@@ -5,14 +5,13 @@ FROM node:20
 WORKDIR /app
 
 # 의존성 설치
-COPY package*.json ./
+COPY . .
 
 RUN npm install
 
-# 앱 소스 추가
-COPY . .
+RUN npm run build
 
-EXPOSE 5002
+EXPOSE 3002
 
 # pm2를 foreground로 실행 및 run 시 클러스터 인자 받기
-CMD ["npm", "run", "start:dev"]
+CMD ["node", "dist/main.js"]
