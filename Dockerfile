@@ -11,7 +11,7 @@ RUN npm install
 
 RUN npm run build
 
-EXPOSE 3002
+EXPOSE 5001
 
 # pm2를 foreground로 실행 및 run 시 클러스터 인자 받기
 CMD ["node", "dist/main.js"]
