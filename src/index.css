@@ -17,3 +17,27 @@ code {
   height: 844px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
+
+/* GLOBAL */
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: "Noto Sans KR";
+  /* font-size: $basic-font-size;
+  color: $black-color;
+  height: 100%; */
+}
+
+#root {
+  height: 100%;
+}
+
+/* VARIABLES */
+
+:root {
+  --bbig-font-size: pink;
+  --gray-lev-1: #e4e4e4;
+}
