@@ -26,6 +26,12 @@
   background-color: var(--main-blue);
 }
 
+.default-active {
+  background-color: #fff;
+  color: #000000;
+  border: 2px solid var(--main-blue);
+}
+
 .disabled {
   color: var(--mainskyblue);
   background-color: var(--main-lightblue);
@@ -44,8 +50,30 @@
 }
 
 .medium {
-  width: 169;
+  width: 169px;
   height: 45px;
+}
+
+.med-small {
+  width: 200px;
+  height: 35px;
+}
+
+.small {
+  width: 63px;
+  height: 35px;
+}
+
+.ssmall {
+  border-radius: 5px;
+  width: 77px;
+  height: 35px;
+}
+
+.tiny {
+  border-radius: 7px;
+  width: 40px;
+  height: 20px;
 }
 
 /* BUTTON STYLE */
@@ -162,4 +190,10 @@
   font-family: var(--basic-font), sans-serif;
   font-weight: 600;
   font-size: 15px;
+}
+
+.s-tiny {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 600;
+  font-size: 9px;
 }
