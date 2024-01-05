@@ -23,7 +23,15 @@ const ButtonCommon = React.forwardRef(({ className, children, onClickBtn }: Butt
     []
   );
 
-  const buttonClass = Array.isArray(className) ? className.map((classN) => classes[classN]) : className;
+  const classArray = className?.split(' ');
+
+  const buttonClass = classArray
+    ? classArray.map((classN) => classes[classN]).join(' ')
+    : className
+    ? classes[className]
+    : '';
+  console.log(buttonClass);
+  console.log(className);
 
   return (
     <button id={id} className={`${classes.button} ${buttonClass}`} onClick={onClickBtn} ref={buttonRef}>
