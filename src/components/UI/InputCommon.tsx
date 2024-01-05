@@ -6,12 +6,13 @@
 // disabled: boolean;
 // names: string[];
 
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef, useId, useImperativeHandle, useRef } from "react";
 import { useControlled } from "../../hooks/useControlled";
+import classes from "./inputCommon.module.css";
 
 type InputPropsType = {
   value?: string | number | undefined;
-  defaultValue?: string | number;
+  defaultValue?: string | number | readonly string[];
   className?: string;
   onBlur?: any;
   placeholder?: string;
@@ -24,13 +25,18 @@ type InputPropsType = {
 //inputCommon에 value를 넣으면 controlled. 기본은 uncontrolled
 //uncontrolled일때만 input을 자동 변경하게 해줌
 const InputCommon = forwardRef(
-  ({ value = undefined, defaultValue, ...props }: InputPropsType, ref) => {
+  (
+    { value = undefined, defaultValue, className, ...props }: InputPropsType,
+    ref
+  ) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [input, setInput] = useControlled({
       value,
       defaultValue,
     });
+
+    const id = useId();
 
     //focus기능
     useImperativeHandle(
@@ -49,13 +55,17 @@ const InputCommon = forwardRef(
       <>
         {input ? (
           <input
+            id={id}
             value={input}
             onChange={(e) => setInput(e)}
             ref={inputRef}
+            className={`${classes.input} ${
+              className ? classes[className] : ""
+            }`}
             {...props}
           />
         ) : (
-          <input value={input} ref={inputRef} {...props} />
+          <input ref={inputRef} {...props} />
         )}
       </>
     );
