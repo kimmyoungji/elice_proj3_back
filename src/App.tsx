@@ -18,9 +18,6 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        <header className="header">
-          <Layout />
-        </header>
         <main className="main">
           <Suspense fallback="...loading">
           <Routes>
@@ -38,6 +35,9 @@ function App() {
             </Routes>
             </Suspense>
         </main>
+        <header className="header">
+          <Layout />
+        </header>
       </div>
     </div>
   );
