@@ -42,11 +42,13 @@
 .medium {
   width: 280;
   height: 35px;
+  padding: 10px 0 10px 15px;
 }
 
 .small {
   width: 165px;
   height: 55px;
+  padding: 18px 0 18px 25px;
 }
 
 /* FONT SIZE CLASS */
