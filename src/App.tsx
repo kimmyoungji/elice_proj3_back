@@ -1,6 +1,6 @@
 import "./App.css";
 import Layout from "./components/layout/Layout";
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 const Home = lazy(() => import("./components/pages/home/Home"));
@@ -22,6 +22,7 @@ function App() {
           <Layout />
         </header>
         <main className="main">
+          <Suspense fallback="...loading">
           <Routes>
             <Route path="/" element={<Navigate to="/home" />} />
             <Route path="/login" element={<Login />} />
@@ -34,7 +35,8 @@ function App() {
             <Route path="/record" element={<Record />} />
             <Route path="/record/edit" element={<RecordEdit />} />
             <Route path="/calender" element={<Calender />} />
-          </Routes>
+            </Routes>
+            </Suspense>
         </main>
       </div>
     </div>
