@@ -6,7 +6,7 @@ interface togglePropsType {
 
 type ToggleState = {
   on: boolean;
-  setIsOn: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOn: React.Dispatch<React.SetStateAction<boolean | (() => boolean)>>;
 };
 
 const ToggleContext = createContext<ToggleState | undefined>(undefined);
