@@ -25,10 +25,8 @@ html {
 }
 
 body {
-  font-family: "Noto Sans KR";
-  /* font-size: $basic-font-size;
-  color: $black-color;
-  height: 100%; */
+  font-family: var(--basic-font);
+  font-size: var(--basic-font-size);
 }
 
 #root {
@@ -38,10 +36,27 @@ body {
 /* VARIABLES */
 
 :root {
+  /* FONT STYLE */
+  --basic-font: Inter;
+  /* FONT SIZE */
+  --small-font-size: 10px;
+  --medium-font-size: 13px;
+  --large-font-size: 15px;
+  /* COLOR */
   --main-blue: #346dff;
   --main-skyblue: #a0bfed;
   --main-lightblue: #edf3f9;
   --sem-great: #54d168;
   --sem-bad: #ff6a6a;
   --gray-lev-1: #e4e4e4;
+}
+
+.disabled {
+  color: var(--mainskyblue);
+  background-color: var(--main-lightblue);
+}
+
+.active {
+  color: white;
+  background-color: var(--mainblue);
 }
