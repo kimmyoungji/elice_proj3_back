@@ -1,0 +1,66 @@
+.header {
+  background: white;
+  padding: 50px 0px 11px 0px;
+  text-align: center;
+  color: #000;
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  border-bottom: 1px solid #ddd;
+}
+
+.meal_container {
+  background: white;
+  width: 342px;
+  margin: 19px 28px 20px 20px;
+}
+
+.meal_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  color: #000;
+  font-family: Inter;
+  font-size: 27px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.meal_content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 342px;
+  height: 110px;
+  padding: 12px 13px 10px 15px;
+  margin-bottom: 10px;
+  background-image: url('../../../src/assets/9gram_logo_box.png');
+  background-size: cover;
+
+  border-radius: 7px;
+}
+
+.meal_time {
+  display: flex;
+  flex-direction: row;
+  padding-left: 10px;
+  text-align: left;
+  font-family: Inter;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  color: #fff;
+}
+
+.meal_deleteButton {
+  display: flex;
+  flex-direction: row;
+
+  width: 20px;
+  height: 20px;
+}

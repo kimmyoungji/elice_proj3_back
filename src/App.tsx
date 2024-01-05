@@ -10,7 +10,7 @@ const MyPage = lazy(() => import("./components/pages/my-page/MyPage"));
 const MyPageEdit = lazy(() => import("./components/pages/my-page/MyPageEdit"));
 const AddPhoto = lazy(() => import("./components/pages/add-photo/AddPhoto"));
 const AiAnalyze = lazy(() => import("./components/pages/ai-analyze/AiAnalyze"));
-const Record = lazy(() => import("./components/pages/record/Rocord"));
+const Record = lazy(() => import("./components/pages/record/Record"));
 const RecordEdit = lazy(() => import("./components/pages/record/RecordEdit"));
 const Calender = lazy(() => import("./components/pages/calender/Calender"));
 
