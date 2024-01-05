@@ -1,3 +1,8 @@
+
+* {
+  box-sizing: border-box;
+}
+
 .header {
   background: white;
   padding: 50px 0px 11px 0px;
@@ -12,6 +17,9 @@
 }
 
 .meal_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   background: white;
   width: 342px;
   margin: 19px 28px 20px 20px;
@@ -19,7 +27,6 @@
 
 .meal_header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
   color: #000;
@@ -33,15 +40,22 @@
 .meal_content {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  padding-right: 13px;
+  padding-top: 12px;
   width: 342px;
   height: 110px;
-  padding: 12px 13px 10px 15px;
-  margin-bottom: 10px;
-  background-image: url('../../../src/assets/9gram_logo_box.png');
-  background-size: cover;
-
   border-radius: 7px;
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(0.1, 0, 0, 0.1)), url("../../../public/images/9gram_logo_box.png");
+  background-size: cover;
+  /* filter: brightness(0.8); */
+  margin-bottom: 10px;
+}
+
+.meal_info{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .meal_time {
@@ -57,10 +71,23 @@
   color: #fff;
 }
 
+.meal_calories {
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: #000;
+  padding-left: 10px; 
+  padding-bottom: 10px;
+  margin-top: 4px; 
+  text-align: left;
+}
+
 .meal_deleteButton {
   display: flex;
   flex-direction: row;
-
   width: 20px;
   height: 20px;
 }
+
