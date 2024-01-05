@@ -1,4 +1,5 @@
 import { useErrorBoundary } from "react-error-boundary";
+import ButtonCommon from "../UI/ButtonCommon";
 
 const Error = () => {
   const { resetBoundary } = useErrorBoundary();
@@ -12,7 +13,7 @@ const Error = () => {
           보내신 요청을 다시 확인해주세요.
         </div>
       </div>
-      <button onClick={resetBoundary}>이전으로 돌아가기</button>
+      <ButtonCommon onClickBtn={resetBoundary}>이전으로 돌아가기</ButtonCommon>
     </div>
   );
 };
