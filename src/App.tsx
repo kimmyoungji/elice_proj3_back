@@ -1,7 +1,7 @@
-import './App.css';
-import Layout from './components/layout/Layout';
-import { lazy } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import "./App.css";
+import Layout from "./components/layout/Layout";
+import { lazy, Suspense } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 const Home = lazy(() => import('./components/pages/home/Home'));
 const Login = lazy(() => import('./components/pages/login/Login'));
@@ -16,23 +16,27 @@ const Calender = lazy(() => import('./components/pages/calender/Calender'));
 
 function App() {
   return (
-    <div className='App'>
-      <div className='container'>
-        <header className='header'>{/* <Layout /> */}</header>
-        <main className='main'>
+    <div className="App">
+      <div className="container">
+        <header className="header">
+          <Layout />
+        </header>
+        <main className="main">
+          <Suspense fallback="...loading">
           <Routes>
-            <Route path='/' element={<Navigate to='/home' />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/join' element={<Join />} />
-            <Route path='/home' element={<Home />} />
-            <Route path='/my-page' element={<MyPage />} />
-            <Route path='/my-page/edit' element={<MyPageEdit />} />
-            <Route path='/add-photo' element={<AddPhoto />} />
-            <Route path='/ai-analyze' element={<AiAnalyze />} />
-            <Route path='/record' element={<Record />} />
-            <Route path='/record/edit' element={<RecordEdit />} />
-            <Route path='/calender' element={<Calender />} />
-          </Routes>
+            <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/join" element={<Join />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/my-page" element={<MyPage />} />
+            <Route path="/my-page/edit" element={<MyPageEdit />} />
+            <Route path="/add-photo" element={<AddPhoto />} />
+            <Route path="/ai-analyze" element={<AiAnalyze />} />
+            <Route path="/record" element={<Record />} />
+            <Route path="/record/edit" element={<RecordEdit />} />
+            <Route path="/calender" element={<Calender />} />
+            </Routes>
+            </Suspense>
         </main>
       </div>
     </div>
