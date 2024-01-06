@@ -1,7 +1,6 @@
 //
-
 import { useId } from 'react';
-import { Toggle, ToggleButton } from '../../UI/Toggle';
+import { Toggle, ToggleButton } from '@components/UI/Toggle';
 import { Dropdown } from './dropdown/Dropdown';
 import DropdownButton from './dropdown/DropdownButton';
 import DropdownItem from './dropdown/DropdownItem';

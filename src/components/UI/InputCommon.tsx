@@ -1,5 +1,5 @@
 import { forwardRef, useId, useImperativeHandle, useRef } from 'react';
-import { useControlled } from '../../hooks/useControlled';
+import { useControlled } from '@hooks/useControlled';
 import classes from './inputCommon.module.css';
 
 type InputPropsType = {

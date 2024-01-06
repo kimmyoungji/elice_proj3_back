@@ -1,4 +1,4 @@
-import ButtonCommon from '../../UI/ButtonCommon';
+import ButtonCommon from '@components/UI/ButtonCommon';
 import CarlendarHeader from './CalendarHeader';
 import CalendarBody from './CalendarBody';
 import CalendarTitle from './CalendarTitle';
