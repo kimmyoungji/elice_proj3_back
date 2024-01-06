@@ -1,7 +1,26 @@
 //
 
+import { useId } from 'react';
+import { Toggle, ToggleButton } from '../../UI/Toggle';
+import { Dropdown } from './dropdown/Dropdown';
+import DropdownButton from './dropdown/DropdownButton';
+import DropdownItem from './dropdown/DropdownItem';
+
 const CalendarHeader = () => {
-  return <div>CalendarHeader</div>;
+  const itemId = useId();
+  const handleChange = () => {};
+  return (
+    <div>
+      <Dropdown onChange={handleChange}>
+        <DropdownButton>2024년 1월</DropdownButton>
+        {/* item은 현재 날짜에서 앞뒤로????? 인피니티 스크롤???...*/}
+        <DropdownItem id={itemId}>aasasd</DropdownItem>
+      </Dropdown>
+      <Toggle>
+        <ToggleButton />
+      </Toggle>
+    </div>
+  );
 };
 
 export default CalendarHeader;

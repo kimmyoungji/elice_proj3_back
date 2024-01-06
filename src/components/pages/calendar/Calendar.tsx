@@ -1,12 +1,16 @@
-import { Toggle, ToggleOff, ToggleOn, ToggleButton } from '../../UI/Toggle';
+import ButtonCommon from '../../UI/ButtonCommon';
+import CarlendarHeader from './CalendarHeader';
+import CalendarBody from './CalendarBody';
+import CalendarTitle from './CalendarTitle';
 
 const Calendar = () => {
   return (
-    <Toggle>
-      {/* <ToggleOn>달력</ToggleOn>
-      <ToggleOff>앨범</ToggleOff> */}
-      <ToggleButton />
-    </Toggle>
+    <>
+      <CalendarTitle />
+      <CarlendarHeader />
+      <CalendarBody></CalendarBody>
+      <ButtonCommon className='button big b-regular disabled'>선택한 날짜로 이동</ButtonCommon>
+    </>
   );
 };
 
