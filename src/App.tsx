@@ -1,18 +1,18 @@
 import './App.css';
-import Layout from './components/layout/Layout';
+import Layout from '@components/layout/Layout';
 import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-const Home = lazy(() => import('./components/pages/home/Home'));
-const Login = lazy(() => import('./components/pages/login/Login'));
-const Join = lazy(() => import('./components/pages/join/Join'));
-const MyPage = lazy(() => import('./components/pages/my-page/MyPage'));
-const MyPageEdit = lazy(() => import('./components/pages/my-page/MyPageEdit'));
-const AddPhoto = lazy(() => import('./components/pages/add-photo/AddPhoto'));
-const AiAnalyze = lazy(() => import('./components/pages/ai-analyze/AiAnalyze'));
-const Record = lazy(() => import('./components/pages/record/Rocord'));
-const RecordEdit = lazy(() => import('./components/pages/record/RecordEdit'));
-const Calender = lazy(() => import('./components/pages/calendar/Calendar'));
+const Home = lazy(() => import('@components/pages/home/Home'));
+const Login = lazy(() => import('@components/pages/login/Login'));
+const Join = lazy(() => import('@components/pages/join/Join'));
+const MyPage = lazy(() => import('@components/pages/my-page/MyPage'));
+const MyPageEdit = lazy(() => import('@components/pages/my-page/MyPageEdit'));
+const AddPhoto = lazy(() => import('@components/pages/add-photo/AddPhoto'));
+const AiAnalyze = lazy(() => import('@components/pages/ai-analyze/AiAnalyze'));
+const Record = lazy(() => import('@components/pages/record/Rocord'));
+const RecordEdit = lazy(() => import('@components/pages/record/RecordEdit'));
+const Calender = lazy(() => import('@components/pages/calendar/Calendar'));
 
 function App() {
   return (
