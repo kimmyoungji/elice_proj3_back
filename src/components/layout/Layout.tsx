@@ -1,35 +1,30 @@
 import { useNavigate } from 'react-router-dom';
-import styles from './layout.module.css';
+import styles from '@components/layout/layout.module.css';
+
+interface Menu {
+  item: string;
+  text: string;
+}
 
 const Layout = () => {
   const navigate = useNavigate();
 
+  const menus = [
+    { item: 'ai-analyze', text: 'AI분석' },
+    { item: 'calendar', text: '달력' },
+    { item: 'home', text: '홈' },
+    { item: 'record', text: '기록' },
+    { item: 'my-page', text: '설정' },
+  ];
+
   return (
     <div className={styles.navbar}>
-      <div className={styles.item} onClick={() => navigate('/ai-analyze')}>
-        <img className={styles.icon} src='icons/ai.png' alt='ai-analyze' />
-        <div className={styles.text}>AI분석</div>
-      </div>
-
-      <div className={styles.item} onClick={() => navigate('/calendar')}>
-        <img className={styles.icon} src='icons/calendar.png' alt='calendar' />
-        <div className={styles.text}>달력</div>
-      </div>
-
-      <div className={styles.item} onClick={() => navigate('/home')}>
-        <img className={styles.icon} src='icons/home.png' alt='home' />
-        <div className={styles.text}>홈</div>
-      </div>
-
-      <div className={styles.item} onClick={() => navigate('/record')}>
-        <img className={styles.icon} src='icons/records.png' alt='records' />
-        <div className={styles.text}>기록</div>
-      </div>
-
-      <div className={styles.item} onClick={() => navigate('/my-page')}>
-        <img className={styles.icon} src='icons/setting.png' alt='setting' />
-        <div className={styles.text}>설정</div>
-      </div>
+      {menus.map((menu: Menu, index) => (
+        <div key={index} className={styles.item} onClick={() => navigate(`/${menu.item}`)}>
+          <img className={styles.icon} src={`icons/${menu.item}.png`} alt={`${menu.item}`} />
+          <div className={styles.text}>{menu.text}</div>
+        </div>
+      ))}
     </div>
   );
 };

@@ -23,9 +23,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -47,10 +47,10 @@
     ]
   },
   "devDependencies": {
-
     "@types/estree": "^1.0.5",
     "@types/react-router-dom": "^5.3.3",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "@craco/types": "^7.1.0",
     "@types/react": "^18.2.46",
     "craco-alias": "^3.0.1"
 

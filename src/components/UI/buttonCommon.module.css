@@ -1,31 +1,198 @@
+/* BUTTON DEFAULT STYLE */
+
 .button {
-  background-color: var(--main-blue);
-  border-radius: 10px;
+  border-radius: 7px;
   border: none;
-  color: #fff;
-  font-weight: 700;
   flex-shrink: 0;
   margin: 20px;
 }
+
 .button:hover {
+  border: 1px solid var(--main-skyblue);
+  color: var(--main-blue);
 }
 
-.button-large-blue {
+/* BUTTON CLASS */
+
+.default {
+  background-color: #fff;
+  color: #000000;
+  border: 2px solid var(--main-lightblue);
+}
+
+.active {
+  color: white;
+  background-color: var(--main-blue);
+}
+
+.default-active {
+  background-color: #fff;
+  color: #000000;
+  border: 2px solid var(--main-blue);
+}
+
+.disabled {
+  color: var(--main-skyblue);
+  background-color: var(--main-lightblue);
+}
+
+/* BUTTON SIZE CLASS */
+
+.large {
   width: 350px;
   height: 55px;
 }
 
-.button-large-white {
+.big {
+  width: 350px;
+  height: 45px;
+}
+
+.medium {
+  width: 169px;
+  height: 45px;
+}
+
+.med-small {
+  width: 200px;
+  height: 35px;
+}
+
+.small {
+  width: 63px;
+  height: 35px;
+}
+
+.ssmall {
+  border-radius: 5px;
+  width: 77px;
+  height: 35px;
+}
+
+.tiny {
+  border-radius: 7px;
+  width: 40px;
+  height: 20px;
+}
+
+/* BUTTON STYLE */
+
+.white {
   background-color: #fff;
   border: 1px solid var(--main-skyblue);
   color: var(--main-blue);
-  width: 350px;
-  height: 55px;
 }
 
-.button-large-green {
-  width: 350px;
-  height: 55px;
+.lightblue {
   color: #000;
   background-color: var(--main-lightblue);
+}
+
+/* FONT CLASSES */
+.b-super {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+}
+
+.b-large {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 700;
+  font-size: 27px;
+}
+
+.b-big {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.b-medium {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.b-regular {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.b-small {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.b-tiny {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+}
+
+.r-super {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+}
+
+.r-large {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+}
+
+.r-big {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.r-medium {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.r-regular {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+}
+
+.r-small {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+}
+
+.r-tiny {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 400;
+  font-size: 8px;
+}
+
+.s-large {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+}
+
+.s-big {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.s-medium {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.s-tiny {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 600;
+  font-size: 8px;
 }
