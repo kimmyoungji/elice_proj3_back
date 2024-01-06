@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useState } from 'react';
+import { ReactNode, createContext, useContext, useMemo, useState } from 'react';
 import classes from './toggle.module.css';
 
 interface togglePropsType {
@@ -21,20 +21,25 @@ const useToggleContext = (ToggleContext: any): any => {
 
 export const Toggle = ({ children }: togglePropsType) => {
   const [on, setIsOn] = useState(false);
-  const value = {
-    on: on,
-    setValue: setIsOn,
-  };
+  const value = useMemo(
+    () => ({
+      on: on,
+      setValue: setIsOn,
+    }),
+    [on]
+  );
+  console.log(children);
+  //Toggle On과 ToggleButton 글자가 겹치게만 하면 됨
 
   return <ToggleContext.Provider value={value}>{children}</ToggleContext.Provider>;
 };
 
-export const ToggleOn = ({ children }: togglePropsType) => {
+export const ToggleOn = ({ children }: any) => {
   const { on } = useToggleContext(ToggleContext);
   return on ? children : null;
 };
 
-export const ToggleOff = ({ children }: togglePropsType) => {
+export const ToggleOff = ({ children }: any) => {
   const { on } = useToggleContext(ToggleContext);
   return on ? null : children;
 };
@@ -43,8 +48,9 @@ export const ToggleButton = ({ children }: togglePropsType) => {
   const { on, setValue } = useToggleContext(ToggleContext);
   const btnClassName = ['toggle-btn', on ? 'toggle-btn-on' : 'toggle-btn-off'];
   const classNames = btnClassName.map((cls) => classes[cls]).join(' ');
+
   return (
-    <label style={{ display: 'block' }}>
+    <label className={classes['toggle-label']}>
       <input
         className={classes[`toggle-input`]}
         type='checkbox'
@@ -53,9 +59,13 @@ export const ToggleButton = ({ children }: togglePropsType) => {
         onClick={() => setValue((prev: any) => !prev)}
         data-testid='toggle-input'
       />
-      <span className={classNames}>
-        <div className={classes['toggle-text']}>{on ? '달력' : '앨범'}</div>
-      </span>
+      <div className={classes.toggles}>
+        <div className={classes['toggle-text']}>
+          <div>달력</div>
+          <div>앨범</div>
+        </div>
+        <span className={classNames} />
+      </div>
     </label>
   );
 };
