@@ -8,7 +8,7 @@ const Calendar = () => {
     <>
       <CalendarTitle />
       <CarlendarHeader />
-      <CalendarBody></CalendarBody>
+      <CalendarBody />
       <ButtonCommon className='button big b-regular disabled'>선택한 날짜로 이동</ButtonCommon>
     </>
   );

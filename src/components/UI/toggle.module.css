@@ -53,8 +53,9 @@
   margin: -1px;
   overflow: hidden;
   padding: 0;
-  width: 1px;
+  width: 0px;
   white-space: nowrap;
+  position: absolute;
 }
 
 .toggles {
@@ -62,6 +63,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: translateX(-100%);
 }
 
 .toggle-text {
@@ -76,6 +78,6 @@
 }
 
 .toggle-label {
-  margin: 20px;
+  position: relative;
   display: inline-block;
 }
