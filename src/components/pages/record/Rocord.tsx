@@ -1,5 +1,12 @@
+import AddPhoto from "../add-photo/AddPhoto";
+
+
+
 const Record = () => {
-  return <div>Record</div>;
+
+  return (
+    <AddPhoto />
+  );
 };
 
 export default Record;

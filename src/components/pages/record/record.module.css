@@ -1,0 +1,60 @@
+.header {
+  background: white;
+  padding: 50px 0px 11px 0px;
+  text-align: center;
+  color: #000;
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  border-bottom: 1px solid #ddd;
+}
+
+.meal_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  background: white;
+  width: 342px;
+  margin: 19px 28px 20px 20px;
+}
+
+.meal_header {
+  display: flex;
+  align-items: center;
+  color: #000;
+  font-family: Inter;
+  font-size: 27px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.meal_content {
+  display: flex;
+  width: 342px;
+  height: 110px;
+  border-radius: 7px;
+  filter: brightness(0.8);
+}
+
+.meal_time {
+  display: flex;
+  flex-direction: row;
+  padding-left: 10px;
+  text-align: left;
+  font-family: Inter;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  color: #fff;
+}
+
+.meal_deleteButton {
+  display: flex;
+  flex-direction: row;
+  width: 20px;
+  height: 20px;
+}
