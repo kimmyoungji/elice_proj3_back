@@ -5,15 +5,34 @@ interface MealList {
   mealTime: string;
 }
 
+interface mealData {
+  cal: number;
+  img: "string";
+}
 
 const Record = () => {
   const navigate = useNavigate();
   const mealList = [
-    { mealTime : "아침" },
+    { mealTime : "아침"},
     { mealTime : "점심" },
     { mealTime : "저녁" },
     { mealTime : "간식" },
   ]
+  const mealData = [
+    {
+      cal : 500, img : "/images//9gram_logo_box.png"
+    },
+    {
+      cal : 300, img : "/images//9gram_logo_box.png"
+    },
+    {
+      cal : 200, img : "/images//9gram_logo_box.png"
+    },
+    {
+      cal : 900, img : "/images//9gram_logo_box.png"
+    }
+  ]
+ 
 
   return (
     <>
@@ -22,11 +41,10 @@ const Record = () => {
          <div className={record.meal_header}> 오늘 날짜 </div>
           {mealList.map((meal: MealList, index) => (
           <div key={index} className={record.meal_content} onClick={()=> navigate(`/${meal.mealTime}`)}>
-           {/* <div key={index} className={record.mealTime} onClick={()=> navigate(`/${meal.mealTime}`)}> */}
-            {/* <img className={record.meal_content} src="/images/9gram_logo_box.png" alt='한 끼 식단'/> */}
               <div className={record.meal_info}>
+                <img src= {mealData[index].img} alt='하루 식단 이미지' />
                 <div className={record.meal_time}>{meal.mealTime}</div>
-                <div className={record.meal_calories}> 0 kcal </div>
+                <div className={record.meal_calories}> {mealData[index].cal} kcal </div>
               </div>
               <img className={record.meal_deleteButton} src="/icons/meal_delete.png" alt='식단 삭제 버튼' />
               

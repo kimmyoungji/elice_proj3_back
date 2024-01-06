@@ -45,7 +45,7 @@
   width: 342px;
   height: 110px;
   border-radius: 7px;
-  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(0.1, 0, 0, 0.1)), url("../../../public/images/9gram_logo_box.png");
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(0.1, 0, 0, 0.1));
   background-size: cover;
   /* filter: brightness(0.8); */
   margin-bottom: 10px;
@@ -89,5 +89,6 @@
   flex-direction: row;
   width: 20px;
   height: 20px;
+  cursor: pointer;
 }
 
