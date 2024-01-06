@@ -28,8 +28,6 @@ export const Toggle = ({ children }: togglePropsType) => {
     }),
     [on]
   );
-  console.log(children);
-  //Toggle On과 ToggleButton 글자가 겹치게만 하면 됨
 
   return <ToggleContext.Provider value={value}>{children}</ToggleContext.Provider>;
 };
