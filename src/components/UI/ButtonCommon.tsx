@@ -30,8 +30,6 @@ const ButtonCommon = React.forwardRef(({ className, children, onClickBtn }: Butt
     : className
     ? classes[className]
     : '';
-  console.log(buttonClass);
-  console.log(className);
 
   return (
     <button id={id} className={`${classes.button} ${buttonClass}`} onClick={onClickBtn} ref={buttonRef}>
