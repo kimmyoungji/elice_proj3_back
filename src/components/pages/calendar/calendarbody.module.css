@@ -1,0 +1,22 @@
+.cla-body {
+  /* margin: 30px 20px;
+  box-sizing: border-box; */
+  background-color: beige;
+}
+
+.cla-week {
+  margin: 6px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* .day-wrapper {
+  width: 44px;
+  height: 31px;
+} */
+
+.day-arr {
+  width: 44px;
+  height: 31px;
+  display: flex;
+}
