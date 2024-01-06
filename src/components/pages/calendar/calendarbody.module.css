@@ -2,12 +2,14 @@
   /* margin: 30px 20px;
   box-sizing: border-box; */
   background-color: beige;
+  border: 1px solid transparent;
 }
 
 .cla-week {
   margin: 6px 20px;
   display: flex;
   justify-content: space-between;
+  box-sizing: border-box;
 }
 
 /* .day-wrapper {
@@ -19,4 +21,6 @@
   width: 44px;
   height: 31px;
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
