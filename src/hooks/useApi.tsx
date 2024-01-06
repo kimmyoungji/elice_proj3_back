@@ -1,17 +1,11 @@
-import { useEffect, useState, useCallback } from "react";
-import { API_FETCHER } from "../utils/axiosConfig";
-import { useErrorBoundary } from "react-error-boundary";
+import { useEffect, useState, useCallback } from 'react';
+import { API_FETCHER } from '@utils/axiosConfig';
+import { useErrorBoundary } from 'react-error-boundary';
 
-const useApi = ({
-  method = "get",
-  path = "",
-  data = {},
-  shouldInitFetch = false,
-  initialResult = "",
-}) => {
+const useApi = ({ method = 'get', path = '', data = {}, shouldInitFetch = false, initialResult = '' }) => {
   const [result, setResult] = useState(initialResult);
   const [loading, setLoading] = useState(false);
-  const [reqIdentifier, setReqIdentifier] = useState("");
+  const [reqIdentifier, setReqIdentifier] = useState('');
   const [error, setError] = useState(false);
   const { showBoundary } = useErrorBoundary();
 
@@ -24,15 +18,12 @@ const useApi = ({
       isShowBoundary = true,
     }) => {
       setLoading(true);
-      setReqIdentifier(triggerMethod + "Data");
+      setReqIdentifier(triggerMethod + 'Data');
       try {
-        const triggerResult = await API_FETCHER[triggerMethod](
-          triggerPath,
-          triggerData
-        );
+        const triggerResult = await API_FETCHER[triggerMethod](triggerPath, triggerData);
 
         if (applyResult) {
-          console.log("result를 apply합니다");
+          console.log('result를 apply합니다');
           setResult(triggerResult);
           return result;
         }
@@ -54,7 +45,7 @@ const useApi = ({
   );
 
   useEffect(() => {
-    shouldInitFetch && console.log("초기 요청합니다!!", method, path);
+    shouldInitFetch && console.log('초기 요청합니다!!', method, path);
     shouldInitFetch && trigger({ method, path, data });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
