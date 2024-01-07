@@ -1,45 +1,48 @@
-import { useId, useState } from 'react';
+import { ReactElement, useId, useState } from 'react';
 import classes from './calendarbody.module.css';
+import { useCalendarContext } from './Calendar';
 
 const CalendarBody = () => {
-  //이번달 혹은 선택한 달
-  //선택한 달을 받지 못하면 지금 달을 표시
-  let today = new Date();
-  const [thisMonth, setThisMonth] = useState(today.getMonth());
+  const { yearMonth: selectedYearMonth } = useCalendarContext();
+  //비어있을 수 없음 초깃값 이번해.이번달
+
+  const [thisYear, thisMonth] = selectedYearMonth.split('-');
+  console.log({ thisYear, thisMonth });
   const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+
   const dayOfWeekArray = dayOfWeek.map((day) => (
     <div className={classes['day-wrapper']}>
       <p className={`${classes['day-arr']} r-big`}>{day}</p>
     </div>
   ));
 
-  const thisDayOfWeek = new Date();
-  const thisMonthArray = () => {
-    // thisMonthArray.push(dayOfWeekArray)
+  const getThisMonthArray = () => {
+    const thisMonthTotal = new Date(parseInt(thisYear), parseInt(thisMonth), 0).getDate();
+    const thisMonthFirstDay = new Date(parseInt(thisYear), parseInt(thisMonth) - 1, 1).getDay(); //선택된 첫번째 날의 요일
+    //1
+    //그럼 한개만큼만 ""를 그리면 됨
+    console.log(thisMonthTotal);
+    const arr: ReactElement[] = [];
+    new Array(35).fill(0).map((_, idx) => {
+      if (idx < thisMonthFirstDay || idx > thisMonthFirstDay + thisMonthTotal - 1) {
+        arr.push(<div>{''}</div>);
+      }
+      if (idx > thisMonthFirstDay && idx < thisMonthTotal) {
+        arr.push(<div>{1 + idx - thisMonthFirstDay - 1}</div>);
+      }
+      return arr;
+    });
+    return arr;
   };
+  console.log(getThisMonthArray());
   const dateId = useId();
   //이번달의 첫날 요일 구하기
   //이번달의 총 날짜 구하기
   //총 날짜만큼 어레이 만들어서 element사이에 넣기
-
-  const thisMonthDay = () => {};
-  const thisMonthFirstDay = () => {};
-
-  let month = today.getMonth();
-  let day = today.getDay();
-  console.log('today is?' + day);
-
-  const dayArray = new Array(7).fill(0).map((_, idx) => <div>{idx + 1}</div>);
-  console.log(dayArray);
-
   return (
     <div className={classes['cla-body']}>
       <div className={classes['cla-week']}>{dayOfWeekArray}</div>
-      <div className={classes.display}>
-        {new Array(5).fill(0).map((_, idx) => (
-          <div key={dateId}>{dayArray}</div>
-        ))}
-      </div>
+      <div className={classes.display}>{getThisMonthArray()}</div>
     </div>
   );
 };
