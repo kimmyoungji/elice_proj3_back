@@ -11,7 +11,8 @@ const MyPageEdit = lazy(() => import('@components/pages/my-page/MyPageEdit'));
 const AddPhoto = lazy(() => import('@components/pages/add-photo/AddPhoto'));
 const AiAnalyze = lazy(() => import('@components/pages/ai-analyze/AiAnalyze'));
 const Record = lazy(() => import('@components/pages/record/Record'));
-const RecordEdit = lazy(() => import('@components/pages/record/RecordEdit'));
+// const RecordEdit = lazy(() => import('@components/pages/record/RecordEdit'));
+const MealPage = lazy(() => import('@components/pages/record/MealPage'));
 const Calender = lazy(() => import('@components/pages/calendar/Calendar'));
 
 function App() {
@@ -30,7 +31,8 @@ function App() {
               <Route path='/add-photo' element={<AddPhoto />} />
               <Route path='/ai-analyze' element={<AiAnalyze />} />
               <Route path='/record' element={<Record />} />
-              <Route path='/record/edit' element={<RecordEdit />} />
+              <Route path='/record/:date/:mealTime' element={<MealPage />} />
+              {/* <Route path='/record/edit' element={<RecordEdit />} /> */}
               <Route path='/calendar' element={<Calender />} />
             </Routes>
           </Suspense>

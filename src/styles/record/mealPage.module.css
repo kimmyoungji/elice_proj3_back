@@ -1,0 +1,41 @@
+
+* {
+    box-sizing: border-box;
+  }
+
+  .header {
+    background: white;
+    width: 100%;
+    padding: 50px 0px 11px 0px;
+    text-align: center;
+    color: #000;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    border-bottom: 1px solid #ddd;
+  }
+
+
+.bannerBackground {
+    position: absolute;
+    object-fit: cover;
+    z-index: 0;
+    width: 350px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.bannerFont {
+    position: relative;
+    z-index: 1;
+    color: #FFF;
+    text-align: center;
+    /* B-Regular */
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
