@@ -1,7 +1,7 @@
 import './App.css';
 import Layout from '@components/layout/Layout';
 import { lazy, Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { useLocation, Navigate, Route, Routes } from 'react-router-dom';
 
 const Home = lazy(() => import('@components/pages/home/Home'));
 const Login = lazy(() => import('@components/pages/login/Login'));
@@ -15,6 +15,7 @@ const RecordEdit = lazy(() => import('@components/pages/record/RecordEdit'));
 const Calender = lazy(() => import('@components/pages/calendar/Calendar'));
 
 function App() {
+  const location = useLocation();
   return (
     <div className='App'>
       <div className='container'>
@@ -36,7 +37,7 @@ function App() {
           </Suspense>
         </main>
         <header className='header'>
-          <Layout />
+          {location.pathname !== "/login" && location.pathname !== "/join" && <Layout />}
         </header>
       </div>
     </div>
