@@ -1,7 +1,5 @@
-import AddPhotoSearch from "../add-photo/AddPhotoSearch";
-
 const Record = () => {
-  return <AddPhotoSearch/>;
+  return <div>record</div>;
 };
 
 export default Record;
