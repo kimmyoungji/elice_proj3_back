@@ -1,4 +1,5 @@
 {
+  "extends": "./tsconfig.paths.json",
   "compilerOptions": {
     "target": "es5",
     "jsx": "react-jsx",
@@ -14,6 +15,6 @@
     "strictNullChecks": true,
     "skipLibCheck": true
   },
-  "include": ["./src/", "./typings"],
+  "include": ["./src/", "./typings", "craco.config.cjs"],
   "exclude": ["node_modules"]
 }

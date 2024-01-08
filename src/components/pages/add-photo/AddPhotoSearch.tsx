@@ -1,6 +1,8 @@
 // import { useLocation } from "react-router-dom";
+import ButtonCommon from "@components/UI/ButtonCommon";
 import InputCommon from "../../UI/InputCommon";
 import header from "../../UI/headerCommon.module.css";
+import styles from "./addphotosearch.module.css";
 
 const AddPhotoSearch = () => {
   // const useQuery = () => new URLSearchParams(useLocation().search);
@@ -13,7 +15,11 @@ const AddPhotoSearch = () => {
         <img className={header.arrow} src="icons/left_arrow.png" alt="뒤로가기" />
         <div className={header.text}>식단 검색</div>
       </div>
-      <InputCommon/>
+      <div className={styles.searchbox}>
+        <InputCommon className="medium r-large default" />
+        <ButtonCommon className="small b-small active">검색</ButtonCommon>
+      </div>
+      
       <div>AddPhotoSearch </div>
     </>
   );

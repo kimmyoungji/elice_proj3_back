@@ -1,8 +1,7 @@
-const Record = () => {
+import AddPhotoSearch from "../add-photo/AddPhotoSearch";
 
-  return (
-    
-  );
+const Record = () => {
+  return <AddPhotoSearch/>;
 };
 
 export default Record;

@@ -32,7 +32,7 @@
 }
 
 .disabled {
-  color: var(--mainskyblue);
+  color: var(--main-skyblue);
   background-color: var(--main-lightblue);
 }
 
