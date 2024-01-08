@@ -55,13 +55,7 @@ const InputCommon = forwardRef(({ value = undefined, defaultValue, className, ..
       : '';
   };
 
-  const classArray = className?.split(' ');
-
-  const inputClass = classArray
-    ? classArray.map((classN) => classes[classN]).join(' ')
-    : className
-    ? classes[className]
-    : '';
+  const inputClass = getClassName(className);
 
   return (
     <>
