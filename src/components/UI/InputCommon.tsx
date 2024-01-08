@@ -1,6 +1,7 @@
 import { forwardRef, useId, useImperativeHandle, useRef } from 'react';
 import { useControlled } from '@hooks/useControlled';
 import classes from './inputCommon.module.css';
+import { getClassName } from '@utils/getClasses';
 
 type InputPropsType = {
   value?: string | number | undefined;
@@ -39,13 +40,7 @@ const InputCommon = forwardRef(({ value = undefined, defaultValue, className, ..
     []
   );
 
-  const classArray = className?.split(' ');
-
-  const inputClass = classArray
-    ? classArray.map((classN) => classes[classN]).join(' ')
-    : className
-    ? classes[className]
-    : '';
+  const inputClass = getClassName(className);
 
   return (
     <>
