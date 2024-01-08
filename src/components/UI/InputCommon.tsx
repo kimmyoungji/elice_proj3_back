@@ -12,6 +12,7 @@ type InputPropsType = {
   required?: boolean;
   type?: string;
   onChange?: (value: React.ChangeEvent<HTMLInputElement>) => void;
+  id?: string;
 };
 
 //inputCommon에 value를 넣으면 controlled. 기본은 uncontrolled
@@ -20,11 +21,17 @@ const InputCommon = forwardRef(({ value = undefined, defaultValue, className, ..
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [input, setInput] = useControlled({
-    value,
-    defaultValue,
+    controlled: value,
+    unControlled: defaultValue,
   });
 
-  const id = useId();
+  const controlledId = props.id;
+  const uncontrolledId = useId();
+
+  const id = useControlled({
+    controlled: controlledId,
+    unControlled: uncontrolledId,
+  })[0];
 
   //focus기능
   useImperativeHandle(
@@ -39,6 +46,15 @@ const InputCommon = forwardRef(({ value = undefined, defaultValue, className, ..
     []
   );
 
+  const getClassName = (className: any | undefined) => {
+    const classArray: string[] | undefined = className?.split(' ');
+    return typeof classArray === 'object'
+      ? classArray.map((classN) => classN && classes[classN]).join(' ')
+      : className
+      ? classes[className]
+      : '';
+  };
+
   const classArray = className?.split(' ');
 
   const inputClass = classArray
@@ -49,7 +65,7 @@ const InputCommon = forwardRef(({ value = undefined, defaultValue, className, ..
 
   return (
     <>
-      {input ? (
+      {!defaultValue ? (
         <input
           id={id}
           value={input}

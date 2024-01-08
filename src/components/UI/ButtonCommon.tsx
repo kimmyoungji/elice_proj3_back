@@ -7,6 +7,15 @@ type ButtonPropsType = {
   onClickBtn?: () => void;
 } & ComponentPropsWithRef<'button'>;
 
+const getClassName = (className: any | undefined) => {
+  const classArray: string[] | undefined = className?.split(' ');
+  return typeof classArray === 'object'
+    ? classArray.map((classN) => classN && classes[classN]).join(' ')
+    : className
+    ? classes[className]
+    : '';
+};
+
 const ButtonCommon = React.forwardRef(({ className, children, onClickBtn }: ButtonPropsType, ref) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const id = useId();

@@ -26,15 +26,26 @@
 }
 
 .cal-circle {
-  width: 44px;
-  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  border: 1px solid black;
-  margin: 7px;
+  border: 1px solid var(--main-lightblue);
+  background-color: var(--main-lightblue);
+  color: var(--main-skyblue);
+  box-sizing: border-box;
 }
 
 .cal-flex {
-  display: flex;
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(7, 1fr);
+  justify-items: center;
+  grid-row-gap: 20px;
+
   flex-wrap: wrap;
   flex-direction: row;
+  justify-content: space-between;
 }
