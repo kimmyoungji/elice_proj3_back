@@ -1,0 +1,40 @@
+.cla-body {
+  /* margin: 30px 20px;
+  box-sizing: border-box; */
+  background-color: beige;
+  border: 1px solid transparent;
+}
+
+.cla-week {
+  margin: 6px 20px;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* .day-wrapper {
+  width: 44px;
+  height: 31px;
+} */
+
+.day-arr {
+  width: 44px;
+  height: 31px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cal-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid black;
+  margin: 7px;
+}
+
+.cal-flex {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
