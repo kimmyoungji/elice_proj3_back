@@ -4,15 +4,16 @@ import CalendarBody from './CalendarBody';
 import CalendarTitle from './CalendarTitle';
 import { createContext } from 'react';
 import { Dispatch, ReactElement, useContext, useState } from 'react';
+import getDates from '../../../utils/getDates';
 
 const CalendarContext = createContext<
   { yearMonth: string; setYearMonth: Dispatch<React.SetStateAction<string>> } | undefined
 >(undefined);
 
 const CalendarProvider = ({ children }: { children: ReactElement[] | ReactElement }) => {
-  const thisYear = new Date().getFullYear();
-  const thisMonth = new Date().getMonth() + 1;
-  const initialYearMonth = `${thisYear}.${thisMonth >= 10 ? thisMonth : `0${thisMonth}`}`;
+  const { thisYear, thisMonth } = getDates();
+  const initialYearMonth = `${thisYear}.${thisMonth}`;
+  console.log(initialYearMonth);
   //형식 2024.01
   const [yearMonth, setYearMonth] = useState(initialYearMonth);
   return <CalendarContext.Provider value={{ yearMonth, setYearMonth }}>{children}</CalendarContext.Provider>;
@@ -33,6 +34,7 @@ const Calendar = () => {
       <CalendarProvider>
         <CarlendarHeader />
         <CalendarBody />
+
         <ButtonCommon className='button big b-regular disabled'>선택한 날짜로 이동</ButtonCommon>
       </CalendarProvider>
     </>
