@@ -19,12 +19,23 @@ const Onboarding = () => {
   };
 
   const onNextClick = () => {
-    setCurrentStep((prevStep) => prevStep + 1);
+    setCurrentStep((prevStep) => {
+      if (prevStep === 6) {
+        navigate('/join/onboarding-join');
+        return prevStep;
+      } else {
+        return Math.min(6, prevStep + 1);
+      }
+    });
   };
 
   useEffect(() => {
-    console.log(currentStep)
-  }, [currentStep])
+    if (currentStep === 0) {
+      navigate("/join");
+    }
+    console.log(currentStep);
+  }, [currentStep, navigate]);
+
 
   const renderProgressBar = () => {
     const steps = 6;

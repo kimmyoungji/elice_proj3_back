@@ -1,9 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import ButtonCommon from "../../UI/ButtonCommon";
+import InputCommon from '@components/UI/InputCommon';
 import './Onboarding.css';
 
 const Onboarding_birth = () => {
+    const [year, setYear] = useState('');
+    const [month, setMonth] = useState('');
     const [selectedBirth, setSelectedBirth] = useState<string | null>(null);
+
+    const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setYear(e.target.value);
+    };
+    const handleMonthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setMonth(e.target.value);
+    };
 
     const onClick = (birth: string) => {
         setSelectedBirth((prevGender: string | null) => {
@@ -15,28 +25,20 @@ const Onboarding_birth = () => {
         <div>
             <h1 className="b-medium">생년월일을 입력해주세요</h1>
             <div style={{ marginTop: '30px' }}>
-                <ButtonCommon
-                    className={`button large r-large ${selectedBirth === 'female' ? 'default-active' : 'gray'}`}
-                    onClick={() => onClick('female')}
+                <InputCommon
+                    className={`button large r-large gray`}
+                    value={year}
+                    onChange={handleYearChange}
                 >
-                    여성
-                </ButtonCommon>
+                </InputCommon>
             </div>
             <div style={{ marginTop: '15px' }}>
-                <ButtonCommon
-                    className={`button large r-large ${selectedBirth === 'male' ? 'default-active' : 'gray'}`}
-                    onClick={() => onClick('male')}
+                <InputCommon
+                    className={`button large r-large gray`}
+                    value={month}
+                    onChange={handleMonthChange}
                 >
-                    남성
-                </ButtonCommon>
-            </div>
-            <div style={{ marginTop: '15px' }}>
-                <ButtonCommon
-                    className={`button large r-large ${selectedBirth === 'other' ? 'default-active' : 'gray'}`}
-                    onClick={() => onClick('other')}
-                >
-                    기타
-                </ButtonCommon>
+                </InputCommon>
             </div>
         </div>
     );
