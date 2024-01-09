@@ -5,11 +5,14 @@ import styles from "./addphotosearch.module.css";
 import { useState } from "react";
 import AddTag from "./AddTag";
 import DeleteTag from "./DeleteTag";
+import { useNavigate } from "react-router-dom";
 
 const AddPhotoSearch = () => {
   const [searchInput, setSearchInput] = useState("");
   const [clicked, setClicked] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
+
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setClicked(true);
@@ -19,7 +22,7 @@ const AddPhotoSearch = () => {
   return (
     <div className={styles.container}>
       <div className={header.header}>
-        <img className={header.arrow} src="icons/left_arrow.png" alt="뒤로가기" />
+        <img className={header.arrow} src="/icons/left_arrow.png" alt="뒤로가기" onClick={()=>navigate(-1)}/>
         <div className={header.text}>식단 검색</div>
       </div>
       <div className={styles.searchbox}>

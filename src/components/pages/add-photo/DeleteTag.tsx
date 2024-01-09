@@ -21,7 +21,7 @@ const DeleteTag = ({ tags, setTags }: Props) => {
       {tags.map((tag, index) => (
         <span key={index} className={styles.tag}>
           {tag}
-          <img className={styles.xbtn} src="icons/x-icon.png" alt="태그삭제" onClick={(e)=>deleteTag(e)}/>
+          <img className={styles.xbtn} src="/icons/x-icon.png" alt="태그삭제" onClick={(e)=>deleteTag(e)}/>
         </span>
       ))}
     </>
