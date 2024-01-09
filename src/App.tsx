@@ -6,6 +6,7 @@ import { useLocation, Navigate, Route, Routes } from 'react-router-dom';
 const Home = lazy(() => import('@components/pages/home/Home'));
 const Login = lazy(() => import('@components/pages/login/Login'));
 const Join = lazy(() => import('@components/pages/join/Join'));
+const Onboarding = lazy(() => import('@components/pages/join/Onboarding'));
 const MyPage = lazy(() => import('@components/pages/my-page/MyPage'));
 const MyPageEdit = lazy(() => import('@components/pages/my-page/MyPageEdit'));
 const AddPhoto = lazy(() => import('@components/pages/add-photo/AddPhoto'));
@@ -22,9 +23,10 @@ function App() {
         <main className='main'>
           <Suspense fallback='...loading'>
             <Routes>
-              <Route path='/' element={<Navigate to='/home' />} />
+              <Route path='/' element={<Navigate to='/join' />} />
               <Route path='/login' element={<Login />} />
               <Route path='/join' element={<Join />} />
+              <Route path='/join/onboarding' element={<Onboarding />} />
               <Route path='/home' element={<Home />} />
               <Route path='/my-page' element={<MyPage />} />
               <Route path='/my-page/edit' element={<MyPageEdit />} />
@@ -37,7 +39,11 @@ function App() {
           </Suspense>
         </main>
         <header className='header'>
-          {location.pathname !== "/login" && location.pathname !== "/join" && <Layout />}
+          {location.pathname !== "/login" &&
+            location.pathname !== "/join" &&
+            location.pathname !== "/join/onboarding" &&
+            <Layout />
+          }
         </header>
       </div>
     </div>

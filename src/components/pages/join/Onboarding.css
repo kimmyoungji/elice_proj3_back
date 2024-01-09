@@ -1,0 +1,19 @@
+.progress-bar {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: 20px auto;
+}
+
+.progress-step {
+    flex: 1;
+    height: 4px;
+    background-color: #EDF3F9;
+    margin-right: 4px;
+    margin-left: 4px;
+    border-radius: 4px;
+}
+
+.progress-step.active {
+    background-color: #346DFF;
+}
