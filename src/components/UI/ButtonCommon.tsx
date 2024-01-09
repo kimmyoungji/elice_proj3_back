@@ -1,5 +1,6 @@
 import React, { ComponentPropsWithRef, ReactElement, useId, useImperativeHandle, useRef } from 'react';
 import classes from './buttonCommon.module.css';
+import { getClassName } from '@utils/getClasses';
 
 type ButtonPropsType = {
   children?: string | ReactElement | number;
@@ -23,13 +24,7 @@ const ButtonCommon = React.forwardRef(({ className, children, onClickBtn }: Butt
     []
   );
 
-  const classArray = className?.split(' ');
-
-  const buttonClass = classArray
-    ? classArray.map((classN) => classes[classN]).join(' ')
-    : className
-    ? classes[className]
-    : '';
+  const buttonClass = getClassName(className);
 
   return (
     <button id={id} className={`${classes.button} ${buttonClass}`} onClick={onClickBtn} ref={buttonRef}>
