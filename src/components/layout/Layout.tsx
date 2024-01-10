@@ -21,7 +21,7 @@ const Layout = () => {
     <div className={styles.navbar}>
       {menus.map((menu: Menu, index) => (
         <div key={index} className={styles.item} onClick={() => navigate(`/${menu.item}`)}>
-          <img className={styles.icon} src={`icons/${menu.item}.png`} alt={`${menu.item}`} />
+          <img className={styles.icon} src={`/icons/${menu.item}.png`} alt={`${menu.item}`} />
           <div className={styles.text}>{menu.text}</div>
         </div>
       ))}
