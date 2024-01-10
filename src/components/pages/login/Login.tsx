@@ -6,14 +6,8 @@ import './Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [state, setState] = useState(0);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const onClick = () => {
-    console.log("btn is clicked!");
-    setState((prev) => prev + 1);
-  };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -24,7 +18,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="login-container">
       < div className='title' >
         <div className='title-text'>
           <p className="b-regular">로그인</p>
@@ -35,26 +29,30 @@ const Login = () => {
       < div className='body' >
         <p className="r-large">이메일</p>
       </div>
-      <InputCommon
-        className={`button large r-large gray`}
-        value={email}
-        onChange={handleEmailChange}
-      >
-      </InputCommon>
+      <div style={{ marginTop: '15px' }}>
+        <InputCommon
+          className={`button large r-large gray`}
+          value={email}
+          onChange={handleEmailChange}
+        >
+        </InputCommon>
+      </div>
       < div className='body' >
         <p className="r-large">비밀번호</p>
       </div>
-      <InputCommon
-        className={`button large r-large gray`}
-        type="password"
-        value={password}
-        onChange={handlePasswordChange}
-      >
-      </InputCommon>
-      <div style={{ marginTop: '230px' }}>
-        <p className="r-medium">비밀번호를 잊으셨나요?</p>
+      <div style={{ marginTop: '15px' }}>
+        <InputCommon
+          className={`button large r-large gray`}
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
+        >
+        </InputCommon>
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className='button-container'>
+        <div style={{ marginBottom: '20px' }}>
+          <p className="r-medium">비밀번호를 잊으셨나요?</p>
+        </div>
         <ButtonCommon
           className='button big b-small blue'
           onClickBtn={() => navigate(`/home`)}

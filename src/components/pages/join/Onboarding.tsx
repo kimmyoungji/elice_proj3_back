@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ButtonCommon from "../../UI/ButtonCommon";
-import InputCommon from '@components/UI/InputCommon';
 import './Onboarding.css';
 import Onboarding_gender from "./Onboarding_gender";
 import Onboarding_birth from "./Onboarding_birth";
@@ -9,22 +8,27 @@ import Onboarding_height from "./Onboarding_height";
 import Onboarding_weight from "./Onboarding_weight";
 import Onboarding_goal from "./Onboarding_goal";
 import Onboarding_goalweight from "./Onboarding_goalweight";
+import Onboarding_activity from "./Onboarding_activity";
 
 const Onboarding = () => {
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(Number(localStorage.getItem('currentStep')) || 1);
 
   const onBackClick = () => {
-    setCurrentStep((prevStep) => prevStep - 1);
+    const prevStep = currentStep - 1
+    setCurrentStep(prevStep);
+    localStorage.setItem('currenStep', prevStep.toString());
   };
 
   const onNextClick = () => {
     setCurrentStep((prevStep) => {
-      if (prevStep === 6) {
+      if (prevStep === 7) {
         navigate('/join/onboarding-join');
         return prevStep;
       } else {
-        return Math.min(6, prevStep + 1);
+        const nextStep = Math.min(7, prevStep + 1);
+        localStorage.setItem('currentStep', nextStep.toString());
+        return nextStep;
       }
     });
   };
@@ -38,7 +42,7 @@ const Onboarding = () => {
 
 
   const renderProgressBar = () => {
-    const steps = 6;
+    const steps = 7;
     const progressBarSteps = [];
 
     for (let i = 1; i <= steps; i++) {
@@ -55,23 +59,26 @@ const Onboarding = () => {
   };
 
   return (
-    <div>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div
-          style={{ marginLeft: '25px', marginTop: '30px', marginBottom: '30px', cursor: 'pointer', fontSize: '14px' }}
-          onClick={onBackClick}
-        >
-          back
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div
+            style={{ marginLeft: '25px', marginTop: '30px', marginBottom: '30px', cursor: 'pointer', fontSize: '14px' }}
+            onClick={onBackClick}
+          >
+            back
+          </div>
         </div>
+        <div className="progress-bar" style={{ marginBottom: '50px' }}>{renderProgressBar()}</div>
+        {currentStep === 1 && <Onboarding_gender />}
+        {currentStep === 2 && <Onboarding_birth />}
+        {currentStep === 3 && <Onboarding_height />}
+        {currentStep === 4 && <Onboarding_weight />}
+        {currentStep === 5 && <Onboarding_goal />}
+        {currentStep === 6 && <Onboarding_goalweight />}
+        {currentStep === 7 && <Onboarding_activity />}
       </div>
-      <div className="progress-bar" style={{ marginBottom: '50px' }}>{renderProgressBar()}</div>
-      {currentStep === 1 && <Onboarding_gender />}
-      {currentStep === 2 && <Onboarding_birth />}
-      {currentStep === 3 && <Onboarding_height />}
-      {currentStep === 4 && <Onboarding_weight />}
-      {currentStep === 5 && <Onboarding_goal />}
-      {currentStep === 6 && <Onboarding_goalweight />}
-      <div style={{ marginTop: '330px' }}>
+      <div className='button-container'>
         <ButtonCommon
           className='button big b-small blue'
           onClickBtn={onNextClick}

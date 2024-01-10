@@ -12,7 +12,7 @@ const MyPage = lazy(() => import('@components/pages/my-page/MyPage'));
 const MyPageEdit = lazy(() => import('@components/pages/my-page/MyPageEdit'));
 const AddPhoto = lazy(() => import('@components/pages/add-photo/AddPhoto'));
 const AiAnalyze = lazy(() => import('@components/pages/ai-analyze/AiAnalyze'));
-const Record = lazy(() => import('@components/pages/record/Rocord'));
+const Record = lazy(() => import('@components/pages/record/Record'));
 const RecordEdit = lazy(() => import('@components/pages/record/RecordEdit'));
 const Calender = lazy(() => import('@components/pages/calendar/Calendar'));
 
@@ -24,7 +24,7 @@ function App() {
         <main className='main'>
           <Suspense fallback='...loading'>
             <Routes>
-              <Route path='/' element={<Navigate to='/join' />} />
+              <Route path='/' element={<Navigate to='/home' />} />
               <Route path='/login' element={<Login />} />
               <Route path='/join' element={<Join />} />
               <Route path='/join/onboarding' element={<Onboarding />} />

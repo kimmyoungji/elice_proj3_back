@@ -54,7 +54,7 @@
 
 .gray {
   background-color: #fff;
-  border: 2px solid var(--main-lightblue);
+  border: 1px solid var(--main-lightblue);
   color: #3C3C3C;
 }
 

@@ -6,6 +6,7 @@ import './Onboarding.css';
 const Onboarding_birth = () => {
     const [year, setYear] = useState('');
     const [month, setMonth] = useState('');
+    const [date, setDate] = useState('');
     const [selectedBirth, setSelectedBirth] = useState<string | null>(null);
 
     const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,11 +15,8 @@ const Onboarding_birth = () => {
     const handleMonthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMonth(e.target.value);
     };
-
-    const onClick = (birth: string) => {
-        setSelectedBirth((prevGender: string | null) => {
-            return prevGender === birth ? null : birth;
-        });
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDate(e.target.value);
     };
 
     return (
@@ -28,15 +26,26 @@ const Onboarding_birth = () => {
                 <InputCommon
                     className={`button large r-large gray`}
                     value={year}
+                    placeholder='년'
                     onChange={handleYearChange}
                 >
                 </InputCommon>
             </div>
             <div style={{ marginTop: '15px' }}>
                 <InputCommon
-                    className={`button large r-large gray`}
+                    className={`button r-large gray`}
                     value={month}
+                    placeholder='월'
                     onChange={handleMonthChange}
+                >
+                </InputCommon>
+            </div>
+            <div style={{ marginTop: '15px' }}>
+                <InputCommon
+                    className={`button large r-large gray`}
+                    value={date}
+                    placeholder='일'
+                    onChange={handleDateChange}
                 >
                 </InputCommon>
             </div>
