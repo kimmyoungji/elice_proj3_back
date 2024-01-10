@@ -10,11 +10,18 @@ interface UseButtonPropsOptions extends AnchorOptions {
   type?: ButtonType;
   disabled?: boolean;
   tagName?: keyof JSX.IntrinsicElements;
-  onClickBtn?: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 export interface UseButtonPropsMetadata {
   tagName: React.ElementType;
+}
+
+export interface BaseButtonProps {
+  disabled?: boolean | undefined;
+  href?: string | undefined;
+  target?: string | undefined;
+  rel?: string | undefined;
 }
 
 export function isTrivialHref(href?: string) {
@@ -26,7 +33,7 @@ export function useButtonProps({
   href,
   target,
   rel,
-  onClickBtn,
+  onClick,
   tagName,
   type,
 }: UseButtonPropsOptions): [UseButtonPropsOptions, UseButtonPropsMetadata] {
@@ -38,12 +45,8 @@ export function useButtonProps({
     }
   }
   const meta: UseButtonPropsMetadata = { tagName };
-  if (tagName === 'button') {
-    //type: type이 존재하지 않거나 falsy한 경우 'button'이 / 그렇지않으면 type할당
-    return [{ type: (type as any) || 'button', disabled }, meta];
-  }
 
-  const handleClick = (event: React.MouseEvent | React.KeyboardEvent) => {
+  function handleClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     if (disabled || (tagName === 'a' && isTrivialHref(href))) {
       event.preventDefault();
     }
@@ -53,8 +56,13 @@ export function useButtonProps({
       return;
     }
 
-    onClickBtn?.(event);
-  };
+    onClick?.(event);
+  }
+
+  if (tagName === 'button') {
+    //type: type이 존재하지 않거나 falsy한 경우 'button'이 / 그렇지않으면 type할당
+    return [{ type: (type as any) || 'button', disabled, onClick: handleClick }, meta];
+  }
 
   if (tagName === 'a') {
     // href가 falsy라면 "#"를 할당
@@ -70,7 +78,7 @@ export function useButtonProps({
       href,
       target: tagName === 'a' ? target : undefined,
       rel: tagName === 'a' ? rel : undefined,
-      onClickBtn: handleClick,
+      onClick: handleClick,
     },
     meta,
   ];

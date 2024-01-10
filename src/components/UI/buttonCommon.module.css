@@ -4,6 +4,7 @@
   border-radius: 7px;
   border: none;
   flex-shrink: 0;
+  display: block;
 }
 
 .button:hover {
