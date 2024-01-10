@@ -1,24 +1,101 @@
 
-* {
-    box-sizing: border-box;
-  }
-
   .header {
     background: white;
     width: 100%;
     padding: 50px 0px 11px 0px;
-    text-align: center;
+    text-align: cennter;
+    font-size: 16ter;
     color: #000;
     font-family: Inter;
-    font-size: 16px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
     border-bottom: 1px solid #ddd;
   }
 
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 
-.bannerBackground {
+  .mealToggle {
+    margin-left: 15px;
+  }
+
+  .pageTitle{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    margin-bottom: 13px;
+    margin-top: 16px;
+    font-family: Inter;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    position: relative;
+  }
+
+  .dropdown {
+    position: absolute;
+    top: 100%; 
+    left: 39%;
+    background-color: #f9f9f9;
+    min-width: 30px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1000; 
+}
+
+.dropdown div {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 12px;
+}
+
+.dropdown div:hover{
+  background-color: #f1f1f1;
+}
+
+.active {
+  background-color: var(--main-skyblue); 
+  color: white; 
+}
+
+  .headerButton{
+    display: flex;
+    margin-left: auto;
+    gap: 10px;
+  }
+
+  .imgBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 350px;
+    height: 200px;
+    flex-shrink: 0;
+    background-color: var(--main-lightblue);
+    border-radius: 10px;
+}
+
+  .banner {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 40px;
+  }
+
+
+  .bannerBackground {
     position: absolute;
     object-fit: cover;
     z-index: 0;
@@ -28,7 +105,7 @@
 }
 
 .bannerFont {
-    position: relative;
+    position: absolute;
     z-index: 1;
     color: #FFF;
     text-align: center;
@@ -38,4 +115,46 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+}
+
+.mealTag{
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    width: 350px;
+    height: 120px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    border: 1px solid var(--main-lightblue, #EDF3F9);
+    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: nowrap; 
+}
+
+.mealTag::-webkit-scrollbar {
+  display: none;
+}
+
+.mealTag {
+  scrollbar-width: none;
+}
+
+.mealTag {
+  -ms-overflow-style: none;
+}
+
+
+
+
+.nutritionBox{
+  width: 350px;
+  height: 195px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid var(--main-lightblue);
+  margin-top: 10px;
+  padding: 18px 16px 21px 18px;
 }
