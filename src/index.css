@@ -9,12 +9,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-.container {
-  margin: 100px auto;
-  width: 390px;
-  height: 844px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-}
+
 
 /* RESET CSS */
 * {
@@ -98,7 +93,7 @@ body {
 }
 
 .disabled {
-  color: var(--mainskyblue);
+  color: var(--main-skyblue);
   background-color: var(--main-lightblue);
 }
 
