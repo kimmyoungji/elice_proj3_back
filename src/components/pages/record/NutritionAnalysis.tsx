@@ -15,7 +15,7 @@ interface MealData {
   }
 
 const nutritionData : MealData[] = [
-    { mealTime: "점심", calories : 1500 , carbo:  "", fat :  "", fiber:  ""}
+    { mealTime: "점심", calories : 300 , carbo:  "", fat :  "", fiber:  ""}
 ]
 
 const goalCalories = 1300
@@ -27,7 +27,7 @@ const NutritionAnalysis: React.FC<NutritionAnalysisProps> = ({className} ) => {
         return sum + calories;
       }, 0); 
     const percentage = totalCalories === 0 ? 0 : Math.min(100, (totalCalories / goalCalories) * 100);
-    const barFill = percentage > 100 ? "#007bff" : "#ff6a6a"
+    const barFill = percentage >= 100 ? "#ff6a6a" : "#007bff"
 
     return (
     <>
