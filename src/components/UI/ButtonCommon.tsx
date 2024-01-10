@@ -38,12 +38,13 @@ const getClassNames = (...params: getClassNameType[]): string[] | string | undef
 };
 
 const getClassName = (classNames: string | undefined, { variant, disabled, active, size }: getClassNameType) => {
+  const className = classNames?.split(' ');
   const get = getClassNames({ variant, disabled, active, size });
   console.log(get);
-  return typeof get === 'object'
-    ? get.map((classN) => classN && classes[classN]).join(' ')
-    : classNames
-    ? classes[classNames]
+  return typeof className === 'object'
+    ? className.map((classN) => classN && classes[classN]).join(' ')
+    : className
+    ? classes[className]
     : '';
 };
 
