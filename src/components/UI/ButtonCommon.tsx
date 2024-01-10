@@ -17,20 +17,31 @@ type ButtonPropsType = {
   active?: boolean;
 } & ComponentPropsWithRef<'button'>;
 
-type getClassNameType = { variant?: ButtonVariant; disabled?: boolean; active?: boolean; size?: CommonSizeType };
+interface getClassNameType {
+  variant?: ButtonVariant;
+  disabled?: boolean;
+  active?: boolean;
+  size?: CommonSizeType;
+}
 
-const getClassNames = (...params: getClassNameType[]) => {
-  return params.reduce((acc, cur) => {
-    if (cur) acc.push(cur);
-    return acc;
-  }, []);
+const getClassNames = (...params: getClassNameType[]): string[] | string | undefined => {
+  let cls: string[] | undefined;
+  console.log(params);
+  if (params.length > 0) {
+    cls = params.reduce((acc: string[], cur: getClassNameType) => {
+      console.log(cur);
+      if (cur) acc.concat(cur.toString());
+      return acc;
+    }, []);
+  }
+  return cls;
 };
 
 const getClassName = (classNames: string | undefined, { variant, disabled, active, size }: getClassNameType) => {
-  getClassNames(variant, disabled, active, size);
-  const classArray: string[] | undefined = classNames?.split(' ');
-  return typeof classArray === 'object'
-    ? classArray.map((classN) => classN && classes[classN]).join(' ')
+  const get = getClassNames({ variant, disabled, active, size });
+  console.log(get);
+  return typeof get === 'object'
+    ? get.map((classN) => classN && classes[classN]).join(' ')
     : classNames
     ? classes[classNames]
     : '';
