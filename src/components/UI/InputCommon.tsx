@@ -67,10 +67,11 @@ const InputCommon = forwardRef(({ value = undefined, defaultValue, className, ..
           onChange={(e) => setInput(e)}
           ref={inputRef}
           className={`${classes.input} ${inputClass}`}
+          autoComplete='off'
           {...props}
         />
       ) : (
-        <input ref={inputRef} {...props} className={`${classes.input} ${inputClass}`} />
+        <input ref={inputRef} autoComplete='off' {...props} className={`${classes.input} ${inputClass}`} />
       )}
     </>
   );
