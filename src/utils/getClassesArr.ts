@@ -4,7 +4,6 @@ export const getClassNamesArr = (
   classNames: string | undefined,
   arr: any[]
 ): string[] | string | undefined => {
-  console.log(arr);
   let cls: string[] = [];
   if (arr.length > 0) {
     cls = cls?.concat(
