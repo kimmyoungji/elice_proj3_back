@@ -7,11 +7,6 @@
   display: block;
 }
 
-.button:hover {
-  border: 1px solid var(--main-skyblue);
-  color: var(--main-blue);
-}
-
 /* BUTTON CLASS */
 
 .variant-default {
@@ -21,14 +16,14 @@
 }
 
 .variant-active {
-  color: white;
-  background-color: var(--main-blue);
-}
-
-.variant-default-active {
   background-color: #fff;
   color: #000000;
   border: 2px solid var(--main-blue);
+}
+
+.variant-default-active {
+  color: white;
+  background-color: var(--main-blue);
 }
 
 .disabled-true {
@@ -68,23 +63,36 @@
 .size-med-small {
   width: 200px;
   height: 35px;
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 600;
+  font-size: 11px;
 }
 
 .size-small {
   width: 63px;
   height: 35px;
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
 }
 
 .size-ssmall {
   border-radius: 5px;
   width: 77px;
   height: 35px;
+  font-family: Inter;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
 }
 
 .size-tiny {
   border-radius: 7px;
   width: 40px;
   height: 20px;
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 600;
+  font-size: 8px;
 }
 
 /* BUTTON STYLE */
