@@ -1,7 +1,9 @@
-import { forwardRef, useId, useImperativeHandle, useRef } from 'react';
-import { useControlled } from '@hooks/useControlled';
-import classes from './inputCommon.module.css';
-import { getClassName } from '@utils/getClasses';
+import { forwardRef, useId, useImperativeHandle, useRef } from "react";
+import { useControlled } from "@hooks/useControlled";
+import classes from "./inputCommon.module.css";
+import { getClassNamesArr } from "@utils/getClassesArr";
+import { InputVariant, getClassNameType } from "typings/commontypes";
+import { CommonSizeType } from "typings/commontypes";
 
 type InputPropsType = {
   value?: string | number | undefined;
@@ -14,67 +16,111 @@ type InputPropsType = {
   type?: string;
   onChange?: (value: React.ChangeEvent<HTMLInputElement>) => void;
   id?: string;
+  variant?: InputVariant;
+  active?: boolean;
+  size?: CommonSizeType;
 };
-
+const getModuleClassName = (
+  customClassName: string | undefined,
+  { variant, disabled, active, size, prefix }: getClassNameType
+) => {
+  //get = ['variant-active', '', 'active-true', 'size-large']
+  const get = getClassNamesArr(
+    customClassName,
+    Object.entries({ variant, disabled, active, size })
+  );
+  console.log(get);
+  if (typeof get === "object" && get.length > 0) {
+    //prefix 스타일은 button, 중간은 classes 하이픈고려, custom은 마지막에 적용
+    //`input ${classes[`${variant-active}`]} ${classes[`${active-true}`]} ... customClassName`
+    console.log("object이고 get의 length가 0보다 큼");
+    const returnedClasses =
+      `${classes[`${prefix}`]}` +
+        " " +
+        get.map((classN) => classN && `${classes[`${classN}`]}`).join(" ") +
+        " " +
+        customClassName || "";
+    return returnedClasses;
+  } else if (get?.length === 0) {
+    return prefix + " " + customClassName && customClassName;
+  }
+};
 //inputCommon에 value를 넣으면 controlled. 기본은 uncontrolled
 //uncontrolled일때만 input을 자동 변경하게 해줌
-const InputCommon = forwardRef(({ value = undefined, defaultValue, className, ...props }: InputPropsType, ref) => {
-  const inputRef = useRef<HTMLInputElement>(null);
+const InputCommon = forwardRef(
+  (
+    {
+      value = undefined,
+      defaultValue,
+      className,
+      variant = "default",
+      disabled,
+      active,
+      size = "large",
+      ...props
+    }: InputPropsType,
+    ref
+  ) => {
+    const inputRef = useRef<HTMLInputElement>(null);
 
-  const [input, setInput] = useControlled({
-    controlled: value,
-    unControlled: defaultValue,
-  });
+    const [input, setInput] = useControlled({
+      controlled: value,
+      unControlled: defaultValue,
+    });
 
-  const controlledId = props.id;
-  const uncontrolledId = useId();
+    const controlledId = props.id;
+    const uncontrolledId = useId();
 
-  const id = useControlled({
-    controlled: controlledId,
-    unControlled: uncontrolledId,
-  })[0];
+    const id = useControlled({
+      controlled: controlledId,
+      unControlled: uncontrolledId,
+    })[0];
 
-  //focus기능
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        focus() {
-          inputRef.current?.focus();
-        },
-      };
-    },
-    []
-  );
+    //focus기능
+    useImperativeHandle(
+      ref,
+      () => {
+        return {
+          focus() {
+            inputRef.current?.focus();
+          },
+        };
+      },
+      []
+    );
 
-  const getClassName = (className: any | undefined) => {
-    const classArray: string[] | undefined = className?.split(' ');
-    return typeof classArray === 'object'
-      ? classArray.map((classN) => classN && classes[classN]).join(' ')
-      : className
-      ? classes[className]
-      : '';
-  };
+    const inputClass = getModuleClassName(className, {
+      variant,
+      disabled,
+      active,
+      size,
+      prefix: "input",
+    });
 
-  const inputClass = getClassName(className);
-
-  return (
-    <>
-      {!defaultValue ? (
-        <input
-          id={id}
-          value={input}
-          onChange={(e) => setInput(e)}
-          ref={inputRef}
-          className={`${classes.input} ${inputClass}`}
-          autoComplete='off'
-          {...props}
-        />
-      ) : (
-        <input ref={inputRef} autoComplete='off' {...props} className={`${classes.input} ${inputClass}`} />
-      )}
-    </>
-  );
-});
+    return (
+      <>
+        {value ? (
+          <input
+            id={id}
+            value={input}
+            onChange={(e) => setInput(e)}
+            ref={inputRef}
+            className={inputClass}
+            autoComplete="off"
+            {...props}
+          />
+        ) : (
+          <input
+            defaultValue={defaultValue}
+            ref={inputRef}
+            autoComplete="off"
+            {...props}
+            className={inputClass}
+          />
+        )}
+      </>
+    );
+  }
+);
 
 export default InputCommon;

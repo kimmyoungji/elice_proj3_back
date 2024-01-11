@@ -1,106 +1,92 @@
-import React, { ComponentPropsWithRef, ReactElement, useId, useImperativeHandle, useRef } from 'react';
-import classes from './buttonCommon.module.css';
-import { BaseButtonProps, useButtonProps } from '@hooks/useButtonProps';
+import React, { useId, useImperativeHandle, forwardRef, useRef } from "react";
+import classes from "./buttonCommon.module.css";
+import { useButtonProps } from "@hooks/useButtonProps";
+import { getClassNamesArr } from "@utils/getClassesArr";
+import { ButtonPropsType, getClassNameType } from "typings/commontypes";
 
-type ButtonVariant = 'default' | 'active' | 'default-active' | 'validated' | 'error';
-
-export type CommonSizeType = 'large' | 'big' | 'medium' | 'med-small' | 'small' | 'ssmall' | 'tiny';
-
-interface ButtonPropsType extends ComponentPropsWithRef<'button'> {
-  children?: string | ReactElement | number;
-  className?: string;
-  onClickBtn?: ((event: React.MouseEvent<Element, MouseEvent> | React.KeyboardEvent<Element>) => void) | undefined;
-  href?: string;
-  variant?: ButtonVariant;
-  size?: CommonSizeType;
-  disabled?: boolean;
-  active?: boolean;
-}
-
-interface getClassNameType {
-  variant?: ButtonVariant;
-  disabled?: boolean;
-  active?: boolean;
-  size?: CommonSizeType;
-}
-
-interface ButtonProps extends BaseButtonProps, React.ComponentPropsWithoutRef<'button'> {}
-
-const getClassNames = (...params: any[]): string[] | string | undefined => {
-  let cls: string[] | undefined;
-  if (params.length > 0) {
-    cls = params.reduce((acc: string[], cur: getClassNameType) => {
-      if (cur) acc.concat(cur.toString());
-      return acc;
-    }, []);
+const getModuleClassName = (
+  customClassName: string | undefined,
+  { variant, disabled, active, size, prefix }: getClassNameType
+) => {
+  //get = ['variant-active', '', 'active-true', 'size-large']
+  const get = getClassNamesArr(
+    customClassName,
+    Object.entries({ variant, disabled, active, size })
+  );
+  console.log(get);
+  if (typeof get === "object" && get.length > 0) {
+    //prefix 스타일은 button, 중간은 classes 하이픈고려, custom은 마지막에 적용
+    //`button ${classes[`${variant-active}`]} ${classes[`${active-true}`]} ... customClassName`
+    console.log("object이고 get의 length가 0보다 큼");
+    const returnedClasses =
+      `${classes[`${prefix}`]}` +
+        " " +
+        get.map((classN) => classN && `${classes[`${classN}`]}`).join(" ") +
+        " " +
+        customClassName || "";
+    return returnedClasses;
+  } else if (get?.length === 0) {
+    return prefix + " " + customClassName && customClassName;
   }
-  return cls;
 };
 
-const getClassName = (classNames: string | undefined, { variant, disabled, active, size }: getClassNameType) => {
-  const className = classNames?.split(' ');
-  const get = getClassNames({ variant, disabled, active, size });
-  // console.log(get);
-  return typeof className === 'object'
-    ? className.map((classN) => classN && classes[classN]).join(' ')
-    : className
-    ? classes[className]
-    : '';
-};
-// const className = classNames;
-// const get = getClassNames(variant, disabled, active, size);
-// console.log(get);
-// return typeof get === 'object' ? get.map((classN) => classN && classes[classN]).join(' ') : get ? classes[get] : '';
-// };
-
-const ButtonCommon = React.forwardRef(
+const ButtonCommon = forwardRef<HTMLButtonElement, ButtonPropsType>(
   (
-    { children, onClickBtn, className, size, disabled, active, variant = 'default', href, ...props }: ButtonPropsType,
+    {
+      children,
+      onClickBtn,
+      customClassName,
+      size,
+      disabled = false,
+      active = true,
+      variant = "default",
+      href,
+      ...props
+    }: ButtonPropsType,
     ref
   ) => {
     const buttonRef = useRef<HTMLButtonElement>(null);
     const id = useId();
 
     const [buttonProps, { tagName: Component }] = useButtonProps({
+      disabled,
       href,
-      onClickBtn,
+      onClick: onClickBtn,
       ...props,
     });
 
-    useImperativeHandle(
-      ref,
-      () => {
-        return {
-          focus() {
-            buttonRef.current?.focus();
-          },
-        };
-      },
-      []
-    );
+    // useImperativeHandle(
+    //   ref,
+    //   () => {
+    //     return {
+    //       focus() {
+    //         buttonRef.current?.focus();
+    //       },
+    //     };
+    //   },
+    //   []
+    // );
 
-    const buttonClass = getClassName(className, { variant, disabled, active, size });
+    const buttonClass = getModuleClassName(customClassName, {
+      variant,
+      disabled,
+      active,
+      size,
+      prefix: "button",
+    });
+
+    console.log(buttonClass);
 
     return (
       <>
-        {href && (
-          <a href={href} id={id} className={`${classes.button} ${buttonClass}`} onClick={onClickBtn}>
-            {children}
-          </a>
-        )}
-        {!href && (
-          <button id={id} className={`${classes.button} ${buttonClass}`} onClick={onClickBtn} ref={buttonRef}>
-            {children}
-          </button>
-        )}
-        {/* <Component {...buttonProps} onClick={onClickBtn} className={buttonClass}>
+        <Component id={id} {...buttonProps} {...props} className={buttonClass}>
           {children}
-        </Component> */}
+        </Component>
       </>
     );
   }
 );
 
-ButtonCommon.displayName = 'ButtonCommon';
+ButtonCommon.displayName = "ButtonCommon";
 
 export default ButtonCommon;

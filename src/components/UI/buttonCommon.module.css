@@ -4,74 +4,95 @@
   border-radius: 7px;
   border: none;
   flex-shrink: 0;
-}
-
-.button:hover {
-  border: 1px solid var(--main-skyblue);
-  color: var(--main-blue);
+  display: block;
 }
 
 /* BUTTON CLASS */
 
-.default {
+.variant-default {
   background-color: #fff;
   color: #000000;
   border: 2px solid var(--main-lightblue);
-} 
-
-.active {
-  color: white;
-  background-color: var(--main-blue);
 }
 
-.default-active {
+.variant-active {
   background-color: #fff;
   color: #000000;
   border: 2px solid var(--main-blue);
 }
 
-.disabled {
+.variant-default-active {
+  color: white;
+  background-color: var(--main-blue);
+}
+
+.disabled-true {
   color: var(--main-skyblue);
   background-color: var(--main-lightblue);
 }
 
+.disabled-false {
+}
+
 /* BUTTON SIZE CLASS */
 
-.large {
+.size-large {
   width: 350px;
   height: 55px;
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 400;
+  font-size: 15px;
 }
 
-.big {
+.size-big {
   width: 350px;
   height: 45px;
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 700;
+  font-size: 15px;
 }
 
-.medium {
+.size-medium {
   width: 169px;
   height: 45px;
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
 }
 
-.med-small {
+.size-med-small {
   width: 200px;
   height: 35px;
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 600;
+  font-size: 11px;
 }
 
-.small {
+.size-small {
   width: 63px;
   height: 35px;
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
 }
 
-.ssmall {
+.size-ssmall {
   border-radius: 5px;
   width: 77px;
   height: 35px;
+  font-family: Inter;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
 }
 
-.tiny {
+.size-tiny {
   border-radius: 7px;
   width: 40px;
   height: 20px;
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 600;
+  font-size: 8px;
 }
 
 /* BUTTON STYLE */
@@ -102,7 +123,7 @@
 
 .b-big {
   font-family: var(--basic-font), sans-serif;
-  font-weight: 700; 
+  font-weight: 700;
   font-size: 24px;
 }
 
@@ -187,7 +208,19 @@
 .s-medium {
   font-family: var(--basic-font), sans-serif;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 13px;
+}
+
+.s-regular {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.s-small {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 600;
+  font-size: 10px;
 }
 
 .s-tiny {
