@@ -2,7 +2,7 @@ import React, { useId, useImperativeHandle, forwardRef, useRef } from "react";
 import classes from "./buttonCommon.module.css";
 import { useButtonProps } from "@hooks/useButtonProps";
 import { getClassNamesArr } from "@utils/getClassesArr";
-import { ButtonPropsType, getClassNameType } from "typings/buttontypes";
+import { ButtonPropsType, getClassNameType } from "typings/commontypes";
 
 const getModuleClassName = (
   customClassName: string | undefined,
@@ -71,7 +71,7 @@ const ButtonCommon = forwardRef<HTMLButtonElement, ButtonPropsType>(
       variant,
       disabled,
       active,
-      size: "large",
+      size,
       prefix: "button",
     });
 
