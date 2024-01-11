@@ -38,7 +38,9 @@ export type ButtonVariant =
   | "active"
   | "default-active"
   | "validated"
-  | "error";
+  | "error"  
+  | "disabled";
+
 
 export interface ButtonPropsType extends ComponentPropsWithRef<"button"> {
   children?: string | ReactElement | number;
