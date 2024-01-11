@@ -5,14 +5,17 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  Unique,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, IsBoolean, IsDate, IsOptional } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, IsBoolean, IsDate, IsOptional, IsEnum } from 'class-validator';
+import { Gender } from './user.health-info.enums';
 
-@Entity('user')
+@Entity()
+@Unique(['username','email'])
 export class User {
     @ApiProperty({ description: '사용자의 고유 ID' })
-    @PrimaryColumn({ type: 'varchar', length: 36 })
+    @PrimaryColumn({ type: 'uuid' })
     user_id: string;
 
     @ApiProperty({ description: '사용자의 이메일' })
@@ -32,16 +35,16 @@ export class User {
     username: string;
 
     @ApiProperty({ description: '사용자의 생일' })
-    @Column({ type: 'datetime' })
+    @Column({ type: 'date' })
     @IsNotEmpty()
     @IsDate()
     birthday: Date;
 
     @ApiProperty({ description: '사용자의 성별' })
-    @Column({ type: 'boolean' })
+    @Column({ type: 'enum', enum:Gender })
     @IsNotEmpty()
-    @IsBoolean()
-    gender: boolean;
+    @IsEnum(Gender)
+    gender: Gender;
 
     @ApiProperty({ description: '사용자의 프로필 이미지' })
     @Column({ type: 'varchar', length: 50, nullable: true })
@@ -55,10 +58,12 @@ export class User {
     membership: boolean;
 
     @ApiProperty({ description: '사용자가 생성된 날짜' })
+    @Column({ type: 'datetime' })
     @CreateDateColumn()
     created_date: Date;
 
     @ApiProperty({ description: '사용자 정보가 업데이트된 날짜' })
+    @Column({ type: 'datetime'})
     @UpdateDateColumn()
     updated_date: Date;
 
