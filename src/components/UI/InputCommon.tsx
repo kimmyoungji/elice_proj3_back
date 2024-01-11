@@ -48,7 +48,7 @@ const getModuleClassName = (
 const InputCommon = forwardRef(
   (
     {
-      value = "",
+      value,
       defaultValue,
       className,
       variant = "default",
@@ -97,12 +97,11 @@ const InputCommon = forwardRef(
 
     return (
       <>
-        {value ? (
+        {onchange ? (
           <input
             id={id}
             value={input}
             onChange={(e) => setInput(e)}
-            ref={inputRef}
             className={inputClass}
             autoComplete="off"
             {...props}
