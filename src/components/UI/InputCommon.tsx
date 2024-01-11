@@ -48,7 +48,7 @@ const getModuleClassName = (
 const InputCommon = forwardRef(
   (
     {
-      value = undefined,
+      value = "",
       defaultValue,
       className,
       variant = "default",
