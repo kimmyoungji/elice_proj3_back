@@ -8,8 +8,22 @@ interface Nutrition {
   gram : string 
 }
 
+interface Props {
+  focus: string,
+  foods: {
+    foodName: string;
+    foodImage: string;
+    XYCoordinate: number[];
+}[],
+  setFoods: React.Dispatch<React.SetStateAction<{
+    foodName: string;
+    foodImage: string;
+    XYCoordinate: number[];
+}[]>>
+}
 
-const RecordEditDetail = () => {
+
+const RecordEditDetail = ({focus, foods, setFoods}:Props) => {
   const [searchInput, setSearchInput] = useState("");
   const [searching, setSearching] = useState(false);
 
@@ -17,7 +31,11 @@ const RecordEditDetail = () => {
     setSearching(true);
     //api 호출 코드 
     //특정항목 선택 시 setSearching(false)
-  }
+  };
+
+  const editName = (e:React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
+    
+  };
 
   let amount = 1;
   const searchResults = ["떡국", "두살 떡국","1등 떡국 최고" ,"세살 떡국", "네살 떡국", "다섯살 떡국","좋은 떡국","나쁜 떡국","해맑은 떡국"]; 
@@ -34,7 +52,7 @@ const RecordEditDetail = () => {
     <div className={styles.container}>
 
       <div className={styles.titlebox}>
-        <p className="s-large">음식명</p>
+        <p className="s-large">{focus}</p>
         <p className="r-super" style={{marginLeft:"auto"}}>0Kcal</p>
       </div>
 
@@ -67,7 +85,7 @@ const RecordEditDetail = () => {
               <div style={{overflowY:"auto"}}>
                 {searchResults
                   ? searchResults.map((result:string,index) =>
-                    <p key={index} className="r-medium" style={{marginBottom: "5px"}}>
+                    <p key={index} className="r-medium" style={{marginBottom: "5px"}} onClick={e=>editName(e)}>
                       {result.split(searchInput)[0] !== "" && result.split(searchInput)[0]}
                       <span className="r-medium" style={{color: "var(--main-blue)"}}>{searchInput}</span>
                       {result.split(searchInput)[1] !== "" && result.split(searchInput)[1]}

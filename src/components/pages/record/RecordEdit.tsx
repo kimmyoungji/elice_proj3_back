@@ -92,6 +92,7 @@ const RecordEdit = () => {
   }, [foods]);
 
 
+
   return (
     <>
       <div className={header.header}>
@@ -151,7 +152,7 @@ const RecordEdit = () => {
           ))}
         </div>
       </div>
-      {focus && <RecordEditDetail />}
+      {focus && <RecordEditDetail focus={focus} foods={foods} setFoods={setFoods} />}
       <div className={styles.btnbox}>
         <ButtonCommon size="medium" variant="disabled">취소</ButtonCommon>
         <ButtonCommon size="medium" variant="default-active" >수정 완료</ButtonCommon>
