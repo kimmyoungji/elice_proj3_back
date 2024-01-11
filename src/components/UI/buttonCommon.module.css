@@ -26,6 +26,11 @@
   background-color: var(--main-blue);
 }
 
+.variant-disabled {
+  color: var(--main-skyblue);
+  background-color: var(--main-lightblue);
+}
+
 .disabled-true {
   color: var(--main-skyblue);
   background-color: var(--main-lightblue);
