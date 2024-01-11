@@ -86,7 +86,7 @@ const RecordEditDetail = () => {
         </div>
       </div>
 
-      <div className={styles.calbox}>
+      <div>
         <div className={styles.caltext}>
           <p className="r-large">얼마나 먹었나요?</p>
           <p className="r-super">{amount}g</p>
@@ -98,10 +98,7 @@ const RecordEditDetail = () => {
         </div>
       </div>
 
-      <div className={styles.btnbox}>
-        <ButtonCommon size="medium" variant="disabled">취소</ButtonCommon>
-        <ButtonCommon size="medium" variant="default-active" >수정 완료</ButtonCommon>
-      </div>
+      
     </div>
   )
 

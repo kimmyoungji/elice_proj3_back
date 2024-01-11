@@ -3,6 +3,7 @@ import header from "../../UI/headerCommon.module.css";
 import styles from "./recordedit.module.css";
 import RecordEditDetail from "./RecordEditDetail";
 import { useEffect, useRef, useState } from "react";
+import ButtonCommon from "@components/UI/ButtonCommon";
 
 interface Food {
   foodName: string,
@@ -32,20 +33,28 @@ const RecordEdit = () => {
     ]);
   const [focus, setFocus] = useState("");
 
-  const handleFocus = (e:React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+  const handleFocus = (e:React.MouseEvent<HTMLCanvasElement|HTMLDivElement, MouseEvent>) => {
     setFocus(`${e.currentTarget.id}`);
   };
 
-  const addFood = () => {
-    setFoods([...foods, {
-      "foodName": "음식명",
-      "foodImage": "/images/9gram_logo.png",
-      "XYCoordinate": [0,0],
-    }])
+  const addFood = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    foods[0].foodName === "음식명"
+      ? alert("음식 상세 정보를 추가해주세요!")
+      : setFoods([{
+        "foodName": "음식명",
+        "foodImage": "/images/9gram_logo.png",
+        "XYCoordinate": [0, 0]
+      }, ...foods
+      ]);
+    e.currentTarget.nextElementSibling?.scrollTo({
+      left: 0 ,
+      behavior: "smooth",
+    })
+    console.log('추가')
   };
 
   const deletefood = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
-    const delete_target = (e.currentTarget.previousSibling as HTMLElement)?.attributes[2].nodeValue;
+    const delete_target = e.currentTarget.id;
     setFoods(foods.filter(food => food.foodName !== delete_target))
   };
 
@@ -67,7 +76,7 @@ const RecordEdit = () => {
     const context = canvas?.getContext('2d');
 
     const image = new Image();
-    image.src = `${foods[0].foodImage}`;
+    image.src = `${foods[foods.length-1].foodImage}`;
 
     image.onload = () => {
       // props (원본 객체, x좌표, y좌표, 이미지가로길이, 이미지세로길이, 캔버스 x좌표, 캔버스 y좌표, 캔버스에 그려질 가로길이, 캔버스에 그려질 세로길이)
@@ -80,7 +89,7 @@ const RecordEdit = () => {
       context?.clearRect(0, 0, canvas?.width as number, canvas?.height as number);
       context?.putImageData(croppedImage as ImageData, 0, 0);
     };
-  }, []);
+  }, [foods]);
 
 
   return (
@@ -99,9 +108,9 @@ const RecordEdit = () => {
       </div>
 
       <div className={styles.photobox}>
-        <button className={styles.addphotobtn}>
+        <button className={styles.addphotobtn} onClick={e=>addFood(e)}>
           <img className={styles.btnicon} src="/icons/plusicon.png" alt="음식추가버튼"/>
-          <p className={styles.btntext} onClick={addFood}>음식<br/>추가</p>
+          <p className={styles.btntext} >음식<br/>추가</p>
         </button>
         <div
           className={styles.tagbox}
@@ -111,7 +120,15 @@ const RecordEdit = () => {
           {foods.map((food:Food,index:number) => (
             <div key={index} className={styles.tagitem}>
               <div className={styles.tagimgwrap}>
-                <canvas
+                {food.foodName === "음식명"
+                  ? <img
+                  className={`${styles.tagimg} ${focus===food.foodName && styles.focusimg}`}
+                    id={food.foodName}
+                    src={food.foodImage}
+                    alt={food.foodName}
+                  onClick={(e => handleFocus(e))}
+                />
+                  : <canvas
                   className={`${styles.tagimg} ${focus===food.foodName && styles.focusimg}`}
                   id={food.foodName}
                   ref={canvasRef}
@@ -119,20 +136,25 @@ const RecordEdit = () => {
                   height={90}
                   onClick={(e => handleFocus(e))}
                 />
+                }
+                
                 <img
                   className={styles.tagdeleteicon}
+                  id={food.foodName}
                   src="/icons/deleteicon.png"
                   alt="태그삭제"
                   onClick={(e)=>deletefood(e)}
                 />
               </div>
-              <p className={`${focus===food.foodName ? styles.focustxt : styles.tagtxt}`}>{food.foodName}</p>
+              <p className={`${focus === food.foodName ? styles.focustxt : styles.tagtxt}`}>{food.foodName}</p>
           </div>
           ))}
         </div>
       </div>
-      <div>
-        <RecordEditDetail/>
+      {focus && <RecordEditDetail />}
+      <div className={styles.btnbox}>
+        <ButtonCommon size="medium" variant="disabled">취소</ButtonCommon>
+        <ButtonCommon size="medium" variant="default-active" >수정 완료</ButtonCommon>
       </div>
     </>
   );
