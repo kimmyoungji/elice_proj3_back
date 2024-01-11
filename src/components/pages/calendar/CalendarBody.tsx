@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 import classes from "./calendarbody.module.css";
 import { useCalendarContext } from "./Calendar";
+import Album from "./Album";
 
 //필요한 전역 정보 나의 목표칼로리 (유저 정보에 포함)
 const DUMMYCumulative_cal_Date = {
@@ -11,7 +12,7 @@ const DUMMYCumulative_cal_Date = {
 const DUMMYtargetCalories = 1200;
 
 const CalendarBody = () => {
-  const { yearMonth: selectedYearMonth } = useCalendarContext();
+  const { yearMonth: selectedYearMonth, isAlbum } = useCalendarContext();
 
   const [thisYear, thisMonth] = selectedYearMonth.split(".");
   const dayOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
@@ -100,15 +101,18 @@ const CalendarBody = () => {
   };
 
   return (
-    <div className={classes["cla-body"]}>
-      <div className={classes["cla-week"]}>{dayOfWeekArray}</div>
-      <div className={classes["cla-week"]}>
-        <div className={classes["cal-flex"]}>{getThisMonthArray()}</div>
-      </div>
-    </div>
+    <>
+      {!isAlbum && (
+        <div className={classes["cla-body"]}>
+          <div className={classes["cla-week"]}>{dayOfWeekArray}</div>
+          <div className={classes["cla-week"]}>
+            <div className={classes["cal-flex"]}>{getThisMonthArray()}</div>
+          </div>
+        </div>
+      )}
+      {isAlbum && <Album />}
+    </>
   );
 };
 
 export default CalendarBody;
-
-// 좌 37 상 14

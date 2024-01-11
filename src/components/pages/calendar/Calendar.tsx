@@ -8,7 +8,12 @@ import getDates from "../../../utils/getDates";
 import InputCommon from "@components/UI/InputCommon";
 
 const CalendarContext = createContext<
-  | { yearMonth: string; setYearMonth: Dispatch<React.SetStateAction<string>> }
+  | {
+      yearMonth: string;
+      setYearMonth: Dispatch<React.SetStateAction<string>>;
+      isAlbum: boolean;
+      setIsAlbum: Dispatch<React.SetStateAction<boolean>>;
+    }
   | undefined
 >(undefined);
 
@@ -17,14 +22,22 @@ const CalendarProvider = ({
 }: {
   children: ReactElement[] | ReactElement;
 }) => {
+  //초깃값은 getDates로 받아옴
+  //그다음은 선택된 값으로 변경되어야 함.
+  //변경된 것을 감지?
+
   // const { thisYear, thisMonth } = getDates();
   const { thisYear, thisMonth } = { thisYear: 2024, thisMonth: 6 };
   const initialYearMonth = `${thisYear}.${thisMonth}`;
   console.log(initialYearMonth);
   //형식 2024.01
   const [yearMonth, setYearMonth] = useState(initialYearMonth);
+  const [isAlbum, setIsAlbum] = useState(false);
+
   return (
-    <CalendarContext.Provider value={{ yearMonth, setYearMonth }}>
+    <CalendarContext.Provider
+      value={{ yearMonth, setYearMonth, isAlbum, setIsAlbum }}
+    >
       {children}
     </CalendarContext.Provider>
   );

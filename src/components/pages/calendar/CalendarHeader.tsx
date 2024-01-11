@@ -7,11 +7,15 @@ import DropdownItem from "./dropdown/DropdownItem";
 import { useCalendarContext } from "./Calendar";
 
 const CalendarHeader = () => {
-  const { yearMonth } = useCalendarContext();
+  const { yearMonth, setIsAlbum } = useCalendarContext();
   const itemId = useId();
   const handleChange = (value: string) => {
-    //value값으로 선택된 날짜를 받아올 수 있음
+    //선택한 날짜를 context에 설정
     console.log(value);
+  };
+
+  const onChangeToggle = (value: boolean) => {
+    setIsAlbum(value);
   };
   return (
     <div
@@ -28,7 +32,7 @@ const CalendarHeader = () => {
         {/* item은 현재 날짜에서 앞뒤로????? 인피니티 스크롤???...*/}
         <DropdownItem id={itemId}>aasasd</DropdownItem>
       </Dropdown>
-      <Toggle>
+      <Toggle onChangeToggle={onChangeToggle}>
         <ToggleButton />
       </Toggle>
     </div>
