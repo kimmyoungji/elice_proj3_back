@@ -50,7 +50,7 @@ const RecordEditDetail = () => {
               setSearchInput(e.target.value)}
           />
           <ButtonCommon size="small" variant="default-active">
-            수정
+            검색
           </ButtonCommon>
         </div>
       </div>
@@ -68,7 +68,7 @@ const RecordEditDetail = () => {
       </div>
 
       <div className={styles.btnbox}>
-        <ButtonCommon size="medium" variant="default" disabled={true}>취소</ButtonCommon>
+        <ButtonCommon size="medium" variant="disabled">취소</ButtonCommon>
         <ButtonCommon size="medium" variant="default-active" >수정 완료</ButtonCommon>
       </div>
     </div>
