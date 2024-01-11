@@ -43,12 +43,13 @@ const RecordEditDetail = () => {
         </p>
         <div className={styles.searchform}>
           <InputCommon
-            className="medium r-large default"
+            size="medium"
+            variant="default"
             value={searchInput}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setSearchInput(e.target.value)}
           />
-          <ButtonCommon className="small b-small active">
+          <ButtonCommon size="small" variant="default-active">
             수정
           </ButtonCommon>
         </div>
@@ -67,8 +68,8 @@ const RecordEditDetail = () => {
       </div>
 
       <div className={styles.btnbox}>
-        <ButtonCommon className="medium b-small disabled">취소</ButtonCommon>
-        <ButtonCommon className="medium b-small active">수정 완료</ButtonCommon>
+        <ButtonCommon size="medium" variant="default" disabled={true}>취소</ButtonCommon>
+        <ButtonCommon size="medium" variant="default-active" >수정 완료</ButtonCommon>
       </div>
     </div>
   )

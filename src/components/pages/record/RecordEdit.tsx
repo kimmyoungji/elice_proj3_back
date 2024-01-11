@@ -12,12 +12,15 @@ const RecordEdit = () => {
         <img className={header.arrow} src="/icons/left_arrow.png" alt="뒤로가기" onClick={()=>navigate(-1)}/>
         <div className={header.text}>AI 식단 확인</div>
       </div>
+
       <div className={styles.datebox}>
         <p className="b-small">2024.01.02 (화) 점심</p>
       </div>
+
       <div className={styles.imgbox}>
         <img className={styles.mealimg} src="https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_1280.jpg" alt="식단이미지"/>
       </div>
+
       <div className={styles.tagbox}>
         <button className={styles.addphotobtn}>
           <img className={styles.btnicon} src="/icons/plusicon.png" alt="음식추가버튼"/>
@@ -38,6 +41,7 @@ const RecordEdit = () => {
           <p className="s-medium" style={{color: "var(--main-blue)"}}>음식명</p>
         </div>
       </div>
+      
       <div>
         <RecordEditDetail/>
       </div>
