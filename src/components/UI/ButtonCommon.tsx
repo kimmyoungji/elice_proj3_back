@@ -73,7 +73,6 @@ const ButtonCommon = forwardRef<HTMLButtonElement, ButtonPropsType>(
       prefix: "button",
     });
 
-    console.log(buttonClass);
 
     return (
       <>
