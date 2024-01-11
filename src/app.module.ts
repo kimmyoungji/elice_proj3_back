@@ -4,10 +4,12 @@ import { AppService } from './app.service';
 // import { createConnection } from 'typeorm';
 import { UsersModule } from './users/users.module';
 import * as config from "config";
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeORMConfig } from './conifg/database/typorm.config.mj';
 
 // const dbConfig = config.get("db");
 @Module({
-  imports: [UsersModule],
+  imports: [TypeOrmModule.forRoot(typeORMConfig),UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })
