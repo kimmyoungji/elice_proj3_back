@@ -1,3 +1,4 @@
+import { HealthInfoRepository } from './health-info.repository';
 import { ActivityAmount } from './user.health-info.enums';
 import { DietGoal, Gender } from './user.health-info.enums';
 import { DataSource } from 'typeorm';
@@ -13,14 +14,10 @@ import { HealthInfo } from './health-info.entity';
 export class UsersService {
     constructor(
         @InjectRepository(UsersRepository) private usersRepository: UsersRepository,
+        @InjectRepository(HealthInfoRepository) private healthInfoRepository: HealthInfoRepository,
     ) {}
 
     async signUp(signUpUserDto: SignUpUserDto) {
-
-        console.log(Gender[signUpUserDto.gender], typeof Gender[signUpUserDto.gender]);
-        console.log(DietGoal[signUpUserDto.goal], typeof DietGoal[signUpUserDto.goal]);
-        console.log(ActivityAmount[signUpUserDto.activity], typeof ActivityAmount[signUpUserDto.activity]);
-        console.log(Gender['FEMAEL'])
 
         // signUpUserDto -> User Entity Type
         const newUser = new User();
@@ -42,8 +39,7 @@ export class UsersService {
         newHealthInfo.activity_amount = signUpUserDto.activity;
 
         const result1 = await this.usersRepository.createUser(newUser);
-        // const result2 = await this.usersRepository.createHealthInfo(newHealthInfo);
-        return { result1, newHealthInfo };
-
+        const result2 = await this.healthInfoRepository.createHealthInfo(newHealthInfo);
+        return { result1, result2 };
     }
 }
