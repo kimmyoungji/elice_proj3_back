@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import header from "../../UI/headerCommon.module.css";
 import styles from "./recordedit.module.css";
 import RecordEditDetail from "./RecordEditDetail";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Food {
   foodName: string,
@@ -16,20 +16,25 @@ const RecordEdit = () => {
     [
       {
         "foodName": "떡만둣국",
-        "foodImage": "/images/9gram_logo.png",
+        "foodImage": "/images/salad-2756467_1280.jpg",
         "XYCoordinate": [35.67, 146.02],
       },
       {
         "foodName": "흰쌀밥",
-        "foodImage": "/images/9gram_logo.png",
+        "foodImage": "/images/salad-2756467_1280.jpg",
         "XYCoordinate": [35.67, 146.02],
       },
       {
         "foodName": "김치",
-        "foodImage": "/images/9gram_logo.png",
+        "foodImage": "/images/salad-2756467_1280.jpg",
         "XYCoordinate": [35.67, 146.02],
       },
     ]);
+  const [focus, setFocus] = useState("");
+
+  const handleFocus = (e:React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+    setFocus(`${e.currentTarget.id}`);
+  };
 
   const addFood = () => {
     setFoods([...foods, {
@@ -42,7 +47,6 @@ const RecordEdit = () => {
   const deletefood = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     const delete_target = (e.currentTarget.previousSibling as HTMLElement)?.attributes[2].nodeValue;
     setFoods(foods.filter(food => food.foodName !== delete_target))
-    console.log(foods);
   };
 
   const scrollDiv = useRef<HTMLDivElement|null>(null);
@@ -55,6 +59,29 @@ const RecordEdit = () => {
       behavior: "smooth",
     });
   };
+
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext('2d');
+
+    const image = new Image();
+    image.src = `${foods[0].foodImage}`;
+
+    image.onload = () => {
+      // props (원본 객체, x좌표, y좌표, 이미지가로길이, 이미지세로길이, 캔버스 x좌표, 캔버스 y좌표, 캔버스에 그려질 가로길이, 캔버스에 그려질 세로길이)
+      context?.drawImage(image, 0, 0, image.width, image.height);
+
+      // props (추출 x좌표, 추출 y좌표, 추출 너비, 추출 높이)
+      const croppedImage= context?.getImageData(0, 0, 90, 90);
+
+      // 자른 이미지를 다시 Canvas에 그립니다.
+      context?.clearRect(0, 0, canvas?.width as number, canvas?.height as number);
+      context?.putImageData(croppedImage as ImageData, 0, 0);
+    };
+  }, []);
+
 
   return (
     <>
@@ -84,7 +111,14 @@ const RecordEdit = () => {
           {foods.map((food:Food,index:number) => (
             <div key={index} className={styles.tagitem}>
               <div className={styles.tagimgwrap}>
-                <img className={styles.tagimg} src={food.foodImage} alt={food.foodName} />
+                <canvas
+                  className={`${styles.tagimg} ${focus===food.foodName && styles.focusimg}`}
+                  id={food.foodName}
+                  ref={canvasRef}
+                  width={90}
+                  height={90}
+                  onClick={(e => handleFocus(e))}
+                />
                 <img
                   className={styles.tagdeleteicon}
                   src="/icons/deleteicon.png"
@@ -92,16 +126,9 @@ const RecordEdit = () => {
                   onClick={(e)=>deletefood(e)}
                 />
               </div>
-              <p className="r-big">{food.foodName}</p>
+              <p className={`${focus===food.foodName ? styles.focustxt : styles.tagtxt}`}>{food.foodName}</p>
           </div>
           ))}
-          <div className={styles.tagitem}>
-            <div className={styles.tagimgwrap}>
-              <img className={styles.tagimg} style={{border: "3px solid var(--main-blue)"}} src="/images/9gram_logo.png" alt="태그기본이미지"/>
-              <img className={styles.tagdeleteicon} src="/icons/deleteicon.png" alt="태그삭제" />
-            </div>
-            <p className="s-medium" style={{color: "var(--main-blue)"}}>음식명</p>
-          </div>
         </div>
       </div>
       <div>

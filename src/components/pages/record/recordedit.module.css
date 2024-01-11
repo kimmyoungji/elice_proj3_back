@@ -72,6 +72,23 @@
   border-radius: 10px;
 }
 
+.focusimg {
+  border: 3px solid var(--main-blue);
+}
+
+.focustxt {
+  color: var(--main-blue);
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.tagtxt {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+}
+
 .tagdeleteicon {
   width: 15px;
   height: 15px;
