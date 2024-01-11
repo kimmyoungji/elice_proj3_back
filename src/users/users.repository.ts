@@ -13,4 +13,8 @@ export class UsersRepository extends Repository<User> {
         const newUser = this.create(user);
         return await this.save(newUser);
     }
+
+    async findUserByEmail(email: string): Promise<User> {
+        return await this.findOneBy({ email });
+    }
 }
