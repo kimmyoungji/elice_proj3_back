@@ -31,6 +31,7 @@
 
 .searchbox {
   margin-bottom: 29px;
+  position:relative;
 }
 
 .searchform {
@@ -72,4 +73,18 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.resultbox {
+  position: absolute;
+  width: 280px;
+  height: 169px;
+  background-color: white;
+  border-radius: 7px;
+  border: 1px solid var(--main-skyblue);
+  top: 105%;
+  text-align: left;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
