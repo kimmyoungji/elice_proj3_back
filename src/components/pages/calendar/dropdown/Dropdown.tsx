@@ -1,5 +1,13 @@
-import { createContext, useState, ReactNode, useContext, useEffect, useMemo, useCallback } from 'react';
-import classes from './dropdown.module.css';
+import {
+  createContext,
+  useState,
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
+import classes from "./dropdown.module.css";
 
 type DropdownProps = {
   children: ReactNode | ReactNode[];
@@ -12,14 +20,16 @@ type DropdownContextType = {
   isOpen: boolean;
   handleIsOpen: (val: React.SetStateAction<boolean>) => void;
   highlightedindex: higlightedIndexType;
-  handleHighlightedIndex: (val: React.SetStateAction<higlightedIndexType>) => void;
+  handleHighlightedIndex: (
+    val: React.SetStateAction<higlightedIndexType>
+  ) => void;
   handleBtnText: (val: React.SetStateAction<string>) => void;
 };
 const DropdownContext = createContext<DropdownContextType | null>(null);
 export const useDropdownContext = () => {
   const context = useContext(DropdownContext);
   if (!context) {
-    throw new Error('Error in creating the context');
+    throw new Error("Error in creating the context");
   }
   return context;
 };
@@ -28,8 +38,11 @@ export const Dropdown = ({ children, onChange }: DropdownProps) => {
   const [isOpen, setIsopen] = useState(false);
   const handleIsOpen = useCallback(() => setIsopen((prev) => !prev), []);
   const [highlightedindex, setHighlightedIndex] = useState(0);
-  const handleHighlightedIndex = useCallback((val: any) => setHighlightedIndex(val), []);
-  const [btnText, setBtnText] = useState('');
+  const handleHighlightedIndex = useCallback(
+    (val: any) => setHighlightedIndex(val),
+    []
+  );
+  const [btnText, setBtnText] = useState("");
   const handleBtnText = useCallback((val: any) => setBtnText(val), []);
 
   const value = useMemo(
@@ -40,7 +53,13 @@ export const Dropdown = ({ children, onChange }: DropdownProps) => {
       handleHighlightedIndex,
       handleBtnText,
     }),
-    [isOpen, handleIsOpen, highlightedindex, handleHighlightedIndex, handleBtnText]
+    [
+      isOpen,
+      handleIsOpen,
+      highlightedindex,
+      handleHighlightedIndex,
+      handleBtnText,
+    ]
   );
 
   useEffect(() => {
@@ -54,7 +73,7 @@ export const Dropdown = ({ children, onChange }: DropdownProps) => {
           className={classes.value}
           onClick={() => {
             setIsopen((prev) => {
-              console.log('handler clicked!');
+              console.log("handler clicked!");
               return !prev;
             });
           }}
@@ -64,7 +83,7 @@ export const Dropdown = ({ children, onChange }: DropdownProps) => {
         <div
           onClick={() => {
             setIsopen((prev) => {
-              console.log('handler clicked!');
+              console.log("handler clicked!");
               return !prev;
             });
           }}
