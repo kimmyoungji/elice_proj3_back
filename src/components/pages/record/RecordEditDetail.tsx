@@ -19,11 +19,12 @@ interface Props {
     foodName: string;
     foodImage: string;
     XYCoordinate: number[];
-}[]>>
+  }[]>>,
+  setFocus: React.Dispatch<React.SetStateAction<string | null | undefined>>
 }
 
 
-const RecordEditDetail = ({focus, foods, setFoods}:Props) => {
+const RecordEditDetail = ({focus, foods, setFoods, setFocus}:Props) => {
   const [searchInput, setSearchInput] = useState("");
   const [searching, setSearching] = useState(false);
 
@@ -33,8 +34,13 @@ const RecordEditDetail = ({focus, foods, setFoods}:Props) => {
     //특정항목 선택 시 setSearching(false)
   };
 
-  const editName = (e:React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
-    
+  const editName = (e: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
+    const newArr = [...foods];
+    const find = foods.findIndex(i => i.foodName === focus);
+    newArr[find].foodName = `${e.currentTarget.textContent}`;
+    setFoods(newArr);
+    setSearching(false);
+    setFocus(e.currentTarget.textContent);
   };
 
   let amount = 1;

@@ -31,10 +31,10 @@ const RecordEdit = () => {
         "XYCoordinate": [35.67, 146.02],
       },
     ]);
-  const [focus, setFocus] = useState("");
+  const [focus, setFocus] = useState<string | undefined | null>("");
 
   const handleFocus = (e:React.MouseEvent<HTMLCanvasElement|HTMLDivElement, MouseEvent>) => {
-    setFocus(`${e.currentTarget.id}`);
+    setFocus(e.currentTarget.parentNode?.nextSibling?.textContent);
   };
 
   const addFood = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -152,7 +152,7 @@ const RecordEdit = () => {
           ))}
         </div>
       </div>
-      {focus && <RecordEditDetail focus={focus} foods={foods} setFoods={setFoods} />}
+      {focus && <RecordEditDetail focus={focus} foods={foods} setFoods={setFoods} setFocus={setFocus} />}
       <div className={styles.btnbox}>
         <ButtonCommon size="medium" variant="disabled">취소</ButtonCommon>
         <ButtonCommon size="medium" variant="default-active" >수정 완료</ButtonCommon>
