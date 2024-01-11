@@ -66,8 +66,8 @@ const RecordEditDetail = () => {
             <div className={styles.resultbox}>
               <div style={{overflowY:"auto"}}>
                 {searchResults
-                  ? searchResults.map((result:string) =>
-                    <p className="r-medium" style={{marginBottom: "5px"}}>
+                  ? searchResults.map((result:string,index) =>
+                    <p key={index} className="r-medium" style={{marginBottom: "5px"}}>
                       {result.split(searchInput)[0] !== "" && result.split(searchInput)[0]}
                       <span className="r-medium" style={{color: "var(--main-blue)"}}>{searchInput}</span>
                       {result.split(searchInput)[1] !== "" && result.split(searchInput)[1]}
@@ -83,7 +83,6 @@ const RecordEditDetail = () => {
               >닫기</p>
             </div>
           }
-          
         </div>
       </div>
 

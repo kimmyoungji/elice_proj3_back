@@ -14,14 +14,15 @@
   object-fit: cover;
 }
 
-.tagbox {
-  margin : 12px 20px;
+.photobox {
+  margin : 0 20px;
   display: flex;
   flex-direction: row;
   gap: 10px;
 }
 
 .addphotobtn{
+  margin-top: 12px;
   width: 50px;
   height: 90px;
   display: flex;
@@ -44,20 +45,30 @@
   font-weight: 700;
 }
 
+.tagbox {
+  padding-top: 12px;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 .tagitem {
   display: flex;
   flex-direction: column;
+  margin: 0 5px;
 }
 
 .tagimgwrap {
+  margin-bottom: 8px;
   position: relative;
+  width:90px;
+  height: 90px;
+  border-radius: 10px;
 }
 
 .tagimg {
-  margin: 0 0 8px 0;
   width:90px;
   height: 90px;
-  object-fit: cover;
   border-radius: 10px;
 }
 
@@ -68,3 +79,4 @@
   top:-5px;
   right: -5px;;
 }
+
