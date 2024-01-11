@@ -1,11 +1,6 @@
 import { ComponentPropsWithRef, ReactElement } from "react";
 
-export type ButtonVariant =
-  | "default"
-  | "active"
-  | "default-active"
-  | "validated"
-  | "error";
+//COMMON
 
 export type CommonSizeType =
   | "large"
@@ -36,6 +31,15 @@ export type CommonFontSizeType =
   | "s-medium"
   | "s-tiny";
 
+//BUTTON
+
+export type ButtonVariant =
+  | "default"
+  | "active"
+  | "default-active"
+  | "validated"
+  | "error";
+
 export interface ButtonPropsType extends ComponentPropsWithRef<"button"> {
   children?: string | ReactElement | number;
   customClassName?: string;
@@ -57,3 +61,12 @@ export interface getClassNameType {
   size?: CommonSizeType;
   prefix?: string;
 }
+
+// INPUT
+
+export type InputVariant =
+  | "default"
+  | "active"
+  | "default-active"
+  | "validated"
+  | "error";
