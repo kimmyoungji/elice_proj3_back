@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import style from './mealPage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates  from '@utils/getDates';
@@ -11,6 +11,7 @@ import MealTime from './MealTime';
 
 const MealPage = () => {
     const params = useParams();
+    const navigate = useNavigate();
     const { thisYear, thisMonth, thisDay} = getDates()
     const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
     const date = params.date || todayDate
@@ -61,7 +62,7 @@ const MealPage = () => {
              )}
         </div>
         <div className={style.headerButton}>
-        <ButtonCommon variant='default-active' size='tiny' > 수정 </ButtonCommon>
+        <ButtonCommon variant='default-active' size='tiny' onClick={()=> navigate(`/record/edit`)}> 수정 </ButtonCommon>
         <ButtonCommon variant='default-active' size='tiny'> 삭제 </ButtonCommon>
         {/* onClickBtn={} */}
         </div>
