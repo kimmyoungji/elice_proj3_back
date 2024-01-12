@@ -50,7 +50,6 @@ const RecordEdit = () => {
       left: 0 ,
       behavior: "smooth",
     })
-    console.log('추가')
   };
 
   const deletefood = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
