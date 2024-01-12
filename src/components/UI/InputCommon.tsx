@@ -29,11 +29,9 @@ const getModuleClassName = (
     customClassName,
     Object.entries({ variant, disabled, active, size })
   );
-  console.log(get);
   if (typeof get === "object" && get.length > 0) {
     //prefix 스타일은 button, 중간은 classes 하이픈고려, custom은 마지막에 적용
     //`input ${classes[`${variant-active}`]} ${classes[`${active-true}`]} ... customClassName`
-    console.log("object이고 get의 length가 0보다 큼");
     const returnedClasses =
       `${classes[`${prefix}`]}` +
         " " +
@@ -50,7 +48,7 @@ const getModuleClassName = (
 const InputCommon = forwardRef(
   (
     {
-      value = undefined,
+      value,
       defaultValue,
       className,
       variant = "default",
@@ -99,12 +97,11 @@ const InputCommon = forwardRef(
 
     return (
       <>
-        {value ? (
+        {onchange ? (
           <input
             id={id}
             value={input}
             onChange={(e) => setInput(e)}
-            ref={inputRef}
             className={inputClass}
             autoComplete="off"
             {...props}
