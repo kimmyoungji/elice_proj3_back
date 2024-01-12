@@ -150,6 +150,10 @@ api.interceptors.response.use(
   }
 );
 
+type ApiFetcherParams = [string, any];
+export type ApiMethods = "get" | "post" | "put" | "delete" | "patch";
+type APiFetcher = (...args: ApiFetcherParams) => Promise<any>;
+
 const getFetcher: (
   path: string,
   { params }: any
@@ -169,18 +173,9 @@ const deleteFetcher = async (path: string, params: any) => {
   return await api.delete(path, { params });
 };
 
-type API_FETCHERType = {
-  get: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  post: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  put: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  patch: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  delete: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  [key: string]: any;
-};
-
 // const args = {path:string, body: any } as const;
 
-export const API_FETCHER: API_FETCHERType = {
+export const API_FETCHER: { [key in ApiMethods]: APiFetcher } = {
   get: (...args) => getFetcher(...args),
   post: (...args) => postFetcher(...args),
   put: (...args) => putFetcher(...args),
