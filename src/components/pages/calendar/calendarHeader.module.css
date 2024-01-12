@@ -1,6 +1,7 @@
 .wrapper {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   margin: 20px;
   height: 40px;
   padding: 1px;
@@ -8,5 +9,6 @@
 }
 
 .header {
+  display: flex;
   /* position: relative; */
 }
