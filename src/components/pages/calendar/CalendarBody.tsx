@@ -1,4 +1,4 @@
-import { ReactElement, SyntheticEvent, createElement } from "react";
+import { ReactElement, createElement } from "react";
 import classes from "./calendarbody.module.css";
 import { useCalendarContext } from "./Calendar";
 import Album from "./Album";
@@ -36,7 +36,10 @@ const CalendarBody = () => {
       (e.target as HTMLDivElement).id.split("-")[1]
     );
     console.log(clickedElementId);
-    setSelectedIndex(clickedElementId);
+    //기존에 index가 동일하면 삭제
+    setSelectedIndex((prev) => {
+      return prev === clickedElementId ? NaN : clickedElementId;
+    });
   };
 
   const getThisMonthArray = () => {
@@ -53,11 +56,23 @@ const CalendarBody = () => {
         "existedDate"
       ].findIndex((el) => el === getDayNumber(idx));
       //목표 칼로리 비교 색깔 구분 적당 vs 과식
+
+      //상태에 따른 className
       const colorCls =
         DUMMYCumulative_cal_Date["totalCalData"][existedDateIndex] >
         DUMMYtargetCalories
           ? "over-eat"
           : "moderate";
+      const colorFonts =
+        colorCls === "over-eat"
+          ? `${classes[`font-over-eat`]}`
+          : classes[`font-moderate`];
+      const selectedCls =
+        selectedIndex === idx - thisMonthFirstDay + 1
+          ? ` ${classes["selected"]}`
+          : ``;
+      const selectedFonts =
+        selectedCls !== "" ? ` ${classes["font-selected"]}` : "";
 
       monthArr.push(
         createElement("div", {
@@ -75,8 +90,8 @@ const CalendarBody = () => {
                 DUMMYCumulative_cal_Date["existedDate"].includes(
                   getDayNumber(idx)
                 )
-                  ? `${classes[`${colorCls}`]} b-small`
-                  : `${classes["cal-circle"]} b-small`,
+                  ? `${classes[`${colorCls}`]} b-small` + selectedCls
+                  : `${classes["cal-circle"]} b-small` + selectedCls,
               //id는 날짜범위 내에서만
               id:
                 idx >= thisMonthFirstDay &&
@@ -95,11 +110,7 @@ const CalendarBody = () => {
             ) &&
               createElement("p", {
                 key: `$p-${idx}`,
-                className: `r-regular ${
-                  colorCls === "over-eat"
-                    ? classes[`font-over-eat`]
-                    : classes[`font-moderate`]
-                }`,
+                className: `r-regular ${colorFonts + selectedFonts}`,
                 children: `+${DUMMYCumulative_cal_Date["totalCalData"][existedDateIndex]}`,
               }),
           ],
@@ -124,9 +135,12 @@ const CalendarBody = () => {
             style={{ margin: "20px auto" }}
             variant="default-active"
             size="big"
-            disabled={true}
+            disabled={!selectedIndex}
+            href={`/record/${selectedIndex}`}
           >
-            선택한 날짜로 이동
+            {DUMMYCumulative_cal_Date["existedDate"].includes(selectedIndex)
+              ? "기록 보러 가기"
+              : "기록 추가하러 가기"}
           </ButtonCommon>
         </>
       )}

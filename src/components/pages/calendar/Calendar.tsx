@@ -45,7 +45,7 @@ const CalendarProvider = ({
   const [thisMonth, setThisMonth] = useState(Number(monthNow));
   const [thisDay, setThisDay] = useState(dayNow);
   const [isAlbum, setIsAlbum] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(NaN);
 
   return (
     <CalendarContext.Provider
