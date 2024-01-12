@@ -3,22 +3,22 @@ import { FoodInfoApiController } from "./food-info-api.controller";
 import { FoodInfoApiService } from "./food-info-api.service";
 import {
   FoodInfoNaraRepository,
-  FoodInfoPortalRepository,
+  FoodInfoAPIRepository,
 } from "./food-info-api.repository";
 import { FoodInfoNara } from "./food-info-nara-api.entity";
-import { FoodInfoPortal } from "./food-info-portal-api.entity";
+import { FoodInfo } from "./food-info-api.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([FoodInfoNara]),
-    TypeOrmModule.forFeature([FoodInfoPortal]),
+    TypeOrmModule.forFeature([FoodInfo]),
   ],
   controllers: [FoodInfoApiController],
   providers: [
     FoodInfoApiService,
     FoodInfoNaraRepository,
-    FoodInfoPortalRepository,
+    FoodInfoAPIRepository,
   ],
 })
 export class FoodInfoApiModule {}

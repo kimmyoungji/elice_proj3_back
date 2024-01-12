@@ -1,12 +1,12 @@
 import { DataSource, Repository } from "typeorm";
 import { FoodInfoNara } from "./food-info-nara-api.entity";
-import { FoodInfoPortal } from "./food-info-portal-api.entity";
+import { FoodInfo } from "./food-info-api.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 
 export class FoodInfoNaraRepository extends Repository<FoodInfoNara> {
-  // constructor(@InjectRepository(FoodInfoNara) private dataSource: DataSource) {
-  //   super(FoodInfoNara, dataSource.manager);
-  // }
+  constructor(@InjectRepository(FoodInfoNara) private dataSource: DataSource) {
+    super(FoodInfoNara, dataSource.manager);
+  }
 
   async saveDataNara(data, count: number) {
     // let message = false;
@@ -61,7 +61,7 @@ export class FoodInfoNaraRepository extends Repository<FoodInfoNara> {
   }
 }
 
-export class FoodInfoPortalRepository extends Repository<FoodInfoPortal> {
+export class FoodInfoAPIRepository extends Repository<FoodInfo> {
   // constructor(
   //   @InjectRepository(FoodInfoPortal) private dataSource: DataSource
   // ) {

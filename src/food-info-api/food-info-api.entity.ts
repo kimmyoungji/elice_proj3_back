@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
-export class FoodInfoPortal extends BaseEntity {
+export class FoodInfo extends BaseEntity {
   @PrimaryColumn()
   food_info_id: string;
 

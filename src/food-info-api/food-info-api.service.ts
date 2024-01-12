@@ -1,6 +1,6 @@
 import {
   FoodInfoNaraRepository,
-  FoodInfoPortalRepository,
+  FoodInfoAPIRepository,
 } from "./food-info-api.repository";
 import { Injectable } from "@nestjs/common";
 import { Cron } from "@nestjs/schedule";
@@ -11,12 +11,12 @@ export class FoodInfoApiService {
   private startIdx = 1;
   constructor(
     private foodInfoNaraRepository: FoodInfoNaraRepository,
-    private foodInfoPortalRepository: FoodInfoPortalRepository
+    private foodInfoAPIRepository: FoodInfoAPIRepository
   ) {}
 
   async getDataNara(): Promise<string> {
-    const keyId = "58e8726322ba419a9c3e";
-    const serviceId = "I2790";
+    const keyId = process.env.NARA_SERVICE_KEY;
+    const serviceId = process.env.NARA_SERVICE_ID;
     const dataType = "json";
     let endIdx = this.startIdx + 999;
     console.log("Range", this.startIdx, endIdx);
@@ -37,8 +37,7 @@ export class FoodInfoApiService {
 
   async getDataPortal(): Promise<string> {
     const params = {
-      serviceKey:
-        "OcjM9kRI15FcumJGzGxP9FV6jgxXUNqamnr8Qw3pvFaHtuyTiOq/nhFZhuWVc5FGd/ifEHPwUzEznlMP4qDK4g==",
+      serviceKey: process.env.PORTAL_SERVICE_KEY,
       pageNo: this.startIdx,
       numOfRows: 200,
       type: "json",
@@ -48,7 +47,7 @@ export class FoodInfoApiService {
     console.log("page", this.startIdx);
     const res = await axios.get(url, { params: params });
     const data = res.data.response.body.items;
-    const result = this.foodInfoPortalRepository.saveDataPortal(data);
+    const result = this.foodInfoAPIRepository.saveDataPortal(data);
 
     if (result) {
       this.startIdx += 1;
@@ -69,8 +68,7 @@ export class FoodInfoApiService {
 
   async getDataPortalProcess(): Promise<string> {
     const params = {
-      serviceKey:
-        "OcjM9kRI15FcumJGzGxP9FV6jgxXUNqamnr8Qw3pvFaHtuyTiOq/nhFZhuWVc5FGd/ifEHPwUzEznlMP4qDK4g==",
+      serviceKey: process.env.PORTAL_SERVICE_KEY,
       pageNo: this.startIdx,
       numOfRows: 1000,
       type: "json",
@@ -80,10 +78,9 @@ export class FoodInfoApiService {
     console.log("page", this.startIdx);
     const res = await axios.get(url, { params: params });
     const data = res.data.response.body.items;
-    const result =
-      await this.foodInfoPortalRepository.saveDataPortalProcess(data);
+    const result = await this.foodInfoAPIRepository.saveDataPortalProcess(data);
     if (result) {
-      this.startIdx += 1;
+      // this.startIdx += 1;
       return "성공!";
     } else {
       return "실패";
