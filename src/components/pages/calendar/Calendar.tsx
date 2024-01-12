@@ -19,6 +19,8 @@ const CalendarContext = createContext<
       setThisDay: Dispatch<React.SetStateAction<number>>;
       selectedIndex: number;
       setSelectedIndex: Dispatch<React.SetStateAction<number>>;
+      showSelect: boolean;
+      setShowSelect: Dispatch<React.SetStateAction<boolean>>;
     }
   | undefined
 >(undefined);
@@ -28,13 +30,6 @@ const CalendarProvider = ({
 }: {
   children: ReactElement[] | ReactElement;
 }) => {
-  //초깃값은 getDates로 받아옴
-  //그다음은 선택된 값으로 변경되어야 함.
-  //변경된 것을 감지?
-
-  //thisYear thisMonth 가져오거나
-  //선택하거나
-
   const {
     thisYear: yearNow,
     thisMonth: monthNow,
@@ -46,6 +41,7 @@ const CalendarProvider = ({
   const [thisDay, setThisDay] = useState(dayNow);
   const [isAlbum, setIsAlbum] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(NaN);
+  const [showSelect, setShowSelect] = useState(false);
 
   return (
     <CalendarContext.Provider
@@ -60,6 +56,8 @@ const CalendarProvider = ({
         setSelectedIndex,
         isAlbum,
         setIsAlbum,
+        showSelect,
+        setShowSelect,
       }}
     >
       {children}

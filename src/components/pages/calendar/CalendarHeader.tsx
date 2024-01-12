@@ -2,7 +2,6 @@ import { Toggle, ToggleButton } from "@components/UI/Toggle";
 import { useCalendarContext } from "./Calendar";
 import MonthToggle from "./MonthToggle";
 import CalendarMonth from "./CalendarMonth";
-import CalendarMonthBody from "./CalendarMonth";
 import classes from "./calendarHeader.module.css";
 
 const CalendarHeader = () => {
@@ -19,11 +18,9 @@ const CalendarHeader = () => {
   return (
     <div className={classes.wrapper}>
       <div className={classes.header}>
-        <MonthToggle>{`${thisYear}.${thisMonth}`}</MonthToggle>
-        <CalendarMonth>
-          <div>{`${thisYear}`}</div>
-          <CalendarMonthBody />
-        </CalendarMonth>
+        <MonthToggle>
+          <CalendarMonth />
+        </MonthToggle>
       </div>
 
       <Toggle onChangeToggle={onChangeToggle}>

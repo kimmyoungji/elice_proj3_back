@@ -1,9 +1,9 @@
-import { ReactNode, useState } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import { useCalendarContext } from "./Calendar";
 import classes from "./calendarMonth.module.css";
 
 interface CalendarMonthProps {
-  children?: string | ReactNode[] | ReactNode;
+  children?: string | ReactElement[] | ReactElement;
 }
 
 const CalendarMonth = ({ children }: CalendarMonthProps) => {
@@ -28,7 +28,11 @@ const CalendarMonth = ({ children }: CalendarMonthProps) => {
       </div>
       <div className={classes.monthWrapper}>
         {new Array(12).fill(0).map((_, idx) => (
-          <div onClick={onClickMonth} id={`month-${idx + 1}`}>
+          <div
+            onClick={onClickMonth}
+            id={`month-${idx + 1}`}
+            key={`month-${idx + 1}`}
+          >
             {idx + 1}
           </div>
         ))}
