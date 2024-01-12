@@ -6,10 +6,10 @@ type DropdownButtonProps = {
 };
 
 const DropdownButton = ({ children }: DropdownButtonProps) => {
-  const { handleBtnText } = useDropdownContext();
+  const { setBtnText } = useDropdownContext();
 
   useEffect(() => {
-    handleBtnText(children);
+    setBtnText(children);
   }, []);
 
   return <></>;

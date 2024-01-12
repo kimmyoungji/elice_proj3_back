@@ -79,8 +79,8 @@ const CalendarBody = () => {
           key: `$cal-${idx}`,
           className:
             idx >= thisMonthFirstDay && idx < thisMonthTotal + thisMonthFirstDay
-              ? `${classes["day-wrapper"]} b-small`
-              : ` ${classes["cal-circle"]} b-small`,
+              ? `${classes["day-wrapper"]} b-small` + selectedCls
+              : ` ${classes["cal-circle"]} b-small` + selectedCls,
           children: [
             //날짜에 맞는 idx일때만 숫자를 넣음
             createElement("div", {
@@ -90,8 +90,8 @@ const CalendarBody = () => {
                 DUMMYCumulative_cal_Date["existedDate"].includes(
                   getDayNumber(idx)
                 )
-                  ? `${classes[`${colorCls}`]} b-small` + selectedCls
-                  : `${classes["cal-circle"]} b-small` + selectedCls,
+                  ? `${classes[`${colorCls}`]} b-small`
+                  : `${classes["cal-circle"]} b-small`,
               //id는 날짜범위 내에서만
               id:
                 idx >= thisMonthFirstDay &&

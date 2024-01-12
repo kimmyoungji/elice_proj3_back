@@ -1,0 +1,12 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+  height: 40px;
+  padding: 1px;
+  /* position: absolute; */
+}
+
+.header {
+  /* position: relative; */
+}

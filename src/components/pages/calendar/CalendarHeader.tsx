@@ -1,15 +1,14 @@
-//
-import { useId } from "react";
 import { Toggle, ToggleButton } from "@components/UI/Toggle";
-import { Dropdown } from "./dropdown/Dropdown";
-import DropdownButton from "./dropdown/DropdownButton";
-import DropdownItem from "./dropdown/DropdownItem";
 import { useCalendarContext } from "./Calendar";
+import MonthToggle from "./MonthToggle";
+import CalendarMonth from "./CalendarMonth";
+import CalendarMonthBody from "./CalendarMonth";
+import classes from "./calendarHeader.module.css";
 
 const CalendarHeader = () => {
   const { thisYear, thisMonth, setIsAlbum } = useCalendarContext();
-  const itemId = useId();
-  const handleChange = (value: string) => {
+  // const itemId = useId();
+  const handleView = (value: string) => {
     //선택한 날짜를 context에 설정
     console.log(value);
   };
@@ -18,20 +17,15 @@ const CalendarHeader = () => {
     setIsAlbum(value);
   };
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        margin: "20px",
-        height: "40px",
-        padding: "1px",
-      }}
-    >
-      <Dropdown className="b-large" onChange={handleChange}>
-        <DropdownButton>{`${thisYear}.${thisMonth}`}</DropdownButton>
-        {/* item은 현재 날짜에서 앞뒤로????? 인피니티 스크롤???...*/}
-        <DropdownItem id={itemId}>aasasd</DropdownItem>
-      </Dropdown>
+    <div className={classes.wrapper}>
+      <div className={classes.header}>
+        <MonthToggle>{`${thisYear}.${thisMonth}`}</MonthToggle>
+        <CalendarMonth>
+          <div>{`${thisYear}`}</div>
+          <CalendarMonthBody />
+        </CalendarMonth>
+      </div>
+
       <Toggle onChangeToggle={onChangeToggle}>
         <ToggleButton />
       </Toggle>

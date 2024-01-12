@@ -84,7 +84,6 @@ const Calendar = () => {
       <CalendarProvider>
         <CarlendarHeader />
         <CalendarBody />
-        {/* <InputCommon /> */}
       </CalendarProvider>
     </>
   );

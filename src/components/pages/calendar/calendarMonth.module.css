@@ -1,0 +1,14 @@
+.wrapper {
+  z-index: 999;
+  background-color: white;
+}
+
+.header {
+  display: flex;
+}
+
+.monthWrapper {
+  background-color: white;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
