@@ -1,53 +1,71 @@
-import { Between, DataSource, Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { CumulativeRecord } from "./cumulative-record.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 // import { User } from "src/user/user.entity";
 import { Injectable } from "@nestjs/common";
+import {
+  CumulativeRecordDateDto,
+  CumulativeRecordMonthDto,
+} from "./dtos/cumulative-record.dto";
 
 @Injectable()
 export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
   constructor(
-    @InjectRepository(CumulativeRecord) private dataSource: DataSource
+    @InjectRepository(CumulativeRecord)
+    private cumulativeRecordRepository: Repository<CumulativeRecord>
   ) {
-    super(CumulativeRecord, dataSource.manager);
+    super(
+      cumulativeRecordRepository.target,
+      cumulativeRecordRepository.manager,
+      cumulativeRecordRepository.queryRunner
+    );
   }
-
-  // 데이터 추가 api - test용
-  // async addData(): Promise<CumulativeRecord> {
-  //   const data = this.create({
-  //     user_id: "02",
-  //     daily_total_calories: 600,
-  //     date: new Date(),
-  //   });
-  //   await this.save(data);
-  //   return data;
+  // constructor(
+  //   @InjectRepository(CumulativeRecord) private dataSource: DataSource
+  // ) {
+  //   super(CumulativeRecord, dataSource.manager);
   // }
 
-  async getDateRecord(date: Date, userId: string): Promise<CumulativeRecord[]> {
-    console.log(date);
+  // 데이터 추가 api - test용
+  async addData(): Promise<CumulativeRecord> {
+    const data = this.create({
+      record_id: "A01",
+      user_id: "02",
+      daily_total_calories: 800,
+      date: new Date("2024-01-09"),
+    });
+    await this.save(data);
+    return data;
+  }
+
+  async getDateRecord(
+    date: Date,
+    userId: string
+  ): Promise<CumulativeRecordDateDto[]> {
     const result = await this.createQueryBuilder("entity")
       .where(`DATE_TRUNC('day', entity.date) = :date`, { date })
       .andWhere(`entity.user_id = :userId`, { userId })
       .getMany();
-    console.log(result);
     return result;
-    // return this.findBy({ date, user_id: userId });
   }
 
   async getMonthRecord(
-    date: Date,
+    month: Date,
     userId: string
-  ): Promise<CumulativeRecord[]> {
-    const datetime = new Date(date);
-    const year = datetime.getFullYear();
-    const month = datetime.getMonth() + 1;
-    console.log("year", year, month);
+  ): Promise<CumulativeRecordMonthDto[]> {
     const result = await this.createQueryBuilder("entity")
       .where("entity.user_id = :userId", { userId })
-      .andWhere("EXTRACT(YEAR FROM entity.date) = :year", { year })
-      .andWhere("EXTRACT(MONTH FROM entity.date) = :month", { month })
+      .where(`DATE_TRUNC('month', entity.date) = :month`, { month })
       .getMany();
-    console.log(result);
+    return result;
+  }
+
+  async getMonthDetailRecord(page: Number, userId: string) {
+    const recordId = ["3", "5"]; // record-table에서 가져옴
+    const result = await this.createQueryBuilder("entity")
+      .where("entity.user_id = :userId", { userId })
+      .where("entity.record_id IN :recordId", { recordId })
+      .getMany();
     return result;
   }
 }

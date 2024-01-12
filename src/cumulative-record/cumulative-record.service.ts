@@ -1,6 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { CumulativeRecord } from "./cumulative-record.entity";
 import { CumulativeRecordRepository } from "./cumulative.repository";
+import {
+  CumulativeRecordDateDto,
+  CumulativeRecordMonthDto,
+} from "./dtos/cumulative-record.dto";
+import { plainToInstance } from "class-transformer";
 // import { User } from "src/user/user.entity";
 
 @Injectable()
@@ -8,27 +12,28 @@ export class CumulativeRecordService {
   constructor(private cumulativeRepository: CumulativeRecordRepository) {}
 
   // 데이터 추가 api - test용
-  //   async addData(): Promise<CumulativeRecord> {
-  //     return this.cumulativeRepository.addData();
-  //   }
+  async addData() {
+    return this.cumulativeRepository.addData();
+  }
 
-  async getDateRecord(date: Date, userId: string): Promise<CumulativeRecord[]> {
-    return this.cumulativeRepository.getDateRecord(date, userId);
+  async getDateRecord(
+    date: Date,
+    userId: string
+  ): Promise<CumulativeRecordDateDto> {
+    const result = this.cumulativeRepository.getDateRecord(date, userId);
+    return plainToInstance(CumulativeRecordDateDto, result);
   }
 
   async getMonthRecord(
-    date: Date,
+    month: Date,
     userId: string
-  ): Promise<CumulativeRecord[]> {
-    return this.cumulativeRepository.getMonthRecord(date, userId);
+  ): Promise<CumulativeRecordMonthDto> {
+    const result = this.cumulativeRepository.getMonthRecord(month, userId);
+    return plainToInstance(CumulativeRecordMonthDto, result);
   }
 
-  // User module 합칠 때
-  // async getDateRecord(date: Date, user: User): Promise<CumulativeRecord[]> {
-  //   return this.cumulativeRepository.getDateRecord(date, user);
-  // }
-
-  // async getMonthRecord(date: Date, user: User): Promise<CumulativeRecord[]> {
-  //   return this.cumulativeRepository.getMonthRecord(date, user);
-  // }
+  async getMonthDetailRecord(page: Number, userId: string) {
+    const result = this.cumulativeRepository.getMonthDetailRecord(page, userId);
+    return result;
+  }
 }

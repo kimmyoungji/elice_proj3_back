@@ -6,12 +6,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from "typeorm";
 
 @Entity()
 export class CumulativeRecord extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   @ApiProperty({ description: "누적 기록 id" })
   record_id: string;
 
