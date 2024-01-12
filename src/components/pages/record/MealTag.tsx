@@ -1,5 +1,5 @@
 import style from './mealTag.module.css';
-import { mealTimeData } from './mealTimeData';
+import { mealDetailData } from './mealDetailData';
 
 
 interface MealTagProps {
@@ -9,7 +9,7 @@ interface MealTagProps {
 
 const MealTag = ({meal, className} : MealTagProps) => {
 
-  const tagName = mealTimeData[meal].food
+  const tagName = mealDetailData[meal].food
 
     return (
       <div className={className}>
