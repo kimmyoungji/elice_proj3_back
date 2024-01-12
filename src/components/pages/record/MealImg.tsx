@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import style from './mealImg.module.css';
-import { mealTimeData } from './mealTimeData';
-
+import { mealDetailData } from './mealDetailData';
+import PutImgTag from './PutImgTag';
 
 interface MealImgProps {
   meal : string;
@@ -9,14 +9,15 @@ interface MealImgProps {
 }
 
 const MealImg =  ({meal, className}: MealImgProps) => {
-    const imgUrl = mealTimeData[meal].imgurl
+    const imgUrl = mealDetailData[meal].imgurl
     const navigate = useNavigate();
 
     return (
     <>
         <div className={className}>
           { imgUrl ? (
-           <img src={imgUrl} className={className} alt='식단 전체 이미지' />
+          //  <img src={imgUrl} className={className} alt='식단 전체 이미지' />
+            <PutImgTag mealType={meal} imgUrl={imgUrl} className={className} />
            ) : ( 
             <div onClick={()=> {navigate( `/add-photo` )
           }}>

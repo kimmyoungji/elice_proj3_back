@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import style from './mealPage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates  from '@utils/getDates';
-import MealTime from './MealTime';
+import MealDeatilPage from './MealDeatilPage';
 
 // ✅ MealPage : 날짜, 특정 meal로 MealPage를 그려주기
 // ✅ 토글로 다른 meal을 선택하면 MealTime만 다시 받아와서 그려주기 
@@ -64,10 +64,9 @@ const MealPage = () => {
         <div className={style.headerButton}>
         <ButtonCommon variant='default-active' size='tiny' onClick={()=> navigate(`/record/edit`)}> 수정 </ButtonCommon>
         <ButtonCommon variant='default-active' size='tiny'> 삭제 </ButtonCommon>
-        {/* onClickBtn={} */}
         </div>
       </div>
-         <MealTime meal = {selectedMeal} />
+         <MealDeatilPage meal = {selectedMeal} />
       </div>
       
     </>

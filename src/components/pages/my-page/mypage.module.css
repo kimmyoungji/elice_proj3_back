@@ -1,0 +1,86 @@
+.settingTitle {
+    font-size: 1rem; 
+    padding: 1rem; 
+    border-bottom: 1px solid #ccc; 
+    background-color: #ffffff; 
+    margin-top: 17px;
+  }
+  
+
+  .userProfileArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25px;
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+  }
+  
+
+  .defaultProfile {
+    width: 80px;
+    height: 80px;
+    background-color: #eee;
+    border-radius: 50%;
+  }
+
+  .editUserProfile{
+    display: flex;
+    flex-direction: column;
+    justify-content : space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+
+  .userName {
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+  }
+  
+  .editButton{
+    margin-left: auto;
+    cursor: pointer;
+    margin-right: 15px;
+  } 
+
+
+  .infoArea {
+    background-color: #fff;
+    padding: 1rem;
+    border-bottom: 1px solid #ccc;
+  }
+  
+
+  .infoTitle {
+    font-size: 0.9rem;
+    color: #666;
+    text-align: left;
+
+  }
+  
+
+  .infoContent {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+
+  .activityAccountArea {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 1rem;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .rightButton {
+   margin-left: auto;
+   cursor: pointer;
+  }
+  
+  .section {
+    margin-bottom: 10px; }

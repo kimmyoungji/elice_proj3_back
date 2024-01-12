@@ -7,7 +7,7 @@ import style from './mealTime.module.css';
 
 
 
-const MealTime =({meal}: any)=> {
+const MealDeatilPage =({meal}: any)=> {
 
   const navigate = useNavigate()
 
@@ -26,4 +26,4 @@ return (
 
 
 
-export default MealTime;
+export default MealDeatilPage;

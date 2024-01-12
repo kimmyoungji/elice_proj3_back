@@ -1,7 +1,7 @@
 import style from './nutritionAnalysis.module.css';
 import { BarChart } from './BarChart';
 import Bar from './Bar';
-import { mealTimeData } from './mealTimeData';
+import { mealDetailData } from './mealDetailData';
 
 
 interface NutritionAnalysisProps {
@@ -14,7 +14,7 @@ const goalCalories = 1300
 
 const NutritionAnalysis = ({meal, className} : NutritionAnalysisProps ) => {
     
-    const totalCalories = mealTimeData[meal].totalCalories
+    const totalCalories = mealDetailData[meal].totalCalories
     const percentage = totalCalories === 0 ? 0 : Math.min(100, (totalCalories / goalCalories) * 100);
     const barFill = percentage >= 100 ? "#ff6a6a" : "#007bff"
 

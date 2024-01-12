@@ -1,4 +1,4 @@
-export interface MealTimeData {
+export interface MealDetailData {
     [key: string]: {
       food: {
         foodName: string;
@@ -25,7 +25,7 @@ export interface MealTimeData {
 
 
 
-const mealTimeData : MealTimeData = {
+const mealDetailData : MealDetailData = {
 
     "아침" : {    
     
@@ -33,17 +33,17 @@ const mealTimeData : MealTimeData = {
       {
           foodName: "떡만둣국",
           foodImage: "Image1", 
-          XYCoordinate:  [35.67, 146.02],
+          XYCoordinate:  [160, 13],
       },
       {
         foodName: "김치찌개",
         foodImage: "Image1", 
-        XYCoordinate:  [35.67, 146.02],
+        XYCoordinate:  [12, 4],
     },
     {
         foodName: "오징어무침",
         foodImage: "Image1", 
-        XYCoordinate:  [35.67, 146.02],
+        XYCoordinate:  [70, 55],
     },
 ],
 
@@ -76,7 +76,7 @@ const mealTimeData : MealTimeData = {
               XYCoordinate:  [35.67, 146.02],
           },
       ],
-          totalCalories: 2500,
+          totalCalories: 600,
           totalNutrient : {carbohydrates:  240 ,proteins: 80, fat: 25, dietaryFiber: 2 },
           recommendNutrient : {carbohydrates:  200 , proteins: 80, fat: 50, dietaryFiber: 4 },
           imgurl : undefined
@@ -159,4 +159,4 @@ const mealTimeData : MealTimeData = {
 
     }
     
-    export {mealTimeData }
+    export {mealDetailData }
