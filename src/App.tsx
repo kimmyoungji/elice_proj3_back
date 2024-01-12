@@ -14,6 +14,7 @@ const AiAnalyze = lazy(() => import('@components/pages/ai-analyze/AiAnalyze'));
 const Record = lazy(() => import('@components/pages/record/Record'));
 const RecordEdit = lazy(() => import('@components/pages/record/RecordEdit'));
 const MealPage = lazy(() => import('@components/pages/record/MealPage'));
+const MealTime = lazy(()=> import('@components/pages/record/MealTime') )
 const Calender = lazy(() => import('@components/pages/calendar/Calendar'));
 
 function App() {
@@ -33,9 +34,11 @@ function App() {
               <Route path='/add-photo' element={<AddPhoto />} />
               <Route path='/add-photo/search' element={<AddPhotoSearch />} />
               <Route path='/ai-analyze' element={<AiAnalyze />} />
-              <Route path='/record' element={<Record />} />
+              <Route path='/record/:selectedDate' element={<Record />} />
               <Route path='/record/edit' element={<RecordEdit />} />
-              <Route path='/record/:date/:mealTime' element={<MealPage />} />
+              <Route path='/record/:date' element={<MealPage />}>
+                <Route path=':mealTime' element= {<MealTime />} />
+              </Route>
               {/* <Route path='/record/edit' element={<RecordEdit />} /> */}
               <Route path='/calendar' element={<Calender />} />
             </Routes>

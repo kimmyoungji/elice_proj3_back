@@ -1,22 +1,39 @@
 import React, { useState } from 'react';
-import style from '@styles/record/mealPage.module.css';
-import MealImg from './MealImg';
-import MealTag from './MealTag';
-import NutritionAnalysis from './NutritionAnalysis';
+import { useParams } from 'react-router-dom'
+import style from './mealPage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates  from '@utils/getDates';
+import MealTime from './MealTime';
 
-
+// ✅ MealPage : 날짜, 특정 meal로 MealPage를 그려주기
+// ✅ 토글로 다른 meal을 선택하면 MealTime만 다시 받아와서 그려주기 
+// ✅ meal data가 있으면 그려주고 없으면 default 그리기
 
 const MealPage = () => {
-    const { thisYear, thisMonth, thisDay, thisDayText} = getDates()
-    const [selectedMeal, setSelectedMeal] = useState('점심');
+    const params = useParams();
+    const { thisYear, thisMonth, thisDay} = getDates()
+    const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
+    const date = params.date || todayDate
+    const selectedMealTime = params.mealTime // 받아온 아점저간
+    const dateSplit = date.split('-')
+    const formatDate = `${dateSplit[0]}년 ${dateSplit[1]}월 ${dateSplit[2]}일` 
+    let stringfyMeal;
+
+    if (selectedMealTime === "1") stringfyMeal = "아침"
+      else if(selectedMealTime === "2") stringfyMeal = "점심"
+      else if(selectedMealTime === "3") stringfyMeal = "저녁"
+      else if(selectedMealTime === "4") stringfyMeal = "간식"
+      else stringfyMeal = "아침"
+    
+
+    const [selectedMeal, setSelectedMeal] = useState(stringfyMeal);
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const mealTypes = ['아침', '점심', '저녁', '간식'];
 
 
     const handleMealSelect = (mealType: string) => {
       setSelectedMeal(mealType);
+      // 선택한 mealType로 api 요청해서 data 뿌려주기
       setDropdownVisible(false);
   };
 
@@ -26,36 +43,30 @@ const MealPage = () => {
       <div className={style.container}>
       <div className={style.pageTitle}> 
         <div>
-          {thisYear}년 {thisMonth}월 {thisDay}일 ({thisDayText})
+          {formatDate}
         </div>
         <div className={style.mealToggle}>
           <div onClick={() => setDropdownVisible(!isDropdownVisible)}>
-            {selectedMeal.charAt(0).toUpperCase() + selectedMeal.slice(1)} ▼
+            {selectedMeal.charAt(0) + selectedMeal.slice(1)} ▼
               </div>
                 {isDropdownVisible && (
                   <div className={style.dropdown}>
                   {mealTypes.map(mealType => (
                     <div key={mealType} onClick={() => handleMealSelect(mealType)}
                        className={selectedMeal === mealType ? style.active : ''}>
-                        {mealType.charAt(0).toUpperCase() + mealType.slice(1)}
+                        {mealType.charAt(0) + mealType.slice(1)}
                     </div>
                   ))}
                 </div>
              )}
         </div>
         <div className={style.headerButton}>
-        <ButtonCommon className= 'button active tiny b-tiny '> 수정 </ButtonCommon>
-        <ButtonCommon className= 'button active tiny b-tiny'> 삭제 </ButtonCommon>
+        <ButtonCommon variant='default-active' size='tiny' > 수정 </ButtonCommon>
+        <ButtonCommon variant='default-active' size='tiny'> 삭제 </ButtonCommon>
+        {/* onClickBtn={} */}
         </div>
       </div>
-      <MealImg className={style.imgBox}/>
-      <div className={style.banner}>
-      <img className={style.bannerBackground} src="/images/recommendation_banner.png"  alt="AI 식단 분석 서비스 이동 배너" />
-      <div className={style.bannerFont}> AI가 말아주는 오늘의 한 끼 추천이 궁금하다면? </div>
-      </div>
-      <MealTag className={style.mealTag}/>
-      <NutritionAnalysis className={style.nutritionBox} />
-
+         <MealTime meal = {selectedMeal} />
       </div>
       
     </>
@@ -64,3 +75,5 @@ const MealPage = () => {
   
   export default MealPage;
   
+
+

@@ -1,31 +1,20 @@
-import style from '@styles/record/nutritionAnalysis.module.css';
+import style from './nutritionAnalysis.module.css';
 import { BarChart } from './BarChart';
 import Bar from './Bar';
+import { mealTimeData } from './mealTimeData';
+
 
 interface NutritionAnalysisProps {
-    className?: string;
-  }
+  meal : string
+  className: string;
+}
 
-interface MealData {
-    mealTime: string;
-    calories: number | string;
-    carbo: number | string;
-    fat: number | string;
-    fiber: number | string;
-  }
-
-const nutritionData : MealData[] = [
-    { mealTime: "점심", calories : 300 , carbo:  "", fat :  "", fiber:  ""}
-]
 
 const goalCalories = 1300
 
-const NutritionAnalysis: React.FC<NutritionAnalysisProps> = ({className} ) => {
+const NutritionAnalysis = ({meal, className} : NutritionAnalysisProps ) => {
     
-    const totalCalories = nutritionData.reduce((sum, item) => {
-        const calories = typeof item.calories === 'number' ? item.calories : 0;
-        return sum + calories;
-      }, 0); 
+    const totalCalories = mealTimeData[meal].totalCalories
     const percentage = totalCalories === 0 ? 0 : Math.min(100, (totalCalories / goalCalories) * 100);
     const barFill = percentage >= 100 ? "#ff6a6a" : "#007bff"
 
@@ -35,7 +24,7 @@ const NutritionAnalysis: React.FC<NutritionAnalysisProps> = ({className} ) => {
         <div className={style.header}> 
         <div className={style.title}>총섭취량</div>
         <div className={style.caloriesCount}>
-        <div className={style.intakeCalories}> {nutritionData[0].calories || 0}  </div>
+        <div className={style.intakeCalories}> {totalCalories || 0}  </div>
         <div className={style.totalCalories}> /{goalCalories} </div>
         </div>
         </div>
