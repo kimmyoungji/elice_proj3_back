@@ -17,7 +17,7 @@ line-height: normal;
 .caloriesCount{
     display: flex;
     flex-direction: row;
-    align-items: end;
+    align-items: flex-end;
     height: 15px ;
 }
 

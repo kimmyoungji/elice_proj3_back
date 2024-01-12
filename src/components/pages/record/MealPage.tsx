@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'
-import style from './mealPage.module.css';
+import style from './mealpage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates  from '@utils/getDates';
-import MealDeatilPage from './MealDeatilPage';
+import MealDeatilPage from './MealDetailPage';
 
 // ✅ MealPage : 날짜, 특정 meal로 MealPage를 그려주기
 // ✅ 토글로 다른 meal을 선택하면 MealTime만 다시 받아와서 그려주기 

@@ -20,10 +20,11 @@ const PutImgTag : React.FC<PutImgTagProps> = ({mealType, imgUrl, className}) => 
                 background : 'rgba(43, 43, 43, 0.6)',
                 color : "white",
                 borderRadius : 15,
-                padding : '4px 9px 4px 9px'
+                padding : '4px 9px'
             }
             return (
-                <p key={index} style={tageStyle} className='b-tiny'>{food.foodName}</p>
+                ( food.XYCoordinate.length > 0 ) && <p key={index} style={tageStyle} className='b-tiny'>{food.foodName}</p>
+                
             )
         })
        

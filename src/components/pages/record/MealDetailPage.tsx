@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import MealImg from './MealImg';
 import MealTag from './MealTag';
 import NutritionAnalysis from './NutritionAnalysis';
-import style from './mealTime.module.css';
+import style from './mealdetailpage.module.css';
 
 
 

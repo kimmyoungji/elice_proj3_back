@@ -1,4 +1,4 @@
-import style from './mealTag.module.css';
+import style from './mealtag.module.css';
 import { mealDetailData } from './mealDetailData';
 
 

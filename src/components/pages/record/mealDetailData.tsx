@@ -58,22 +58,22 @@ const mealDetailData : MealDetailData = {
             {
                 foodName: "감자떡",
                 foodImage: "Image1", 
-                XYCoordinate:  [35.67, 146.02],
+                XYCoordinate:  [],
             },
             {
               foodName: "고구마빵",
               foodImage: "Image1", 
-              XYCoordinate:  [35.67, 146.02],
+              XYCoordinate:  [],
           },
           {
               foodName: "아이스크림",
               foodImage: "Image1", 
-              XYCoordinate:  [35.67, 146.02],
+              XYCoordinate:  [],
           },
           {
               foodName: "약과",
               foodImage: "Image1", 
-              XYCoordinate:  [35.67, 146.02],
+              XYCoordinate:  [],
           },
       ],
           totalCalories: 600,

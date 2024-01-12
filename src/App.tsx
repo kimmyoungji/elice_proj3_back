@@ -14,7 +14,7 @@ const AiAnalyze = lazy(() => import('@components/pages/ai-analyze/AiAnalyze'));
 const Record = lazy(() => import('@components/pages/record/Record'));
 const RecordEdit = lazy(() => import('@components/pages/record/RecordEdit'));
 const MealPage = lazy(() => import('@components/pages/record/MealPage'));
-const MealDeatilPage = lazy(()=> import('@components/pages/record/MealDeatilPage') )
+const MealDeatilPage = lazy(()=> import('@components/pages/record/MealDetailPage') )
 const Calender = lazy(() => import('@components/pages/calendar/Calendar'));
 
 function App() {

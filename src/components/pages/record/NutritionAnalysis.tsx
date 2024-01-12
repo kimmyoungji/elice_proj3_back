@@ -1,4 +1,4 @@
-import style from './nutritionAnalysis.module.css';
+import style from './nutritionanalysis.module.css';
 import { BarChart } from './BarChart';
 import Bar from './Bar';
 import { mealDetailData } from './mealDetailData';
