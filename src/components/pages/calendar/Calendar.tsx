@@ -9,10 +9,16 @@ import InputCommon from "@components/UI/InputCommon";
 
 const CalendarContext = createContext<
   | {
-      yearMonth: string;
-      setYearMonth: Dispatch<React.SetStateAction<string>>;
       isAlbum: boolean;
       setIsAlbum: Dispatch<React.SetStateAction<boolean>>;
+      thisYear: number;
+      setThisYear: Dispatch<React.SetStateAction<number>>;
+      thisMonth: number;
+      setThisMonth: Dispatch<React.SetStateAction<number>>;
+      thisDay: number;
+      setThisDay: Dispatch<React.SetStateAction<number>>;
+      selectedIndex: number;
+      setSelectedIndex: Dispatch<React.SetStateAction<number>>;
     }
   | undefined
 >(undefined);
@@ -26,17 +32,35 @@ const CalendarProvider = ({
   //그다음은 선택된 값으로 변경되어야 함.
   //변경된 것을 감지?
 
-  // const { thisYear, thisMonth } = getDates();
-  const { thisYear, thisMonth } = { thisYear: 2024, thisMonth: 6 };
-  const initialYearMonth = `${thisYear}.${thisMonth}`;
-  console.log(initialYearMonth);
-  //형식 2024.01
-  const [yearMonth, setYearMonth] = useState(initialYearMonth);
+  //thisYear thisMonth 가져오거나
+  //선택하거나
+
+  const {
+    thisYear: yearNow,
+    thisMonth: monthNow,
+    thisDay: dayNow,
+  } = getDates();
+
+  const [thisYear, setThisYear] = useState(yearNow);
+  const [thisMonth, setThisMonth] = useState(Number(monthNow));
+  const [thisDay, setThisDay] = useState(dayNow);
   const [isAlbum, setIsAlbum] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
     <CalendarContext.Provider
-      value={{ yearMonth, setYearMonth, isAlbum, setIsAlbum }}
+      value={{
+        thisYear,
+        setThisYear,
+        thisMonth,
+        setThisMonth,
+        thisDay,
+        setThisDay,
+        selectedIndex,
+        setSelectedIndex,
+        isAlbum,
+        setIsAlbum,
+      }}
     >
       {children}
     </CalendarContext.Provider>
@@ -61,14 +85,6 @@ const Calendar = () => {
         <CarlendarHeader />
         <CalendarBody />
         {/* <InputCommon /> */}
-        <ButtonCommon
-          style={{ margin: "20px auto" }}
-          variant="default-active"
-          size="big"
-          disabled={true}
-        >
-          선택한 날짜로 이동
-        </ButtonCommon>
       </CalendarProvider>
     </>
   );

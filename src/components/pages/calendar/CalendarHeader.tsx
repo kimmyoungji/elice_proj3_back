@@ -7,7 +7,7 @@ import DropdownItem from "./dropdown/DropdownItem";
 import { useCalendarContext } from "./Calendar";
 
 const CalendarHeader = () => {
-  const { yearMonth, setIsAlbum } = useCalendarContext();
+  const { thisYear, thisMonth, setIsAlbum } = useCalendarContext();
   const itemId = useId();
   const handleChange = (value: string) => {
     //선택한 날짜를 context에 설정
@@ -27,8 +27,8 @@ const CalendarHeader = () => {
         padding: "1px",
       }}
     >
-      <Dropdown onChange={handleChange}>
-        <DropdownButton>{yearMonth.split("-").join(". ")}</DropdownButton>
+      <Dropdown className="b-large" onChange={handleChange}>
+        <DropdownButton>{`${thisYear}.${thisMonth}`}</DropdownButton>
         {/* item은 현재 날짜에서 앞뒤로????? 인피니티 스크롤???...*/}
         <DropdownItem id={itemId}>aasasd</DropdownItem>
       </Dropdown>
