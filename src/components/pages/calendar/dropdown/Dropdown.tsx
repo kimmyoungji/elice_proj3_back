@@ -12,6 +12,7 @@ import classes from "./dropdown.module.css";
 type DropdownProps = {
   children: ReactNode | ReactNode[];
   onChange?: (val: string) => void;
+  className?: string;
 };
 
 export type higlightedIndexType = number | string;
@@ -34,7 +35,7 @@ export const useDropdownContext = () => {
   return context;
 };
 
-export const Dropdown = ({ children, onChange }: DropdownProps) => {
+export const Dropdown = ({ children, onChange, className }: DropdownProps) => {
   const [isOpen, setIsopen] = useState(false);
   const handleIsOpen = useCallback(() => setIsopen((prev) => !prev), []);
   const [highlightedindex, setHighlightedIndex] = useState(0);
@@ -70,7 +71,7 @@ export const Dropdown = ({ children, onChange }: DropdownProps) => {
     <DropdownContext.Provider value={value}>
       <div className={classes.container}>
         <span
-          className={classes.value}
+          className={`${className} ${classes.value}`}
           onClick={() => {
             setIsopen((prev) => {
               console.log("handler clicked!");
