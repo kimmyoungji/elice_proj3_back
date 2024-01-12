@@ -5,6 +5,9 @@
   border: none;
   flex-shrink: 0;
   display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* BUTTON CLASS */
