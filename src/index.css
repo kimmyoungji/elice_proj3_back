@@ -205,3 +205,13 @@ body {
   font-weight: 600;
   font-size: 15px;
 }
+
+/* CARET */
+
+.caret {
+  width: 10px;
+  margin-left: 10px;
+  translate: 0 40%;
+  border: 8px solid transparent;
+  border-top-color: black;
+}
