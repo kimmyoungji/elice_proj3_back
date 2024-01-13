@@ -179,8 +179,12 @@ type API_FETCHERType = {
 };
 
 // const args = {path:string, body: any } as const;
+export type ApiMethods = "get" | "post" | "put" | "patch" | "delete";
 
-export const API_FETCHER: API_FETCHERType = {
+type ApiParams = [string, any];
+type APiFetcher = (...args: ApiParams) => Promise<any>;
+
+export const API_FETCHER: { [key in ApiMethods]: APiFetcher } = {
   get: (...args) => getFetcher(...args),
   post: (...args) => postFetcher(...args),
   put: (...args) => putFetcher(...args),
