@@ -13,7 +13,7 @@ const Home = () => {
   return (
     <div>
       Home
-      <ButtonCommon className='button-large-white' onClickBtn={onClick}>
+      <ButtonCommon className='button large r-large default' onClickBtn={onClick}>
         {state}
       </ButtonCommon>
       Home <ButtonCommon className='button-large-green'>Button</ButtonCommon>

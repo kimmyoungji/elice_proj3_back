@@ -93,12 +93,12 @@ body {
   --main-skyblue: #a0bfed;
   --main-lightblue: #edf3f9;
   --sem-great: #54d168;
-  --sem-bad: #ff6a6a;
+  --sem-bad: #;
   --gray-lev-1: #e4e4e4;
 }
 
 .disabled {
-  color: var(--mainskyblue);
+  color: var(--main-skyblue);
   background-color: var(--main-lightblue);
 }
 

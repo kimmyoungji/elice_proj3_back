@@ -1,0 +1,51 @@
+.cla-body {
+  /* margin: 30px 20px;
+  box-sizing: border-box; */
+  background-color: beige;
+  border: 1px solid transparent;
+}
+
+.cla-week {
+  margin: 6px 20px;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* .day-wrapper {
+  width: 44px;
+  height: 31px;
+} */
+
+.day-arr {
+  width: 44px;
+  height: 31px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cal-circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--main-lightblue);
+  background-color: var(--main-lightblue);
+  color: var(--main-skyblue);
+  box-sizing: border-box;
+}
+
+.cal-flex {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(7, 1fr);
+  justify-items: center;
+  grid-row-gap: 20px;
+
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+}
