@@ -29,9 +29,10 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
   // 데이터 추가 api - test용
   async addData(): Promise<CumulativeRecord> {
     const data = this.create({
-      record_id: "A01",
+      record_ids: ["A01", "A02"],
       user_id: "02",
-      daily_total_calories: 800,
+      meal_type: "점심",
+      meal_total_calories: 800,
       date: new Date("2024-01-09"),
     });
     await this.save(data);
@@ -61,10 +62,10 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
   }
 
   async getMonthDetailRecord(page: Number, userId: string) {
-    const recordId = ["3", "5"]; // record-table에서 가져옴
+    const recordIds = ["3", "5"]; // record-table에서 가져옴
     const result = await this.createQueryBuilder("entity")
       .where("entity.user_id = :userId", { userId })
-      .where("entity.record_id IN :recordId", { recordId })
+      .where("entity.record_ids IN :recordIds", { recordIds })
       .getMany();
     return result;
   }

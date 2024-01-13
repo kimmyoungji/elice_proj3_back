@@ -5,29 +5,38 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 
 @Entity()
 export class CumulativeRecord extends BaseEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   @ApiProperty({ description: "누적 기록 id" })
-  record_id: string;
+  cumulative_record_id: string;
 
-  // User module 합칠 때
+  // Record module 합칠 때
   // @JoinColumn()
-  // @ApiProperty({ description: "유저 id" })
-  // @ManyToOne(() => User)
-  // user: User;
+  // @ApiProperty({ description: "기록 id" })
+  // @OneToMany(() => Record, (record) => record.record_id, { cascade: true })
+  // record_ids: Record[];
 
-  // 데이터 추가 컬럼 - test용
+  // Record module과 취합 전 test용
   @Column()
+  @ApiProperty({ description: "기록 id" })
+  record_ids: string[];
+
+  @Column()
+  @ApiProperty({ description: "유저 id" })
   user_id: string;
 
+  @Column()
+  @ApiProperty({ description: "기록한 식사 종류" })
+  meal_type: string;
+
   @Column({ default: 0 })
-  @ApiProperty({ description: "일별 섭취한 총 칼로리" })
-  daily_total_calories: number;
+  @ApiProperty({ description: "식사별 섭취한 총 칼로리" })
+  meal_total_calories: number;
 
   @Column()
   @ApiProperty({ description: "날짜" })
