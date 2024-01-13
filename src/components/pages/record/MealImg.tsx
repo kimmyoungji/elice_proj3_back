@@ -20,7 +20,7 @@ const MealImg =  ({meal, className}: MealImgProps) => {
            ) : ( 
             <div onClick={()=> {navigate( `/add-photo` )
           }}>
-            <div className={style.uploadButton}> + </div> 
+            <div className={style.uploadButton} > + </div> 
             <div className={style.uploadText}> 오늘의 식단을 <br/> 추가해주세요 </div>
             </div>
            )}

@@ -22,6 +22,7 @@
 
   .mealToggle {
     margin-left: 15px;
+    cursor: pointer;
   }
 
   .pageTitle{

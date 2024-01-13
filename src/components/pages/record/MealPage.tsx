@@ -48,7 +48,7 @@ const MealPage = () => {
         </div>
         <div className={style.mealToggle}>
           <div onClick={() => setDropdownVisible(!isDropdownVisible)}>
-            {selectedMeal.charAt(0) + selectedMeal.slice(1)} ▼
+            {selectedMeal} ▼
               </div>
                 {isDropdownVisible && (
                   <div className={style.dropdown}>
