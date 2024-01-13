@@ -28,11 +28,11 @@ export class Record extends BaseEntity {
   @ApiProperty({ description: "음식 수량" })
   food_counts: number;
 
-  @Column({ type: "datetime", nullable: true })
+  @Column({ type: "timestamp", nullable: true })
   @ApiProperty({ description: "첫 기록 날짜" })
   first_record_date: Date;
 
-  @Column({ type: "datetime", nullable: true })
+  @Column({ type: "timestamp", nullable: true })
   @ApiProperty({ description: "최근 수정 날짜" })
   updated_date: Date;
 }

@@ -16,15 +16,17 @@
 
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 
+import { Record } from "src/record/record.entity";
+
 export const typeORMConfig : TypeOrmModuleOptions = {
    type: 'postgres',
    host: 'localhost',
    port: 5432,
    username: 'postgres',
    password: '0000',
-   database: 'postgres',
+   database: 'ggu',
 
-   entities: [__dirname + '/../**/*.entity.{js, tx}'],
+   entities: [Record],
 
-   synchronize: false
+   synchronize: true
 }

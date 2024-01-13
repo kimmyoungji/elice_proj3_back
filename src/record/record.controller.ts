@@ -31,23 +31,23 @@ export class RecordController {
   }
 
   // PUT /records
-  @Put()
-  @ApiOperation({ summary: "식단 수정" })
-  async updateRecord(
-    @Body() record: Record,
-    @Req() req: Request,
-  ): Promise<Record> {
-    const updatedRecord = await this.recordService.updateRecord(record);
-    return updatedRecord;
-  }
+  // @Put()
+  // @ApiOperation({ summary: "식단 수정" })
+  // async updateRecord(
+  //   @Body() record: Record,
+  //   @Req() req: Request,
+  // ): Promise<Record> {
+  //   const updatedRecord = await this.recordService.updateRecord(record);
+  //   return updatedRecord;
+  // }
 
   // DELETE /records
-  @Delete()
-  @ApiOperation({ summary: "식단 삭제" })
-  async deleteRecord(
-    @Body() record: Record,
-    @Req() req: Request,
-  ): Promise<void> {
-    await this.recordService.deleteRecord(record);
-  }
+  // @Delete()
+  // @ApiOperation({ summary: "식단 삭제" })
+  // async deleteRecord(
+  //   @Body() record: Record,
+  //   @Req() req: Request,
+  // ): Promise<void> {
+  //   await this.recordService.deleteRecord(record);
+  // }
 }
