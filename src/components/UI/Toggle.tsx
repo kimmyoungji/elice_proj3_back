@@ -1,8 +1,16 @@
-import { ReactNode, createContext, useContext, useMemo, useState } from 'react';
-import classes from './toggle.module.css';
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import classes from "./toggle.module.css";
 
 interface togglePropsType {
   children?: ReactNode | ReactNode[];
+  onChangeToggle?: (value: boolean) => void;
 }
 
 type ToggleState = {
@@ -13,13 +21,13 @@ type ToggleState = {
 const ToggleContext = createContext<ToggleState | null>(null);
 const useToggleContext = (ToggleContext: any): any => {
   if (ToggleContext === undefined) {
-    throw new Error('useToggleContext must be used within a ToggleProvider');
+    throw new Error("useToggleContext must be used within a ToggleProvider");
   }
   const state = useContext(ToggleContext);
   return state;
 };
 
-export const Toggle = ({ children }: togglePropsType) => {
+export const Toggle = ({ children, onChangeToggle }: togglePropsType) => {
   const [on, setIsOn] = useState(false);
   const value = useMemo(
     () => ({
@@ -29,36 +37,34 @@ export const Toggle = ({ children }: togglePropsType) => {
     [on]
   );
 
-  return <ToggleContext.Provider value={value}>{children}</ToggleContext.Provider>;
-};
+  useEffect(() => {
+    onChangeToggle && onChangeToggle(on);
+  }, [on, onChangeToggle]);
 
-export const ToggleOn = ({ children }: any) => {
-  const { on } = useToggleContext(ToggleContext);
-  return on ? children : null;
-};
-
-export const ToggleOff = ({ children }: any) => {
-  const { on } = useToggleContext(ToggleContext);
-  return on ? null : children;
+  return (
+    <ToggleContext.Provider value={value}>{children}</ToggleContext.Provider>
+  );
 };
 
 export const ToggleButton = ({ children }: togglePropsType) => {
   const { on, setValue } = useToggleContext(ToggleContext);
-  const btnClassName = ['toggle-btn', on ? 'toggle-btn-on' : 'toggle-btn-off'];
-  const classNames = btnClassName.map((cls) => classes[cls]).join(' ');
+  const btnClassName = ["toggle-btn", on ? "toggle-btn-on" : "toggle-btn-off"];
+  const classNames = btnClassName.map((cls) => classes[cls]).join(" ");
 
   return (
-    <label className={classes['toggle-label']}>
+    <label className={classes["toggle-label"]}>
       <input
         className={classes[`toggle-input`]}
-        type='checkbox'
+        type="checkbox"
         checked={on}
         onChange={() => {}}
-        onClick={() => setValue((prev: any) => !prev)}
-        data-testid='toggle-input'
+        onClick={() => {
+          setValue((prev: any) => !prev);
+        }}
+        data-testid="toggle-input"
       />
       <div className={classes.toggles}>
-        <div className={classes['toggle-text']}>
+        <div className={classes["toggle-text"]}>
           <div>달력</div>
           <div>앨범</div>
         </div>
