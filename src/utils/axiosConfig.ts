@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 type originRequestType = {
   baseURL: string;
@@ -9,17 +9,17 @@ type originRequestType = {
 };
 //AxiosRequestConfigType
 
-const config = {
+const config: originRequestType = {
   baseURL: "/api",
   headers: {
     "Content-Type": "application/json",
   },
 };
 
-export const api = axios.create(config); // 인스턴스
+export const api: AxiosInstance = axios.create(config); // 인스턴스
 
 // //refresh token api
-export async function postRefreshToken() {
+export async function postRefreshToken(): Promise<AxiosResponse<any, any>> {
   const autorizationData = `Bearer ${localStorage.getItem("refreshToken")}`;
   const response = await api.post("/accessToken", {
     Authorization: autorizationData,
@@ -152,7 +152,7 @@ api.interceptors.response.use(
 
 type ApiFetcherParams = [string, any];
 export type ApiMethods = "get" | "post" | "put" | "delete" | "patch";
-type APiFetcher = (...args: ApiFetcherParams) => Promise<any>;
+export type APiFetcher = (...args: ApiFetcherParams) => Promise<any>;
 
 const getFetcher: (
   path: string,
