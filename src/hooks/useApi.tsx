@@ -1,15 +1,42 @@
-import { useEffect, useState, useCallback } from 'react';
-import { API_FETCHER } from '@utils/axiosConfig';
-import { useErrorBoundary } from 'react-error-boundary';
+import { useEffect, useState, useCallback } from "react";
+import { API_FETCHER, ApiMethods } from "@utils/axiosConfig";
+import { useErrorBoundary } from "react-error-boundary";
+import { AxiosError, AxiosResponse } from "axios";
+import axios from "axios";
 
-const useApi = ({ method = 'get', path = '', data = {}, shouldInitFetch = false, initialResult = '' }) => {
+interface UseApipropsType {
+  method?: ApiMethods;
+  path?: string | undefined;
+  data?: {} | any | undefined;
+  shouldInitFetch?: boolean | undefined;
+  initialResult?: string | undefined;
+}
+interface TriggerPropsType {
+  method: ApiMethods;
+  path: UseApipropsType["path"];
+  data: UseApipropsType["data"];
+  applyResult?: boolean;
+  isShowBoundary?: boolean;
+}
+
+type TriggerType = ({
+  ...props
+}: TriggerPropsType) => Promise<AxiosResponse<any, any>>;
+
+const useApi = ({
+  method = "get",
+  path = "",
+  data = {},
+  shouldInitFetch = false,
+  initialResult = "",
+}: UseApipropsType) => {
   const [result, setResult] = useState(initialResult);
   const [loading, setLoading] = useState(false);
-  const [reqIdentifier, setReqIdentifier] = useState('');
-  const [error, setError] = useState(false);
+  const [reqIdentifier, setReqIdentifier] = useState("");
+  const [error, setError] = useState({});
   const { showBoundary } = useErrorBoundary();
 
-  const trigger = useCallback(
+  const trigger: TriggerType = useCallback(
     async ({
       method: triggerMethod = method,
       path: triggerPath = path,
@@ -18,24 +45,27 @@ const useApi = ({ method = 'get', path = '', data = {}, shouldInitFetch = false,
       isShowBoundary = true,
     }) => {
       setLoading(true);
-      setReqIdentifier(triggerMethod + 'Data');
+      setReqIdentifier(triggerMethod + "Data");
       try {
-        const triggerResult = await API_FETCHER[triggerMethod](triggerPath, triggerData);
+        const triggerResult = await API_FETCHER[triggerMethod as ApiMethods](
+          triggerPath,
+          triggerData
+        );
 
         if (applyResult) {
-          console.log('result를 apply합니다');
+          console.log("result를 apply합니다");
           setResult(triggerResult);
-          return result;
+          return;
         }
         return triggerResult;
-      } catch (err: any) {
+      } catch (err) {
         console.log(err);
-        if (isShowBoundary) {
+        if (axios.isAxiosError(err) && isShowBoundary) {
           //에러 바운더리를 보여줘야 할때만 보여줌
           showBoundary(err);
           return;
         }
-        setError(err);
+        axios.isAxiosError(err) && setError(err);
         return;
       } finally {
         setLoading(false);
@@ -45,7 +75,7 @@ const useApi = ({ method = 'get', path = '', data = {}, shouldInitFetch = false,
   );
 
   useEffect(() => {
-    shouldInitFetch && console.log('초기 요청합니다!!', method, path);
+    shouldInitFetch && console.log("초기 요청합니다!!", method, path);
     shouldInitFetch && trigger({ method, path, data });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

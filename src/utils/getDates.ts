@@ -11,13 +11,13 @@ const getDates = () => {
 
   const getNowMealText = () => {
     if (thisHour >= 5 && thisHour < 11) {
-      return '아침';
+      return "아침";
     } else if (thisHour >= 11 && thisHour < 17) {
-      return '점심';
+      return "점심";
     } else if (thisHour >= 17 && thisHour < 23) {
-      return '저녁';
+      return "저녁";
     } else {
-      return '간식';
+      return "간식";
     }
   };
 

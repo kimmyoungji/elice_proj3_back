@@ -14,14 +14,15 @@
   object-fit: cover;
 }
 
-.tagbox {
-  margin : 12px 20px;
+.photobox {
+  margin : 0 20px;
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  
 }
 
 .addphotobtn{
+  margin-top: 12px;
   width: 50px;
   height: 90px;
   display: flex;
@@ -31,6 +32,7 @@
   gap: 10px;
   border-radius: 10px;
   border: 1px solid var(--main-skyblue);
+  flex-shrink:0;
 }
 
 .btnicon {
@@ -44,21 +46,52 @@
   font-weight: 700;
 }
 
+.tagbox {
+  padding-top: 12px;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
+.tagbox:nth-child(0){
+  margin-left: 10px;
+}
+
 .tagitem {
   display: flex;
   flex-direction: column;
+  margin: 0 5px;
 }
 
 .tagimgwrap {
+  margin-bottom: 8px;
   position: relative;
+  width:90px;
+  height: 90px;
+  border-radius: 10px;
 }
 
 .tagimg {
-  margin: 0 0 8px 0;
   width:90px;
   height: 90px;
-  object-fit: cover;
   border-radius: 10px;
+}
+
+.focusimg {
+  border: 3px solid var(--main-blue);
+}
+
+.focustxt {
+  color: var(--main-blue);
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.tagtxt {
+  font-family: var(--basic-font), sans-serif;
+  font-weight: 400;
+  font-size: 13px;
 }
 
 .tagdeleteicon {
@@ -67,4 +100,11 @@
   position: absolute;
   top:-5px;
   right: -5px;;
+}
+
+.btnbox {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin : 20px 20px;
 }
