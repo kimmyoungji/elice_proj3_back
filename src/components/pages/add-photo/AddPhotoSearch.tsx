@@ -27,13 +27,15 @@ const AddPhotoSearch = () => {
       </div>
       <div className={styles.searchbox}>
         <InputCommon
-          className="medium r-large default"
+          size="medium"
+          variant="default"
           value={searchInput}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setSearchInput(e.target.value)}
         />
         <ButtonCommon
-          className="small b-small active"
+          size="small"
+          variant="default-active"
           onClickBtn={handleClick}>
           검색
         </ButtonCommon>
@@ -46,8 +48,8 @@ const AddPhotoSearch = () => {
       </div>
       <div className={styles.btnbox}>
         {tags.length > 0
-          ? <ButtonCommon className="big b-regular active">식단 추가하기</ButtonCommon>
-          : <ButtonCommon className="big b-regular disabled">식단 추가하기</ButtonCommon>
+          ? <ButtonCommon size="big" variant="default-active">식단 추가하기</ButtonCommon>
+          : <ButtonCommon size="big" variant="default" disabled={true}>식단 추가하기</ButtonCommon>
         }
       </div>
     </div>

@@ -1,11 +1,12 @@
 .container {
-  margin: 4px 20px 25px 20px;
+  margin: 4px 20px 0 20px;
   display: flex;
   flex-direction: column;
 }
 
 .titlebox {
   margin-bottom: 16px;
+  margin-top: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -31,6 +32,7 @@
 
 .searchbox {
   margin-bottom: 29px;
+  position:relative;
 }
 
 .searchform {
@@ -39,9 +41,6 @@
   gap: 7px;
 }
 
-.calbox {
-  margin-bottom: 30px;
-}
 
 .caltext {
   display: flex;
@@ -60,7 +59,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding : 20px;
+  padding : 0 20px;
 }
 
 .calbtn {
@@ -68,8 +67,18 @@
   height: 10px;
 }
 
-.btnbox {
+
+
+.resultbox {
+  position: absolute;
+  width: 280px;
+  height: 169px;
+  background-color: white;
+  border-radius: 7px;
+  border: 1px solid var(--main-skyblue);
+  top: 105%;
+  text-align: left;
+  padding: 10px;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
 }
