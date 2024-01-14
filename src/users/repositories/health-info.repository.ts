@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { HealthInfo } from "./health-info.entity";
+import { HealthInfo } from "../entities/health-info.entity";
 
 @Injectable()
 export class HealthInfoRepository extends Repository<HealthInfo> {

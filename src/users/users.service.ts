@@ -1,16 +1,14 @@
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { LoginUserDto } from './dto/loginUser.dto';
-import { HealthInfoRepository } from './health-info.repository';
-import { ActivityAmount } from './user.health-info.enums';
-import { DietGoal, Gender } from './user.health-info.enums';
-import { DataSource } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { HealthInfoRepository } from './repositories/health-info.repository';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsersRepository} from './users.repository';
+import { UsersRepository} from './repositories/users.repository';
 import { SignUpUserDto } from './dto/signUpUpser.dto';
 import { v4 as uuidv4} from 'uuid';
-import { User } from './user.entity';
-import { HealthInfo } from './health-info.entity';
+import { User } from './entities/user.entity';
+import { HealthInfo } from './entities/health-info.entity';
+import { sign } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -31,10 +29,10 @@ export class UsersService {
             if (user.password === LoginUserDto.password) {
                 return user;
             } else {
-                return '비밀번호가 일치하지 않습니다.';
+                throw new HttpException('비밀번호가 일치하지 않습니다.', 401);
             }
         } else {
-            return '가입되어 있지 않은 이메일입니다.';
+            throw new HttpException('가입되지 않은 이메일입니다.', 401);
         }       
     }
 
@@ -44,24 +42,16 @@ export class UsersService {
 
     async signUp(signUpUserDto: SignUpUserDto) {
 
+        // userId 생성
+        signUpUserDto.userId = uuidv4();
+
         // signUpUserDto -> User Entity Type
         const newUser = new User();
-        newUser.user_id = uuidv4();
-        newUser.email = signUpUserDto.email;
-        newUser.username = signUpUserDto.username;
-        newUser.password = signUpUserDto.password;
-        newUser.birthday = signUpUserDto.birthday;
-        newUser.gender = signUpUserDto.gender;
+        newUser.signUpUserDtoToEntity(signUpUserDto);
 
         // signUpUserDto -> HealthInfo Entity Type
         const newHealthInfo = new HealthInfo();
-        newHealthInfo.user_id = newUser.user_id;
-        newHealthInfo.weight = signUpUserDto.weight;
-        newHealthInfo.height = signUpUserDto.height;
-        newHealthInfo.goal = signUpUserDto.goal;
-        newHealthInfo.target_weight = signUpUserDto.targetWeight;
-        newHealthInfo.target_calories = signUpUserDto.targetCalories;
-        newHealthInfo.activity_amount = signUpUserDto.activity;
+        newHealthInfo.signUpUserDtotoEntity(signUpUserDto);
 
         const result1 = await this.usersRepository.createUser(newUser);
         const result2 = await this.healthInfoRepository.createHealthInfo(newHealthInfo);
@@ -72,18 +62,11 @@ export class UsersService {
 
         // updteUserDto -> User Entity Type
         const newUser = new User();
-        newUser.username = updateUserDto.username;
-        newUser.birthday = updateUserDto.birthday;
-        newUser.gender = updateUserDto.gender;
+        newUser.UpdateUserDtoToEntity(updateUserDto);
 
         // updteUserDto -> HealthInfo Entity Type
         const newHealthInfo = new HealthInfo();
-        newHealthInfo.weight = updateUserDto.weight;
-        newHealthInfo.height = updateUserDto.height;
-        newHealthInfo.goal = updateUserDto.goal;
-        newHealthInfo.target_weight = updateUserDto.targetWeight;
-        newHealthInfo.target_calories = updateUserDto.targetCalories;
-        newHealthInfo.activity_amount = updateUserDto.activity;
+        newHealthInfo.updateUserDtoToEntity(updateUserDto);
 
         const userInfoUpdateResult =  await this.usersRepository.update(userId, newUser);
         const HealthInfoUpdateResult =  await this.healthInfoRepository.update(userId, newHealthInfo);
