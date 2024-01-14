@@ -5,12 +5,7 @@ import CalendarMonth from "./CalendarMonth";
 import classes from "./calendarHeader.module.css";
 
 const CalendarHeader = () => {
-  const { thisYear, thisMonth, setIsAlbum } = useCalendarContext();
-  // const itemId = useId();
-  const handleView = (value: string) => {
-    //선택한 날짜를 context에 설정
-    console.log(value);
-  };
+  const {  setIsAlbum } = useCalendarContext();
 
   const onChangeToggle = (value: boolean) => {
     setIsAlbum(value);
