@@ -24,7 +24,7 @@ interface Props {
 }
 
 
-const RecordEditDetail = ({focus, foods, setFoods, setFocus}:Props) => {
+const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
   const [searchInput, setSearchInput] = useState("");
   const [searching, setSearching] = useState(false);
 
@@ -35,15 +35,31 @@ const RecordEditDetail = ({focus, foods, setFoods, setFocus}:Props) => {
   };
 
   const editName = (e: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
-    const newArr = [...foods];
-    const find = foods.findIndex(i => i.foodName === focus);
-    newArr[find].foodName = `${e.currentTarget.textContent}`;
-    setFoods(newArr);
-    setSearching(false);
-    setFocus(e.currentTarget.textContent);
+    if (foods.some(food => food.foodName === e.currentTarget.textContent)) {
+      alert("이미 등록된 음식입니다!")
+    } else {
+      const newArr = [...foods];
+      const find = foods.findIndex(i => i.foodName === focus);
+      newArr[find].foodName = `${e.currentTarget.textContent}`;
+      setFoods(newArr);
+      setSearching(false);
+      setFocus(e.currentTarget.textContent);
+    }
+    
   };
 
-  let amount = 1;
+  const [amount, setAmount] = useState(1);
+  const increment = () => {
+    setAmount(amount + 0.25);
+  };
+  const decrement = () => {
+    if (amount === 0.25) {
+      alert('더 이상 양을 줄일 수 없습니다!')
+    } else {
+      setAmount(amount - 0.25);
+    }
+  }
+
   const searchResults = ["떡국", "두살 떡국","1등 떡국 최고" ,"세살 떡국", "네살 떡국", "다섯살 떡국","좋은 떡국","나쁜 떡국","해맑은 떡국"]; 
   // const searchResults:any= undefined;
 
@@ -116,9 +132,9 @@ const RecordEditDetail = ({focus, foods, setFoods, setFocus}:Props) => {
           <p className="r-super">{amount}g</p>
         </div>
         <div className={styles.calinput}>
-          <img className={styles.calbtn} src="/icons/minusicon.png" alt="-" />
+          <img className={styles.calbtn} src="/icons/minusicon.png" alt="-" onClick={decrement} />
           <p className="s-big">{amount}</p>
-          <img className={styles.calbtn} src="/icons/plusicon.png" alt="+" />
+          <img className={styles.calbtn} src="/icons/plusicon.png" alt="+" onClick={increment} />
         </div>
       </div>
 
