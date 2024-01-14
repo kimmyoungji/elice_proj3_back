@@ -60,12 +60,10 @@ const MealPage = () => {
           </div>
           <div className={style.headerButton}>
             <ButtonCommon variant='default-active' size='tiny' onClick={() => navigate(`/record/edit`)}>
-              {' '}
-              수정{' '}
+              <> 수정 </>
             </ButtonCommon>
             <ButtonCommon variant='default-active' size='tiny'>
-              {' '}
-              삭제{' '}
+              <> 삭제 </>
             </ButtonCommon>
           </div>
         </div>
