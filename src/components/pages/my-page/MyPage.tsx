@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import style from './mypage.module.css';
+import { PencilIcon } from '@assets/PencilIcon';
 
 const userData = {
   email: 'elice@gmail.com',
@@ -46,24 +47,14 @@ const MyPage = () => {
           <div className={style.userName}>{userData.username}</div>
         </div>
         <div className={style.editUserProfile}>
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
+          <PencilIcon
             width='15px'
             height='15px'
+            strokeWidth={2}
             onClick={() => {
               navigate(`/my-page/edit`);
             }}
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth={2}
-            stroke='currentColor'
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              d='m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125'
-            />
-          </svg>
+          />
           <div className={style.editText}> 편집 </div>
         </div>
       </div>
