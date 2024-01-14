@@ -1,4 +1,3 @@
-import { ReactElement, createElement } from "react";
 import classes from "./calendarbody.module.css";
 import { useCalendarContext } from "./Calendar";
 import Album from "./Album";
@@ -18,8 +17,7 @@ const CalendarBody = () => {
     thisMonth,
     selectedIndex,
     setSelectedIndex,
-    setThisMonth,
-    setThisYear,
+
     isAlbum,
   } = useCalendarContext();
 
@@ -45,13 +43,12 @@ const CalendarBody = () => {
   const getThisMonthArray = () => {
     const thisMonthTotal = new Date(thisYear, thisMonth, 0).getDate();
     const thisMonthFirstDay = new Date(thisYear, thisMonth - 1, 1).getDay();
-    const monthArr: ReactElement[] = [];
     const totalCalNum = thisMonthTotal + thisMonthFirstDay > 35 ? 42 : 35;
     const getDayNumber = (idx: number): number => {
       return idx - thisMonthFirstDay + 1;
     };
 
-    new Array(totalCalNum).fill(0).map((_, idx) => {
+    return new Array(totalCalNum).fill(0).map((_, idx) => {
       const existedDateIndex = DUMMYCumulative_cal_Date[
         "existedDate"
       ].findIndex((el) => el === getDayNumber(idx));
@@ -74,51 +71,49 @@ const CalendarBody = () => {
       const selectedFonts =
         selectedCls !== "" ? ` ${classes["font-selected"]}` : "";
 
-      monthArr.push(
-        createElement("div", {
-          key: `$cal-${idx}`,
-          className:
+      return (
+        <div
+          key={`$cal-${idx}`}
+          className={
             idx >= thisMonthFirstDay && idx < thisMonthTotal + thisMonthFirstDay
               ? `${classes["day-wrapper"]} b-small`
-              : ` ${classes["cal-circle"]} b-small`,
-          children: [
-            //날짜에 맞는 idx일때만 숫자를 넣음
-            createElement("div", {
-              key: `$date-${idx}`,
-              className:
-                //칼로리데이터 존재하는 날짜의 인덱스
-                DUMMYCumulative_cal_Date["existedDate"].includes(
-                  getDayNumber(idx)
-                )
-                  ? `${classes[`${colorCls}`]} b-small` + selectedCls
-                  : `${classes["cal-circle"]} b-small` + selectedCls,
-              //id는 날짜범위 내에서만
-              id:
-                idx >= thisMonthFirstDay &&
-                idx < thisMonthTotal + thisMonthFirstDay
-                  ? `idx-${getDayNumber(idx)}`
-                  : null,
-              onClick: onClickDate,
-              children:
-                idx >= thisMonthFirstDay &&
-                idx < thisMonthTotal + thisMonthFirstDay &&
-                getDayNumber(idx),
-            }),
-            //데이터 존재하는 idx에서만
-            DUMMYCumulative_cal_Date["existedDate"].includes(
-              getDayNumber(idx)
-            ) &&
-              createElement("p", {
-                key: `$p-${idx}`,
-                className: `r-regular ${colorFonts + selectedFonts}`,
-                children: `+${DUMMYCumulative_cal_Date["totalCalData"][existedDateIndex]}`,
-              }),
-          ],
-        })
+              : ` ${classes["cal-circle"]} b-small`
+          }
+        >
+          <div
+            key={`$date-${idx}`}
+            className={
+              DUMMYCumulative_cal_Date["existedDate"].includes(
+                getDayNumber(idx)
+              )
+                ? `${classes[`${colorCls}`]} b-small` + selectedCls
+                : `${classes["cal-circle"]} b-small` + selectedCls
+            }
+            id={
+              idx >= thisMonthFirstDay &&
+              idx < thisMonthTotal + thisMonthFirstDay
+                ? `idx-${getDayNumber(idx)}`
+                : undefined
+            }
+            onClick={onClickDate}
+          >
+            {idx >= thisMonthFirstDay &&
+              idx < thisMonthTotal + thisMonthFirstDay &&
+              getDayNumber(idx)}
+          </div>
+          {DUMMYCumulative_cal_Date["existedDate"].includes(
+            getDayNumber(idx)
+          ) && (
+            <p
+              key={`$p-${idx}`}
+              className={`r-regular ${colorFonts + selectedFonts}`}
+            >
+              {`+${DUMMYCumulative_cal_Date["totalCalData"][existedDateIndex]}`}
+            </p>
+          )}
+        </div>
       );
-      return monthArr;
     });
-    return monthArr;
   };
 
   return (
