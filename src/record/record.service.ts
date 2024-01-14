@@ -22,10 +22,10 @@ export class RecordService {
   }
 
   // // 특정 ID의 식단을 수정하는 메서드
-  // async updateRecord(record: Record): Promise<Record> {
-  //   const updatedRecord = await this.recordRepository.updateRecord(record);
-  //   return updatedRecord;
-  // }
+  async updateRecord(record: Record): Promise<Record> {
+    const updatedRecord = await this.recordRepository.updateRecord(record);
+    return updatedRecord;
+  }
 
   // // 특정 ID의 식단을 삭제하는 메서드
   // async deleteRecord(record: Record): Promise<void> {
