@@ -24,7 +24,7 @@
   justify-content: space-between;
   color: white;
   background-size: cover;
-  background-image: url("../../../../public/images/record_example.png");
+  background-image: url('../../../../public/images/record_example.png');
   /* 끝과 끝으로  */
 }
 

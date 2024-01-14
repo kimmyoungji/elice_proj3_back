@@ -9,7 +9,7 @@ interface Menu {
 
 const Layout = () => {
   const navigate = useNavigate();
-  const { thisYear, thisMonth, thisDay} = getDates()
+  const { thisYear, thisMonth, thisDay } = getDates();
   const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
 
   const menus = [
@@ -24,8 +24,11 @@ const Layout = () => {
     <div className={styles.navbar}>
       {menus.map((menu: Menu, index) => (
         <div key={index} className={styles.item} onClick={() => navigate(`/${menu.item}`)}>
-          <img className={styles.icon} 
-          src={ index === 3 ? `/icons/record.png` : `/icons/${menu.item}.png`} alt={`${menu.item}`} />
+          <img
+            className={styles.icon}
+            src={index === 3 ? `/icons/record.png` : `/icons/${menu.item}.png`}
+            alt={`${menu.item}`}
+          />
           <div className={styles.text}>{menu.text}</div>
         </div>
       ))}

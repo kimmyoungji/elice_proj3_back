@@ -1,4 +1,1 @@
-export  const useImageUpload = () => {
-
-
-}
+export const useImageUpload = () => {};
