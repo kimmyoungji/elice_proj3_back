@@ -20,6 +20,13 @@
   display: flex;
   gap: 7px;
 }
+.name {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+.title {
+}
 .icon_wrapper {
   position: absolute;
   right: 20px;

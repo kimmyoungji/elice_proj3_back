@@ -6,7 +6,13 @@ import Week from "./Week";
 const Home = () => {
   return (
     <div>
-      <TopBar title="구그램" back={true} qIcon={true} icon={true} />
+      <TopBar
+        home={true}
+        title="구그램"
+        back={false}
+        qIcon={false}
+        icon={false}
+      />
       <Week />
       <Today />
     </div>
