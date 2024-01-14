@@ -18,6 +18,10 @@ export class User {
     @PrimaryColumn({ type: 'uuid' })
     userId: string;
 
+    @IsNotEmpty()
+    @IsString()
+    providerId:string;
+
     @Column({ type: 'varchar', length: 50 })
     @IsNotEmpty()
     @IsEmail()

@@ -6,10 +6,11 @@ import { UsersModule } from './users/users.module';
 import * as config from "config";
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from './conifg/database/typorm.config.mj';
+import { AuthModule } from './auth/auth.module';
 
 const dbConfig = config.get("db");
 @Module({
-  imports: [TypeOrmModule.forRoot(typeORMConfig),UsersModule],
+  imports: [TypeOrmModule.forRoot(typeORMConfig),UsersModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
