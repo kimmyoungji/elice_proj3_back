@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 type originRequestType = {
   baseURL: string;
@@ -9,17 +9,17 @@ type originRequestType = {
 };
 //AxiosRequestConfigType
 
-const config = {
+const config: originRequestType = {
   baseURL: "/api",
   headers: {
     "Content-Type": "application/json",
   },
 };
 
-export const api = axios.create(config); // 인스턴스
+export const api: AxiosInstance = axios.create(config); // 인스턴스
 
 // //refresh token api
-export async function postRefreshToken() {
+export async function postRefreshToken(): Promise<AxiosResponse<any, any>> {
   const autorizationData = `Bearer ${localStorage.getItem("refreshToken")}`;
   const response = await api.post("/accessToken", {
     Authorization: autorizationData,
@@ -150,6 +150,10 @@ api.interceptors.response.use(
   }
 );
 
+type ApiFetcherParams = [string, any];
+export type ApiMethods = "get" | "post" | "put" | "delete" | "patch";
+export type APiFetcher = (...args: ApiFetcherParams) => Promise<any>;
+
 const getFetcher: (
   path: string,
   { params }: any
@@ -169,20 +173,7 @@ const deleteFetcher = async (path: string, params: any) => {
   return await api.delete(path, { params });
 };
 
-type API_FETCHERType = {
-  get: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  post: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  put: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  patch: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  delete: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  [key: string]: any;
-};
-
 // const args = {path:string, body: any } as const;
-export type ApiMethods = "get" | "post" | "put" | "patch" | "delete";
-
-type ApiParams = [string, any];
-type APiFetcher = (...args: ApiParams) => Promise<any>;
 
 export const API_FETCHER: { [key in ApiMethods]: APiFetcher } = {
   get: (...args) => getFetcher(...args),
