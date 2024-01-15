@@ -17,7 +17,6 @@ const CalendarBody = () => {
     thisMonth,
     selectedIndex,
     setSelectedIndex,
-
     isAlbum,
   } = useCalendarContext();
 
@@ -36,6 +35,7 @@ const CalendarBody = () => {
     setSelectedIndex((prev) => {
       return prev === clickedElementId ? NaN : clickedElementId;
     });
+
   };
 
   const getThisMonthArray = () => {
@@ -107,7 +107,7 @@ const CalendarBody = () => {
             variant='default-active'
             size='big'
             disabled={!selectedIndex}
-            href={`/record/${selectedIndex}`}
+            href={`/record/${thisYear}-${thisMonth}-${selectedIndex}`}
           >
             {DUMMYCumulative_cal_Date['existedDate'].includes(selectedIndex) ? '기록 보러 가기' : '기록 추가하러 가기'}
           </ButtonCommon>
