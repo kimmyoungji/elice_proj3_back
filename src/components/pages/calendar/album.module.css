@@ -1,3 +1,7 @@
+.wrapper {
+  z-index: -1;
+}
+
 .date {
   display: flex;
   flex-direction: column;
@@ -33,6 +37,7 @@
 }
 
 .meal-img {
+  z-index: -1;
   border-radius: 7px;
   position: relative;
   overflow: hidden;
