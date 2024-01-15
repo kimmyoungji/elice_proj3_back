@@ -104,7 +104,7 @@ const MyPageEdit = () => {
         </div>
         <div className={style.goaltInfo}>
           <div className={style.goalTitle}>목표 칼로리</div>
-          <div className={style.goalDetail}>{userData.height}kg</div>
+          <div className={style.goalDetail}>{userData.targetCalories}kcal</div>
         </div>
       </div>
 

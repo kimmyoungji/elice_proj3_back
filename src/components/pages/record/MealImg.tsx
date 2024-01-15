@@ -16,7 +16,11 @@ const MealImg = ({ meal, className }: MealImgProps) => {
     <>
       <div className={className}>
         {imgUrl || mealDetailData[meal].food.length > 0 ? (
-          <PutImgTag mealType={meal} imgUrl={imgUrl || '/images/9gram_logo.png'} className={className} />
+          <PutImgTag
+            mealType={meal}
+            imgUrl={imgUrl || '/images/9gram_logo.png'}
+            className={className}
+          />
         ) : (
           <div
             onClick={() => {

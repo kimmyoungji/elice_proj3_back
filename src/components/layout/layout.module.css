@@ -40,7 +40,7 @@
   display: flex;
 }
 
-.navbar .item{
+.navbar .item {
   width: 20%;
   height: 100%;
   display: flex;
@@ -48,13 +48,13 @@
   justify-content: center;
 }
 
-.navbar .item .icon{
+.navbar .item .icon {
   width: 20px;
   height: 20px;
   margin: 0 auto;
 }
 
-.navbar .item .text{
+.navbar .item .text {
   margin-top: 5px;
   font-size: 12px;
 }

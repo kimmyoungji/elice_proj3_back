@@ -94,7 +94,12 @@ const RecordEdit = () => {
   return (
     <>
       <div className={header.header}>
-        <img className={header.arrow} src='/icons/left_arrow.png' alt='뒤로가기' onClick={() => navigate(-1)} />
+        <img
+          className={header.arrow}
+          src='/icons/left_arrow.png'
+          alt='뒤로가기'
+          onClick={() => navigate(-1)}
+        />
         <div className={header.text}>AI 식단 확인</div>
       </div>
 
@@ -150,12 +155,16 @@ const RecordEdit = () => {
                   onClick={(e) => deletefood(e)}
                 />
               </div>
-              <p className={`${focus === food.foodName ? styles.focustxt : styles.tagtxt}`}>{food.foodName}</p>
+              <p className={`${focus === food.foodName ? styles.focustxt : styles.tagtxt}`}>
+                {food.foodName}
+              </p>
             </div>
           ))}
         </div>
       </div>
-      {focus && <RecordEditDetail focus={focus} foods={foods} setFoods={setFoods} setFocus={setFocus} />}
+      {focus && (
+        <RecordEditDetail focus={focus} foods={foods} setFoods={setFoods} setFocus={setFocus} />
+      )}
       <div className={styles.btnbox}>
         <ButtonCommon size='medium' variant='disabled'>
           취소
