@@ -1,8 +1,8 @@
-import { useEffect, useState, useCallback } from "react";
-import { API_FETCHER, ApiMethods } from "@utils/axiosConfig";
-import { useErrorBoundary } from "react-error-boundary";
-import { AxiosError, AxiosResponse } from "axios";
-import axios from "axios";
+import { useEffect, useState, useCallback } from 'react';
+import { API_FETCHER, ApiMethods } from '@utils/axiosConfig';
+import { useErrorBoundary } from 'react-error-boundary';
+import { AxiosError, AxiosResponse } from 'axios';
+import axios from 'axios';
 
 interface UseApipropsType {
   method?: ApiMethods;
@@ -13,26 +13,24 @@ interface UseApipropsType {
 }
 interface TriggerPropsType {
   method: ApiMethods;
-  path: UseApipropsType["path"];
-  data: UseApipropsType["data"];
+  path: UseApipropsType['path'];
+  data: UseApipropsType['data'];
   applyResult?: boolean;
   isShowBoundary?: boolean;
 }
 
-type TriggerType = ({
-  ...props
-}: TriggerPropsType) => Promise<AxiosResponse<any, any>>;
+type TriggerType = ({ ...props }: TriggerPropsType) => Promise<AxiosResponse<any, any>>;
 
 const useApi = ({
-  method = "get",
-  path = "",
+  method = 'get',
+  path = '',
   data = {},
   shouldInitFetch = false,
-  initialResult = "",
+  initialResult = '',
 }: UseApipropsType) => {
   const [result, setResult] = useState(initialResult);
   const [loading, setLoading] = useState(false);
-  const [reqIdentifier, setReqIdentifier] = useState("");
+  const [reqIdentifier, setReqIdentifier] = useState('');
   const [error, setError] = useState({});
   const { showBoundary } = useErrorBoundary();
 
@@ -45,15 +43,12 @@ const useApi = ({
       isShowBoundary = true,
     }) => {
       setLoading(true);
-      setReqIdentifier(triggerMethod + "Data");
+      setReqIdentifier(triggerMethod + 'Data');
       try {
-        const triggerResult = await API_FETCHER[triggerMethod as ApiMethods](
-          triggerPath,
-          triggerData
-        );
+        const triggerResult = await API_FETCHER[triggerMethod as ApiMethods](triggerPath, triggerData);
 
         if (applyResult) {
-          console.log("result를 apply합니다");
+          console.log('result를 apply합니다');
           setResult(triggerResult);
           return;
         }
@@ -75,7 +70,7 @@ const useApi = ({
   );
 
   useEffect(() => {
-    shouldInitFetch && console.log("초기 요청합니다!!", method, path);
+    shouldInitFetch && console.log('초기 요청합니다!!', method, path);
     shouldInitFetch && trigger({ method, path, data });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

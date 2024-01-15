@@ -1,17 +1,14 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState } from 'react';
 
 interface UseControlledArgs<T = any> {
   controlled?: T;
   unControlled: T;
 }
 
-type UseControlledReturn<T = any> = [
-  T,
-  (value: T | React.SetStateAction<T>) => void
-];
+type UseControlledReturn<T = any> = [T, (value: T | React.SetStateAction<T>) => void];
 
 //매개변수 : {controlledValue, defaultValue}
-export const useControlled = <T=any>( // prettier-ignore
+export const useControlled = <T,>(
   args: UseControlledArgs<T>
 ): UseControlledReturn => {
   const { controlled: controlledValue, unControlled } = args;

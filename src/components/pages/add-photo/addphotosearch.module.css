@@ -5,8 +5,8 @@
 }
 
 .searchbox {
-  width:100%;
-  padding:20px 20px 15px 20px;
+  width: 100%;
+  padding: 20px 20px 15px 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -14,7 +14,7 @@
 }
 
 .resultbox {
-  height:435px;
+  height: 435px;
   padding: 0px 20px;
   align-items: start;
 }

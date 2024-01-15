@@ -1,8 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import { useCalendarContext } from "./Calendar";
-import Image from "./Image";
-import classes from "./album.module.css";
-type MealType = "아침" | "점심" | "저녁" | "간식";
+import { useNavigate } from 'react-router-dom';
+import { useCalendarContext } from './Calendar';
+import Image from './Image';
+import classes from './album.module.css';
+type MealType = '아침' | '점심' | '저녁' | '간식';
 
 interface DummyAlbumArrType {
   date: string;
@@ -11,27 +11,27 @@ interface DummyAlbumArrType {
 
 const DUMMYAlbumArr: DummyAlbumArrType[] = [
   {
-    date: "01",
+    date: '01',
     dateArr: [
-      ["아침", 400, "https://source.unsplash.com/random/110x110"],
-      ["점심", 350, "https://source.unsplash.com/random/110x110"],
+      ['아침', 400, 'https://source.unsplash.com/random/110x110'],
+      ['점심', 350, 'https://source.unsplash.com/random/110x110'],
     ],
   },
   {
-    date: "06",
+    date: '06',
     dateArr: [
-      ["아침", 400, "https://source.unsplash.com/random/110x110"],
-      ["점심", 350, "https://source.unsplash.com/random/110x110"],
-      ["저녁", 250, "https://source.unsplash.com/random/110x110"],
+      ['아침', 400, 'https://source.unsplash.com/random/110x110'],
+      ['점심', 350, 'https://source.unsplash.com/random/110x110'],
+      ['저녁', 250, 'https://source.unsplash.com/random/110x110'],
     ],
   },
   {
-    date: "07",
+    date: '07',
     dateArr: [
-      ["아침", 400, "https://source.unsplash.com/random/110x110"],
-      ["점심", 350, "https://source.unsplash.com/random/110x110"],
-      ["저녁", 250, "https://source.unsplash.com/random/110x110"],
-      ["간식", 250, "https://source.unsplash.com/random/110x110"],
+      ['아침', 400, 'https://source.unsplash.com/random/110x110'],
+      ['점심', 350, 'https://source.unsplash.com/random/110x110'],
+      ['저녁', 250, 'https://source.unsplash.com/random/110x110'],
+      ['간식', 250, 'https://source.unsplash.com/random/110x110'],
     ],
   },
 ];
@@ -66,15 +66,15 @@ const Album = () => {
           >{`${thisYear}.${thisMonth}.${day.date}`}</div>
           <div className={classes.cards} onClick={onClickCards}>
             {day.dateArr.map((arr, idx) => (
-              <div className={classes["meal-img"]}>
+              <div className={classes['meal-img']}>
                 <Image src={arr[2]} />
                 <div
-                  className={classes["meal-card"]}
+                  className={classes['meal-card']}
                   key={`date-${idx}`}
                   id={`${day.date}/${getMealsNumber[arr[0]]}`}
                 >
                   <div className={`b-regular`}>{arr[0]}</div>
-                  <div className={`${classes["meal-cal"]} b-medium`}>
+                  <div className={`${classes['meal-cal']} b-medium`}>
                     {arr[1]} kcal
                   </div>
                 </div>

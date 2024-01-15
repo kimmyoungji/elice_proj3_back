@@ -1,6 +1,6 @@
-import { ReactElement, ReactNode, useState } from "react";
-import { useCalendarContext } from "./Calendar";
-import classes from "./calendarMonth.module.css";
+import { ReactElement, ReactNode, useState } from 'react';
+import { useCalendarContext } from './Calendar';
+import classes from './calendarMonth.module.css';
 
 interface CalendarMonthProps {
   children?: string | ReactElement[] | ReactElement;
@@ -11,9 +11,7 @@ const CalendarMonth = ({ children }: CalendarMonthProps) => {
   const [selectedYear, setSelectedYear] = useState(thisYear);
 
   const onClickMonth = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const clickedElementId = Number(
-      (e.target as HTMLDivElement).id.split("-")[1]
-    );
+    const clickedElementId = Number((e.target as HTMLDivElement).id.split('-')[1]);
     console.log(clickedElementId);
     setThisYear(selectedYear);
     setThisMonth(clickedElementId);
@@ -29,11 +27,7 @@ const CalendarMonth = ({ children }: CalendarMonthProps) => {
       </div>
       <div className={classes.monthWrapper}>
         {new Array(12).fill(0).map((_, idx) => (
-          <div
-            onClick={onClickMonth}
-            id={`month-${idx + 1}`}
-            key={`month-${idx + 1}`}
-          >
+          <div onClick={onClickMonth} id={`month-${idx + 1}`} key={`month-${idx + 1}`}>
             {idx + 1}
           </div>
         ))}

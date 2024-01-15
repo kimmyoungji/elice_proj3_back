@@ -1,5 +1,6 @@
 import './App.css';
 import Layout from '@components/layout/Layout';
+import TopBar from '@components/layout/TopBar';
 import { lazy, Suspense } from 'react';
 import { useLocation, Navigate, Route, Routes } from 'react-router-dom';
 
@@ -14,7 +15,7 @@ const AiAnalyze = lazy(() => import('@components/pages/ai-analyze/AiAnalyze'));
 const Record = lazy(() => import('@components/pages/record/Record'));
 const RecordEdit = lazy(() => import('@components/pages/record/RecordEdit'));
 const MealPage = lazy(() => import('@components/pages/record/MealPage'));
-const MealDeatilPage = lazy(()=> import('@components/pages/record/MealDetailPage') )
+const MealDeatilPage = lazy(() => import('@components/pages/record/MealDetailPage'));
 const Calender = lazy(() => import('@components/pages/calendar/Calendar'));
 
 function App() {
@@ -37,7 +38,7 @@ function App() {
               <Route path='/record/:selectedDate' element={<Record />} />
               <Route path='/record/edit' element={<RecordEdit />} />
               <Route path='/record/:date' element={<MealPage />}>
-                <Route path=':mealTime' element= {<MealDeatilPage />} />
+                <Route path=':mealTime' element={<MealDeatilPage />} />
               </Route>
               {/* <Route path='/record/edit' element={<RecordEdit />} /> */}
               <Route path='/calendar' element={<Calender />} />
@@ -45,7 +46,7 @@ function App() {
           </Suspense>
         </main>
         <header className='header'>
-          {location.pathname !== "/login" && location.pathname !== "/join" && <Layout />}
+          {location.pathname !== '/login' && location.pathname !== '/join' && <Layout />}
         </header>
       </div>
     </div>

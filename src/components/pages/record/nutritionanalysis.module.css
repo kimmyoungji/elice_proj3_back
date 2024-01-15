@@ -1,41 +1,41 @@
 .header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-.title{
-color: #000;
-font-family: Inter;
-font-size: 15px;
-font-style: normal;
-font-weight: 700;
-line-height: normal;
+.title {
+  color: #000;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
 
-.caloriesCount{
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    height: 15px ;
+.caloriesCount {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  height: 15px;
 }
 
-.intakeCalories{
-    color: #000;
-    text-align: right;
-    font-family: Inter;
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 900;
-    line-height: normal;
+.intakeCalories {
+  color: #000;
+  text-align: right;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: normal;
 }
 
-.totalCalories{
-    color: var(--main-skyblue);
-    font-family: Inter;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
+.totalCalories {
+  color: var(--main-skyblue);
+  font-family: Inter;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 }
