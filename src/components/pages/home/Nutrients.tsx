@@ -19,7 +19,12 @@ const Nutrients = () => {
         <div className={styles.nutrient}>
           <p>{nutrient.title}</p>
           <div className={styles.progress_wrapper}>
-            <svg className={styles.progress} width='48' height='48' viewBox='0 0 48 48'>
+            <svg
+              className={styles.progress}
+              width='48'
+              height='48'
+              viewBox='0 0 48 48'
+            >
               <circle
                 className={styles.frame}
                 cx='24'
@@ -30,18 +35,26 @@ const Nutrients = () => {
                 strokeDasharray={circumference}
               />
               <circle
-                className={nutrient.value / standard[idx] <= 1 ? styles.bar : styles.overbar}
+                className={
+                  nutrient.value / standard[idx] <= 1
+                    ? styles.bar
+                    : styles.overbar
+                }
                 cx='24'
                 cy='24'
                 r='22'
                 strokeWidth='3'
                 strokeDashoffset={
-                  nutrient.value / standard[idx] < 1 ? circumference * (1 - nutrient.value / standard[idx]) : 0
+                  nutrient.value / standard[idx] < 1
+                    ? circumference * (1 - nutrient.value / standard[idx])
+                    : 0
                 }
                 strokeDasharray={circumference}
               />
             </svg>
-            <p className={styles.percent}>{Math.floor((nutrient.value / standard[idx]) * 100)}%</p>
+            <p className={styles.percent}>
+              {Math.floor((nutrient.value / standard[idx]) * 100)}%
+            </p>
           </div>
           <p className={styles.gram}>
             {nutrient.value}/{standard[idx]}g

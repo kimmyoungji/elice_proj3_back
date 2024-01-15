@@ -32,7 +32,9 @@ const RecordEdit = () => {
   ]);
   const [focus, setFocus] = useState<string | undefined | null>('');
 
-  const handleFocus = (e: React.MouseEvent<HTMLCanvasElement | HTMLDivElement, MouseEvent>) => {
+  const handleFocus = (
+    e: React.MouseEvent<HTMLCanvasElement | HTMLDivElement, MouseEvent>
+  ) => {
     setFocus(e.currentTarget.parentNode?.nextSibling?.textContent);
   };
 
@@ -86,7 +88,12 @@ const RecordEdit = () => {
       const croppedImage = context?.getImageData(0, 0, 90, 90);
 
       // 자른 이미지를 다시 Canvas에 그립니다.
-      context?.clearRect(0, 0, canvas?.width as number, canvas?.height as number);
+      context?.clearRect(
+        0,
+        0,
+        canvas?.width as number,
+        canvas?.height as number
+      );
       context?.putImageData(croppedImage as ImageData, 0, 0);
     };
   }, [foods]);
@@ -117,14 +124,22 @@ const RecordEdit = () => {
 
       <div className={styles.photobox}>
         <button className={styles.addphotobtn} onClick={(e) => addFood(e)}>
-          <img className={styles.btnicon} src='/icons/plusicon.png' alt='음식추가버튼' />
+          <img
+            className={styles.btnicon}
+            src='/icons/plusicon.png'
+            alt='음식추가버튼'
+          />
           <p className={styles.btntext}>
             음식
             <br />
             추가
           </p>
         </button>
-        <div className={styles.tagbox} ref={scrollDiv} onWheel={(e) => scrollConvert(e)}>
+        <div
+          className={styles.tagbox}
+          ref={scrollDiv}
+          onWheel={(e) => scrollConvert(e)}
+        >
           {foods.map((food: Food, index: number) => (
             <div key={index} className={styles.tagitem}>
               <div className={styles.tagimgwrap}>
@@ -155,7 +170,9 @@ const RecordEdit = () => {
                   onClick={(e) => deletefood(e)}
                 />
               </div>
-              <p className={`${focus === food.foodName ? styles.focustxt : styles.tagtxt}`}>
+              <p
+                className={`${focus === food.foodName ? styles.focustxt : styles.tagtxt}`}
+              >
                 {food.foodName}
               </p>
             </div>
@@ -163,7 +180,12 @@ const RecordEdit = () => {
         </div>
       </div>
       {focus && (
-        <RecordEditDetail focus={focus} foods={foods} setFoods={setFoods} setFocus={setFocus} />
+        <RecordEditDetail
+          focus={focus}
+          foods={foods}
+          setFoods={setFoods}
+          setFocus={setFocus}
+        />
       )}
       <div className={styles.btnbox}>
         <ButtonCommon size='medium' variant='disabled'>

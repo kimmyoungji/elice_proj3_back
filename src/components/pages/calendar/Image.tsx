@@ -1,4 +1,4 @@
-import { useImageLazyLoading } from "@hooks/useImageLazyLoading";
+import { useImageLazyLoading } from '@hooks/useImageLazyLoading';
 
 interface ImagePropsType {
   src: string;
@@ -9,8 +9,8 @@ const Image = ({ src }: ImagePropsType) => {
   return (
     <img
       ref={targetRef}
-      src={isLoaded ? src : ""}
-      style={isLoaded ? { backgroundColor: "gray" } : {}}
+      src={isLoaded ? src : ''}
+      style={isLoaded ? { backgroundColor: 'gray' } : {}}
       alt={src}
     />
   );

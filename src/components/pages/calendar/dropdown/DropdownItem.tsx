@@ -8,7 +8,13 @@ type DropdownItemProps = {
 };
 
 const DropdownItem = ({ children, id, value }: DropdownItemProps) => {
-  const { isOpen, setIsopen, highlightedindex, setHighlightedIndex, setBtnText } = useDropdownContext();
+  const {
+    isOpen,
+    setIsopen,
+    highlightedindex,
+    setHighlightedIndex,
+    setBtnText,
+  } = useDropdownContext();
   const setText = useCallback(() => {
     if (value) {
       setBtnText(value);
@@ -20,7 +26,15 @@ const DropdownItem = ({ children, id, value }: DropdownItemProps) => {
     return setIsopen((prev) => !prev);
   }, [children, id, value]);
 
-  return <>{isOpen && typeof children === 'string' ? <option onClick={setText}>{children}</option> : { children }}</>;
+  return (
+    <>
+      {isOpen && typeof children === 'string' ? (
+        <option onClick={setText}>{children}</option>
+      ) : (
+        { children }
+      )}
+    </>
+  );
 };
 
 export default DropdownItem;

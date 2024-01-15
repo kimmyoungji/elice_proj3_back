@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 export const useImageLazyLoading = () => {
   const targetRef = useRef<HTMLImageElement>(null);
@@ -13,7 +13,7 @@ export const useImageLazyLoading = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(handler, {
       threshold: 1,
-      rootMargin: "20px",
+      rootMargin: '20px',
     });
     targetRef.current && observer.observe(targetRef.current);
 

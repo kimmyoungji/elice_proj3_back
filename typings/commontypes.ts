@@ -2,7 +2,14 @@ import { ComponentPropsWithRef, ReactElement } from 'react';
 
 //COMMON
 
-export type CommonSizeType = 'large' | 'big' | 'medium' | 'med-small' | 'small' | 'ssmall' | 'tiny';
+export type CommonSizeType =
+  | 'large'
+  | 'big'
+  | 'medium'
+  | 'med-small'
+  | 'small'
+  | 'ssmall'
+  | 'tiny';
 
 export type CommonFontSizeType =
   | 'b-super'
@@ -26,12 +33,20 @@ export type CommonFontSizeType =
 
 //BUTTON
 
-export type ButtonVariant = 'default' | 'active' | 'default-active' | 'validated' | 'error' | 'disabled';
+export type ButtonVariant =
+  | 'default'
+  | 'active'
+  | 'default-active'
+  | 'validated'
+  | 'error'
+  | 'disabled';
 
 export interface ButtonPropsType extends ComponentPropsWithRef<'button'> {
   children?: string | ReactElement | number;
   customClassName?: string;
-  onClickBtn?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void | undefined;
+  onClickBtn?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void | undefined;
   href?: string;
   variant?: ButtonVariant;
   size?: CommonSizeType;
@@ -50,4 +65,9 @@ export interface getClassNameType {
 
 // INPUT
 
-export type InputVariant = 'default' | 'active' | 'default-active' | 'validated' | 'error';
+export type InputVariant =
+  | 'default'
+  | 'active'
+  | 'default-active'
+  | 'validated'
+  | 'error';

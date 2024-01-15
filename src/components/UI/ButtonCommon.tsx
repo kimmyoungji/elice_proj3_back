@@ -9,7 +9,10 @@ const getModuleClassName = (
   { variant, disabled, active, size, prefix }: getClassNameType
 ) => {
   //get = ['variant-active', '', 'active-true', 'size-large']
-  const get = getClassNamesArr(customClassName, Object.entries({ variant, disabled, active, size }));
+  const get = getClassNamesArr(
+    customClassName,
+    Object.entries({ variant, disabled, active, size })
+  );
   if (typeof get === 'object' && get.length > 0) {
     //prefix 스타일은 button, 중간은 classes 하이픈고려, custom은 마지막에 적용
     //`button ${classes[`${variant-active}`]} ${classes[`${active-true}`]} ... customClassName`

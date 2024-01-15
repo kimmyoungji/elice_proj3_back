@@ -46,7 +46,8 @@ const MyPageEdit = () => {
 
   const [selectedGoal, setSelectedGoal] = useState(stringfyGoal);
   const [selectedActity, setSelectedActity] = useState(stringfyActivity);
-  const [isActivityDropdownVisible, setActivityDropdownVisible] = useState(false);
+  const [isActivityDropdownVisible, setActivityDropdownVisible] =
+    useState(false);
   const [isGoalDropdownVisible, setGoalDropdownVisible] = useState(false);
   const goalTypes = ['근육증량', '체중감량', '체중유지', '체중증량'];
   const activityType = ['비활동적', '약간 활동적', '활동적', '매우 활동적'];
@@ -77,7 +78,11 @@ const MyPageEdit = () => {
       <div className={style.userProfileArea}>
         <div className={style.userProfileContainer}>
           {userData.img ? (
-            <img className={style.userProfile} src={userData.img} alt='사용자 프로필' />
+            <img
+              className={style.userProfile}
+              src={userData.img}
+              alt='사용자 프로필'
+            />
           ) : (
             <div className={style.defaultProfile}></div>
           )}

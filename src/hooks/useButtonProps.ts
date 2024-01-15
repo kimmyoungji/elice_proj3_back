@@ -61,7 +61,10 @@ export function useButtonProps({
 
   if (tagName === 'button') {
     //type: type이 존재하지 않거나 falsy한 경우 'button'이 / 그렇지않으면 type할당
-    return [{ type: (type as any) || 'button', disabled, onClick: handleClick }, meta];
+    return [
+      { type: (type as any) || 'button', disabled, onClick: handleClick },
+      meta,
+    ];
   }
 
   if (tagName === 'a') {

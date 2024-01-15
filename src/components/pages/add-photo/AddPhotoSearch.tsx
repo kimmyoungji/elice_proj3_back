@@ -22,7 +22,12 @@ const AddPhotoSearch = () => {
   return (
     <div className={styles.container}>
       <div className={header.header}>
-        <img className={header.arrow} src='/icons/left_arrow.png' alt='뒤로가기' onClick={() => navigate(-1)} />
+        <img
+          className={header.arrow}
+          src='/icons/left_arrow.png'
+          alt='뒤로가기'
+          onClick={() => navigate(-1)}
+        />
         <div className={header.text}>식단 검색</div>
       </div>
       <div className={styles.searchbox}>
@@ -30,14 +35,26 @@ const AddPhotoSearch = () => {
           size='medium'
           variant='default'
           value={searchInput}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchInput(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setSearchInput(e.target.value)
+          }
         />
-        <ButtonCommon size='small' variant='default-active' onClickBtn={handleClick}>
+        <ButtonCommon
+          size='small'
+          variant='default-active'
+          onClickBtn={handleClick}
+        >
           검색
         </ButtonCommon>
       </div>
-      <div className={styles.resultbox}>{clicked && <AddTag props={searchInput} tags={tags} setTags={setTags} />}</div>
-      <div className={styles.tagbox}>{tags.length > 0 && <DeleteTag tags={tags} setTags={setTags} />}</div>
+      <div className={styles.resultbox}>
+        {clicked && (
+          <AddTag props={searchInput} tags={tags} setTags={setTags} />
+        )}
+      </div>
+      <div className={styles.tagbox}>
+        {tags.length > 0 && <DeleteTag tags={tags} setTags={setTags} />}
+      </div>
       <div className={styles.btnbox}>
         {tags.length > 0 ? (
           <ButtonCommon size='big' variant='default-active'>

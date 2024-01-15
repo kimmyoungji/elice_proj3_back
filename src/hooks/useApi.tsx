@@ -19,7 +19,9 @@ interface TriggerPropsType {
   isShowBoundary?: boolean;
 }
 
-type TriggerType = ({ ...props }: TriggerPropsType) => Promise<AxiosResponse<any, any>>;
+type TriggerType = ({
+  ...props
+}: TriggerPropsType) => Promise<AxiosResponse<any, any>>;
 
 const useApi = ({
   method = 'get',
@@ -45,7 +47,10 @@ const useApi = ({
       setLoading(true);
       setReqIdentifier(triggerMethod + 'Data');
       try {
-        const triggerResult = await API_FETCHER[triggerMethod as ApiMethods](triggerPath, triggerData);
+        const triggerResult = await API_FETCHER[triggerMethod as ApiMethods](
+          triggerPath,
+          triggerData
+        );
 
         if (applyResult) {
           console.log('result를 apply합니다');

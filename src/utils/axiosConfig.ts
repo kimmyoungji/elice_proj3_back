@@ -57,7 +57,11 @@ api.interceptors.response.use(
   async (err) => {
     const { status, data } = err?.response;
     //토큰 만료시 재발급 로직
-    if (err.response && status === 401 && data === 'Access token이 존재하지 않음') {
+    if (
+      err.response &&
+      status === 401 &&
+      data === 'Access token이 존재하지 않음'
+    ) {
       //엑세스 토큰 없을 때 (만료로 삭제 )
       if (data === 'Access Token의 정보가 서버에 존재하지 않습니다.') {
         const originRequest: originRequestType = config;
@@ -77,7 +81,10 @@ api.interceptors.response.use(
             //리프레시 토큰 요청이 실패할때(리프레시 토큰도 만료되었을때 = 재로그인 안내)
           }
         } catch (refreshError: any) {
-          if (refreshError.response.status === 404 && data === 'Access Token의 정보가 서버에 존재하지 않습니다.') {
+          if (
+            refreshError.response.status === 404 &&
+            data === 'Access Token의 정보가 서버에 존재하지 않습니다.'
+          ) {
             //엑세스 토큰 만료(쿠키 없을 때) => 쿠키만료시간확인
             alert('로그인 정보가 없습니다.');
             window.location.replace('/login');
@@ -118,7 +125,10 @@ api.interceptors.response.use(
             //리프레시 토큰 요청이 실패할때(리프레시 토큰도 만료되었을때 = 재로그인 안내)
           }
         } catch (refreshError: any) {
-          if (refreshError.response.status === 404 && data === 'Access Token의 정보가 서버에 존재하지 않습니다.') {
+          if (
+            refreshError.response.status === 404 &&
+            data === 'Access Token의 정보가 서버에 존재하지 않습니다.'
+          ) {
             //엑세스 토큰 만료(쿠키 없을 때) => 쿠키만료시간확인
             alert('로그인 정보가 없습니다.');
             window.location.replace('/login');
@@ -144,7 +154,10 @@ type ApiFetcherParams = [string, any];
 export type ApiMethods = 'get' | 'post' | 'put' | 'delete' | 'patch';
 export type APiFetcher = (...args: ApiFetcherParams) => Promise<any>;
 
-const getFetcher: (path: string, { params }: any) => Promise<AxiosResponse<any, any>> = async (path, params) => {
+const getFetcher: (
+  path: string,
+  { params }: any
+) => Promise<AxiosResponse<any, any>> = async (path, params) => {
   return await api.get(path, { params });
 };
 const postFetcher = async (path: string, body: any) => {

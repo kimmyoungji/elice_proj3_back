@@ -13,7 +13,10 @@ const goalCalories = 1300;
 
 const NutritionAnalysis = ({ meal, className }: NutritionAnalysisProps) => {
   const totalCalories = mealDetailData[meal].totalCalories;
-  const percentage = totalCalories === 0 ? 0 : Math.min(100, (totalCalories / goalCalories) * 100);
+  const percentage =
+    totalCalories === 0
+      ? 0
+      : Math.min(100, (totalCalories / goalCalories) * 100);
   const barFill = percentage >= 100 ? '#ff6a6a' : '#007bff';
 
   return (
@@ -28,7 +31,12 @@ const NutritionAnalysis = ({ meal, className }: NutritionAnalysisProps) => {
         </div>
         <BarChart>
           <Bar key='goal-calories' width='100%' height='20px' fill='#edf3f9' />
-          <Bar key='consumed-calories' width={`${percentage}%`} height='20px' fill={barFill} />
+          <Bar
+            key='consumed-calories'
+            width={`${percentage}%`}
+            height='20px'
+            fill={barFill}
+          />
         </BarChart>
         <NutritionGraph meal={meal} />
       </div>

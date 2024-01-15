@@ -2,7 +2,8 @@ const getDates = () => {
   const date = new Date();
   const thisYear = date.getFullYear();
   const thisMonthNum = date.getMonth() + 1;
-  const thisMonthwithzero = thisMonthNum >= 10 ? thisMonthNum : `0${thisMonthNum}`;
+  const thisMonthwithzero =
+    thisMonthNum >= 10 ? thisMonthNum : `0${thisMonthNum}`;
   const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
   const thisDay = date.getDate();
   const thisDate = thisDay >= 10 ? thisDay : Number(`0${thisDay}`); // 날짜
@@ -21,6 +22,12 @@ const getDates = () => {
     }
   };
 
-  return { thisYear, thisMonth: thisMonthwithzero, thisDay: thisDate, thisDayText, getNowMealText };
+  return {
+    thisYear,
+    thisMonth: thisMonthwithzero,
+    thisDay: thisDate,
+    thisDayText,
+    getNowMealText,
+  };
 };
 export default getDates;

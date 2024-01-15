@@ -43,8 +43,18 @@ const mealDetailData: MealDetailData = {
     ],
 
     totalCalories: 1400,
-    totalNutrient: { carbohydrates: 240, proteins: 80, fat: 25, dietaryFiber: 2 },
-    recommendNutrient: { carbohydrates: 200, proteins: 80, fat: 50, dietaryFiber: 4 },
+    totalNutrient: {
+      carbohydrates: 240,
+      proteins: 80,
+      fat: 25,
+      dietaryFiber: 2,
+    },
+    recommendNutrient: {
+      carbohydrates: 200,
+      proteins: 80,
+      fat: 50,
+      dietaryFiber: 4,
+    },
     imgurl: '/images/record_example.png',
   },
 
@@ -72,8 +82,18 @@ const mealDetailData: MealDetailData = {
       },
     ],
     totalCalories: 600,
-    totalNutrient: { carbohydrates: 240, proteins: 80, fat: 25, dietaryFiber: 2 },
-    recommendNutrient: { carbohydrates: 200, proteins: 80, fat: 50, dietaryFiber: 4 },
+    totalNutrient: {
+      carbohydrates: 240,
+      proteins: 80,
+      fat: 25,
+      dietaryFiber: 2,
+    },
+    recommendNutrient: {
+      carbohydrates: 200,
+      proteins: 80,
+      fat: 50,
+      dietaryFiber: 4,
+    },
     imgurl: undefined,
   },
 
@@ -138,8 +158,18 @@ const mealDetailData: MealDetailData = {
       },
     ],
     totalCalories: 5100,
-    totalNutrient: { carbohydrates: 240, proteins: 80, fat: 25, dietaryFiber: 2 },
-    recommendNutrient: { carbohydrates: 200, proteins: 80, fat: 50, dietaryFiber: 4 },
+    totalNutrient: {
+      carbohydrates: 240,
+      proteins: 80,
+      fat: 25,
+      dietaryFiber: 2,
+    },
+    recommendNutrient: {
+      carbohydrates: 200,
+      proteins: 80,
+      fat: 50,
+      dietaryFiber: 4,
+    },
     imgurl: '/images/record_example.png',
   },
 
@@ -147,7 +177,12 @@ const mealDetailData: MealDetailData = {
     food: [],
     totalCalories: 0,
     totalNutrient: { carbohydrates: 0, proteins: 0, fat: 0, dietaryFiber: 0 },
-    recommendNutrient: { carbohydrates: 200, proteins: 80, fat: 50, dietaryFiber: 4 },
+    recommendNutrient: {
+      carbohydrates: 200,
+      proteins: 80,
+      fat: 50,
+      dietaryFiber: 4,
+    },
     imgurl: undefined,
   },
 };

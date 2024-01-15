@@ -25,7 +25,10 @@ const getModuleClassName = (
   { variant, disabled, active, size, prefix }: getClassNameType
 ) => {
   //get = ['variant-active', '', 'active-true', 'size-large']
-  const get = getClassNamesArr(customClassName, Object.entries({ variant, disabled, active, size }));
+  const get = getClassNamesArr(
+    customClassName,
+    Object.entries({ variant, disabled, active, size })
+  );
   if (typeof get === 'object' && get.length > 0) {
     //prefix 스타일은 button, 중간은 classes 하이픈고려, custom은 마지막에 적용
     //`input ${classes[`${variant-active}`]} ${classes[`${active-true}`]} ... customClassName`
@@ -44,7 +47,16 @@ const getModuleClassName = (
 //uncontrolled일때만 input을 자동 변경하게 해줌
 const InputCommon = forwardRef(
   (
-    { value, defaultValue, className, variant = 'default', disabled, active, size = 'large', ...props }: InputPropsType,
+    {
+      value,
+      defaultValue,
+      className,
+      variant = 'default',
+      disabled,
+      active,
+      size = 'large',
+      ...props
+    }: InputPropsType,
     ref
   ) => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -95,7 +107,13 @@ const InputCommon = forwardRef(
             {...props}
           />
         ) : (
-          <input defaultValue={defaultValue} ref={inputRef} autoComplete='off' {...props} className={inputClass} />
+          <input
+            defaultValue={defaultValue}
+            ref={inputRef}
+            autoComplete='off'
+            {...props}
+            className={inputClass}
+          />
         )}
       </>
     );
