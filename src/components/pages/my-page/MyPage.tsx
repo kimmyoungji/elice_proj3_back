@@ -19,6 +19,10 @@ const userData = {
 
 const MyPage = () => {
   const navigate = useNavigate();
+  const handleIconClick = () => {
+    navigate(`/my-page/edit`);
+  };
+
   const userActivity = userData.activity;
 
   let activity;
@@ -46,22 +50,25 @@ const MyPage = () => {
 
           <div className={style.userName}>{userData.username}</div>
         </div>
-        <div className={style.editUserProfile}>
-          <PencilIcon
-            width='15px'
-            height='15px'
-            strokeWidth={2}
-            onClick={() => {
-              navigate(`/my-page/edit`);
-            }}
-          />
+        <div className={style.editUserProfile} onClick={handleIconClick}>
+          <PencilIcon width='15px' height='15px' strokeWidth={2} />
           <div className={style.editText}> 편집 </div>
         </div>
       </div>
 
-      <div className={style.infoArea}>
-        <div className={style.infoTitle}>목표</div>
-        <div className={style.infoContent}>{userData.goal}</div>
+      <div className={style.goalInfoArea}>
+        <div className={style.goalInfoTitle}>
+          <div className={style.infoTitle}>목표</div>
+          <div className={style.infoContent}>{userData.goal}</div>
+        </div>
+        <div className={style.goaltInfo}>
+          <div className={style.goalTitle}>목표 몸무게</div>
+          <div className={style.goalDetail}> {userData.weight}kg</div>
+        </div>
+        <div className={style.goaltInfo}>
+          <div className={style.goalTitle}>목표 칼로리</div>
+          <div className={style.goalDetail}>{userData.height}kg</div>
+        </div>
       </div>
 
       <div className={style.infoArea}>
