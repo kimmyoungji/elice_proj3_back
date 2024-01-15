@@ -11,7 +11,7 @@ type UseControlledReturn<T = any> = [
 ];
 
 //매개변수 : {controlledValue, defaultValue}
-export const useControlled = <T=any>( // prettier-ignore
+export const useControlled = <T,>(
   args: UseControlledArgs<T>
 ): UseControlledReturn => {
   const { controlled: controlledValue, unControlled } = args;
