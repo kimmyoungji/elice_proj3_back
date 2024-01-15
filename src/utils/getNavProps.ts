@@ -1,9 +1,8 @@
 import { TopBarPropsType, TopNavKeyType } from 'typings/propTypes';
 
 export const existDate = (val: string) => {
-  const dateRegExp = /(\d{4}-\d{2}-\d{2})/;
+  const dateRegExp = /(\d{4}-\d{1,2}-\d{1,2})/;
   const dateInUrl = val.match(dateRegExp);
-  console.log(dateInUrl);
   return {
     existed: !!(dateInUrl && dateInUrl[1]),
     date: dateInUrl ? dateInUrl[1] : null,
@@ -17,23 +16,16 @@ export const getKeyFromUrl = (url: string): TopNavKeyType | string => {
   const returnKey: TopNavKeyType | string = urlArr
     .map((url, idx) => {
       const deleteHypen = url.replace(/-/g, '');
-      console.log(deleteHypen);
-      console.log(url);
-
       const dateExisted = existDate(url).existed;
-
       if (dateExisted) {
-        console.log('date exited!');
         return 'ymd';
       }
       if (idx === 2) {
         return 'meal';
       }
-      console.log(url);
       return deleteHypen;
     })
     .join('');
-  console.log(returnKey);
   return returnKey;
 };
 
