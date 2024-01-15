@@ -5,8 +5,8 @@ import {
   useEffect,
   useMemo,
   useState,
-} from "react";
-import classes from "./toggle.module.css";
+} from 'react';
+import classes from './toggle.module.css';
 
 interface togglePropsType {
   children?: ReactNode | ReactNode[];
@@ -21,7 +21,7 @@ type ToggleState = {
 const ToggleContext = createContext<ToggleState | null>(null);
 const useToggleContext = (ToggleContext: any): any => {
   if (ToggleContext === undefined) {
-    throw new Error("useToggleContext must be used within a ToggleProvider");
+    throw new Error('useToggleContext must be used within a ToggleProvider');
   }
   const state = useContext(ToggleContext);
   return state;
@@ -48,23 +48,23 @@ export const Toggle = ({ children, onChangeToggle }: togglePropsType) => {
 
 export const ToggleButton = ({ children }: togglePropsType) => {
   const { on, setValue } = useToggleContext(ToggleContext);
-  const btnClassName = ["toggle-btn", on ? "toggle-btn-on" : "toggle-btn-off"];
-  const classNames = btnClassName.map((cls) => classes[cls]).join(" ");
+  const btnClassName = ['toggle-btn', on ? 'toggle-btn-on' : 'toggle-btn-off'];
+  const classNames = btnClassName.map((cls) => classes[cls]).join(' ');
 
   return (
-    <label className={classes["toggle-label"]}>
+    <label className={classes['toggle-label']}>
       <input
         className={classes[`toggle-input`]}
-        type="checkbox"
+        type='checkbox'
         checked={on}
         onChange={() => {}}
         onClick={() => {
           setValue((prev: any) => !prev);
         }}
-        data-testid="toggle-input"
+        data-testid='toggle-input'
       />
       <div className={classes.toggles}>
-        <div className={classes["toggle-text"]}>
+        <div className={classes['toggle-text']}>
           <div>달력</div>
           <div>앨범</div>
         </div>
