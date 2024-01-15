@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useDropdownContext } from "./Dropdown";
+import { useEffect } from 'react';
+import { useDropdownContext } from './Dropdown';
 
 type DropdownButtonProps = {
   children: string;

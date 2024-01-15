@@ -1,5 +1,5 @@
-import { ReactElement, useCallback } from "react";
-import { useDropdownContext } from "./Dropdown";
+import { ReactElement, useCallback } from 'react';
+import { useDropdownContext } from './Dropdown';
 
 type DropdownItemProps = {
   children?: string | ReactElement[];
@@ -19,7 +19,7 @@ const DropdownItem = ({ children, id, value }: DropdownItemProps) => {
     if (value) {
       setBtnText(value);
     }
-    if (typeof children === "string") {
+    if (typeof children === 'string') {
       setBtnText(children);
     }
     setHighlightedIndex(id);
@@ -28,7 +28,7 @@ const DropdownItem = ({ children, id, value }: DropdownItemProps) => {
 
   return (
     <>
-      {isOpen && typeof children === "string" ? (
+      {isOpen && typeof children === 'string' ? (
         <option onClick={setText}>{children}</option>
       ) : (
         { children }

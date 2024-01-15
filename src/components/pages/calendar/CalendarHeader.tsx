@@ -1,11 +1,11 @@
-import { Toggle, ToggleButton } from "@components/UI/Toggle";
-import { useCalendarContext } from "./Calendar";
-import MonthToggle from "./MonthToggle";
-import CalendarMonth from "./CalendarMonth";
-import classes from "./calendarHeader.module.css";
+import { Toggle, ToggleButton } from '@components/UI/Toggle';
+import { useCalendarContext } from './Calendar';
+import MonthToggle from './MonthToggle';
+import CalendarMonth from './CalendarMonth';
+import classes from './calendarHeader.module.css';
 
 const CalendarHeader = () => {
-  const {  setIsAlbum } = useCalendarContext();
+  const { setIsAlbum } = useCalendarContext();
 
   const onChangeToggle = (value: boolean) => {
     setIsAlbum(value);

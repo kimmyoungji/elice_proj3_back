@@ -1,9 +1,9 @@
-import { forwardRef, useId, useImperativeHandle, useRef } from "react";
-import { useControlled } from "@hooks/useControlled";
-import classes from "./inputCommon.module.css";
-import { getClassNamesArr } from "@utils/getClassesArr";
-import { InputVariant, getClassNameType } from "typings/commontypes";
-import { CommonSizeType } from "typings/commontypes";
+import { forwardRef, useId, useImperativeHandle, useRef } from 'react';
+import { useControlled } from '@hooks/useControlled';
+import classes from './inputCommon.module.css';
+import { getClassNamesArr } from '@utils/getClassesArr';
+import { InputVariant, getClassNameType } from 'typings/commontypes';
+import { CommonSizeType } from 'typings/commontypes';
 
 type InputPropsType = {
   value?: string | number | undefined;
@@ -29,18 +29,18 @@ const getModuleClassName = (
     customClassName,
     Object.entries({ variant, disabled, active, size })
   );
-  if (typeof get === "object" && get.length > 0) {
+  if (typeof get === 'object' && get.length > 0) {
     //prefix 스타일은 button, 중간은 classes 하이픈고려, custom은 마지막에 적용
     //`input ${classes[`${variant-active}`]} ${classes[`${active-true}`]} ... customClassName`
     const returnedClasses =
       `${classes[`${prefix}`]}` +
-        " " +
-        get.map((classN) => classN && `${classes[`${classN}`]}`).join(" ") +
-        " " +
-        customClassName || "";
+        ' ' +
+        get.map((classN) => classN && `${classes[`${classN}`]}`).join(' ') +
+        ' ' +
+        customClassName || '';
     return returnedClasses;
   } else if (get?.length === 0) {
-    return prefix + " " + customClassName && customClassName;
+    return prefix + ' ' + customClassName && customClassName;
   }
 };
 //inputCommon에 value를 넣으면 controlled. 기본은 uncontrolled
@@ -51,10 +51,10 @@ const InputCommon = forwardRef(
       value,
       defaultValue,
       className,
-      variant = "default",
+      variant = 'default',
       disabled,
       active,
-      size = "large",
+      size = 'large',
       ...props
     }: InputPropsType,
     ref
@@ -92,7 +92,7 @@ const InputCommon = forwardRef(
       disabled,
       active,
       size,
-      prefix: "input",
+      prefix: 'input',
     });
 
     return (
@@ -103,14 +103,14 @@ const InputCommon = forwardRef(
             value={input}
             onChange={(e) => setInput(e)}
             className={inputClass}
-            autoComplete="off"
+            autoComplete='off'
             {...props}
           />
         ) : (
           <input
             defaultValue={defaultValue}
             ref={inputRef}
-            autoComplete="off"
+            autoComplete='off'
             {...props}
             className={inputClass}
           />
