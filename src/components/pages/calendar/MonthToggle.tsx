@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode, useEffect } from 'react';
 import { useCalendarContext } from './Calendar';
 //선택하면 나타나게, 월을 선택하면 사라지게.
 

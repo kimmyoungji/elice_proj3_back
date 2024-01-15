@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import style from './mypage.module.css';
+import { PencilIcon } from '@assets/PencilIcon';
 
 const userData = {
   email: 'elice@gmail.com',
@@ -18,6 +19,10 @@ const userData = {
 
 const MyPage = () => {
   const navigate = useNavigate();
+  const handleIconClick = () => {
+    navigate(`/my-page/edit`);
+  };
+
   const userActivity = userData.activity;
 
   let activity;
@@ -35,7 +40,6 @@ const MyPage = () => {
   return (
     <>
       <div className={style.settingTitle}>설정</div>
-
       <div className={style.userProfileArea}>
         <div className={style.userProfileContainer}>
           {userData.img ? (
@@ -49,34 +53,26 @@ const MyPage = () => {
           )}
 
           <div className={style.userName}>{userData.username}</div>
-
-          <div className={style.editUserProfile}>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              width='15px'
-              height='15px'
-              onClick={() => {
-                navigate(`/my-page/edit`);
-              }}
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={2}
-              stroke='currentColor'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125'
-              />
-            </svg>
-            <div className={style.editText}> 편집 </div>
-          </div>
+        </div>
+        <div className={style.editUserProfile} onClick={handleIconClick}>
+          <PencilIcon width='15px' height='15px' strokeWidth={2} />
+          <div className={style.editText}> 편집 </div>
         </div>
       </div>
 
-      <div className={style.infoArea}>
-        <div className={style.infoTitle}>목표</div>
-        <div className={style.infoContent}>{userData.goal}</div>
+      <div className={style.goalInfoArea}>
+        <div className={style.goalInfoTitle}>
+          <div className={style.infoTitle}>목표</div>
+          <div className={style.infoContent}>{userData.goal}</div>
+        </div>
+        <div className={style.goaltInfo}>
+          <div className={style.goalTitle}>목표 몸무게</div>
+          <div className={style.goalDetail}> {userData.weight}kg</div>
+        </div>
+        <div className={style.goaltInfo}>
+          <div className={style.goalTitle}>목표 칼로리</div>
+          <div className={style.goalDetail}>{userData.height}kg</div>
+        </div>
       </div>
 
       <div className={style.infoArea}>

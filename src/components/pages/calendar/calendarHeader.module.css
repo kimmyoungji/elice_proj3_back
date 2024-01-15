@@ -10,5 +10,5 @@
 
 .header {
   display: flex;
-  /* position: relative; */
+  flex-direction: column;
 }

@@ -7,7 +7,8 @@ interface CalendarMonthProps {
 }
 
 const CalendarMonth = ({ children }: CalendarMonthProps) => {
-  const { setThisYear, setThisMonth, thisYear } = useCalendarContext();
+  const { setThisYear, setThisMonth, thisYear, setShowSelect } =
+    useCalendarContext();
   const [selectedYear, setSelectedYear] = useState(thisYear);
 
   const onClickMonth = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -17,6 +18,7 @@ const CalendarMonth = ({ children }: CalendarMonthProps) => {
     console.log(clickedElementId);
     setThisYear(selectedYear);
     setThisMonth(clickedElementId);
+    setShowSelect((prev) => !prev);
   };
 
   return (

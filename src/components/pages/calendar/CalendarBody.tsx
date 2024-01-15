@@ -12,14 +12,8 @@ const DUMMYCumulative_cal_Date = {
 const DUMMYtargetCalories = 1200;
 
 const CalendarBody = () => {
-  const {
-    thisYear,
-    thisMonth,
-    selectedIndex,
-    setSelectedIndex,
-
-    isAlbum,
-  } = useCalendarContext();
+  const { thisYear, thisMonth, selectedIndex, setSelectedIndex, isAlbum } =
+    useCalendarContext();
 
   const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -131,7 +125,7 @@ const CalendarBody = () => {
             variant='default-active'
             size='big'
             disabled={!selectedIndex}
-            href={`/record/${selectedIndex}`}
+            href={`/record/${thisYear}-${thisMonth}-${selectedIndex}`}
           >
             {DUMMYCumulative_cal_Date['existedDate'].includes(selectedIndex)
               ? '기록 보러 가기'

@@ -1,6 +1,7 @@
 import style from './nutritionanalysis.module.css';
 import { BarChart } from './BarChart';
 import Bar from './Bar';
+import NutritionGraph from './NutritionGraph';
 import { mealDetailData } from './mealDetailData';
 
 interface NutritionAnalysisProps {
@@ -30,7 +31,6 @@ const NutritionAnalysis = ({ meal, className }: NutritionAnalysisProps) => {
         </div>
         <BarChart>
           <Bar key='goal-calories' width='100%' height='20px' fill='#edf3f9' />
-
           <Bar
             key='consumed-calories'
             width={`${percentage}%`}
@@ -38,6 +38,7 @@ const NutritionAnalysis = ({ meal, className }: NutritionAnalysisProps) => {
             fill={barFill}
           />
         </BarChart>
+        <NutritionGraph meal={meal} />
       </div>
     </>
   );

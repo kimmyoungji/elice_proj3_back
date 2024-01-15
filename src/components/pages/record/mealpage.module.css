@@ -1,15 +1,26 @@
 .header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   background: white;
   width: 100%;
-  padding: 50px 0px 11px 0px;
-  text-align: cennter;
+  height: 70px;
+  margin: 0px 0px 20px 0px;
+  text-align: center;
+  line-height: normal;
+  border-bottom: 1px solid #ddd;
   font-size: 16ter;
   color: #000;
   font-family: Inter;
   font-style: normal;
   font-weight: 700;
-  line-height: normal;
-  border-bottom: 1px solid #ddd;
+}
+
+.arrow {
+  width: 6px;
+  height: 12px;
+  margin-left: 25px;
+  margin-right: 122px;
 }
 
 .container {
