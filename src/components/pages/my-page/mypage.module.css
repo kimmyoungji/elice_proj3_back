@@ -2,12 +2,10 @@
   box-sizing: border-box;
 }
 
-
 .settingTitle {
-  
-  border-bottom: 1px solid #E4E4E4;
-  background-color: #ffffff; 
-  margin-top : 60px;
+  border-bottom: 1px solid #e4e4e4;
+  background-color: #ffffff;
+  margin-top: 60px;
   padding-bottom: 17px;
   color: #000;
   text-align: center;
@@ -16,86 +14,79 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  }
-  
+}
 
-  .userProfileArea {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 25px;
-    width: 100%;
-    background-color: #fff;
-    border-bottom: 1px solid #E4E4E4;
-    
-  }
+.userProfileArea {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+  width: 100%;
+  background-color: #fff;
+  border-bottom: 1px solid #e4e4e4;
+}
 
-  .userProfileContainer{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 25px;
-  }
-  
+.userProfileContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+}
 
-  .defaultProfile {
-    width: 80px;
-    height: 80px;
-    background-color: #D9D9D9;
-    border-radius: 50%;
-  }
+.defaultProfile {
+  width: 80px;
+  height: 80px;
+  background-color: #d9d9d9;
+  border-radius: 50%;
+}
 
-  .userName {
-    left: 151px ;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    color: #000;
-    text-align: center;
-    font-family: Inter;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    }
+.userName {
+  left: 151px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  color: #000;
+  text-align: center;
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
 
-  .editUserProfile{   
-    margin-left: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: end;
-    width: 100%;
-    margin-left: auto;
-    margin-bottom: 10px;
-    cursor: pointer;
-    margin-right: 15px;
-  }
-  
-  
-  .editText{
+.editUserProfile {
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  width: 100%;
+  margin-left: auto;
+  margin-bottom: 10px;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+.editText {
   margin-left: 6px;
-  color: var(--gray-lev2, #2B2B2B);
+  color: var(--gray-lev2, #2b2b2b);
   font-family: Inter;
   font-size: 15px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
 
-  }
+.infoArea {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 23px 25px;
+  border-bottom: 1px solid #d9d9d9;
+}
 
-
-  .infoArea {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    background-color: #fff;
-    padding: 23px 25px;
-    border-bottom: 1px solid #D9D9D9;
-  }
-  
-
-  .infoTitle {
+.infoTitle {
   color: #000;
   font-family: Inter;
   font-size: 15px;
@@ -103,12 +94,10 @@
   font-weight: 600;
   line-height: normal;
   text-align: left;
+}
 
-  }
-  
-
-  .infoContent {
-  color: var(--main-blue, #346DFF);
+.infoContent {
+  color: var(--main-blue, #346dff);
   text-align: right;
   font-family: Inter;
   font-size: 17px;
@@ -116,21 +105,19 @@
   font-weight: 600;
   line-height: normal;
   text-align: right;
-  }
-  
+}
 
-  .activityAccountArea {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #fff;
-    padding: 23px 25px;
-    border-bottom: 1px solid #D9D9D9;
-  }
-  
-  .rightButton {
-   margin-left: auto;
-   cursor: pointer;
-  }
-  
+.activityAccountArea {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 23px 25px;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.rightButton {
+  margin-left: auto;
+  cursor: pointer;
+}

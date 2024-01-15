@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import InputCommon from '@components/UI/InputCommon';
-import { Toggle, ToggleOn, ToggleOff, ToggleButton } from '@components/UI/Toggle';
+import {
+  Toggle,
+  ToggleOn,
+  ToggleOff,
+  ToggleButton,
+} from '@components/UI/Toggle';
 
 const Home = () => {
   const [state, setState] = useState(0);
@@ -13,7 +18,10 @@ const Home = () => {
   return (
     <div>
       Home
-      <ButtonCommon className='button large r-large default' onClickBtn={onClick}>
+      <ButtonCommon
+        className='button large r-large default'
+        onClickBtn={onClick}
+      >
         {state}
       </ButtonCommon>
       Home <ButtonCommon className='button-large-green'>Button</ButtonCommon>

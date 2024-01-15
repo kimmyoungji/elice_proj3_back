@@ -1,4 +1,4 @@
-import { getClassNameType } from "typings/commontypes";
+import { getClassNameType } from 'typings/commontypes';
 
 export const getClassNamesArr = (
   classNames: string | undefined,

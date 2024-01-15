@@ -1,8 +1,8 @@
-import React, { useId, useImperativeHandle, forwardRef, useRef } from "react";
-import classes from "./buttonCommon.module.css";
-import { useButtonProps } from "@hooks/useButtonProps";
-import { getClassNamesArr } from "@utils/getClassesArr";
-import { ButtonPropsType, getClassNameType } from "typings/commontypes";
+import React, { useId, useImperativeHandle, forwardRef, useRef } from 'react';
+import classes from './buttonCommon.module.css';
+import { useButtonProps } from '@hooks/useButtonProps';
+import { getClassNamesArr } from '@utils/getClassesArr';
+import { ButtonPropsType, getClassNameType } from 'typings/commontypes';
 
 const getModuleClassName = (
   customClassName: string | undefined,
@@ -13,18 +13,18 @@ const getModuleClassName = (
     customClassName,
     Object.entries({ variant, disabled, active, size })
   );
-  if (typeof get === "object" && get.length > 0) {
+  if (typeof get === 'object' && get.length > 0) {
     //prefix 스타일은 button, 중간은 classes 하이픈고려, custom은 마지막에 적용
     //`button ${classes[`${variant-active}`]} ${classes[`${active-true}`]} ... customClassName`
     const returnedClasses =
       `${classes[`${prefix}`]}` +
-        " " +
-        get.map((classN) => classN && `${classes[`${classN}`]}`).join(" ") +
-        " " +
-        customClassName || "";
+        ' ' +
+        get.map((classN) => classN && `${classes[`${classN}`]}`).join(' ') +
+        ' ' +
+        customClassName || '';
     return returnedClasses;
   } else if (get?.length === 0) {
-    return prefix + " " + customClassName && customClassName;
+    return prefix + ' ' + customClassName && customClassName;
   }
 };
 
@@ -37,7 +37,7 @@ const ButtonCommon = forwardRef<HTMLButtonElement, ButtonPropsType>(
       size,
       disabled = false,
       active = true,
-      variant = "default",
+      variant = 'default',
       href,
       ...props
     }: ButtonPropsType,
@@ -70,9 +70,8 @@ const ButtonCommon = forwardRef<HTMLButtonElement, ButtonPropsType>(
       disabled,
       active,
       size,
-      prefix: "button",
+      prefix: 'button',
     });
-
 
     return (
       <>
@@ -84,6 +83,6 @@ const ButtonCommon = forwardRef<HTMLButtonElement, ButtonPropsType>(
   }
 );
 
-ButtonCommon.displayName = "ButtonCommon";
+ButtonCommon.displayName = 'ButtonCommon';
 
 export default ButtonCommon;
