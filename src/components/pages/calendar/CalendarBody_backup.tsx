@@ -95,11 +95,7 @@ const CalendarBody = () => {
                 {getDayNumber(idx)}
               </div>
               <p
-                className={`r-regular ${
-                  colorCls === 'over-eat'
-                    ? classes[`font-over-eat`]
-                    : classes[`font-moderate`]
-                }`}
+                className={`r-regular ${colorCls === 'over-eat' ? classes[`font-over-eat`] : classes[`font-moderate`]}`}
               >{`+${DUMMYCumulative_cal_Date['totalCalData'][existedDateIndex]}`}</p>
             </div>
           );

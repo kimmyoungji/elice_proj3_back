@@ -1,5 +1,6 @@
 import './App.css';
 import Layout from '@components/layout/Layout';
+import TopBar from '@components/layout/TopBar';
 import { lazy, Suspense } from 'react';
 import { useLocation, Navigate, Route, Routes } from 'react-router-dom';
 

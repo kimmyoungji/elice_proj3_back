@@ -145,9 +145,7 @@ const RecordEdit = () => {
               <div className={styles.tagimgwrap}>
                 {food.XYCoordinate[0] === 0 && food.XYCoordinate[1] === 0 ? (
                   <img
-                    className={`${styles.tagimg} ${
-                      focus === food.foodName && styles.focusimg
-                    }`}
+                    className={`${styles.tagimg} ${focus === food.foodName && styles.focusimg}`}
                     id={food.foodName}
                     src={food.foodImage}
                     alt={food.foodName}
@@ -155,9 +153,7 @@ const RecordEdit = () => {
                   />
                 ) : (
                   <canvas
-                    className={`${styles.tagimg} ${
-                      focus === food.foodName && styles.focusimg
-                    }`}
+                    className={`${styles.tagimg} ${focus === food.foodName && styles.focusimg}`}
                     id={food.foodName}
                     ref={canvasRef}
                     width={90}
@@ -175,9 +171,7 @@ const RecordEdit = () => {
                 />
               </div>
               <p
-                className={`${
-                  focus === food.foodName ? styles.focustxt : styles.tagtxt
-                }`}
+                className={`${focus === food.foodName ? styles.focustxt : styles.tagtxt}`}
               >
                 {food.foodName}
               </p>

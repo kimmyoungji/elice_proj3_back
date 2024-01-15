@@ -38,7 +38,15 @@ const MealPage = () => {
 
   return (
     <>
-      <div className={style.header}>AI 식단기록</div>
+      <div className={style.header}>
+        <img
+          className={style.arrow}
+          src='/icons/left_arrow.png'
+          alt='뒤로가기'
+          onClick={() => navigate(-1)}
+        />
+        <div>AI 식단기록</div>
+      </div>
       <div className={style.container}>
         <div className={style.pageTitle}>
           <div>{formatDate}</div>
@@ -54,7 +62,7 @@ const MealPage = () => {
                     onClick={() => handleMealSelect(mealType)}
                     className={selectedMeal === mealType ? style.active : ''}
                   >
-                    {mealType.charAt(0) + mealType.slice(1)}
+                    {mealType}
                   </div>
                 ))}
               </div>
@@ -66,12 +74,10 @@ const MealPage = () => {
               size='tiny'
               onClick={() => navigate(`/record/edit`)}
             >
-              {' '}
-              수정{' '}
+              <> 수정 </>
             </ButtonCommon>
             <ButtonCommon variant='default-active' size='tiny'>
-              {' '}
-              삭제{' '}
+              <> 삭제 </>
             </ButtonCommon>
           </div>
         </div>
