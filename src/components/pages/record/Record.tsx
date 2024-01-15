@@ -18,7 +18,9 @@ const Record = () => {
   // 가져온 날짜로 api 통신 data 가져오기
   const { thisYear, thisMonth, thisDay } = getDates();
   const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
-  const dateSplit = selectedDate ? selectedDate.split('-') : todayDate.split('-');
+  const dateSplit = selectedDate
+    ? selectedDate.split('-')
+    : todayDate.split('-');
   const formatDate =
     dateSplit.length === 3
       ? `${dateSplit[0]}년 ${dateSplit[1]}월 ${dateSplit[2]}일`
@@ -47,9 +49,14 @@ const Record = () => {
       <div className={style.meal_container}>
         <div className={style.meal_header}> {headerDate} </div>
         {mealTimeKeys.map((meal, index) => (
-          <div onClick={() => handleMealClick(meal)} key={index} className={style.meal_content}>
+          <div
+            onClick={() => handleMealClick(meal)}
+            key={index}
+            className={style.meal_content}
+          >
             <div className={style.meal_info}>
-              {recordData[meal].totalCalories && recordData[meal].img !== null ? (
+              {recordData[meal].totalCalories &&
+              recordData[meal].img !== null ? (
                 <>
                   <img
                     className={style.meal_contentBackground}
@@ -57,7 +64,10 @@ const Record = () => {
                     alt='하루 식단 이미지'
                   />
                   <div className={style.meal_time}>{meal}</div>
-                  <div className={style.meal_calories}> {recordData[meal].totalCalories ?? 0} kcal </div>
+                  <div className={style.meal_calories}>
+                    {' '}
+                    {recordData[meal].totalCalories ?? 0} kcal{' '}
+                  </div>
                 </>
               ) : (
                 <>
@@ -68,9 +78,17 @@ const Record = () => {
               )}
             </div>
             {recordData[meal].totalCalories && recordData[meal].img !== null ? (
-              <img className={style.meal_button} src='/icons/meal_delete.png' alt='식단 삭제 버튼' />
+              <img
+                className={style.meal_button}
+                src='/icons/meal_delete.png'
+                alt='식단 삭제 버튼'
+              />
             ) : (
-              <img className={style.meal_button} src='/icons/meal_plus_button.png' alt='식단 추가 버튼' />
+              <img
+                className={style.meal_button}
+                src='/icons/meal_plus_button.png'
+                alt='식단 추가 버튼'
+              />
             )}
           </div>
         ))}

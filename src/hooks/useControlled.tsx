@@ -5,7 +5,10 @@ interface UseControlledArgs<T = any> {
   unControlled: T;
 }
 
-type UseControlledReturn<T = any> = [T, (value: T | React.SetStateAction<T>) => void];
+type UseControlledReturn<T = any> = [
+  T,
+  (value: T | React.SetStateAction<T>) => void,
+];
 
 //매개변수 : {controlledValue, defaultValue}
 export const useControlled = <T,>(

@@ -39,14 +39,21 @@ const MealPage = () => {
   return (
     <>
       <div className={style.header}>
-        <img className={style.arrow} src='/icons/left_arrow.png' alt='뒤로가기' onClick={() => navigate(-1)} />
+        <img
+          className={style.arrow}
+          src='/icons/left_arrow.png'
+          alt='뒤로가기'
+          onClick={() => navigate(-1)}
+        />
         <div>AI 식단기록</div>
       </div>
       <div className={style.container}>
         <div className={style.pageTitle}>
           <div>{formatDate}</div>
           <div className={style.mealToggle}>
-            <div onClick={() => setDropdownVisible(!isDropdownVisible)}>{selectedMeal} ▼</div>
+            <div onClick={() => setDropdownVisible(!isDropdownVisible)}>
+              {selectedMeal} ▼
+            </div>
             {isDropdownVisible && (
               <div className={style.dropdown}>
                 {mealTypes.map((mealType) => (
@@ -62,7 +69,11 @@ const MealPage = () => {
             )}
           </div>
           <div className={style.headerButton}>
-            <ButtonCommon variant='default-active' size='tiny' onClick={() => navigate(`/record/edit`)}>
+            <ButtonCommon
+              variant='default-active'
+              size='tiny'
+              onClick={() => navigate(`/record/edit`)}
+            >
               <> 수정 </>
             </ButtonCommon>
             <ButtonCommon variant='default-active' size='tiny'>

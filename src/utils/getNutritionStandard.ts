@@ -14,12 +14,15 @@ interface UserData {
 }
 
 const calculatedProtein = (userData: UserData) => {
-  return userData.goal === '근육증량' ? userData.weight * 2 : userData.weight * 1.2;
+  return userData.goal === '근육증량'
+    ? userData.weight * 2
+    : userData.weight * 1.2;
 };
 
 const getNutritionStandard = (userData: UserData) => {
   const protein = calculatedProtein(userData);
-  const standard = userData.height < 175 ? [275, protein, 60, 25] : [300, protein, 80, 38];
+  const standard =
+    userData.height < 175 ? [275, protein, 60, 25] : [300, protein, 80, 38];
   return standard;
 };
 

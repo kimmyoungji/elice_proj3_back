@@ -21,7 +21,10 @@ const MealDeatilPage = ({ meal }: any) => {
           src='/images/recommendation_banner.png'
           alt='AI 식단 분석 서비스 이동 배너'
         />
-        <div className={style.bannerFont}> AI가 말아주는 오늘의 한 끼 추천이 궁금하다면? </div>
+        <div className={style.bannerFont}>
+          {' '}
+          AI가 말아주는 오늘의 한 끼 추천이 궁금하다면?{' '}
+        </div>
       </div>
       <MealTag meal={meal} className={style.mealTag} />
       <NutritionAnalysis meal={meal} className={style.nutritionBox} />

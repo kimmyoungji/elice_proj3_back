@@ -5,7 +5,7 @@ import CalendarMonth from './CalendarMonth';
 import classes from './calendarHeader.module.css';
 
 const CalendarHeader = () => {
-  const {  setIsAlbum } = useCalendarContext();
+  const { setIsAlbum } = useCalendarContext();
 
   const onChangeToggle = (value: boolean) => {
     setIsAlbum(value);

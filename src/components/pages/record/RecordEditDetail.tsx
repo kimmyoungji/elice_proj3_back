@@ -88,7 +88,14 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
       </div>
 
       <div className={styles.searchbox}>
-        <p className='r-medium' style={{ color: 'var(--main-skyblue)', textAlign: 'left', marginBottom: '9px' }}>
+        <p
+          className='r-medium'
+          style={{
+            color: 'var(--main-skyblue)',
+            textAlign: 'left',
+            marginBottom: '9px',
+          }}
+        >
           음식을 수정하려면 검색하세요!
         </p>
         <div className={styles.searchform}>
@@ -96,9 +103,15 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
             size='medium'
             variant='default'
             value={searchInput}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchInput(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchInput(e.target.value)
+            }
           />
-          <ButtonCommon size='small' variant='default-active' onClickBtn={handleSearch}>
+          <ButtonCommon
+            size='small'
+            variant='default-active'
+            onClickBtn={handleSearch}
+          >
             검색
           </ButtonCommon>
           {searching && (
@@ -106,16 +119,29 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
               <div style={{ overflowY: 'auto' }}>
                 {searchResults ? (
                   searchResults.map((result: string, index) => (
-                    <p key={index} className='r-medium' style={{ marginBottom: '5px' }} onClick={(e) => editName(e)}>
-                      {result.split(searchInput)[0] !== '' && result.split(searchInput)[0]}
-                      <span className='r-medium' style={{ color: 'var(--main-blue)' }}>
+                    <p
+                      key={index}
+                      className='r-medium'
+                      style={{ marginBottom: '5px' }}
+                      onClick={(e) => editName(e)}
+                    >
+                      {result.split(searchInput)[0] !== '' &&
+                        result.split(searchInput)[0]}
+                      <span
+                        className='r-medium'
+                        style={{ color: 'var(--main-blue)' }}
+                      >
                         {searchInput}
                       </span>
-                      {result.split(searchInput)[1] !== '' && result.split(searchInput)[1]}
+                      {result.split(searchInput)[1] !== '' &&
+                        result.split(searchInput)[1]}
                     </p>
                   ))
                 ) : (
-                  <p className='r-medium' style={{ textAlign: 'center', marginTop: '60px' }}>
+                  <p
+                    className='r-medium'
+                    style={{ textAlign: 'center', marginTop: '60px' }}
+                  >
                     검색 결과가 없습니다.
                   </p>
                 )}
@@ -123,7 +149,12 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
 
               <p
                 className='r-medium'
-                style={{ color: 'var(--main-skyblue)', marginLeft: 'auto', marginTop: 'auto', paddingTop: '10px' }}
+                style={{
+                  color: 'var(--main-skyblue)',
+                  marginLeft: 'auto',
+                  marginTop: 'auto',
+                  paddingTop: '10px',
+                }}
                 onClick={() => setSearching(false)}
               >
                 닫기

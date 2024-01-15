@@ -23,7 +23,11 @@ const MyPageDropdwon = ({
       {isDropdownVisible && (
         <div className={toggle.dropdown}>
           {items.map((item: string) => (
-            <div key={item} onClick={() => onSelectItem(item)} className={selectedItem === item ? toggle.active : ''}>
+            <div
+              key={item}
+              onClick={() => onSelectItem(item)}
+              className={selectedItem === item ? toggle.active : ''}
+            >
               {item}
             </div>
           ))}

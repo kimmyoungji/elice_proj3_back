@@ -16,7 +16,11 @@ const MealCard = () => {
       {meallist.map((meal, idx) => (
         <div key={idx} className={styles.mealcard}>
           <img className={styles.img} src={meal.imgUrl} alt={meal.meal} />
-          {meal.imgUrl !== undefined ? <div className={styles.black}></div> : <div className={styles.block}></div>}
+          {meal.imgUrl !== undefined ? (
+            <div className={styles.black}></div>
+          ) : (
+            <div className={styles.block}></div>
+          )}
           <p className={styles.meal}>{meal.meal}</p>
           <svg className={styles.plus}></svg>
           <p className={styles.calorie}>{meal.calorie}kcal</p>

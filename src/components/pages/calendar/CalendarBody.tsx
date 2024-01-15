@@ -12,13 +12,8 @@ const DUMMYCumulative_cal_Date = {
 const DUMMYtargetCalories = 1200;
 
 const CalendarBody = () => {
-  const {
-    thisYear,
-    thisMonth,
-    selectedIndex,
-    setSelectedIndex,
-    isAlbum,
-  } = useCalendarContext();
+  const { thisYear, thisMonth, selectedIndex, setSelectedIndex, isAlbum } =
+    useCalendarContext();
 
   const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -29,13 +24,14 @@ const CalendarBody = () => {
   ));
 
   const onClickDate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const clickedElementId = Number((e.target as HTMLDivElement).id.split('-')[1]);
+    const clickedElementId = Number(
+      (e.target as HTMLDivElement).id.split('-')[1]
+    );
     console.log(clickedElementId);
     //기존에 index가 동일하면 삭제
     setSelectedIndex((prev) => {
       return prev === clickedElementId ? NaN : clickedElementId;
     });
-
   };
 
   const getThisMonthArray = () => {
@@ -47,15 +43,27 @@ const CalendarBody = () => {
     };
 
     return new Array(totalCalNum).fill(0).map((_, idx) => {
-      const existedDateIndex = DUMMYCumulative_cal_Date['existedDate'].findIndex((el) => el === getDayNumber(idx));
+      const existedDateIndex = DUMMYCumulative_cal_Date[
+        'existedDate'
+      ].findIndex((el) => el === getDayNumber(idx));
       //목표 칼로리 비교 색깔 구분 적당 vs 과식
 
       //상태에 따른 className
       const colorCls =
-        DUMMYCumulative_cal_Date['totalCalData'][existedDateIndex] > DUMMYtargetCalories ? 'over-eat' : 'moderate';
-      const colorFonts = colorCls === 'over-eat' ? `${classes[`font-over-eat`]}` : classes[`font-moderate`];
-      const selectedCls = selectedIndex === idx - thisMonthFirstDay + 1 ? ` ${classes['selected']}` : ``;
-      const selectedFonts = selectedCls !== '' ? ` ${classes['font-selected']}` : '';
+        DUMMYCumulative_cal_Date['totalCalData'][existedDateIndex] >
+        DUMMYtargetCalories
+          ? 'over-eat'
+          : 'moderate';
+      const colorFonts =
+        colorCls === 'over-eat'
+          ? `${classes[`font-over-eat`]}`
+          : classes[`font-moderate`];
+      const selectedCls =
+        selectedIndex === idx - thisMonthFirstDay + 1
+          ? ` ${classes['selected']}`
+          : ``;
+      const selectedFonts =
+        selectedCls !== '' ? ` ${classes['font-selected']}` : '';
 
       return (
         <div
@@ -69,21 +77,31 @@ const CalendarBody = () => {
           <div
             key={`$date-${idx}`}
             className={
-              DUMMYCumulative_cal_Date['existedDate'].includes(getDayNumber(idx))
+              DUMMYCumulative_cal_Date['existedDate'].includes(
+                getDayNumber(idx)
+              )
                 ? `${classes[`${colorCls}`]} b-small` + selectedCls
                 : `${classes['cal-circle']} b-small` + selectedCls
             }
             id={
-              idx >= thisMonthFirstDay && idx < thisMonthTotal + thisMonthFirstDay
+              idx >= thisMonthFirstDay &&
+              idx < thisMonthTotal + thisMonthFirstDay
                 ? `idx-${getDayNumber(idx)}`
                 : undefined
             }
             onClick={onClickDate}
           >
-            {idx >= thisMonthFirstDay && idx < thisMonthTotal + thisMonthFirstDay && getDayNumber(idx)}
+            {idx >= thisMonthFirstDay &&
+              idx < thisMonthTotal + thisMonthFirstDay &&
+              getDayNumber(idx)}
           </div>
-          {DUMMYCumulative_cal_Date['existedDate'].includes(getDayNumber(idx)) && (
-            <p key={`$p-${idx}`} className={`r-regular ${colorFonts + selectedFonts}`}>
+          {DUMMYCumulative_cal_Date['existedDate'].includes(
+            getDayNumber(idx)
+          ) && (
+            <p
+              key={`$p-${idx}`}
+              className={`r-regular ${colorFonts + selectedFonts}`}
+            >
               {`+${DUMMYCumulative_cal_Date['totalCalData'][existedDateIndex]}`}
             </p>
           )}
@@ -109,7 +127,9 @@ const CalendarBody = () => {
             disabled={!selectedIndex}
             href={`/record/${thisYear}-${thisMonth}-${selectedIndex}`}
           >
-            {DUMMYCumulative_cal_Date['existedDate'].includes(selectedIndex) ? '기록 보러 가기' : '기록 추가하러 가기'}
+            {DUMMYCumulative_cal_Date['existedDate'].includes(selectedIndex)
+              ? '기록 보러 가기'
+              : '기록 추가하러 가기'}
           </ButtonCommon>
         </>
       )}

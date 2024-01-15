@@ -6,7 +6,11 @@ interface PutImgTagProps {
   className: string;
 }
 
-const PutImgTag: React.FC<PutImgTagProps> = ({ mealType, imgUrl, className }) => {
+const PutImgTag: React.FC<PutImgTagProps> = ({
+  mealType,
+  imgUrl,
+  className,
+}) => {
   const tagData = mealDetailData[mealType].food;
 
   const getTags = () => {

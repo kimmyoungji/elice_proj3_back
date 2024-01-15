@@ -8,7 +8,13 @@ interface Props {
 
 const AddTag = ({ props, tags, setTags }: Props) => {
   // api 호출 결과 data 예시 (떡국 검색 시)
-  const searchResults = ['떡국', '두살 떡국', '세살 떡국', '네살 떡국', '다섯살 떡국'];
+  const searchResults = [
+    '떡국',
+    '두살 떡국',
+    '세살 떡국',
+    '네살 떡국',
+    '다섯살 떡국',
+  ];
 
   const addTag = (e: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
     if (!e.currentTarget.textContent) {

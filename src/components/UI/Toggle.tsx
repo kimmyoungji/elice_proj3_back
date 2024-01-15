@@ -1,4 +1,11 @@
-import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import classes from './toggle.module.css';
 
 interface togglePropsType {
@@ -34,7 +41,9 @@ export const Toggle = ({ children, onChangeToggle }: togglePropsType) => {
     onChangeToggle && onChangeToggle(on);
   }, [on, onChangeToggle]);
 
-  return <ToggleContext.Provider value={value}>{children}</ToggleContext.Provider>;
+  return (
+    <ToggleContext.Provider value={value}>{children}</ToggleContext.Provider>
+  );
 };
 
 export const ToggleButton = ({ children }: togglePropsType) => {

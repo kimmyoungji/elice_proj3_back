@@ -43,7 +43,11 @@ const MyPage = () => {
       <div className={style.userProfileArea}>
         <div className={style.userProfileContainer}>
           {userData.img ? (
-            <img className={style.userProfile} src={userData.img} alt='사용자 프로필' />
+            <img
+              className={style.userProfile}
+              src={userData.img}
+              alt='사용자 프로필'
+            />
           ) : (
             <div className={style.defaultProfile}></div>
           )}
@@ -85,7 +89,11 @@ const MyPage = () => {
 
       <div className={style.activityAccountArea}>
         <div className={style.infoTitle}>계정</div>
-        <img className={style.rightButton} src='/icons/right-arrow-icon.png' alt='계정 설정 화살표' />
+        <img
+          className={style.rightButton}
+          src='/icons/right-arrow-icon.png'
+          alt='계정 설정 화살표'
+        />
       </div>
     </>
   );
