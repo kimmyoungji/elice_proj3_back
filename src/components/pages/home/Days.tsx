@@ -1,6 +1,6 @@
-import styles from "@components/pages/home/week.module.css";
+import styles from '@components/pages/home/week.module.css';
 
-const week = ["일", "월", "화", "수", "목", "금", "토"];
+const week = ['일', '월', '화', '수', '목', '금', '토'];
 
 const Days = () => {
   const now = new Date();

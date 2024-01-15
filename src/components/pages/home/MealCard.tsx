@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import styles from "@components/pages/home/today.module.css";
+import { useEffect, useRef, useState } from 'react';
+import styles from '@components/pages/home/today.module.css';
 
 const meallist = [
-  { meal: "아침", imgUrl: "", calorie: 530 },
-  { meal: "점심", imgUrl: "", calorie: 315 },
-  { meal: "저녁", imgUrl: undefined, calorie: 0 },
-  { meal: "간식", imgUrl: undefined, calorie: 0 },
+  { meal: '아침', imgUrl: '', calorie: 530 },
+  { meal: '점심', imgUrl: '', calorie: 315 },
+  { meal: '저녁', imgUrl: undefined, calorie: 0 },
+  { meal: '간식', imgUrl: undefined, calorie: 0 },
 ];
 
 const MealCard = () => {

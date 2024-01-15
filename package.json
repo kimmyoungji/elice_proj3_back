@@ -53,6 +53,5 @@
     "@craco/types": "^7.1.0",
     "@types/react": "^18.2.46",
     "craco-alias": "^3.0.1"
-
   }
 }

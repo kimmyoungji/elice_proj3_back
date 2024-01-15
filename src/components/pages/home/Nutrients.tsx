@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import styles from "@components/pages/home/nutrients.module.css";
+import { useEffect, useRef, useState } from 'react';
+import styles from '@components/pages/home/nutrients.module.css';
 
 const nutrients = [
-  { title: "탄수화물", value: 240 },
-  { title: "단백질", value: 20 },
-  { title: "지방", value: 23 },
-  { title: "식이섬유", value: 0 },
+  { title: '탄수화물', value: 240 },
+  { title: '단백질', value: 20 },
+  { title: '지방', value: 23 },
+  { title: '식이섬유', value: 0 },
 ];
 const standard = [200, 80, 50, 4];
 
@@ -21,17 +21,17 @@ const Nutrients = () => {
           <div className={styles.progress_wrapper}>
             <svg
               className={styles.progress}
-              width="48"
-              height="48"
-              viewBox="0 0 48 48"
+              width='48'
+              height='48'
+              viewBox='0 0 48 48'
             >
               <circle
                 className={styles.frame}
-                cx="24"
-                cy="24"
-                r="22"
-                strokeWidth="3"
-                strokeDashoffset="1"
+                cx='24'
+                cy='24'
+                r='22'
+                strokeWidth='3'
+                strokeDashoffset='1'
                 strokeDasharray={circumference}
               />
               <circle
@@ -40,10 +40,10 @@ const Nutrients = () => {
                     ? styles.bar
                     : styles.overbar
                 }
-                cx="24"
-                cy="24"
-                r="22"
-                strokeWidth="3"
+                cx='24'
+                cy='24'
+                r='22'
+                strokeWidth='3'
                 strokeDashoffset={
                   nutrient.value / standard[idx] < 1
                     ? circumference * (1 - nutrient.value / standard[idx])

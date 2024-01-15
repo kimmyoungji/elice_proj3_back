@@ -1,5 +1,5 @@
 .datebox {
-  margin:20px 20px 15px 20px;
+  margin: 20px 20px 15px 20px;
   text-align: start;
 }
 
@@ -15,13 +15,12 @@
 }
 
 .photobox {
-  margin : 0 20px;
+  margin: 0 20px;
   display: flex;
   flex-direction: row;
-  
 }
 
-.addphotobtn{
+.addphotobtn {
   margin-top: 12px;
   width: 50px;
   height: 90px;
@@ -32,12 +31,12 @@
   gap: 10px;
   border-radius: 10px;
   border: 1px solid var(--main-skyblue);
-  flex-shrink:0;
+  flex-shrink: 0;
 }
 
 .btnicon {
   width: 10px;
-  height:10px;
+  height: 10px;
 }
 
 .btntext {
@@ -53,7 +52,7 @@
   flex-direction: row;
 }
 
-.tagbox:nth-child(0){
+.tagbox:nth-child(0) {
   margin-left: 10px;
 }
 
@@ -66,13 +65,13 @@
 .tagimgwrap {
   margin-bottom: 8px;
   position: relative;
-  width:90px;
+  width: 90px;
   height: 90px;
   border-radius: 10px;
 }
 
 .tagimg {
-  width:90px;
+  width: 90px;
   height: 90px;
   border-radius: 10px;
 }
@@ -98,13 +97,13 @@
   width: 15px;
   height: 15px;
   position: absolute;
-  top:-5px;
-  right: -5px;;
+  top: -5px;
+  right: -5px;
 }
 
 .btnbox {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin : 20px 20px;
+  margin: 20px 20px;
 }

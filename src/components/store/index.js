@@ -1,5 +1,5 @@
-import { configureStore } from "@reduxjs/toolkit";
-import userLoginRouter from "./userLoginRouter";
+import { configureStore } from '@reduxjs/toolkit';
+import userLoginRouter from './userLoginRouter';
 
 const store = configureStore({
   reducer: {

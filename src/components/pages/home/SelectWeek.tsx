@@ -1,4 +1,4 @@
-import styles from "@components/pages/home/week.module.css";
+import styles from '@components/pages/home/week.module.css';
 
 const SelectWeek = () => {
   const now = new Date();
@@ -12,7 +12,7 @@ const SelectWeek = () => {
 
   return (
     <div className={styles.select_wrapper}>
-      {nowYear}.{String(nowMonth + 1).padStart(2, "0")}
+      {nowYear}.{String(nowMonth + 1).padStart(2, '0')}
       {/* 드롭다운 */}
       {week}주차
     </div>

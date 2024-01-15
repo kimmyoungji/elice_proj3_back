@@ -1,7 +1,7 @@
-import styles from "@components/pages/home/today.module.css";
-import Calorie from "./Calorie";
-import MealCard from "./MealCard";
-import Nutrients from "./Nutrients";
+import styles from '@components/pages/home/today.module.css';
+import Calorie from './Calorie';
+import MealCard from './MealCard';
+import Nutrients from './Nutrients';
 
 const Today = () => {
   return (
