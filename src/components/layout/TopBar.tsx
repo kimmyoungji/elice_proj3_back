@@ -32,9 +32,9 @@ const TopBar = ({ home, title, back, qIcon, icon }: propsType) => {
       )}
       <div className={styles.title_wrapper}>
         {home ? (
-          <p className={styles.name}>{title}</p>
+          <p className={`${styles.name} b-big`}>{title}</p>
         ) : (
-          <p className={styles.title}>{title}</p>
+          <p className={`${styles.title} b-regular`}>{title}</p>
         )}
         {qIcon && (
           <svg

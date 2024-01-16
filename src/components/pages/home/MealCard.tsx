@@ -1,29 +1,34 @@
-import { useEffect, useRef, useState } from "react";
-import styles from "@components/pages/home/today.module.css";
+import styles from "@components/pages/home/week.module.css";
 
-const meallist = [
-  { meal: "아침", imgUrl: "", calorie: 530 },
-  { meal: "점심", imgUrl: "", calorie: 315 },
-  { meal: "저녁", imgUrl: undefined, calorie: 0 },
-  { meal: "간식", imgUrl: undefined, calorie: 0 },
-];
+interface Props {
+  dateArr:[string, number, string|undefined][];
+}
 
-const MealCard = () => {
-  const [state, setState] = useState(0);
-
+const MealCard = ({dateArr}:Props) => {
   return (
     <div className={styles.mealcard_wrapper}>
-      {meallist.map((meal, idx) => (
+      {dateArr.map((meal, idx) => (
         <div key={idx} className={styles.mealcard}>
-          <img className={styles.img} src={meal.imgUrl} alt={meal.meal} />
-          {meal.imgUrl !== undefined ? (
-            <div className={styles.black}></div>
+          {(meal[1] !== 0 || meal[2] !== undefined) ? (
+            <>
+              <img className={styles.img} src={meal[2]} alt={meal[0]} />
+              <div className={styles.black}></div>
+              <p className={`${styles.meal} b-regular`}>{meal[0]}</p>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 ${styles.plus}`}  width="25"  >
+  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+</svg>
+              <p className={`${styles.calorie} b-medium`}>{meal[1]}kcal</p>
+            </>
           ) : (
-            <div className={styles.block}></div>
+            <>
+              <div className={styles.block}></div>
+              <p className={`${styles.nomeal} b-regular`}>{meal[0]}</p>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={`w-6 h-6 ${styles.noplus}`}  width="25"  >
+  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+</svg>
+              <p className={`${styles.nocalorie} b-medium`}>{meal[1]}kcal</p>
+            </>
           )}
-          <p className={styles.meal}>{meal.meal}</p>
-          <svg className={styles.plus}></svg>
-          <p className={styles.calorie}>{meal.calorie}kcal</p>
         </div>
       ))}
     </div>

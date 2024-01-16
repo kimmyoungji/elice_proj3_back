@@ -1,13 +1,14 @@
-import { useEffect, useRef, useState } from "react";
 import styles from "@components/pages/home/calorie.module.css";
 
-const calorie = 845;
-const standard = 1200;
+interface Props{
+  totalCalories: number,
+  recommendCalories: number
+}
 
-const Calorie = () => {
+const Calorie = ({totalCalories, recommendCalories}:Props) => {
   const radius = 125;
   const circumference = 2 * Math.PI * radius;
-  const angle = (calorie / standard) * 0.5;
+  const angle = (totalCalories / recommendCalories) * 0.5;
 
   return (
     <div className={styles.calorie}>
@@ -31,8 +32,8 @@ const Calorie = () => {
           />
         </svg>
         <div className={styles.calorie_wrapper}>
-          <p className={styles.calorie_num}>{calorie}</p>
-          <p className={styles.calorie_standard}>/ {standard}kcal</p>
+          <p className={`${styles.calorie_num} b-big`}>{totalCalories}</p>
+          <p className={`${styles.calorie_standard} r-medium`}>/ {recommendCalories}kcal</p>
         </div>
       </div>
     </div>

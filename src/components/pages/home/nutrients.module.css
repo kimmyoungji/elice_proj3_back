@@ -1,14 +1,14 @@
 .nutrients {
   display: flex;
   justify-content: center;
-  gap: 18px;
+  gap: 25px;
 }
 
 .nutrient {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 9px;
+  gap: 5px;
 }
 
 .progress_wrapper {
@@ -19,13 +19,14 @@
   transform: rotate(-90deg);
 }
 
-.frame,
 .bar,
 .overbar {
-  fill: #fff;
+  fill: none;
 }
 .frame {
+  fill: #fff;
   stroke: var(--main-lightblue);
+  filter: drop-shadow(-2px 0px 2px rgba(0, 0, 0, 0.2));
 }
 .bar {
   stroke: var(--main-blue);
@@ -34,12 +35,17 @@
   stroke: var(--sem-bad);
 }
 
-.percent {
+.percent, .overpercent{
   position: absolute;
   width: 48px;
   text-align: center;
-  top: 12px;
+  top: 16px;
 }
 
-.gram {
+.percent {
+  color: var(--main-blue)
+}
+
+.overpercent{
+  color: var(--sem-bad);
 }
