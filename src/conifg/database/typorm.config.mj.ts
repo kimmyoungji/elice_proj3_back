@@ -1,7 +1,8 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import * as config from "config";
-import { HealthInfo } from "src/users/entities/health-info.entity";
-import { User } from "src/users/entities/user.entity";
+// import { HealthInfo } from "src/users/entities/health-info.entity";
+// import { User } from "src/users/entities/user.entity";
+import { User } from "../../auth/entites/user.entity";
 import * as TypeOrmNamingStrategies from "typeorm-naming-strategies";
 
 const dbConfig = config.get("db");
@@ -13,7 +14,8 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   username: process.env.DB_USERNAME || dbConfig.username,
   password: process.env.DB_PASSWORD || dbConfig.password,
   database: process.env.DB_NAME || dbConfig.database,
-  entities: [User, HealthInfo],
+  // entities: [User, HealthInfo],
+  entities: [ User ],
   synchronize: false,
   namingStrategy: new TypeOrmNamingStrategies.SnakeNamingStrategy(),
 };
