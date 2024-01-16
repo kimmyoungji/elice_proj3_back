@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState } from 'react';
 
 interface UseControlledArgs<T = any> {
   controlled?: T;
@@ -7,7 +7,7 @@ interface UseControlledArgs<T = any> {
 
 type UseControlledReturn<T = any> = [
   T,
-  (value: T | React.SetStateAction<T>) => void
+  (value: T | React.SetStateAction<T>) => void,
 ];
 
 //매개변수 : {controlledValue, defaultValue}

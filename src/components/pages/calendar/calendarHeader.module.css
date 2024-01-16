@@ -5,10 +5,9 @@
   margin: 20px;
   height: 40px;
   padding: 1px;
-  /* position: absolute; */
 }
 
 .header {
   display: flex;
-  /* position: relative; */
+  flex-direction: column;
 }

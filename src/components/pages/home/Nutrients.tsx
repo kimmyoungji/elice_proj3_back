@@ -52,10 +52,10 @@ const Nutrients = ({totalNutrient, recommendNutrient}:Props) => {
                     ? styles.bar
                     : styles.overbar
                 }
-                cx="24"
-                cy="24"
-                r="22"
-                strokeWidth="3"
+                cx='24'
+                cy='24'
+                r='22'
+                strokeWidth='3'
                 strokeDashoffset={
                   totalNutrient[idx] /  recommendNutrient[idx] < 1
                     ? circumference * (1 - totalNutrient[idx] /  recommendNutrient[idx])

@@ -16,15 +16,15 @@ const Calorie = ({totalCalories, recommendCalories}:Props) => {
         <svg className={styles.progress}>
           <path
             className={styles.frame}
-            d="M 25 150 A 100 100 0 0 1 275 150"
-            strokeWidth="45"
+            d='M 25 150 A 100 100 0 0 1 275 150'
+            strokeWidth='45'
           />
           <circle
             className={angle <= 0.5 ? styles.bar : styles.overbar}
-            cx="-150"
-            cy="-150"
-            r="125"
-            strokeWidth="45"
+            cx='-150'
+            cy='-150'
+            r='125'
+            strokeWidth='45'
             strokeDashoffset={
               angle <= 0.5 ? circumference * (1 - angle) : circumference * 0.5
             }

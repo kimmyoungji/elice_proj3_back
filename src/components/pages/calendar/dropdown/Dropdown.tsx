@@ -7,8 +7,8 @@ import {
   useMemo,
   useCallback,
   Dispatch,
-} from "react";
-import classes from "./dropdown.module.css";
+} from 'react';
+import classes from './dropdown.module.css';
 
 type DropdownProps = {
   children: ReactNode | ReactNode[];
@@ -20,18 +20,18 @@ type DropdownProps = {
 
 export type higlightedIndexType = number | string;
 
-interface DropdownContextType  {
-  isOpen: boolean,
-  setIsopen: Dispatch<React.SetStateAction<boolean>>,
-  highlightedindex: higlightedIndexType,
-  setHighlightedIndex: Dispatch<React.SetStateAction<number>>
-  setBtnText: Dispatch<React.SetStateAction<string>>,
+interface DropdownContextType {
+  isOpen: boolean;
+  setIsopen: Dispatch<React.SetStateAction<boolean>>;
+  highlightedindex: higlightedIndexType;
+  setHighlightedIndex: Dispatch<React.SetStateAction<number>>;
+  setBtnText: Dispatch<React.SetStateAction<string>>;
 }
 const DropdownContext = createContext<DropdownContextType | null>(null);
 export const useDropdownContext = () => {
   const context = useContext(DropdownContext);
   if (!context) {
-    throw new Error("Error in creating the context");
+    throw new Error('Error in creating the context');
   }
   return context;
 };
@@ -39,9 +39,9 @@ export const useDropdownContext = () => {
 export const Dropdown = ({ children, onChange, className }: DropdownProps) => {
   const [isOpen, setIsopen] = useState(false);
   const [highlightedindex, setHighlightedIndex] = useState(0);
-  const [btnText, setBtnText] = useState("");
+  const [btnText, setBtnText] = useState('');
 
-  const value:DropdownContextType = useMemo(
+  const value: DropdownContextType = useMemo(
     () => ({
       isOpen,
       setIsopen,
@@ -49,13 +49,7 @@ export const Dropdown = ({ children, onChange, className }: DropdownProps) => {
       setHighlightedIndex,
       setBtnText,
     }),
-    [
-      isOpen,
-      setIsopen,
-      highlightedindex,
-      setHighlightedIndex,
-      setBtnText,
-    ]
+    [isOpen, setIsopen, highlightedindex, setHighlightedIndex, setBtnText]
   );
 
   useEffect(() => {
@@ -69,7 +63,7 @@ export const Dropdown = ({ children, onChange, className }: DropdownProps) => {
           className={`${className} ${classes.value}`}
           onClick={() => {
             setIsopen((prev) => {
-              console.log("handler clicked!");
+              console.log('handler clicked!');
               return !prev;
             });
           }}
@@ -79,7 +73,7 @@ export const Dropdown = ({ children, onChange, className }: DropdownProps) => {
         <div
           onClick={() => {
             setIsopen((prev) => {
-              console.log("handler clicked!");
+              console.log('handler clicked!');
               return !prev;
             });
           }}
