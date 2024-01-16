@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import header from '../../UI/headerCommon.module.css';
 import styles from './recordedit.module.css';
 import RecordEditDetail from './RecordEditDetail';
 import { useEffect, useRef, useState } from 'react';
@@ -68,8 +67,18 @@ const RecordEdit = () => {
     el.scrollTo({
       left: el.scrollLeft + deltaY,
       behavior: 'smooth',
-    });
+    });    
   };
+
+  const handleEnter = () => {
+    const main = document.querySelector(".main") as HTMLElement;
+    main.style.overflow = 'hidden';
+  }
+
+  const handleLeave = () => {
+    const main = document.querySelector(".main") as HTMLElement;
+    main.style.overflow = 'scroll';
+  }
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -100,16 +109,6 @@ const RecordEdit = () => {
 
   return (
     <>
-      <div className={header.header}>
-        <img
-          className={header.arrow}
-          src='/icons/left_arrow.png'
-          alt='뒤로가기'
-          onClick={() => navigate(-1)}
-        />
-        <div className={header.text}>AI 식단 확인</div>
-      </div>
-
       <div className={styles.datebox}>
         <p className='b-small'>2024.01.02 (화) 점심</p>
       </div>
@@ -139,13 +138,17 @@ const RecordEdit = () => {
           className={styles.tagbox}
           ref={scrollDiv}
           onWheel={(e) => scrollConvert(e)}
+          onMouseEnter={handleEnter}
+          onMouseLeave={handleLeave}
         >
           {foods.map((food: Food, index: number) => (
             <div key={index} className={styles.tagitem}>
               <div className={styles.tagimgwrap}>
                 {food.XYCoordinate[0] === 0 && food.XYCoordinate[1] === 0 ? (
                   <img
-                    className={`${styles.tagimg} ${focus === food.foodName && styles.focusimg}`}
+                    className={`${styles.tagimg} ${
+                      focus === food.foodName && styles.focusimg
+                    }`}
                     id={food.foodName}
                     src={food.foodImage}
                     alt={food.foodName}
@@ -153,7 +156,9 @@ const RecordEdit = () => {
                   />
                 ) : (
                   <canvas
-                    className={`${styles.tagimg} ${focus === food.foodName && styles.focusimg}`}
+                    className={`${styles.tagimg} ${
+                      focus === food.foodName && styles.focusimg
+                    }`}
                     id={food.foodName}
                     ref={canvasRef}
                     width={90}
@@ -171,7 +176,9 @@ const RecordEdit = () => {
                 />
               </div>
               <p
-                className={`${focus === food.foodName ? styles.focustxt : styles.tagtxt}`}
+                className={`${
+                  focus === food.foodName ? styles.focustxt : styles.tagtxt
+                }`}
               >
                 {food.foodName}
               </p>
@@ -188,7 +195,7 @@ const RecordEdit = () => {
         />
       )}
       <div className={styles.btnbox}>
-        <ButtonCommon size='medium' variant='disabled'>
+        <ButtonCommon size='medium' variant='disabled' onClick={()=>setFocus('')}>
           취소
         </ButtonCommon>
         <ButtonCommon size='medium' variant='default-active'>
