@@ -2,7 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { useCalendarContext } from './Calendar';
 import Image from './Image';
 import classes from './album.module.css';
-type MealType = '아침' | '점심' | '저녁' | '간식';
+import { getMealsNumber } from '@utils/getMealNum';
+export type MealType = '아침' | '점심' | '저녁' | '간식';
 
 interface DummyAlbumArrType {
   date: string;
@@ -48,17 +49,8 @@ const Album = () => {
     navigate(`/record/${thisYear}-${thisMonth}-${clickedId}`);
   };
 
-  const getMealsNumber: {
-    [key in MealType]: number;
-  } = {
-    아침: 1,
-    점심: 2,
-    저녁: 3,
-    간식: 4,
-  };
-
   return (
-    <div>
+    <div className={classes.wrapper}>
       {DUMMYAlbumArr.map((day, idx) => (
         <div key={`album-${idx}`} className={classes.date}>
           <div
