@@ -21,15 +21,6 @@ const AddPhotoSearch = () => {
 
   return (
     <div className={styles.container}>
-      <div className={header.header}>
-        <img
-          className={header.arrow}
-          src='/icons/left_arrow.png'
-          alt='뒤로가기'
-          onClick={() => navigate(-1)}
-        />
-        <div className={header.text}>식단 검색</div>
-      </div>
       <div className={styles.searchbox}>
         <InputCommon
           size='medium'

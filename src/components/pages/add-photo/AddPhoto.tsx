@@ -7,14 +7,6 @@ const AddPhoto = () => {
 
   return (
     <>
-      <div className={header.header}>
-        <img
-          className={header.arrow}
-          src='/icons/left_arrow.png'
-          alt='뒤로가기'
-        />
-        <div className={header.text}>AI 식단 카메라</div>
-      </div>
       <div className={styles.cam}>촬영 화면 들어갈 공간</div>
       <div className={styles.addbox}>
         <div className={styles.item}>

@@ -100,16 +100,6 @@ const RecordEdit = () => {
 
   return (
     <>
-      <div className={header.header}>
-        <img
-          className={header.arrow}
-          src='/icons/left_arrow.png'
-          alt='뒤로가기'
-          onClick={() => navigate(-1)}
-        />
-        <div className={header.text}>AI 식단 확인</div>
-      </div>
-
       <div className={styles.datebox}>
         <p className='b-small'>2024.01.02 (화) 점심</p>
       </div>
