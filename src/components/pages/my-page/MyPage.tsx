@@ -65,10 +65,6 @@ const MyPage = () => {
           <div className={style.infoContent}>{userData.goal}</div>
         </div>
         <div className={style.goaltInfo}>
-          <div className={style.goalTitle}>목표 몸무게</div>
-          <div className={style.goalDetail}> {userData.weight}kg</div>
-        </div>
-        <div className={style.goaltInfo}>
           <div className={style.goalTitle}>목표 칼로리</div>
           <div className={style.goalDetail}>{userData.height}kg</div>
         </div>
@@ -87,7 +83,7 @@ const MyPage = () => {
       </div>
 
       <div className={style.activityAccountArea}>
-        <div className={style.infoTitle}>계정</div>
+        <div className={style.infoTitle}>계정 설정</div>
         <img
           className={style.rightButton}
           src='/icons/right-arrow-icon.png'

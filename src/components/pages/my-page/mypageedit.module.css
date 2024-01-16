@@ -40,6 +40,7 @@ input[type='number'] {
 }
 
 .userProfileContainer {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -47,11 +48,25 @@ input[type='number'] {
   margin-top: 25px;
 }
 
+.userProfile {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
 .defaultProfile {
   width: 80px;
   height: 80px;
   background-color: #d9d9d9;
   border-radius: 50%;
+}
+
+.imgButton {
+  position: absolute;
+  top: 10%;
+  color: #346dff;
+  font-size: xx-large;
+  font-weight: 600;
 }
 
 .userName {

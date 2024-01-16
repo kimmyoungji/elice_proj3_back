@@ -39,10 +39,10 @@ export const calBMRCalories = ({
   return data.activity === 1
     ? bmr * 1.2
     : data.activity === 2
-      ? bmr * 1.375
+      ? bmr * 1.3
       : data.activity === 3
         ? bmr * 1.55
-        : bmr * 1.8125;
+        : bmr * 1.7;
 };
 
 export const adjustCaloriesByGoal = ({
@@ -53,9 +53,9 @@ export const adjustCaloriesByGoal = ({
   bmrCalories: number;
 }) => {
   return data.goal === 1
-    ? bmrCalories + 500 // 근육증량
+    ? bmrCalories + 400 // 근육증량
     : data.goal === 2
-      ? bmrCalories - 500 // 체중감량
+      ? bmrCalories - 400 // 체중감량
       : data.goal === 3
         ? bmrCalories // 체중유지
         : bmrCalories + 300; // 체중증량

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import style from './mypageedit.module.css';
 import MyPageDropdown from './MyPageDropdwon';
+import getImgPreview from '@utils/getImgPreview';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import {
   calAge,
@@ -29,19 +30,23 @@ const userData = {
   email: 'elice@gmail.com',
   username: 'elice',
   password: 'Elice1234@!',
-  birthday: '2005-02-03',
-  gender: 1,
+  birthday: '1997-04-26',
+  gender: 2,
   weight: 90,
   height: 190,
   goal: 2,
   targetWeight: 80,
   targetCalories: 1200,
   activity: 4,
-  img: undefined,
+  img: 'https://reclo.s3.ap-northeast-2.amazonaws.com/upload/itemImage/40962e2811b76d1ab5f661013f500061_%ED%9B%84%EB%93%9C.jpg',
 };
 
 const MyPageEdit = () => {
   const [data, setData] = useState<UserData>(userData);
+  const [profileImage, setProfileImage] = useState<string | undefined>(
+    userData.img
+  );
+  const [file, setFile] = useState<File | null>(null);
   const navigate = useNavigate();
   const age = calAge({ data });
   const [bmr, setBmr] = useState(calBMR({ data, age }));
@@ -89,6 +94,18 @@ const MyPageEdit = () => {
   const goalTypes = ['근육증량', '체중감량', '체중유지', '체중증량'];
   const activityType = ['비활동적', '약간 활동적', '활동적', '매우 활동적'];
 
+  const imgInputRef = useRef(null);
+  const handleImageClick = () => {
+    imgInputRef.current.click();
+  };
+
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const imgFile = event.target.files?.[0];
+    if (imgFile) {
+      getImgPreview(imgFile, setFile, setProfileImage);
+    }
+  };
+
   const toggleGoalDropdown = () => {
     setGoalDropdownVisible(!isGoalDropdownVisible);
     setActivityDropdownVisible(false);
@@ -118,21 +135,37 @@ const MyPageEdit = () => {
     setGoalCalories(updatedGoalCalories);
   };
 
-  const handleGoalSelect = (goalType: string) => {
-    const newGoal = Number(findKeyByValue(mapGoaltoMsg, goalType));
-    const updatedData = { ...data, goal: newGoal };
-    updateDataAndCalories(updatedData);
-    setSelectedGoal(goalType);
-    setGoalDropdownVisible(false);
+  const handleSelect = (type: 'goal' | 'activity', value: string) => {
+    if (type === 'goal') {
+      const newGoal = Number(findKeyByValue(mapGoaltoMsg, value));
+      const updatedData = { ...data, goal: newGoal };
+      updateDataAndCalories(updatedData);
+      setSelectedGoal(value);
+      setGoalDropdownVisible(false);
+    } else if (type === 'activity') {
+      const newActivity = Number(findKeyByValue(mapActivitytoMsg, value));
+      const updatedData = { ...data, activity: newActivity };
+      updateDataAndCalories(updatedData);
+      setSelectedActity(value);
+      setActivityDropdownVisible(false);
+    }
   };
 
-  const handleActivitySelect = (activityType: string) => {
-    const newActivity = Number(findKeyByValue(mapActivitytoMsg, activityType));
-    const updatedData = { ...data, activity: newActivity };
-    updateDataAndCalories(updatedData);
-    setSelectedActity(activityType);
-    setActivityDropdownVisible(false);
-  };
+  // const handleGoalSelect = (goalType: string) => {
+  //   const newGoal = Number(findKeyByValue(mapGoaltoMsg, goalType));
+  //   const updatedData = { ...data, goal: newGoal };
+  //   updateDataAndCalories(updatedData);
+  //   setSelectedGoal(goalType);
+  //   setGoalDropdownVisible(false);
+  // };
+
+  // const handleActivitySelect = (activityType: string) => {
+  //   const newActivity = Number(findKeyByValue(mapActivitytoMsg, activityType));
+  //   const updatedData = { ...data, activity: newActivity };
+  //   updateDataAndCalories(updatedData);
+  //   setSelectedActity(activityType);
+  //   setActivityDropdownVisible(false);
+  // };
 
   const editHeightAndWeight = () => {
     setIsEditingData(!isEditingData);
@@ -140,13 +173,18 @@ const MyPageEdit = () => {
     setPrevWeight(data.weight);
   };
 
-  const updateProfileData = () => {
-    const updatedData = {
-      ...data,
-      height: Number(prevHeight),
-      weight: Number(prevWeight),
-    };
-    updateDataAndCalories(updatedData);
+  const updateProfileData = async () => {
+    try {
+      const updatedData = {
+        ...data,
+        height: Number(prevHeight),
+        weight: Number(prevWeight),
+      };
+      // 데이터 업데이트
+      updateDataAndCalories(updatedData);
+    } catch (error) {
+      console.log('profile data updating error', error);
+    }
   };
 
   const saveAndNavigate = () => {
@@ -163,14 +201,31 @@ const MyPageEdit = () => {
     <>
       <div className={style.userProfileArea}>
         <div className={style.userProfileContainer}>
+          <input
+            type='file'
+            accept='image/*'
+            style={{ display: 'none' }}
+            ref={imgInputRef}
+            onChange={handleImageSelect}
+          />
           {data.img ? (
-            <img
-              className={style.userProfile}
-              src={data.img}
-              alt='사용자 프로필'
-            />
+            <>
+              <img
+                className={style.userProfile}
+                src={data.img}
+                alt='사용자 프로필'
+                onClick={handleImageClick}
+              />
+              <span className={style.imgButton}>+</span>
+            </>
           ) : (
-            <div className={style.defaultProfile}></div>
+            <>
+              <div
+                className={style.defaultProfile}
+                onClick={handleImageClick}
+              ></div>
+              <span className={style.imgButton}>+</span>
+            </>
           )}
 
           <div className={style.userName}>{data.username}</div>
@@ -183,7 +238,7 @@ const MyPageEdit = () => {
           <MyPageDropdown
             items={goalTypes}
             selectedItem={selectedGoal}
-            onSelectItem={handleGoalSelect}
+            onSelectItem={(value) => handleSelect('goal', value)}
             toggleDropdown={toggleGoalDropdown}
             isDropdownVisible={isGoalDropdownVisible}
           />
@@ -236,7 +291,7 @@ const MyPageEdit = () => {
         <MyPageDropdown
           items={activityType}
           selectedItem={selectedActity}
-          onSelectItem={handleActivitySelect}
+          onSelectItem={(value) => handleSelect('activity', value)}
           toggleDropdown={toggleActivityDropdown}
           isDropdownVisible={isActivityDropdownVisible}
         />
