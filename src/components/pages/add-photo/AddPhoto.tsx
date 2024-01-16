@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import header from '../../UI/headerCommon.module.css';
 import styles from './addphoto.module.css';
 
 const AddPhoto = () => {

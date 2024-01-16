@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import header from '../../UI/headerCommon.module.css';
 import styles from './recordedit.module.css';
 import RecordEditDetail from './RecordEditDetail';
 import { useEffect, useRef, useState } from 'react';
