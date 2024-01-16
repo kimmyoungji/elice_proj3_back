@@ -2,6 +2,18 @@
   box-sizing: border-box;
 }
 
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* 파이어폭스에서의 초기화 방법 */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
 .settingTitle {
   border-bottom: 1px solid #e4e4e4;
   background-color: #ffffff;
@@ -56,6 +68,7 @@
 }
 
 .goalInfoArea {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -65,7 +78,6 @@
 }
 
 .goalInfoTitle {
-  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -77,12 +89,14 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   background-color: #fff;
   padding: 23px 25px;
   border-bottom: 1px solid #d9d9d9;
 }
 
 .infoTitle {
+  margin-right: 50px;
   color: #000;
   font-family: Inter;
   font-size: 15px;
@@ -92,9 +106,25 @@
   text-align: left;
 }
 
+.toggleTitle {
+  display: flex;
+  flex-direction: row;
+  color: var(--main-blue, #346dff);
+  font-family: Inter;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.arrow {
+  width: 10px;
+  margin-left: 10px;
+}
+
 .dropdown {
   position: absolute;
-  right: 0;
+  right: 28px;
   background-color: #f9f9f9;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
   z-index: 1;
@@ -132,14 +162,24 @@
 }
 
 .infoContent {
+  width: 200px;
+  height: 32px;
   color: var(--main-blue, #346dff);
-  text-align: right;
   font-family: Inter;
   font-size: 17px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
   text-align: right;
+}
+
+.inputStyle {
+  width: 50px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 7px;
+  border: 2px solid var(--main-lightblue, #edf3f9);
+  text-align: center;
 }
 
 .goaltInfo {
@@ -159,7 +199,18 @@
 }
 
 .goalDetail {
-  color: #000;
+  color: var(--main-skyblue, #a0bfed);
+  text-align: right;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.userDataDetail {
+  padding: 9px;
+  color: var(--main-blue);
   text-align: right;
   font-family: Inter;
   font-size: 15px;

@@ -38,15 +38,6 @@ const MealPage = () => {
 
   return (
     <>
-      <div className={style.header}>
-        <img
-          className={style.arrow}
-          src='/icons/left_arrow.png'
-          alt='뒤로가기'
-          onClick={() => navigate(-1)}
-        />
-        <div>AI 식단기록</div>
-      </div>
       <div className={style.container}>
         <div className={style.pageTitle}>
           <div>{formatDate}</div>

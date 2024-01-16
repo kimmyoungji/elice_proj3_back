@@ -1,4 +1,5 @@
 import toggle from './mypageedit.module.css';
+import { DownArrow } from '@assets/DownArrow';
 
 interface MyPageDropdownProps {
   items: string[];
@@ -19,7 +20,10 @@ const MyPageDropdown = ({
 }: MyPageDropdownProps) => {
   return (
     <div style={style}>
-      <div onClick={toggleDropdown}>{selectedItem} ▼</div>
+      <div className={toggle.toggleTitle} onClick={toggleDropdown}>
+        <div>{selectedItem}</div>
+        <DownArrow className={toggle.arrow} />
+      </div>
       {isDropdownVisible && (
         <div className={toggle.dropdown}>
           {items.map((item: string) => (

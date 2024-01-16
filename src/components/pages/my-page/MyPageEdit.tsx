@@ -10,6 +10,21 @@ import {
   adjustCaloriesByGoal,
 } from './calUserData';
 
+type UserData = {
+  email: string;
+  username: string;
+  password: string;
+  birthday: string;
+  gender: number;
+  weight: number;
+  height: number;
+  goal: number;
+  targetWeight: number;
+  targetCalories: number;
+  activity: number;
+  img: string | undefined;
+};
+
 const userData = {
   email: 'elice@gmail.com',
   username: 'elice',
@@ -26,7 +41,7 @@ const userData = {
 };
 
 const MyPageEdit = () => {
-  const [data, setData] = useState(userData);
+  const [data, setData] = useState<UserData>(userData);
   const navigate = useNavigate();
   const age = calAge({ data });
   const [bmr, setBmr] = useState(calBMR({ data, age }));
@@ -38,7 +53,10 @@ const MyPageEdit = () => {
   const [prevWeight, setPrevWeight] = useState(data.weight);
   const [prevHeight, setPrevHeight] = useState(data.weight);
 
-  const findKeyByValue = (msg, value) => {
+  const findKeyByValue = (
+    msg: { [key: string]: string },
+    value: string
+  ): string | undefined => {
     for (let [key, val] of Object.entries(msg)) {
       if (val === value) {
         return key;
@@ -81,7 +99,7 @@ const MyPageEdit = () => {
     setGoalDropdownVisible(false);
   };
 
-  const updateDataAndCalories = (updatedData) => {
+  const updateDataAndCalories = (updatedData: UserData) => {
     const updatedBmr = calBMR({ data: updatedData, age });
     const updatedBmrCalories = calBMRCalories({
       bmr: updatedBmr,
@@ -116,12 +134,9 @@ const MyPageEdit = () => {
     setActivityDropdownVisible(false);
   };
 
-  const editHeight = () => {
+  const editHeightAndWeight = () => {
     setIsEditingData(!isEditingData);
     setPrevHeight(data.height);
-  };
-  const editWeight = () => {
-    setIsEditingData(!isEditingData);
     setPrevWeight(data.weight);
   };
 
@@ -131,9 +146,7 @@ const MyPageEdit = () => {
       height: Number(prevHeight),
       weight: Number(prevWeight),
     };
-    console.log(updatedData);
     updateDataAndCalories(updatedData);
-    setIsEditingData(false);
   };
 
   const saveAndNavigate = () => {
@@ -148,7 +161,6 @@ const MyPageEdit = () => {
 
   return (
     <>
-      <div className={style.settingTitle}>설정</div>
       <div className={style.userProfileArea}>
         <div className={style.userProfileContainer}>
           {data.img ? (
@@ -169,7 +181,6 @@ const MyPageEdit = () => {
         <div className={style.goalInfoTitle}>
           <div className={style.infoTitle}>목표</div>
           <MyPageDropdown
-            style={{ position: 'absolute', left: '75%' }}
             items={goalTypes}
             selectedItem={selectedGoal}
             onSelectItem={handleGoalSelect}
@@ -190,36 +201,39 @@ const MyPageEdit = () => {
             <>
               <input
                 type='number'
+                className={style.inputStyle}
                 value={prevHeight}
-                onChange={(e) => setPrevHeight(e.target.value)}
+                onChange={(e) => setPrevHeight(Number(e.target.value))}
+                onBlur={updateProfileData}
               />
+              <span style={{ color: '#346dff' }}> cm </span>
+              <span style={{ color: 'black' }}> / </span>
               <input
                 type='number'
+                className={style.inputStyle}
                 value={prevWeight}
-                onChange={(e) => setPrevWeight(e.target.value)}
+                onChange={(e) => setPrevWeight(Number(e.target.value))}
+                onBlur={updateProfileData}
               />
-              <button onClick={updateProfileData}> 저장 </button>
+              <span style={{ color: '#346dff' }}> kg </span>
             </>
           ) : (
             <>
-              <div onClick={editHeight} className={style.goalDetail}>
-                {' '}
-                {data.height}kg
-              </div>
-              <div onClick={editWeight} className={style.goalDetail}>
-                {' '}
-                {data.weight}kg
+              <div
+                onClick={editHeightAndWeight}
+                className={style.userDataDetail}
+              >
+                {data.height} cm <span style={{ color: 'black' }}> / </span>
+                {data.weight} kg
               </div>
             </>
           )}
-          {/* {data.height}cm / {data.weight}kg */}
         </div>
       </div>
 
       <div className={style.activityAccountArea}>
         <div className={style.infoTitle}>활동량</div>
         <MyPageDropdown
-          style={{ position: 'absolute', left: '67%' }}
           items={activityType}
           selectedItem={selectedActity}
           onSelectItem={handleActivitySelect}
