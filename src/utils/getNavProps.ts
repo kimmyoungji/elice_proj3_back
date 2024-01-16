@@ -43,8 +43,8 @@ interface GetNavPropsType {
 
 export const getNavProps: GetNavPropsType = {
   join: { title: '회원정보 입력', back: true },
-  joinonboarding: { back: true },
-  login: { title: '로그인' },
+  onboarding: { back: true },
+  login: { back: true, title: '로그인' },
   home: { home: true, title: '구그램' },
   calendar: { title: '식단달력' },
   recordymd: { title: '하루식단' },
