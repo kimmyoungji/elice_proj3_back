@@ -1,6 +1,7 @@
 export type TopNavKeyType =
   | 'join'
-  | 'joinonboarding'
+  | 'onboarding'
+  | 'onboardingmeal'
   | 'login'
   | 'home'
   | 'calendar'
