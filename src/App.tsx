@@ -5,9 +5,9 @@ import { useLocation, Navigate, Route, Routes } from 'react-router-dom';
 
 const Home = lazy(() => import('@components/pages/home/Home'));
 const Login = lazy(() => import('@components/pages/login/Login'));
-const Join = lazy(() => import('@components/pages/join/Join'));
+const Auth = lazy(() => import('@components/pages/join/Auth'));
 const Onboarding = lazy(() => import('@components/pages/join/Onboarding'));
-const Onboarding_join = lazy(() => import('@components/pages/join/Onboarding_join'));
+const Join = lazy(() => import('@components/pages/join/Join'));
 const MyPage = lazy(() => import('@components/pages/my-page/MyPage'));
 const MyPageEdit = lazy(() => import('@components/pages/my-page/MyPageEdit'));
 const AddPhoto = lazy(() => import('@components/pages/add-photo/AddPhoto'));
@@ -26,9 +26,9 @@ function App() {
             <Routes>
               <Route path='/' element={<Navigate to='/home' />} />
               <Route path='/login' element={<Login />} />
+              <Route path='/auth' element={<Auth />} />
+              <Route path='/onboarding' element={<Onboarding />} />
               <Route path='/join' element={<Join />} />
-              <Route path='/join/onboarding' element={<Onboarding />} />
-              <Route path='/join/onboarding-join' element={<Onboarding_join />} />
               <Route path='/home' element={<Home />} />
               <Route path='/my-page' element={<MyPage />} />
               <Route path='/my-page/edit' element={<MyPageEdit />} />
@@ -42,9 +42,9 @@ function App() {
         </main>
         <header className='header'>
           {location.pathname !== "/login" &&
+            location.pathname !== "/auth" &&
+            location.pathname !== "/onboarding" &&
             location.pathname !== "/join" &&
-            location.pathname !== "/join/onboarding" &&
-            location.pathname !== "/join/onboarding-join" &&
             <Layout />
           }
         </header>

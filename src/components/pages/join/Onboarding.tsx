@@ -7,7 +7,6 @@ import Onboarding_birth from "./Onboarding_birth";
 import Onboarding_height from "./Onboarding_height";
 import Onboarding_weight from "./Onboarding_weight";
 import Onboarding_goal from "./Onboarding_goal";
-import Onboarding_goalweight from "./Onboarding_goalweight";
 import Onboarding_activity from "./Onboarding_activity";
 
 const Onboarding = () => {
@@ -22,11 +21,11 @@ const Onboarding = () => {
 
   const onNextClick = () => {
     setCurrentStep((prevStep) => {
-      if (prevStep === 7) {
-        navigate('/join/onboarding-join');
+      if (prevStep === 6) {
+        navigate('/home');
         return prevStep;
       } else {
-        const nextStep = Math.min(7, prevStep + 1);
+        const nextStep = Math.min(6, prevStep + 1);
         localStorage.setItem('currentStep', nextStep.toString());
         return nextStep;
       }
@@ -35,14 +34,14 @@ const Onboarding = () => {
 
   useEffect(() => {
     if (currentStep === 0) {
-      navigate("/join");
+      navigate("/auth");
     }
     console.log(currentStep);
   }, [currentStep, navigate]);
 
 
   const renderProgressBar = () => {
-    const steps = 7;
+    const steps = 6;
     const progressBarSteps = [];
 
     for (let i = 1; i <= steps; i++) {
@@ -75,8 +74,7 @@ const Onboarding = () => {
         {currentStep === 3 && <Onboarding_height />}
         {currentStep === 4 && <Onboarding_weight />}
         {currentStep === 5 && <Onboarding_goal />}
-        {currentStep === 6 && <Onboarding_goalweight />}
-        {currentStep === 7 && <Onboarding_activity />}
+        {currentStep === 6 && <Onboarding_activity />}
       </div>
       <div className='button-container'>
         <ButtonCommon
