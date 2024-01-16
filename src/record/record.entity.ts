@@ -4,29 +4,30 @@ import {
   Column,
   Entity,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 
 @Entity()
 export class Record extends BaseEntity {
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   @ApiProperty({ description: "기록 id" })
-  record_id: string;
+  recordId: string;
 
   @Column({ type: "varchar", length: 50, nullable: false })
   @ApiProperty({ description: "사용자 id" })
-  user_id: string;
+  userId: string;
 
   @Column({ type: "varchar", length: 50, nullable: false })
   @ApiProperty({ description: "식단 구분" })
-  meal_type: string;
+  mealType: string;
 
   @Column({ type: "varchar", length: 50, nullable: false })
   @ApiProperty({ description: "음식/영양 정보 id" })
-  food_info_id: string;
+  foodInfoId: string;
 
   @Column({ type: "int", nullable: false })
   @ApiProperty({ description: "음식 수량" })
-  food_counts: number;
+  foodCounts: number;
 
   @Column({ type: "int", nullable: true })
   @ApiProperty({ description: "탄수화물" })
@@ -42,13 +43,17 @@ export class Record extends BaseEntity {
 
   @Column({ type: "int", nullable: true })
   @ApiProperty({ description: "식이섬유" })
-  dietary_fiber: number;
+  dietaryFiber: number;
 
-  @Column({ type: "timestamp", nullable: true })
+  @Column({ type: "int", nullable: true })
+  @ApiProperty({ description: "총 칼로리" })
+  totalCalories: number;
+
+  @Column({ type: "date", nullable: true })
   @ApiProperty({ description: "첫 기록 날짜" })
-  first_record_date: Date;
+  firstRecordDate: Date;
 
-  @Column({ type: "timestamp", nullable: true })
+  @Column({ type: "timestamp with time zone", nullable: true })
   @ApiProperty({ description: "최근 수정 날짜" })
-  updated_date: Date;
+  updatedDate: Date;
 }

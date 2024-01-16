@@ -28,22 +28,24 @@ export class RecordController {
     return savedRecord;
   }
 
-  // PUT /records
+  // PUT /records/:date
   @Put()
-  @ApiOperation({ summary: "식단 수정" })
-  async updateRecord(
-    @Body() record: Record,
+  @ApiOperation({ summary: "특정 날짜와 식단 구분의 식단 수정" })
+  async updateDailyRecord(
+    @Query('date') date: string,
+    @Query('mealType') mealType: string,
+    @Body() updateData: Partial<Record>,
   ): Promise<Record> {
-    const updatedRecord = await this.recordService.updateRecord(record);
-    return updatedRecord;
+    return await this.recordService.updateDailyRecord(date, mealType, updateData);
   }
 
-  // DELETE /records
-  // @Delete()
-  // @ApiOperation({ summary: "식단 삭제" })
-  // async deleteRecord(
-  //   @Body() record: Record,
-  // ): Promise<void> {
-  //   await this.recordService.deleteRecord(record);
-  // }
+  // DELETE /records/:date
+  @Delete(':date')
+  @ApiOperation({ summary: "특정 날짜와 식단 구분의 식단 삭제" })
+  async deleteDailyRecord(
+    @Query('date') date: string,
+    @Query('mealType') mealType: string
+  ): Promise<void> {
+    await this.recordService.deleteDailyRecord(date, mealType);
+  }
 }

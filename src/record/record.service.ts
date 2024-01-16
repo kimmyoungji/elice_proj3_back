@@ -21,14 +21,13 @@ export class RecordService {
     return savedRecord;
   }
 
-  // // 특정 ID의 식단을 수정하는 메서드
-  async updateRecord(record: Record): Promise<Record> {
-    const updatedRecord = await this.recordRepository.updateRecord(record);
-    return updatedRecord;
+  // 특정 날짜의 식단을 수정하는 메서드
+  async updateDailyRecord(date: string, mealType: string, updateData: Partial<Record>): Promise<Record> {
+    return await this.recordRepository.updateRecord(date, mealType, updateData);
   }
 
-  // // 특정 ID의 식단을 삭제하는 메서드
-  // async deleteRecord(record: Record): Promise<void> {
-  //   await this.recordRepository.deleteRecord(record.record_id);
-  // }
+  // 특정 날짜의 식단을 삭제하는 메서드
+  async deleteDailyRecord(date: string, mealType: string): Promise<void> {
+    await this.recordRepository.deleteRecord(date, mealType);
+  }
 }
