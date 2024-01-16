@@ -9,7 +9,7 @@ interface MyPageDropdownProps {
   style?: React.CSSProperties;
 }
 
-const MyPageDropdwon = ({
+const MyPageDropdown = ({
   items,
   selectedItem,
   onSelectItem,
@@ -37,4 +37,4 @@ const MyPageDropdwon = ({
   );
 };
 
-export default MyPageDropdwon;
+export default MyPageDropdown;

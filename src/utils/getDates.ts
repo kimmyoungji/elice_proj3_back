@@ -25,8 +25,10 @@ const getDates = () => {
   return {
     thisYear,
     thisMonth: thisMonthwithzero,
+    thisMonthNum: thisMonthNum,
     thisDay: thisDate,
     thisDayText,
+    thisDate: thisDay,
     getNowMealText,
   };
 };
