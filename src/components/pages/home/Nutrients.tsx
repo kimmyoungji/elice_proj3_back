@@ -1,6 +1,6 @@
-import styles from "@components/pages/home/nutrients.module.css";
+import styles from '@components/pages/home/nutrients.module.css';
 
-interface Nutrient{
+interface Nutrient {
   carbohydrates: number;
   proteins: number;
   fat: number;
@@ -8,19 +8,19 @@ interface Nutrient{
   [key: string]: number;
 }
 
-interface Props{
-  totalNutrient: Nutrient,
-  recommendNutrient: Nutrient
+interface Props {
+  totalNutrient: Nutrient;
+  recommendNutrient: Nutrient;
 }
 
-const keyToKorean: Record<string,string> = {
-  "carbohydrates": "탄수화물",
-  "proteins": "단백질",
-  "fat": "지방",
-  "dietaryFiber": "식이섬유",
+const keyToKorean: Record<string, string> = {
+  carbohydrates: '탄수화물',
+  proteins: '단백질',
+  fat: '지방',
+  dietaryFiber: '식이섬유',
 };
 
-const Nutrients = ({totalNutrient, recommendNutrient}:Props) => {
+const Nutrients = ({ totalNutrient, recommendNutrient }: Props) => {
   const radius = 22;
   const circumference = 2 * Math.PI * radius;
 
@@ -28,22 +28,22 @@ const Nutrients = ({totalNutrient, recommendNutrient}:Props) => {
     <div className={styles.nutrients}>
       {Object.keys(totalNutrient).map((idx) => (
         <div key={`nutrient-${idx}`} className={styles.nutrient}>
-          <p className="b-small">{keyToKorean[idx]}</p>
+          <p className='b-small'>{keyToKorean[idx]}</p>
           <div className={styles.progress_wrapper}>
             <svg
               className={styles.progress}
-              width="48"
-              height="48"
-              viewBox="0 0 48 48"
-              overflow="visible"
+              width='48'
+              height='48'
+              viewBox='0 0 48 48'
+              overflow='visible'
             >
               <circle
                 className={styles.frame}
-                cx="24"
-                cy="24"
-                r="22"
-                strokeWidth="3"
-                strokeDashoffset="0"
+                cx='24'
+                cy='24'
+                r='22'
+                strokeWidth='3'
+                strokeDashoffset='0'
                 strokeDasharray={circumference}
               />
               <circle
@@ -57,14 +57,21 @@ const Nutrients = ({totalNutrient, recommendNutrient}:Props) => {
                 r='22'
                 strokeWidth='3'
                 strokeDashoffset={
-                  totalNutrient[idx] /  recommendNutrient[idx] < 1
-                    ? circumference * (1 - totalNutrient[idx] /  recommendNutrient[idx])
+                  totalNutrient[idx] / recommendNutrient[idx] < 1
+                    ? circumference *
+                      (1 - totalNutrient[idx] / recommendNutrient[idx])
                     : 0
                 }
                 strokeDasharray={circumference}
               />
             </svg>
-            <p className={totalNutrient[idx] / recommendNutrient[idx] <= 1 ? `${styles.percent} b-tiny` : `${styles.overpercent} b-tiny`}>
+            <p
+              className={
+                totalNutrient[idx] / recommendNutrient[idx] <= 1
+                  ? `${styles.percent} b-tiny`
+                  : `${styles.overpercent} b-tiny`
+              }
+            >
               {Math.floor((totalNutrient[idx] / recommendNutrient[idx]) * 100)}%
             </p>
           </div>

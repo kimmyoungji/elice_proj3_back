@@ -1,11 +1,11 @@
-import styles from "@components/pages/home/calorie.module.css";
+import styles from '@components/pages/home/calorie.module.css';
 
-interface Props{
-  totalCalories: number,
-  recommendCalories: number
+interface Props {
+  totalCalories: number;
+  recommendCalories: number;
 }
 
-const Calorie = ({totalCalories, recommendCalories}:Props) => {
+const Calorie = ({ totalCalories, recommendCalories }: Props) => {
   const radius = 125;
   const circumference = 2 * Math.PI * radius;
   const angle = (totalCalories / recommendCalories) * 0.5;
@@ -33,7 +33,9 @@ const Calorie = ({totalCalories, recommendCalories}:Props) => {
         </svg>
         <div className={styles.calorie_wrapper}>
           <p className={`${styles.calorie_num} b-big`}>{totalCalories}</p>
-          <p className={`${styles.calorie_standard} r-medium`}>/ {recommendCalories}kcal</p>
+          <p className={`${styles.calorie_standard} r-medium`}>
+            / {recommendCalories}kcal
+          </p>
         </div>
       </div>
     </div>

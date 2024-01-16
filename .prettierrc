@@ -10,7 +10,7 @@
   "printWidth": 80,
   "proseWrap": "always",
   "quoteProps": "as-needed",
-  "requirePragma": true,
+  "requirePragma": false,
   "semi": true,
   "singleAttributePerLine": false,
   "singleQuote": true,

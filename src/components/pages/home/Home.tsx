@@ -1,4 +1,4 @@
-import Week from "./Week";
+import Week from './Week';
 
 const Home = () => {
   return (

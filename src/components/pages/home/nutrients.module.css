@@ -35,7 +35,8 @@
   stroke: var(--sem-bad);
 }
 
-.percent, .overpercent{
+.percent,
+.overpercent {
   position: absolute;
   width: 48px;
   text-align: center;
@@ -43,9 +44,9 @@
 }
 
 .percent {
-  color: var(--main-blue)
+  color: var(--main-blue);
 }
 
-.overpercent{
+.overpercent {
   color: var(--sem-bad);
 }
