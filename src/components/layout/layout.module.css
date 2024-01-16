@@ -2,6 +2,7 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+  padding: 0 20px;
   /* 이렇게 sticky, z-index로 처리하는것이 맞을지 */
   position: sticky;
   top: 0;
@@ -54,10 +55,11 @@
   filter: drop-shadow(0px -4px 4px rgba(0, 0, 0, 0.05));
   background: #ffffff;
   display: flex;
+  justify-content: center;
+  gap: 48px;
 }
 
-.navbar .item {
-  width: 20%;
+.item {
   height: 100%;
   display: flex;
   flex-direction: column;

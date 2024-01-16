@@ -28,6 +28,8 @@ const MealDeatilPage = lazy(
 );
 const Calender = lazy(() => import('@components/pages/calendar/Calendar'));
 
+const preventNavArr = ['login', 'join', 'auth'];
+
 function App() {
   const location = useLocation();
   const nowLocation = location.pathname.slice(1);
@@ -36,9 +38,11 @@ function App() {
   return (
     <div className='App'>
       <div className='container'>
-        <header style={{ padding: '0 20px', boxSizing: 'border-box' }}>
-          <TopBar {...defaultNavProps} {...navProps} />
-        </header>
+        {!preventNavArr.includes(key) && (
+          <header style={{ boxSizing: 'border-box' }}>
+            <TopBar {...defaultNavProps} {...navProps} />
+          </header>
+        )}
         <main className='main'>
           <Suspense fallback='...loading'>
             <Routes>
@@ -63,9 +67,7 @@ function App() {
           </Suspense>
         </main>
         <nav className='header'>
-          {location.pathname !== '/login' && location.pathname !== '/join' && (
-            <Layout />
-          )}
+          {!preventNavArr.includes(key) && <Layout />}
         </nav>
       </div>
     </div>
