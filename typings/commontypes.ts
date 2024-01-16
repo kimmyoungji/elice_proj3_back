@@ -42,7 +42,7 @@ export type ButtonVariant =
   | 'disabled';
 
 export interface ButtonPropsType extends ComponentPropsWithRef<'button'> {
-  children?: string | ReactElement | number;
+  children?: string | ReactElement | number | string[];
   customClassName?: string;
   onClickBtn?: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>

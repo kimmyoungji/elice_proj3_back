@@ -1,8 +1,14 @@
 import './App.css';
 import Layout from '@components/layout/Layout';
 import TopBar from '@components/layout/TopBar';
+import {
+  defaultNavProps,
+  getKeyFromUrl,
+  getNavProps,
+} from '@utils/getNavProps';
 import { lazy, Suspense } from 'react';
 import { useLocation, Navigate, Route, Routes } from 'react-router-dom';
+import { TopNavKeyType } from 'typings/propTypes';
 
 const Home = lazy(() => import('@components/pages/home/Home'));
 const Login = lazy(() => import('@components/pages/login/Login'));
@@ -24,15 +30,22 @@ const Calender = lazy(() => import('@components/pages/calendar/Calendar'));
 
 function App() {
   const location = useLocation();
+  const nowLocation = location.pathname.slice(1);
+  const key: TopNavKeyType | string = getKeyFromUrl(nowLocation);
+  const navProps = getNavProps[key];
   return (
     <div className='App'>
       <div className='container'>
+        <header style={{ boxSizing: 'border-box' }}>
+          <TopBar {...defaultNavProps} {...navProps} />
+        </header>
         <main className='main'>
           <Suspense fallback='...loading'>
             <Routes>
               <Route path='/' element={<Navigate to='/home' />} />
               <Route path='/login' element={<Login />} />
               <Route path='/join' element={<Join />} />
+              {/* <Route path='/join/onboarding' element={<JoinOnboard />} /> */}
               <Route path='/home' element={<Home />} />
               <Route path='/my-page' element={<MyPage />} />
               <Route path='/my-page/edit' element={<MyPageEdit />} />
@@ -49,11 +62,11 @@ function App() {
             </Routes>
           </Suspense>
         </main>
-        <header className='header'>
+        <nav className='header'>
           {location.pathname !== '/login' && location.pathname !== '/join' && (
             <Layout />
           )}
-        </header>
+        </nav>
       </div>
     </div>
   );
