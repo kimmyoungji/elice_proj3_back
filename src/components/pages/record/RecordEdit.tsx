@@ -67,8 +67,18 @@ const RecordEdit = () => {
     el.scrollTo({
       left: el.scrollLeft + deltaY,
       behavior: 'smooth',
-    });
+    });    
   };
+
+  const handleEnter = () => {
+    const main = document.querySelector(".main") as HTMLElement;
+    main.style.overflow = 'hidden';
+  }
+
+  const handleLeave = () => {
+    const main = document.querySelector(".main") as HTMLElement;
+    main.style.overflow = 'scroll';
+  }
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -128,6 +138,8 @@ const RecordEdit = () => {
           className={styles.tagbox}
           ref={scrollDiv}
           onWheel={(e) => scrollConvert(e)}
+          onMouseEnter={handleEnter}
+          onMouseLeave={handleLeave}
         >
           {foods.map((food: Food, index: number) => (
             <div key={index} className={styles.tagitem}>
@@ -183,7 +195,7 @@ const RecordEdit = () => {
         />
       )}
       <div className={styles.btnbox}>
-        <ButtonCommon size='medium' variant='disabled'>
+        <ButtonCommon size='medium' variant='disabled' onClick={()=>setFocus('')}>
           취소
         </ButtonCommon>
         <ButtonCommon size='medium' variant='default-active'>
