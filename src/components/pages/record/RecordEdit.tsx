@@ -97,7 +97,7 @@ const RecordEdit = () => {
 
   useEffect(() => {
     foods.map((food, index) => {
-      createCanvas(food, index);
+      return createCanvas(food, index);
     })
   }, [foods]);
 
