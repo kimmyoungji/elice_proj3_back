@@ -2,6 +2,7 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+  padding: 0 20px;
   /* 이렇게 sticky, z-index로 처리하는것이 맞을지 */
   position: sticky;
   top: 0;

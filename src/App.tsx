@@ -36,7 +36,7 @@ function App() {
   return (
     <div className='App'>
       <div className='container'>
-        <header style={{ padding: '0 20px', boxSizing: 'border-box' }}>
+        <header style={{ boxSizing: 'border-box' }}>
           <TopBar {...defaultNavProps} {...navProps} />
         </header>
         <main className='main'>
