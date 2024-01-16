@@ -1,11 +1,11 @@
 .container {
   position: relative;
-  width: 152px;
+  width: 130px;
   min-height: 1.5em;
   border: none;
   display: flex;
   align-items: center;
-  gap: 0.5em;
+  gap: 8px;
   /* padding: 0.5em; */
   border-radius: 0.25em;
   outline: none;
@@ -36,6 +36,6 @@
 
 .caret {
   translate: 0 25%;
-  border: 0.25em solid transparent;
-  border-top-color: #777;
+  border: 8px solid transparent;
+  border-top-color: black;
 }

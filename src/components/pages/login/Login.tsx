@@ -34,8 +34,7 @@ const Login = () => {
           className={`button large r-large gray`}
           value={email}
           onChange={handleEmailChange}
-        >
-        </InputCommon>
+        />
       </div>
       < div className='body' >
         <p className="r-large">비밀번호</p>
@@ -46,8 +45,7 @@ const Login = () => {
           type="password"
           value={password}
           onChange={handlePasswordChange}
-        >
-        </InputCommon>
+        />
       </div>
       <div className='button-container'>
         <div style={{ marginBottom: '20px' }}>

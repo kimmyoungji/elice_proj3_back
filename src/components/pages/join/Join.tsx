@@ -44,8 +44,7 @@ const Join = () => {
           className={`button large r-large gray`}
           value={name}
           onChange={handleNameChange}
-        >
-        </InputCommon>
+        />
       </div>
       < div className='body' >
         <p className="r-large">이메일</p>
@@ -55,16 +54,14 @@ const Join = () => {
           className={`button large r-large gray`}
           value={email}
           onChange={handleEmailChange}
-        >
-        </InputCommon>
+        />
       </div>
       <div style={{ marginTop: '15px' }}>
         <InputCommon
           className={`button large r-large gray`}
           value={verified}
           onChange={handleVerifiedChange}
-        >
-        </InputCommon>
+        />
       </div>
       < div className='body' >
         <p className="r-large">비밀번호</p>
@@ -75,8 +72,7 @@ const Join = () => {
           type="password"
           value={password}
           onChange={handlePasswordChange}
-        >
-        </InputCommon>
+        />
       </div>
       <div className='button-container'>
         <ButtonCommon

@@ -1,26 +1,40 @@
-import { useCallback } from 'react';
+import { ReactElement, useCallback } from 'react';
 import { useDropdownContext } from './Dropdown';
 
 type DropdownItemProps = {
-  children?: string;
-  id: number | string;
+  children?: string | ReactElement[];
+  id: number;
   value?: string;
 };
 
 const DropdownItem = ({ children, id, value }: DropdownItemProps) => {
-  const { isOpen, handleIsOpen, handleBtnText, handleHighlightedIndex, highlightedindex } = useDropdownContext();
+  const {
+    isOpen,
+    setIsopen,
+    highlightedindex,
+    setHighlightedIndex,
+    setBtnText,
+  } = useDropdownContext();
   const setText = useCallback(() => {
     if (value) {
-      handleBtnText(value);
+      setBtnText(value);
     }
     if (typeof children === 'string') {
-      handleBtnText(children);
+      setBtnText(children);
     }
-    handleHighlightedIndex(id);
-    return handleIsOpen(false);
+    setHighlightedIndex(id);
+    return setIsopen((prev) => !prev);
   }, [children, id, value]);
 
-  return <>{isOpen && <option onClick={setText}>{children}</option>}</>;
+  return (
+    <>
+      {isOpen && typeof children === 'string' ? (
+        <option onClick={setText}>{children}</option>
+      ) : (
+        { children }
+      )}
+    </>
+  );
 };
 
 export default DropdownItem;

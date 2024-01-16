@@ -28,8 +28,7 @@ const Onboarding_birth = () => {
                     value={year}
                     placeholder='년'
                     onChange={handleYearChange}
-                >
-                </InputCommon>
+                />
             </div>
             <div style={{ marginTop: '15px' }}>
                 <InputCommon
@@ -37,8 +36,7 @@ const Onboarding_birth = () => {
                     value={month}
                     placeholder='월'
                     onChange={handleMonthChange}
-                >
-                </InputCommon>
+                />
             </div>
             <div style={{ marginTop: '15px' }}>
                 <InputCommon
@@ -46,8 +44,7 @@ const Onboarding_birth = () => {
                     value={date}
                     placeholder='일'
                     onChange={handleDateChange}
-                >
-                </InputCommon>
+                />
             </div>
         </div>
     );

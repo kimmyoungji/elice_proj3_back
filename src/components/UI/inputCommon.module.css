@@ -21,15 +21,20 @@
 
 /* INPUT CLASS */
 
-.default {
+.variant-default {
   border: 2px solid var(--main-lightblue);
 }
 
-.active {
+.variant-active {
   border: 2px solid var(--main-blue);
 }
 
-.error {
+
+.variant-validated {
+  border: 2px solid var(--sem-great);
+}
+
+.variant-error {
   border: 2px solid var(--sem-bad);
 }
 
@@ -60,18 +65,17 @@
 
 /* INPUT SIZE CLASS */
 
-.large {
+.size-large {
   width: 350px;
   height: 55px;
 }
 
-.medium {
-  width: 280;
+.size-medium {
+  width: 280px;
   height: 35px;
-  padding: 10px 0 10px 15px;
 }
 
-.small {
+.size-small {
   width: 165px;
   height: 55px;
   padding: 18px 0 18px 25px;

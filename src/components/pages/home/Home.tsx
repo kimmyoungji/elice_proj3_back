@@ -1,29 +1,20 @@
+import TopBar from '@components/layout/TopBar';
 import { useEffect, useRef, useState } from 'react';
-import ButtonCommon from '@components/UI/ButtonCommon';
-import InputCommon from '@components/UI/InputCommon';
-import { Toggle, ToggleOn, ToggleOff, ToggleButton } from '@components/UI/Toggle';
+import Today from './Today';
+import Week from './Week';
 
 const Home = () => {
-  const [state, setState] = useState(0);
-
-  const onClick = () => {
-    console.log('btn is clicked!');
-    setState((prev) => prev + 1);
-  };
   return (
     <div>
-      Home
-      <ButtonCommon className='button-large-white' onClickBtn={onClick}>
-        {state}
-      </ButtonCommon>
-      Home <ButtonCommon className='button-large-green'>Button</ButtonCommon>
-      <InputCommon
-        value={state}
-        // placeholder="안뇽"
-        // onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-        //   setState(e.target.value)
-        // }
+      <TopBar
+        home={true}
+        title='구그램'
+        back={false}
+        qIcon={false}
+        icon={false}
       />
+      <Week />
+      <Today />
     </div>
   );
 };

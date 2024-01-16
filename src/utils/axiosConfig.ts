@@ -1,27 +1,27 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 type originRequestType = {
   baseURL: string;
   headers: {
-    "Content-Type": string;
+    'Content-Type': string;
     Authorization?: string;
   };
 };
 //AxiosRequestConfigType
 
-const config = {
-  baseURL: "/api",
+const config: originRequestType = {
+  baseURL: '/api',
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 };
 
-export const api = axios.create(config); // 인스턴스
+export const api: AxiosInstance = axios.create(config); // 인스턴스
 
 // //refresh token api
-export async function postRefreshToken() {
-  const autorizationData = `Bearer ${localStorage.getItem("refreshToken")}`;
-  const response = await api.post("/accessToken", {
+export async function postRefreshToken(): Promise<AxiosResponse<any, any>> {
+  const autorizationData = `Bearer ${localStorage.getItem('refreshToken')}`;
+  const response = await api.post('/accessToken', {
     Authorization: autorizationData,
   });
   return response;
@@ -36,13 +36,13 @@ api.interceptors.request.use(
     }
     //요청 data가 Object일 때
     else if (req.data && req.data instanceof Object) {
-      req.headers["Content-Type"] = "application/json";
+      req.headers['Content-Type'] = 'application/json';
     }
 
     return req;
   },
   (err) => {
-    console.log("인터셉터에서 요청에러", err);
+    console.log('인터셉터에서 요청에러', err);
   }
 );
 
@@ -60,10 +60,10 @@ api.interceptors.response.use(
     if (
       err.response &&
       status === 401 &&
-      data === "Access token이 존재하지 않음"
+      data === 'Access token이 존재하지 않음'
     ) {
       //엑세스 토큰 없을 때 (만료로 삭제 )
-      if (data === "Access Token의 정보가 서버에 존재하지 않습니다.") {
+      if (data === 'Access Token의 정보가 서버에 존재하지 않습니다.') {
         const originRequest: originRequestType = config;
         try {
           //리프레시 토큰 api
@@ -71,9 +71,9 @@ api.interceptors.response.use(
           //리프레시 토큰 요청이 성공할 때
           if (response.status === 201) {
             //응답이 {Authorization : Bearer 토큰}
-            const newAccessToken = response.data.Authorization.split(" ")[1];
+            const newAccessToken = response.data.Authorization.split(' ')[1];
             //refreshToken 만료시간에 동일한 localStorage 만료시간??
-            localStorage.setItem("refreshToken", response.data.Authorization);
+            localStorage.setItem('refreshToken', response.data.Authorization);
             axios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
             //진행중이던 요청 이어서하기???
             originRequest.headers.Authorization = `Bearer ${newAccessToken}`;
@@ -83,11 +83,11 @@ api.interceptors.response.use(
         } catch (refreshError: any) {
           if (
             refreshError.response.status === 404 &&
-            data === "Access Token의 정보가 서버에 존재하지 않습니다."
+            data === 'Access Token의 정보가 서버에 존재하지 않습니다.'
           ) {
             //엑세스 토큰 만료(쿠키 없을 때) => 쿠키만료시간확인
-            alert("로그인 정보가 없습니다.");
-            window.location.replace("/login");
+            alert('로그인 정보가 없습니다.');
+            window.location.replace('/login');
             return;
           }
         }
@@ -95,19 +95,19 @@ api.interceptors.response.use(
     }
 
     if (err.response && status === 404) {
-      if (data === "해당하는 주문 내역이 없습니다.") {
-        window.location.href = "/";
+      if (data === '해당하는 주문 내역이 없습니다.') {
+        window.location.href = '/';
       }
     }
 
     if (err.response && status === 409) {
-      if (data === "이미 찜하기 된 상품입니다") {
-        window.location.replace("/login");
+      if (data === '이미 찜하기 된 상품입니다') {
+        window.location.replace('/login');
       }
     }
 
     if (err.response && status === 419) {
-      if (data === "Access Token 만료") {
+      if (data === 'Access Token 만료') {
         const originRequest: originRequestType = config;
         try {
           //리프레시 토큰 api
@@ -115,9 +115,9 @@ api.interceptors.response.use(
           //리프레시 토큰 요청이 성공할 때
           if (response.status === 201) {
             //응답이 {Authorization : Bearer 토큰}
-            const newAccessToken = response.data.Authorization.split(" ")[1];
+            const newAccessToken = response.data.Authorization.split(' ')[1];
             //refreshToken 만료시간에 동일한 localStorage 만료시간??
-            localStorage.setItem("refreshToken", response.data.Authorization);
+            localStorage.setItem('refreshToken', response.data.Authorization);
             axios.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
             //진행중이던 요청 이어서하기???
             originRequest.headers.Authorization = `Bearer ${newAccessToken}`;
@@ -127,28 +127,32 @@ api.interceptors.response.use(
         } catch (refreshError: any) {
           if (
             refreshError.response.status === 404 &&
-            data === "Access Token의 정보가 서버에 존재하지 않습니다."
+            data === 'Access Token의 정보가 서버에 존재하지 않습니다.'
           ) {
             //엑세스 토큰 만료(쿠키 없을 때) => 쿠키만료시간확인
-            alert("로그인 정보가 없습니다.");
-            window.location.replace("/login");
+            alert('로그인 정보가 없습니다.');
+            window.location.replace('/login');
             return;
           }
         }
       } else {
-        window.location.replace("/");
+        window.location.replace('/');
       }
 
       if (err.response && status === 500) {
-        if (data === "해당 상품이 장바구니에 없습니다.") {
-          window.location.replace("/cart");
+        if (data === '해당 상품이 장바구니에 없습니다.') {
+          window.location.replace('/cart');
         }
       }
     }
 
-    throw new Error("잘못된 요청입니다");
+    throw new Error('잘못된 요청입니다');
   }
 );
+
+type ApiFetcherParams = [string, any];
+export type ApiMethods = 'get' | 'post' | 'put' | 'delete' | 'patch';
+export type APiFetcher = (...args: ApiFetcherParams) => Promise<any>;
 
 const getFetcher: (
   path: string,
@@ -169,18 +173,9 @@ const deleteFetcher = async (path: string, params: any) => {
   return await api.delete(path, { params });
 };
 
-type API_FETCHERType = {
-  get: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  post: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  put: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  patch: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  delete: (...args: any[]) => Promise<AxiosResponse<any, any>>;
-  [key: string]: any;
-};
-
 // const args = {path:string, body: any } as const;
 
-export const API_FETCHER: API_FETCHERType = {
+export const API_FETCHER: { [key in ApiMethods]: APiFetcher } = {
   get: (...args) => getFetcher(...args),
   post: (...args) => postFetcher(...args),
   put: (...args) => putFetcher(...args),

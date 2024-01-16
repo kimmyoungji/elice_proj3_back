@@ -1,8 +1,16 @@
-import { ReactNode, createContext, useContext, useMemo, useState } from 'react';
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import classes from './toggle.module.css';
 
 interface togglePropsType {
   children?: ReactNode | ReactNode[];
+  onChangeToggle?: (value: boolean) => void;
 }
 
 type ToggleState = {
@@ -19,7 +27,7 @@ const useToggleContext = (ToggleContext: any): any => {
   return state;
 };
 
-export const Toggle = ({ children }: togglePropsType) => {
+export const Toggle = ({ children, onChangeToggle }: togglePropsType) => {
   const [on, setIsOn] = useState(false);
   const value = useMemo(
     () => ({
@@ -29,17 +37,13 @@ export const Toggle = ({ children }: togglePropsType) => {
     [on]
   );
 
-  return <ToggleContext.Provider value={value}>{children}</ToggleContext.Provider>;
-};
+  useEffect(() => {
+    onChangeToggle && onChangeToggle(on);
+  }, [on, onChangeToggle]);
 
-export const ToggleOn = ({ children }: any) => {
-  const { on } = useToggleContext(ToggleContext);
-  return on ? children : null;
-};
-
-export const ToggleOff = ({ children }: any) => {
-  const { on } = useToggleContext(ToggleContext);
-  return on ? null : children;
+  return (
+    <ToggleContext.Provider value={value}>{children}</ToggleContext.Provider>
+  );
 };
 
 export const ToggleButton = ({ children }: togglePropsType) => {
@@ -54,7 +58,9 @@ export const ToggleButton = ({ children }: togglePropsType) => {
         type='checkbox'
         checked={on}
         onChange={() => {}}
-        onClick={() => setValue((prev: any) => !prev)}
+        onClick={() => {
+          setValue((prev: any) => !prev);
+        }}
         data-testid='toggle-input'
       />
       <div className={classes.toggles}>
