@@ -4,6 +4,9 @@ import CalendarTitle from './CalendarTitle';
 import { createContext } from 'react';
 import { Dispatch, ReactElement, useContext, useState } from 'react';
 import getDates from '../../../utils/getDates';
+import Toast from '@components/UI/Toast';
+import ToastText from '@components/UI/ToastText';
+import ButtonCommon from '@components/UI/ButtonCommon';
 
 const CalendarContext = createContext<
   | {
@@ -74,9 +77,25 @@ export const useCalendarContext = () => {
 };
 
 const Calendar = () => {
+  const [showToast, setShowToast] = useState(false);
+  const [position, setPosition] = useState({
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+  });
+
+  const showMeToast = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    setShowToast(true);
+    console.log({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    console.log({ x: e.clientX, y: e.clientY });
+    setPosition((prev) => ({ ...prev, x: e.clientX, y: e.clientY }));
+  };
+
   return (
     <>
-      <CalendarTitle />
+      <ButtonCommon onClickBtn={showMeToast}>Button</ButtonCommon>
+      <Toast show={showToast} setShow={setShowToast} position={position}>
+        <ToastText>hello</ToastText>
+      </Toast>
       <CalendarProvider>
         <CarlendarHeader />
         <CalendarBody />
