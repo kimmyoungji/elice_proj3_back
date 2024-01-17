@@ -12,7 +12,8 @@ const MealDeatilPage = ({ meal, key, date, selectedMealNumber }: any) => {
       <MealImg
         meal={meal}
         className={style.imgBox}
-        props={{ date, selectedMealNumber }}
+        date={date}
+        selectedMealNumber={selectedMealNumber}
       />
       <div
         className={style.banner}
