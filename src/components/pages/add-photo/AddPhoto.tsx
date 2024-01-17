@@ -37,8 +37,6 @@ const AddPhoto = () => {
     const video = document.getElementById("videoCam");
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
-    context?.scale(-1, 1); // 좌우 반전
-    context?.translate(-1024, 0); // 좌우 반전
     context?.drawImage(video as CanvasImageSource, 0, 0, 390, 580);
     canvas?.toBlob((blob) => {
       let file = blob && new File([blob], "fileName.jpg", { type: "image/jpeg" });
