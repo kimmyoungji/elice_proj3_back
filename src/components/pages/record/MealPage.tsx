@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import style from './mealpage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
@@ -31,14 +31,31 @@ const MealPage = () => {
     4: '간식',
   };
 
+  const findMealNumber = (meal: string) => {
+    const mealNumber = Object.keys(mapSelectMealToMsg).find(
+      (key) => mapSelectMealToMsg[key] === meal
+    );
+    return mealNumber || 1;
+  };
+
   const mealMsg = mapSelectMealToMsg[selectedMealTime];
   const [selectedMeal, setSelectedMeal] = useState(mealMsg);
+  const [selectedMealNumber, setSelectedMealNumber] = useState(
+    findMealNumber(selectedMeal)
+  );
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const mealTypes = ['아침', '점심', '저녁', '간식'];
 
+  useEffect(() => {
+    if (selectedMealNumber) {
+      navigate(`/record/${date}/${selectedMealNumber}`);
+    }
+  }, [selectedMealNumber, date, navigate]);
+
   const handleMealSelect = (mealType: string) => {
     setSelectedMeal(mealType);
-    // 선택한 mealType로 api 요청해서 data 뿌려주기
+    const newMealNumber = findMealNumber(mealType);
+    setSelectedMealNumber(newMealNumber);
     setDropdownVisible(false);
   };
 
@@ -70,7 +87,9 @@ const MealPage = () => {
               variant='default-active'
               size='tiny'
               onClick={() =>
-                navigate(`/record/edit`, { state: { selectedMeal, date } })
+                navigate(`/record/${date}/${selectedMealTime}/edit`, {
+                  state: { selectedMealTime, date },
+                })
               }
             >
               <> 수정 </>
