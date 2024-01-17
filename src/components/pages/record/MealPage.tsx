@@ -105,7 +105,8 @@ const MealPage = () => {
         </div>
         <MealDeatilPage
           meal={selectedMeal}
-          props={{ date, selectedMealNumber }}
+          date={date}
+          selectedMealNumber={selectedMealNumber}
         />
       </div>
     </>
