@@ -5,7 +5,7 @@ CREATE TABLE "user" (
     "email" varchar(50) NOT NULL UNIQUE,
     "provider_id" varchar(50) UNIQUE,
     "password" varchar(200),
-    "display_name" varchar(50) NOT NULL UNIQUE,
+    "username" varchar(50) NOT NULL UNIQUE,
     "birth_day" date,
     "gender" gender,
     "profile_image" varchar(50),

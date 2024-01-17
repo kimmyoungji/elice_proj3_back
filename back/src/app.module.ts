@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import * as config from "config";
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from './conifg/database/typorm.config.mj';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from './user/user.module';
-import { createConnection } from 'typeorm';
-import * as dotenv from "dotenv";
+// import * as dotenv from "dotenv";
+// import * as config from "config";
 
 // dotenv.config({path: __dirname + '/../.env'});
 // const dbConfig = config.get("db");

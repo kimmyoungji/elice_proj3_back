@@ -16,12 +16,6 @@ async function bootstrap() {
   // app 생성
   const app = await NestFactory.create(AppModule);
   
-  // cors 설정
-  app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-  }));
-
   // 세션 설정
   app.use(
     session({
@@ -29,7 +23,7 @@ async function bootstrap() {
       saveUninitialized: false,
       resave: false,
       cookie: {
-        maxAge: 60 * 60 * 1000, // 1시간
+        maxAge: 60 * 60 * 1000, // 1시간 동안 세션이 유효하도록 설정
       },
       name: process.env.SESSION_COOKIE_NAME,
     }),
@@ -46,7 +40,7 @@ async function bootstrap() {
   app.use(cookieParser(process.env.SESSION_SECRET));
   
   // api 프리픽스 설정
-  app.setGlobalPrefix('api');
+  // app.setGlobalPrefix('api');
   
   // dto 유효성 검사 설정
   app.useGlobalPipes(new ValidationPipe({ 
@@ -57,6 +51,13 @@ async function bootstrap() {
       enableImplicitConversion: true, // string -> number, 암묵적 형변환 200 OK
     } 
   }));
+
+  // cors 설정
+  app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  }));
+
   
   // app 실행
   await app.listen(5001);

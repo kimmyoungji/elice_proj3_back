@@ -6,13 +6,8 @@ export class UserRepository{
     // Create
     public async saveUser(user: User, manager: EntityManager): Promise<InsertResult>{
         try{
-            const result =  await manager.createQueryBuilder(User, "user")
-                            .insert()
-                            .into(User,['userId','email','password','providerId','displayName'])
-                            .values(user)
-                            .execute(); 
-            console.log(result);
-            return result;
+            return await manager.createQueryBuilder(User, "user").insert()
+                                .into(User,['userId','email','password','providerId','username']).values(user).execute(); 
         }catch(err){
             throw err;
         }
@@ -20,24 +15,17 @@ export class UserRepository{
     }
 
     // Read
-    public async findUserAll(manager: EntityManager): Promise<User[]>{
-        return await manager.createQueryBuilder(User, "user")
-                            .select()
-                            .getMany();
-    }
-
     public async findUserByEmail(email: string, manager: EntityManager): Promise<User>{
-        return await manager.createQueryBuilder(User, "user")
-                            .where("email = :email", {email})
-                            .getOne();
+        try{
+            return await manager.createQueryBuilder(User, "user").where("email = :email", {email}).getOne();
+        }catch(err){
+            throw err;
+        }
     }
 
     public async findUserByUserId(userId: string, manager: EntityManager): Promise<User>{
         try{
-            return await manager.createQueryBuilder(User, "user")
-                                        .select()
-                                        .where("user_id = :userId", {userId})
-                                        .getOne();
+            return await manager.createQueryBuilder(User, "user").select().where("user_id = :userId",{userId}).getOne();
         }catch(err){
             throw err;
         }
@@ -45,20 +33,20 @@ export class UserRepository{
 
     // Update
     public async updateUserByEmail(email: string, user: User, manager: EntityManager): Promise<UpdateResult>{
-        return await manager.createQueryBuilder(User, "user")
-                            .update(User)
-                            .set(user)
-                            .where("email = :email", {email})
-                            .execute();
+        try{
+            return await manager.createQueryBuilder(User, "user").update(User).set(user).where("email = :email",{email}).execute();
+        }catch(err){
+            throw err;
+        }
     }
 
     // soft Delete
     public async softDeleteUserByUserId(userId: string, manager: EntityManager): Promise<UpdateResult>{       
-        const user = await manager.findOneBy(User, {userId});
-        return await manager.createQueryBuilder(User, "user")
-                            .softDelete()
-                            .where("id = :id", {userId})
-                            .execute();
+        try{
+            return await manager.createQueryBuilder(User, "user").softDelete().where("user_id = :userId",{userId}).execute();
+        }catch(err){
+            throw err;
+        }
     }
 
 }

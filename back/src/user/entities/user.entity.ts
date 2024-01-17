@@ -32,7 +32,7 @@ export class User {
   @Column({type:'varchar',length:50, nullable: false, unique: true})
   @IsString()
   @IsNotEmpty()
-  displayName: string;
+  username: string;
 
   @Column({type:'date', nullable: true})
   @IsDate()
@@ -76,15 +76,15 @@ export class User {
     user.userId = uuidv4();
     user.providerId = providerId;
     user.email = email;
-    user.displayName = displayName;
+    user.username = displayName;
     return user;
   }
 
   public mapLocalSignupDto(localSignupDto: LocalSignupDto):User {
-    const {email, password, displayName} = localSignupDto;
+    const {email, password, username} = localSignupDto;
     const user = new User();
     user.userId = uuidv4();
-    user.displayName = displayName;
+    user.username = username;
     user.email = email;
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
