@@ -9,6 +9,11 @@ import MealDeatilPage from './MealDetailPage';
 // ✅ 토글로 다른 meal을 선택하면 MealTime만 다시 받아와서 그려주기
 // ✅ meal data가 있으면 그려주고 없으면 default 그리기
 
+interface MealPageProps {
+  selectedMeal: string;
+  date: string;
+}
+
 const MealPage = () => {
   const params = useParams();
   const navigate = useNavigate();
@@ -64,7 +69,9 @@ const MealPage = () => {
             <ButtonCommon
               variant='default-active'
               size='tiny'
-              onClick={() => navigate(`/record/edit`)}
+              onClick={() =>
+                navigate(`/record/edit`, { state: { selectedMeal, date } })
+              }
             >
               <> 수정 </>
             </ButtonCommon>
