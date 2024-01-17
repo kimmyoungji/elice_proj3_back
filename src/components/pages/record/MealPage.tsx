@@ -4,6 +4,7 @@ import style from './mealpage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates from '@utils/getDates';
 import MealDeatilPage from './MealDetailPage';
+import { mealDetailData } from './mealDetailData';
 
 // ✅ MealPage : 날짜, 특정 meal로 MealPage를 그려주기
 // ✅ 토글로 다른 meal을 선택하면 MealTime만 다시 받아와서 그려주기
@@ -43,9 +44,12 @@ const MealPage = () => {
   const [selectedMealNumber, setSelectedMealNumber] = useState(
     findMealNumber(selectedMeal)
   );
+  const [data, setData] = useState(mealDetailData);
+  const [coordinate, setCoordinate] = useState(data[selectedMeal].food);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const mealTypes = ['아침', '점심', '저녁', '간식'];
 
+  console.log(coordinate);
   useEffect(() => {
     if (selectedMealNumber) {
       navigate(`/record/${date}/${selectedMealNumber}`);
@@ -88,7 +92,7 @@ const MealPage = () => {
               size='tiny'
               onClick={() =>
                 navigate(`/record/${date}/${selectedMealTime}/edit`, {
-                  state: { selectedMealTime, date },
+                  state: { data, coordinate },
                 })
               }
             >
@@ -99,7 +103,10 @@ const MealPage = () => {
             </ButtonCommon>
           </div>
         </div>
-        <MealDeatilPage meal={selectedMeal} />
+        <MealDeatilPage
+          meal={selectedMeal}
+          props={{ date, selectedMealNumber }}
+        />
       </div>
     </>
   );

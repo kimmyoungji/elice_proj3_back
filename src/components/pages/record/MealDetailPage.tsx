@@ -4,12 +4,16 @@ import MealTag from './MealTag';
 import NutritionAnalysis from './NutritionAnalysis';
 import style from './mealdetailpage.module.css';
 
-const MealDeatilPage = ({ meal, key }: any) => {
+const MealDeatilPage = ({ meal, key, date, selectedMealNumber }: any) => {
   const navigate = useNavigate();
 
   return (
     <>
-      <MealImg meal={meal} className={style.imgBox} />
+      <MealImg
+        meal={meal}
+        className={style.imgBox}
+        props={{ date, selectedMealNumber }}
+      />
       <div
         className={style.banner}
         onClick={() => {
