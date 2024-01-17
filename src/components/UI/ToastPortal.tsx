@@ -1,20 +1,9 @@
 import React, { ReactNode, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import classes from './toast.module.css';
 
 const ToastPortal = ({ children }: { children: ReactNode | ReactNode[] }) => {
-  // const portalRoot = document.getElementById('notice')!;
-  const portalRoot = document.body;
-
-  const toastContainer = React.useMemo(() => document.createElement('div'), []);
-
-  useEffect(() => {
-    portalRoot?.appendChild(toastContainer);
-
-    return () => {
-      toastContainer.remove();
-    };
-  }, []);
-  return createPortal(children, portalRoot);
+  return createPortal(children, document.getElementById('notice')!);
 };
 
 export default ToastPortal;

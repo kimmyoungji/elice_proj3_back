@@ -1,8 +1,12 @@
 import {
+  Children,
+  ReactElement,
   ReactNode,
   SetStateAction,
+  cloneElement,
   createContext,
   useContext,
+  useEffect,
   useState,
 } from 'react';
 import BackDrop from './BackDrop';
@@ -14,8 +18,11 @@ interface ToastContextType {
 }
 
 interface ToastPropsType {
-  children: ReactNode | ReactNode[] | string;
+  children: ReactElement | ReactElement[];
   time?: number;
+  show?: boolean;
+  setShow?: React.Dispatch<SetStateAction<boolean>>;
+  position?: { x: number; y: number };
 }
 
 const ToastContext = createContext<ToastContextType | null>(null);
@@ -39,22 +46,46 @@ export const ToastProvider = (props: ToastPropsType) => {
   );
 };
 
-const Toast = ({ children, time }: ToastPropsType) => {
-  const { show, setShow } = useToastContext();
+const Toast = ({
+  children,
+  time = 1000,
+  setShow,
+  show,
+  position,
+  ...props
+}: ToastPropsType) => {
   const onClickBackDrop = (e: React.MouseEvent) => {
     console.log(e);
-    setShow(false);
+    setShow?.(false);
   };
 
-  setTimeout(() => {
-    setShow(false);
-  }, time);
+  const positionStyle = position && {
+    position: 'absolute',
+    left: `${position.x + 20}px`,
+    top: `${position.y + 20}px`,
+  };
+
+  const positionedElement = Children.map(children, (ch) => {
+    return cloneElement(ch, {
+      ...props,
+      style: positionStyle,
+      show,
+    });
+  });
+  console.log(positionedElement);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShow?.(false);
+    }, time);
+  }, [show]);
 
   return (
     <>
       {show && (
         <ToastPortal>
-          <BackDrop onClick={onClickBackDrop}>{children}</BackDrop>
+          <BackDrop onClick={onClickBackDrop} />
+          {positionedElement}
         </ToastPortal>
       )}
     </>
