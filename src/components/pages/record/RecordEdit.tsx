@@ -56,8 +56,12 @@ const RecordEdit = () => {
   };
 
   const deletefood = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
-    const delete_target = e.currentTarget.id;
-    setFoods(foods.filter((food) => food.foodName !== delete_target));
+    if (foods.length > 1) {
+      const delete_target = e.currentTarget.id;
+      setFoods(foods.filter((food) => food.foodName !== delete_target));
+    } else {
+      alert("음식은 1개 이상 등록되어야 합니다!")
+    }
   };
 
   const scrollDiv = useRef<HTMLDivElement | null>(null);
