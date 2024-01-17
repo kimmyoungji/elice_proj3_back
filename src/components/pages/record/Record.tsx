@@ -54,7 +54,7 @@ const Record = () => {
           >
             <div className={style.meal_info}>
               {recordData[meal].totalCalories &&
-              recordData[meal].img !== null ? (
+                recordData[meal].img !== null ? (
                 <>
                   <img
                     className={style.meal_contentBackground}

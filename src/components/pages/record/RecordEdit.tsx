@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './recordedit.module.css';
 import RecordEditDetail from './RecordEditDetail';
 import { useEffect, useRef, useState } from 'react';
@@ -12,23 +12,25 @@ interface Food {
 
 const RecordEdit = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [foods, setFoods] = useState([
     {
-      foodName: '떡만둣국',
+      foodName: '적채',
       foodImage: '/images/salad-2756467_1280.jpg',
-      XYCoordinate: [35.67, 146.02],
+      XYCoordinate: [45, 200],
     },
     {
-      foodName: '흰쌀밥',
+      foodName: '버섯',
       foodImage: '/images/salad-2756467_1280.jpg',
-      XYCoordinate: [35.67, 146.02],
+      XYCoordinate: [250, 50],
     },
     {
-      foodName: '김치',
+      foodName: '청포도',
       foodImage: '/images/salad-2756467_1280.jpg',
-      XYCoordinate: [35.67, 146.02],
+      XYCoordinate: [1000, 146.02],
     },
   ]);
+
   const [focus, setFocus] = useState<string | undefined | null>('');
 
   const handleFocus = (
@@ -55,8 +57,12 @@ const RecordEdit = () => {
   };
 
   const deletefood = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
-    const delete_target = e.currentTarget.id;
-    setFoods(foods.filter((food) => food.foodName !== delete_target));
+    if (foods.length > 1) {
+      const delete_target = e.currentTarget.id;
+      setFoods(foods.filter((food) => food.foodName !== delete_target));
+    } else {
+      alert("음식은 1개 이상 등록되어야 합니다!")
+    }
   };
 
   const scrollDiv = useRef<HTMLDivElement | null>(null);
@@ -80,31 +86,24 @@ const RecordEdit = () => {
     main.style.overflow = 'scroll';
   }
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<null[] | HTMLCanvasElement[]>([]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
+  const createCanvas = (food:Food, index:number) => {
+    const canvas = canvasRef.current[index];
     const context = canvas?.getContext('2d');
 
     const image = new Image();
-    image.src = `${foods[foods.length - 1].foodImage}`;
+    image.src = food.foodImage;
 
     image.onload = () => {
-      // props (원본 객체, x좌표, y좌표, 이미지가로길이, 이미지세로길이, 캔버스 x좌표, 캔버스 y좌표, 캔버스에 그려질 가로길이, 캔버스에 그려질 세로길이)
-      context?.drawImage(image, 0, 0, image.width, image.height);
-
-      // props (추출 x좌표, 추출 y좌표, 추출 너비, 추출 높이)
-      const croppedImage = context?.getImageData(0, 0, 90, 90);
-
-      // 자른 이미지를 다시 Canvas에 그립니다.
-      context?.clearRect(
-        0,
-        0,
-        canvas?.width as number,
-        canvas?.height as number
-      );
-      context?.putImageData(croppedImage as ImageData, 0, 0);
+      context?.drawImage(image, food.XYCoordinate[0], food.XYCoordinate[1], 90, 90, 0, 0, 90, 90);
     };
+  }
+
+  useEffect(() => {
+    foods.map((food, index) => {
+      return createCanvas(food, index);
+    })
   }, [foods]);
 
   return (
@@ -160,7 +159,7 @@ const RecordEdit = () => {
                       focus === food.foodName && styles.focusimg
                     }`}
                     id={food.foodName}
-                    ref={canvasRef}
+                    ref={(element) => {canvasRef.current[index]= element}}
                     width={90}
                     height={90}
                     onClick={(e) => handleFocus(e)}
