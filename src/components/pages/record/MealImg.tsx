@@ -6,9 +6,16 @@ import PutImgTag from './PutImgTag';
 interface MealImgProps {
   meal: string;
   className: string;
+  date: any;
+  selectedMealNumber: any;
 }
 
-const MealImg = ({ meal, className }: MealImgProps) => {
+const MealImg = ({
+  meal,
+  className,
+  date,
+  selectedMealNumber,
+}: MealImgProps) => {
   const imgUrl = mealDetailData[meal].imgurl;
   const navigate = useNavigate();
 
@@ -24,7 +31,7 @@ const MealImg = ({ meal, className }: MealImgProps) => {
         ) : (
           <div
             onClick={() => {
-              navigate(`/add-photo`);
+              navigate(`/add-photo/${date}/${selectedMealNumber}`);
             }}
           >
             <div className={style.uploadButton}> + </div>
