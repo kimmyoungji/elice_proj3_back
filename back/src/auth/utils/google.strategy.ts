@@ -21,7 +21,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 // ❹ OAuth 인증이 끝나고 콜백으로 실행되는 메서드
   async validate(accessToken: string, refreshToken: string, profile: Profile) {
     
-    const user: User = await this.authService.findByEmailOrSave({
+    // 등록된 구글계정인지 확인, 없으면 등록
+    const user: User = await this.authService.validateGoogleOauthUser({
       providerId: profile.id,
       email: profile.emails[0].value,
       displayName: profile.displayName,

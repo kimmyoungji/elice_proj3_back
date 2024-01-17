@@ -34,16 +34,20 @@ async function bootstrap() {
       name: process.env.SESSION_COOKIE_NAME,
     }),
   );
+
   // passport 설정
   app.use(passport.initialize());
   app.use(passport.session());
 
   // swagger 설정
   setupSwagger(app);
+  
   //cookie 설정
   app.use(cookieParser(process.env.SESSION_SECRET));
+  
   // api 프리픽스 설정
   app.setGlobalPrefix('api');
+  
   // dto 유효성 검사 설정
   app.useGlobalPipes(new ValidationPipe({ 
     // whitelist: true, // dto에 없는 property는 거름, 200 OK
