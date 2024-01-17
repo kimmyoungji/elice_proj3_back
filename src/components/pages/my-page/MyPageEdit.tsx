@@ -41,14 +41,45 @@ const userData = {
   img: 'https://reclo.s3.ap-northeast-2.amazonaws.com/upload/itemImage/40962e2811b76d1ab5f661013f500061_%ED%9B%84%EB%93%9C.jpg',
 };
 
+const findKeyByValue = (
+  msg: { [key: string]: string },
+  value: string
+): string | undefined => {
+  for (let [key, val] of Object.entries(msg)) {
+    if (val === value) {
+      return key;
+    }
+  }
+};
+
+const mapGoaltoMsg: { [key: string]: string } = {
+  '1': '근육증량',
+  '2': '체중감량',
+  '3': '체중유지',
+  '4': '체중증량',
+};
+
+const mapActivitytoMsg: { [key: string]: string } = {
+  '1': '비활동적',
+  '2': '약간 활동적',
+  '3': '활동적',
+  '4': '매우 활동적',
+};
+
+const goalTypes = ['근육증량', '체중감량', '체중유지', '체중증량'];
+const activityType = ['비활동적', '약간 활동적', '활동적', '매우 활동적'];
+
 const MyPageEdit = () => {
   const [data, setData] = useState<UserData>(userData);
+
+  const age = calAge({ data });
+  const goalMsg = mapGoaltoMsg[data.goal.toString()];
+  const activityMsg = mapActivitytoMsg[data.activity.toString()];
+
   const [profileImage, setProfileImage] = useState<string | undefined>(
     userData.img
   );
   const [file, setFile] = useState<File | null>(null);
-  const navigate = useNavigate();
-  const age = calAge({ data });
   const [bmr, setBmr] = useState(calBMR({ data, age }));
   const [bmrCalories, setBmrCalories] = useState(calBMRCalories({ bmr, data }));
   const [goalCalories, setGoalCalories] = useState(
@@ -57,42 +88,13 @@ const MyPageEdit = () => {
   const [isEditingData, setIsEditingData] = useState(false);
   const [prevWeight, setPrevWeight] = useState(data.weight);
   const [prevHeight, setPrevHeight] = useState(data.weight);
-
-  const findKeyByValue = (
-    msg: { [key: string]: string },
-    value: string
-  ): string | undefined => {
-    for (let [key, val] of Object.entries(msg)) {
-      if (val === value) {
-        return key;
-      }
-    }
-  };
-
-  const mapGoaltoMsg: { [key: string]: string } = {
-    '1': '근육증량',
-    '2': '체중감량',
-    '3': '체중유지',
-    '4': '체중증량',
-  };
-
-  const mapActivitytoMsg: { [key: string]: string } = {
-    '1': '비활동적',
-    '2': '약간 활동적',
-    '3': '활동적',
-    '4': '매우 활동적',
-  };
-
-  const goalMsg = mapGoaltoMsg[data.goal.toString()];
-  const activityMsg = mapActivitytoMsg[data.activity.toString()];
-
   const [selectedGoal, setSelectedGoal] = useState(goalMsg);
   const [selectedActity, setSelectedActity] = useState(activityMsg);
   const [isActivityDropdownVisible, setActivityDropdownVisible] =
     useState(false);
   const [isGoalDropdownVisible, setGoalDropdownVisible] = useState(false);
-  const goalTypes = ['근육증량', '체중감량', '체중유지', '체중증량'];
-  const activityType = ['비활동적', '약간 활동적', '활동적', '매우 활동적'];
+
+  const navigate = useNavigate();
 
   const imgInputRef = useRef<HTMLInputElement>(null);
   const handleImageClick = () => {
