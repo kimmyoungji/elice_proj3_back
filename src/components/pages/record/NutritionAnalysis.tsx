@@ -33,7 +33,9 @@ const NutritionAnalysis = ({ meal, className }: NutritionAnalysisProps) => {
           <Bar key='goal-calories' width='100%' height='20px' fill='#edf3f9' />
           <Bar
             key='consumed-calories'
-            width={`${percentage}%`}
+            width='0%'
+            className={style.barAnimated}
+            style={{ '--fillWidth': `${percentage}%` }}
             height='20px'
             fill={barFill}
           />
