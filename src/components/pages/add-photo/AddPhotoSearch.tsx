@@ -4,10 +4,14 @@ import styles from './addphotosearch.module.css';
 import { useState } from 'react';
 import AddTag from './AddTag';
 import DeleteTag from './DeleteTag';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const AddPhotoSearch = () => {
   const navigate = useNavigate();
+  const params = useParams();
+  const date = params.date;
+  const mealTime = params.mealTime;
+
   const [searchInput, setSearchInput] = useState('');
   const [clicked, setClicked] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
@@ -18,7 +22,7 @@ const AddPhotoSearch = () => {
   };
 
   const addMeal = () => {
-    navigate('/record/:date/:mealTime/edit', { state: tags });
+    navigate(`/record/${date}/${mealTime}/edit`, { state: tags });
   }
 
   return (

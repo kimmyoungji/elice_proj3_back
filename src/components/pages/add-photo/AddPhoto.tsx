@@ -1,12 +1,16 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from './addphoto.module.css';
 import { useEffect, useRef } from 'react';
 
 const AddPhoto = () => {
+  const navigate = useNavigate();
+  const params = useParams();
+  const date = params.date;
+  const mealTime = params.mealTime;
+
   const selectFile = useRef<HTMLInputElement|null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     getWebcam((stream: MediaProvider) => {
@@ -71,7 +75,7 @@ const AddPhoto = () => {
         <button className={styles.shotbtn} onClick={screenShot}></button>
         <div
           className={styles.item}
-          onClick={() => navigate('/add-photo/:date/:mealTime/search')}
+          onClick={() => navigate(`/add-photo/${date}/${mealTime}/search`)}
         >
           <img className={styles.icon} src='/icons/self.png' alt='직접입력' />
           <div className={styles.text}>직접입력</div>

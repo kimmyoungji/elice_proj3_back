@@ -16,6 +16,7 @@ interface MealTime {
 
 const RecordEdit = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const params = useParams();
   const date = params.date;
@@ -46,7 +47,20 @@ const RecordEdit = () => {
       XYCoordinate: [1000, 146.02],
     },
   ]);
-  console.log(foods)
+
+  useEffect(() => {
+    if (state) {
+      let newFoods:Food[] = [];
+      state.map((tag:string) => (
+        newFoods.push({
+          foodName: tag,
+          foodImage: '/images/9gram_logo.png',
+          XYCoordinate: [0, 0],
+        })
+      ))
+      setFoods(newFoods);
+      }      
+  },[])
 
   const [focus, setFocus] = useState<string | undefined | null>('');
 
