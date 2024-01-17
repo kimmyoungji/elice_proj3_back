@@ -151,22 +151,6 @@ const MyPageEdit = () => {
     }
   };
 
-  // const handleGoalSelect = (goalType: string) => {
-  //   const newGoal = Number(findKeyByValue(mapGoaltoMsg, goalType));
-  //   const updatedData = { ...data, goal: newGoal };
-  //   updateDataAndCalories(updatedData);
-  //   setSelectedGoal(goalType);
-  //   setGoalDropdownVisible(false);
-  // };
-
-  // const handleActivitySelect = (activityType: string) => {
-  //   const newActivity = Number(findKeyByValue(mapActivitytoMsg, activityType));
-  //   const updatedData = { ...data, activity: newActivity };
-  //   updateDataAndCalories(updatedData);
-  //   setSelectedActity(activityType);
-  //   setActivityDropdownVisible(false);
-  // };
-
   const editHeightAndWeight = () => {
     setIsEditingData(!isEditingData);
     setPrevHeight(data.height);

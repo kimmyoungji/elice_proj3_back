@@ -14,7 +14,7 @@ const userData = {
   targetWeight: 80,
   targetCalories: 1200,
   activity: 4,
-  img: undefined,
+  img: 'https://reclo.s3.ap-northeast-2.amazonaws.com/upload/itemImage/40962e2811b76d1ab5f661013f500061_%ED%9B%84%EB%93%9C.jpg',
 };
 
 const MyPage = () => {
@@ -66,14 +66,15 @@ const MyPage = () => {
         </div>
         <div className={style.goaltInfo}>
           <div className={style.goalTitle}>목표 칼로리</div>
-          <div className={style.goalDetail}>{userData.height}kg</div>
+          <div className={style.goalDetail}>{userData.targetCalories}kcal</div>
         </div>
       </div>
 
       <div className={style.infoArea}>
         <div className={style.infoTitle}>현재 몸상태</div>
         <div className={style.infoContent}>
-          {userData.height}cm / {userData.weight}kg
+          {userData.height} cm <span style={{ color: 'black' }}> / </span>{' '}
+          {userData.weight} kg
         </div>
       </div>
 
