@@ -19,13 +19,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      < div className='title' >
-        <div className='title-text'>
-          <p className="b-regular">로그인</p>
-        </div>
-        <div className='title-line'>
-        </div>
-      </div>
+
       < div className='body' >
         <p className="r-large">이메일</p>
       </div>
@@ -52,7 +46,8 @@ const Login = () => {
           <p className="r-medium">비밀번호를 잊으셨나요?</p>
         </div>
         <ButtonCommon
-          className='button big b-small blue'
+          customClassName="blue"
+          size="big"
           onClickBtn={() => navigate(`/home`)}
         >
           로그인

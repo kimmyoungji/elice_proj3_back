@@ -16,7 +16,8 @@ const Onboarding_gender = () => {
       <h1 className="b-medium">당신의 성별은 무엇인가요?</h1>
       <div style={{ marginTop: '30px' }}>
         <ButtonCommon
-          className={`button large r-large ${selectedGender === 'female' ? 'default-active' : 'gray'}`}
+          customClassName={`white ${selectedGender === 'female' ? 'default-active' : 'gray'}`}
+          size="large"
           onClickBtn={() => onClick('female')}
         >
           여성
@@ -24,7 +25,8 @@ const Onboarding_gender = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          className={`button large r-large ${selectedGender === 'male' ? 'default-active' : 'gray'}`}
+          customClassName={`white ${selectedGender === 'male' ? 'default-active' : 'gray'}`}
+          size="large"
           onClickBtn={() => onClick('male')}
         >
           남성
@@ -32,7 +34,8 @@ const Onboarding_gender = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          className={`button large r-large ${selectedGender === 'other' ? 'default-active' : 'gray'}`}
+          customClassName={`white ${selectedGender === 'other' ? 'default-active' : 'gray'}`}
+          size="large"
           onClickBtn={() => onClick('other')}
         >
           기타

@@ -23,7 +23,8 @@ const Auth = () => {
         <p className="s-superlarge">AI 영양사</p>
         <div style={{ marginTop: '60px' }}>
           <ButtonCommon
-            className='button big b-small blue'
+            customClassName="blue"
+            size="big"
             onClickBtn={() => navigate(`/login`)}
           >
             로그인
@@ -31,10 +32,20 @@ const Auth = () => {
         </div>
         <div style={{ marginTop: '10px' }}>
           <ButtonCommon
-            className='button big b-small white'
+            customClassName="white"
+            size="big"
             onClickBtn={() => navigate(`/join`)}
           >
             회원가입
+          </ButtonCommon>
+        </div>
+        <div style={{ marginTop: '10px' }}>
+          <ButtonCommon
+            customClassName="lightblue"
+            size="big"
+            onClickBtn={() => navigate(`/join`)}
+          >
+            Google로 계속하기
           </ButtonCommon>
         </div>
       </div >

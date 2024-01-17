@@ -16,7 +16,8 @@ const Onboarding_activity = () => {
       <h1 className="b-medium">당신의 평소 활동량은 어떤가요?</h1>
       <div style={{ marginTop: '30px' }}>
         <ButtonCommon
-          className={`button large r-large ${selectedActivity === 'activeHigh' ? 'default-active' : 'gray'}`}
+          customClassName={`white ${selectedActivity === 'activeHigh' ? 'default-active' : 'gray'}`}
+          size="large"
           onClickBtn={() => onClick('activeHigh')}
         >
           매우 활동적
@@ -24,7 +25,8 @@ const Onboarding_activity = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          className={`button large r-large ${selectedActivity === 'activeMid' ? 'default-active' : 'gray'}`}
+          customClassName={`white ${selectedActivity === 'activeMid' ? 'default-active' : 'gray'}`}
+          size="large"
           onClickBtn={() => onClick('activeMid')}
         >
           활동적
@@ -32,7 +34,8 @@ const Onboarding_activity = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          className={`button large r-large ${selectedActivity === 'activeLow' ? 'default-active' : 'gray'}`}
+          customClassName={`white ${selectedActivity === 'activeLow' ? 'default-active' : 'gray'}`}
+          size="large"
           onClickBtn={() => onClick('activeLow')}
         >
           저활동적
@@ -40,7 +43,8 @@ const Onboarding_activity = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          className={`button large r-large ${selectedActivity === 'activeNone' ? 'default-active' : 'gray'}`}
+          customClassName={`white ${selectedActivity === 'activeNone' ? 'default-active' : 'gray'}`}
+          size="large"
           onClickBtn={() => onClick('activeNone')}
         >
           비활동적

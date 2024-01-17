@@ -29,13 +29,6 @@ const Join = () => {
 
   return (
     <div className="join-container">
-      < div className='title' >
-        <div className='title-text'>
-          <p className="b-regular">회원 정보 입력</p>
-        </div>
-        <div className='title-line'>
-        </div>
-      </div>
       < div className='body' >
         <p className="r-large">이름</p>
       </div>
@@ -76,8 +69,9 @@ const Join = () => {
       </div>
       <div className='button-container'>
         <ButtonCommon
-          className='button big b-small blue'
-          onClickBtn={() => navigate(`/onboarding`)}
+          customClassName="blue"
+          size="big"
+          onClickBtn={() => navigate(`/onboarding/1`)}
         >
           가입하기
         </ButtonCommon>

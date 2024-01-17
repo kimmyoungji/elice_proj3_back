@@ -47,7 +47,7 @@ function App() {
               <Route path='/' element={<Navigate to='/home' />} />
               <Route path='/login' element={<Login />} />
               <Route path='/auth' element={<Auth />} />
-              <Route path='/onboarding' element={<Onboarding />} />
+              <Route path="/onboarding/:step" element={<Onboarding />} />
               <Route path='/join' element={<Join />} />
               {/* <Route path='/join/onboarding' element={<JoinOnboard />} /> */}
               <Route path='/home' element={<Home />} />

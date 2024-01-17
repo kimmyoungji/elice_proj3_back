@@ -30,8 +30,15 @@ const NumericPad: React.FC<NumericPadProps> = ({ inputRef }) => {
             cursor: 'pointer',
             fontSize: '18px',
             textAlign: 'center',
+            transition: 'color 0.3s',
           }}
           onClick={() => handleNumericClick(button)}
+          onMouseOver={(e) => {
+            e.currentTarget.style.color = '#346DFF';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.color = '';
+          }}
         >
           {button}
         </div>
