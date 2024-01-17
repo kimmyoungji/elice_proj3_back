@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '@components/pages/record/nutritiongraph.module.css';
 import getNutritionStandard from '@utils/getNutritionStandard';
-import { mealDetailData, MealDetailData } from './mealDetailData';
+import { mealDetailData } from './mealDetailData';
 
 interface NutritionGraphProps {
   meal: string;

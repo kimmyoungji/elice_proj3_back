@@ -5,14 +5,12 @@ const getImgPreview = (
 ) => {
   setFile(imgFile);
 
-  if (imgFile) {
-    const reader = new FileReader();
+  const reader = new FileReader();
 
-    reader.onload = (event) => {
-      setProfileImage(event.target?.result as string);
-    };
-    reader.readAsDataURL(imgFile);
-  }
+  reader.onload = (event) => {
+    setProfileImage(event.target?.result as string);
+  };
+  reader.readAsDataURL(imgFile);
 };
 
 export default getImgPreview;

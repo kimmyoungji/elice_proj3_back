@@ -94,9 +94,9 @@ const MyPageEdit = () => {
   const goalTypes = ['근육증량', '체중감량', '체중유지', '체중증량'];
   const activityType = ['비활동적', '약간 활동적', '활동적', '매우 활동적'];
 
-  const imgInputRef = useRef(null);
+  const imgInputRef = useRef<HTMLInputElement>(null);
   const handleImageClick = () => {
-    imgInputRef.current.click();
+    imgInputRef.current?.click();
   };
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,6 +161,7 @@ const MyPageEdit = () => {
     try {
       const updatedData = {
         ...data,
+        img: profileImage,
         height: Number(prevHeight),
         weight: Number(prevWeight),
       };
@@ -192,11 +193,11 @@ const MyPageEdit = () => {
             ref={imgInputRef}
             onChange={handleImageSelect}
           />
-          {data.img ? (
+          {profileImage ? (
             <>
               <img
                 className={style.userProfile}
-                src={data.img}
+                src={profileImage}
                 alt='사용자 프로필'
                 onClick={handleImageClick}
               />

@@ -15,10 +15,9 @@ const MealPage = () => {
   const { thisYear, thisMonth, thisDay } = getDates();
   const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
   const date = params.date || todayDate;
-  const selectedMealTime = params.mealTime; // 받아온 아점저간
+  const selectedMealTime = params.mealTime || 1; // 받아온 아점저간
   const dateSplit = date.split('-');
   const formatDate = `${dateSplit[0]}년 ${dateSplit[1]}월 ${dateSplit[2]}일`;
-  let stringfyMeal;
 
   const mapSelectMealToMsg: { [key: string]: string } = {
     1: '아침',
@@ -27,19 +26,8 @@ const MealPage = () => {
     4: '간식',
   };
 
-  const reverseMap = (map: { [key: string]: string }) => {
-    const reversedMap: { [key: string]: string } = {};
-    for (const key in map) {
-      reversedMap[map[key]] = key;
-    }
-    return reversedMap;
-  };
-
   const mealMsg = mapSelectMealToMsg[selectedMealTime];
-  const reversedMapSelectMealToMsg = reverseMap(mapSelectMealToMsg);
-
   const [selectedMeal, setSelectedMeal] = useState(mealMsg);
-  const [mealKey, setMealKey] = useState(reversedMapSelectMealToMsg[mealMsg]);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const mealTypes = ['아침', '점심', '저녁', '간식'];
 
@@ -47,8 +35,6 @@ const MealPage = () => {
     setSelectedMeal(mealType);
     // 선택한 mealType로 api 요청해서 data 뿌려주기
     setDropdownVisible(false);
-    // const newMealKey = reversedMapSelectMealToMsg[mealType];
-    // navigate(`/record/${date}/${newMealKey}`);
   };
 
   return (
