@@ -12,11 +12,11 @@ const Onboarding_activity = () => {
   };
 
   return (
-    <div>
+    <div className="onboarding-container">
       <h1 className="b-medium">당신의 평소 활동량은 어떤가요?</h1>
       <div style={{ marginTop: '30px' }}>
         <ButtonCommon
-          customClassName={`white ${selectedActivity === 'activeHigh' ? 'default-active' : 'gray'}`}
+          variant={selectedActivity === 'activeHigh' ? 'active' : 'default'}
           size="large"
           onClickBtn={() => onClick('activeHigh')}
         >
@@ -25,7 +25,7 @@ const Onboarding_activity = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          customClassName={`white ${selectedActivity === 'activeMid' ? 'default-active' : 'gray'}`}
+          variant={selectedActivity === 'activeMid' ? 'active' : 'default'}
           size="large"
           onClickBtn={() => onClick('activeMid')}
         >
@@ -34,7 +34,7 @@ const Onboarding_activity = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          customClassName={`white ${selectedActivity === 'activeLow' ? 'default-active' : 'gray'}`}
+          variant={selectedActivity === 'activeLow' ? 'active' : 'default'}
           size="large"
           onClickBtn={() => onClick('activeLow')}
         >
@@ -43,7 +43,7 @@ const Onboarding_activity = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          customClassName={`white ${selectedActivity === 'activeNone' ? 'default-active' : 'gray'}`}
+          variant={selectedActivity === 'activeNone' ? 'active' : 'default'}
           size="large"
           onClickBtn={() => onClick('activeNone')}
         >

@@ -46,7 +46,7 @@ const Login = () => {
           <p className="r-medium">비밀번호를 잊으셨나요?</p>
         </div>
         <ButtonCommon
-          customClassName="blue"
+          variant="default-active"
           size="big"
           onClickBtn={() => navigate(`/home`)}
         >

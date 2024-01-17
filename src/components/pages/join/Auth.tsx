@@ -23,7 +23,7 @@ const Auth = () => {
         <p className="s-superlarge">AI 영양사</p>
         <div style={{ marginTop: '60px' }}>
           <ButtonCommon
-            customClassName="blue"
+            variant="default-active"
             size="big"
             onClickBtn={() => navigate(`/login`)}
           >

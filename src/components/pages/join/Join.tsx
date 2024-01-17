@@ -8,8 +8,9 @@ const Join = () => {
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [verified, setVerified] = useState('');
+  const [verifiedemail, setVerifiedemail] = useState('');
   const [password, setPassword] = useState('');
+  const [verifiedpassword, setVerifiedpassword] = useState('');
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -19,12 +20,16 @@ const Join = () => {
     setEmail(e.target.value);
   };
 
-  const handleVerifiedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVerified(e.target.value);
+  const handleVerifiedemailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVerifiedemail(e.target.value);
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+  };
+
+  const handleVerifiedpasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVerifiedpassword(e.target.value);
   };
 
   return (
@@ -34,7 +39,7 @@ const Join = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <InputCommon
-          className={`button large r-large gray`}
+          variant="default"
           value={name}
           onChange={handleNameChange}
         />
@@ -44,16 +49,16 @@ const Join = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <InputCommon
-          className={`button large r-large gray`}
+          variant="default"
           value={email}
           onChange={handleEmailChange}
         />
       </div>
       <div style={{ marginTop: '15px' }}>
         <InputCommon
-          className={`button large r-large gray`}
-          value={verified}
-          onChange={handleVerifiedChange}
+          variant="default"
+          value={verifiedemail}
+          onChange={handleVerifiedemailChange}
         />
       </div>
       < div className='body' >
@@ -61,15 +66,26 @@ const Join = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <InputCommon
-          className={`button large r-large gray`}
+          variant="default"
           type="password"
           value={password}
           onChange={handlePasswordChange}
         />
       </div>
+      < div className='body' >
+        <p className="r-large">비밀번호 확인</p>
+      </div>
+      <div style={{ marginTop: '15px' }}>
+        <InputCommon
+          variant="default"
+          type="password"
+          value={verifiedpassword}
+          onChange={handleVerifiedpasswordChange}
+        />
+      </div>
       <div className='button-container'>
         <ButtonCommon
-          customClassName="blue"
+          variant="default-active"
           size="big"
           onClickBtn={() => navigate(`/onboarding/1`)}
         >

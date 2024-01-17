@@ -12,11 +12,11 @@ const Onboarding_goal = () => {
   };
 
   return (
-    <div>
+    <div className="onboarding-container">
       <h1 className="b-medium">당신의 목표는 무엇인가요?</h1>
       <div style={{ marginTop: '30px' }}>
         <ButtonCommon
-          customClassName={`white ${selectedGoal === 'looseWeight' ? 'default-active' : 'gray'}`}
+          variant={selectedGoal === 'looseWeight' ? 'active' : 'default'}
           size="large"
           onClickBtn={() => onClick('looseWeight')}
         >
@@ -25,7 +25,7 @@ const Onboarding_goal = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          customClassName={`white ${selectedGoal === 'maintainWeight' ? 'default-active' : 'gray'}`}
+          variant={selectedGoal === 'maintainWeight' ? 'active' : 'default'}
           size="large"
           onClickBtn={() => onClick('maintainWeight')}
         >
@@ -34,7 +34,7 @@ const Onboarding_goal = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          customClassName={`white ${selectedGoal === 'gainWeight' ? 'default-active' : 'gray'}`}
+          variant={selectedGoal === 'gainWeight' ? 'active' : 'default'}
           size="large"
           onClickBtn={() => onClick('gainWeight')}
         >
@@ -43,7 +43,7 @@ const Onboarding_goal = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          customClassName={`white ${selectedGoal === 'gainMuscle' ? 'default-active' : 'gray'}`}
+          variant={selectedGoal === 'gainMuscle' ? 'active' : 'default'}
           size="large"
           onClickBtn={() => onClick('gainMuscle')}
         >

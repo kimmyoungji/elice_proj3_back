@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import ButtonCommon from "../../UI/ButtonCommon";
+import React, { useState } from "react";
+import ButtonCommon from '@components/UI/ButtonCommon';
 import './Onboarding.css';
 
 const Onboarding_gender = () => {
@@ -12,11 +12,11 @@ const Onboarding_gender = () => {
   };
 
   return (
-    <div>
+    <div className="onboarding-container">
       <h1 className="b-medium">당신의 성별은 무엇인가요?</h1>
       <div style={{ marginTop: '30px' }}>
         <ButtonCommon
-          customClassName={`white ${selectedGender === 'female' ? 'default-active' : 'gray'}`}
+          variant={selectedGender === 'female' ? 'active' : 'default'}
           size="large"
           onClickBtn={() => onClick('female')}
         >
@@ -25,7 +25,7 @@ const Onboarding_gender = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          customClassName={`white ${selectedGender === 'male' ? 'default-active' : 'gray'}`}
+          variant={selectedGender === 'male' ? 'active' : 'default'}
           size="large"
           onClickBtn={() => onClick('male')}
         >
@@ -34,7 +34,7 @@ const Onboarding_gender = () => {
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          customClassName={`white ${selectedGender === 'other' ? 'default-active' : 'gray'}`}
+          variant={selectedGender === 'other' ? 'active' : 'default'}
           size="large"
           onClickBtn={() => onClick('other')}
         >

@@ -24,7 +24,7 @@ const Onboarding_birth = () => {
             <h1 className="b-medium">생년월일을 입력해주세요</h1>
             <div style={{ marginTop: '30px' }}>
                 <InputCommon
-                    className={`button large r-large gray`}
+                    variant="default"
                     value={year}
                     placeholder='년'
                     onChange={handleYearChange}
@@ -32,7 +32,7 @@ const Onboarding_birth = () => {
             </div>
             <div style={{ marginTop: '15px' }}>
                 <InputCommon
-                    className={`button r-large gray`}
+                    variant="default"
                     value={month}
                     placeholder='월'
                     onChange={handleMonthChange}
@@ -40,7 +40,7 @@ const Onboarding_birth = () => {
             </div>
             <div style={{ marginTop: '15px' }}>
                 <InputCommon
-                    className={`button large r-large gray`}
+                    variant="default"
                     value={date}
                     placeholder='일'
                     onChange={handleDateChange}

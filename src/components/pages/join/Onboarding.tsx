@@ -64,7 +64,7 @@ const Onboarding = () => {
       </div>
       <div className='button-container'>
         <ButtonCommon
-          customClassName="blue"
+          variant="default-active"
           size="big"
           onClickBtn={onNextClick}
         >

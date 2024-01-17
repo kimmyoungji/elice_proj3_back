@@ -4,11 +4,10 @@
   border-radius: 7px;
   border: none;
   flex-shrink: 0;
-}
-
-.button:hover {
-  border: 1px solid var(--main-skyblue);
-  color: var(--main-blue);
+  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* BUTTON CLASS */
@@ -40,7 +39,8 @@
   background-color: var(--main-lightblue);
 }
 
-.disabled-false {}
+.disabled-false {
+}
 
 /* BUTTON SIZE CLASS */
 
@@ -114,18 +114,6 @@
 .lightblue {
   color: #000;
   background-color: var(--main-lightblue);
-}
-
-.blue {
-  background-color: #346DFF;
-  border: 1px solid var(--main-blue);
-  color: #fff;
-}
-
-.gray {
-  background-color: #fff;
-  border: 1px solid var(--main-lightblue);
-  color: #3C3C3C;
 }
 
 /* FONT CLASSES */
