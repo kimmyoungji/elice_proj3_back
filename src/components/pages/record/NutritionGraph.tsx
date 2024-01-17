@@ -50,6 +50,15 @@ const userData: UserData = {
 const NutritionGraph = ({ meal }: NutritionGraphProps) => {
   const [data, setData] = useState(userData);
   const [mealData, setMealData] = useState(mealDetailData);
+  const [animationTrigger, setAnimationTrigger] = useState(false);
+
+  useEffect(() => {
+    setAnimationTrigger(false);
+    setTimeout(() => {
+      setAnimationTrigger(true);
+    }, 100);
+  }, [meal]);
+
   const result = getNutritionStandard(data);
   const radius = 22;
   const circumference = 2 * Math.PI * radius;
@@ -114,7 +123,7 @@ const NutritionGraph = ({ meal }: NutritionGraphProps) => {
                 />
                 <circle
                   key={idx}
-                  className={`${nutrient.nutrientRatio <= 1 ? styles.bar : styles.overbar} ${styles.animatedBar}`}
+                  className={`${nutrient.nutrientRatio <= 1 ? styles.bar : styles.overbar} ${animationTrigger ? styles.animatedBar : ''}`}
                   cx='24'
                   cy='24'
                   r='22'

@@ -49,6 +49,19 @@
   }
 }
 
+@keyframes fillBarAnimation {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--fillWidth);
+  }
+}
+
 .barAnimated {
-  animation: fillBar 2s ease-out forwards;
+  animation: fillBar 1s ease-out forwards;
+}
+
+.startAnimation {
+  animation: fillBarAnimation 1s ease-out forwards;
 }
