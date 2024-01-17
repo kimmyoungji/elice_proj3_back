@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './recordedit.module.css';
 import RecordEditDetail from './RecordEditDetail';
 import { useEffect, useRef, useState } from 'react';
@@ -12,6 +12,7 @@ interface Food {
 
 const RecordEdit = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [foods, setFoods] = useState([
     {
       foodName: '적채',

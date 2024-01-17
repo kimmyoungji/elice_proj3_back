@@ -4,7 +4,7 @@ import MealTag from './MealTag';
 import NutritionAnalysis from './NutritionAnalysis';
 import style from './mealdetailpage.module.css';
 
-const MealDeatilPage = ({ meal }: any) => {
+const MealDeatilPage = ({ meal, key }: any) => {
   const navigate = useNavigate();
 
   return (

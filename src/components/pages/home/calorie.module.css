@@ -35,13 +35,17 @@
 .calorie_wrapper {
   display: flex;
   justify-content: center;
+  align-items: flex-end;
+  gap: 5px;
   position: absolute;
   width: 300px;
-  top: 115px;
+  top: 105px;
 }
 
 .calorie_num {
+  line-height: 1;
 }
 
 .calorie_standard {
+  line-height: 1.4;
 }

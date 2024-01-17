@@ -71,7 +71,7 @@ const AddPhoto = () => {
         <button className={styles.shotbtn} onClick={screenShot}></button>
         <div
           className={styles.item}
-          onClick={() => navigate('/add-photo/search')}
+          onClick={() => navigate('/add-photo/:date/:mealTime/search')}
         >
           <img className={styles.icon} src='/icons/self.png' alt='직접입력' />
           <div className={styles.text}>직접입력</div>

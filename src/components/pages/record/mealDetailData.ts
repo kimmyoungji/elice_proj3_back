@@ -9,13 +9,13 @@ export interface MealDetailData {
     totalNutrient: {
       carbohydrates: number;
       proteins: number;
-      fat: number;
+      fats: number;
       dietaryFiber: number;
     };
     recommendNutrient: {
       carbohydrates: number;
       proteins: number;
-      fat: number;
+      fats: number;
       dietaryFiber: number;
     };
     imgurl: string | undefined;
@@ -46,13 +46,13 @@ const mealDetailData: MealDetailData = {
     totalNutrient: {
       carbohydrates: 240,
       proteins: 80,
-      fat: 25,
+      fats: 25,
       dietaryFiber: 2,
     },
     recommendNutrient: {
       carbohydrates: 200,
       proteins: 80,
-      fat: 50,
+      fats: 50,
       dietaryFiber: 4,
     },
     imgurl: '/images/record_example.png',
@@ -85,13 +85,13 @@ const mealDetailData: MealDetailData = {
     totalNutrient: {
       carbohydrates: 240,
       proteins: 80,
-      fat: 25,
+      fats: 25,
       dietaryFiber: 2,
     },
     recommendNutrient: {
       carbohydrates: 200,
       proteins: 80,
-      fat: 50,
+      fats: 50,
       dietaryFiber: 4,
     },
     imgurl: undefined,
@@ -161,13 +161,13 @@ const mealDetailData: MealDetailData = {
     totalNutrient: {
       carbohydrates: 240,
       proteins: 80,
-      fat: 25,
-      dietaryFiber: 2,
+      fats: 25,
+      dietaryFiber: 39,
     },
     recommendNutrient: {
       carbohydrates: 200,
       proteins: 80,
-      fat: 50,
+      fats: 50,
       dietaryFiber: 4,
     },
     imgurl: '/images/record_example.png',
@@ -176,11 +176,11 @@ const mealDetailData: MealDetailData = {
   간식: {
     food: [],
     totalCalories: 0,
-    totalNutrient: { carbohydrates: 0, proteins: 0, fat: 0, dietaryFiber: 0 },
+    totalNutrient: { carbohydrates: 0, proteins: 0, fats: 0, dietaryFiber: 0 },
     recommendNutrient: {
       carbohydrates: 200,
       proteins: 80,
-      fat: 50,
+      fats: 50,
       dietaryFiber: 4,
     },
     imgurl: undefined,

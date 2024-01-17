@@ -39,3 +39,29 @@
   font-weight: 700;
   line-height: normal;
 }
+
+@keyframes fillBar {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--fillWidth);
+  }
+}
+
+@keyframes fillBarAnimation {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--fillWidth);
+  }
+}
+
+.barAnimated {
+  animation: fillBar 1s ease-out forwards;
+}
+
+.startAnimation {
+  animation: fillBarAnimation 1s ease-out forwards;
+}

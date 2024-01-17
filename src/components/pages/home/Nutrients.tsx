@@ -1,29 +1,41 @@
-import { useEffect, useRef, useState } from 'react';
 import styles from '@components/pages/home/nutrients.module.css';
 
-const nutrients = [
-  { title: '탄수화물', value: 240 },
-  { title: '단백질', value: 20 },
-  { title: '지방', value: 23 },
-  { title: '식이섬유', value: 0 },
-];
-const standard = [200, 80, 50, 4];
+interface Nutrient {
+  carbohydrates: number;
+  proteins: number;
+  fat: number;
+  dietaryFiber: number;
+  [key: string]: number;
+}
 
-const Nutrients = () => {
+interface Props {
+  totalNutrient: Nutrient;
+  recommendNutrient: Nutrient;
+}
+
+const keyToKorean: Record<string, string> = {
+  carbohydrates: '탄수화물',
+  proteins: '단백질',
+  fat: '지방',
+  dietaryFiber: '식이섬유',
+};
+
+const Nutrients = ({ totalNutrient, recommendNutrient }: Props) => {
   const radius = 22;
   const circumference = 2 * Math.PI * radius;
 
   return (
     <div className={styles.nutrients}>
-      {nutrients.map((nutrient, idx) => (
-        <div className={styles.nutrient}>
-          <p>{nutrient.title}</p>
+      {Object.keys(totalNutrient).map((idx) => (
+        <div key={`nutrient-${idx}`} className={styles.nutrient}>
+          <p className='b-small'>{keyToKorean[idx]}</p>
           <div className={styles.progress_wrapper}>
             <svg
               className={styles.progress}
               width='48'
               height='48'
               viewBox='0 0 48 48'
+              overflow='visible'
             >
               <circle
                 className={styles.frame}
@@ -31,12 +43,12 @@ const Nutrients = () => {
                 cy='24'
                 r='22'
                 strokeWidth='3'
-                strokeDashoffset='1'
+                strokeDashoffset='0'
                 strokeDasharray={circumference}
               />
               <circle
                 className={
-                  nutrient.value / standard[idx] <= 1
+                  totalNutrient[idx] / recommendNutrient[idx] <= 1
                     ? styles.bar
                     : styles.overbar
                 }
@@ -45,19 +57,26 @@ const Nutrients = () => {
                 r='22'
                 strokeWidth='3'
                 strokeDashoffset={
-                  nutrient.value / standard[idx] < 1
-                    ? circumference * (1 - nutrient.value / standard[idx])
+                  totalNutrient[idx] / recommendNutrient[idx] < 1
+                    ? circumference *
+                      (1 - totalNutrient[idx] / recommendNutrient[idx])
                     : 0
                 }
                 strokeDasharray={circumference}
               />
             </svg>
-            <p className={styles.percent}>
-              {Math.floor((nutrient.value / standard[idx]) * 100)}%
+            <p
+              className={
+                totalNutrient[idx] / recommendNutrient[idx] <= 1
+                  ? `${styles.percent} b-tiny`
+                  : `${styles.overpercent} b-tiny`
+              }
+            >
+              {Math.floor((totalNutrient[idx] / recommendNutrient[idx]) * 100)}%
             </p>
           </div>
-          <p className={styles.gram}>
-            {nutrient.value}/{standard[idx]}g
+          <p className={`${styles.gram} r-regular`}>
+            {totalNutrient[idx]}/{recommendNutrient[idx]}g
           </p>
         </div>
       ))}

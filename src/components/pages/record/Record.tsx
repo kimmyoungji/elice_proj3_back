@@ -44,8 +44,6 @@ const Record = () => {
 
   return (
     <div>
-      {/* <TopBar home={true} title='하루식단' back={true} qIcon={false} icon={false} /> */}
-      <div className={style.header}>하루식단</div>
       <div className={style.meal_container}>
         <div className={style.meal_header}> {headerDate} </div>
         {mealTimeKeys.map((meal, index) => (
@@ -56,7 +54,7 @@ const Record = () => {
           >
             <div className={style.meal_info}>
               {recordData[meal].totalCalories &&
-              recordData[meal].img !== null ? (
+                recordData[meal].img !== null ? (
                 <>
                   <img
                     className={style.meal_contentBackground}

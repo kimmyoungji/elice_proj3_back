@@ -15,18 +15,19 @@ const MealPage = () => {
   const { thisYear, thisMonth, thisDay } = getDates();
   const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
   const date = params.date || todayDate;
-  const selectedMealTime = params.mealTime; // 받아온 아점저간
+  const selectedMealTime = params.mealTime || 1; // 받아온 아점저간
   const dateSplit = date.split('-');
   const formatDate = `${dateSplit[0]}년 ${dateSplit[1]}월 ${dateSplit[2]}일`;
-  let stringfyMeal;
 
-  if (selectedMealTime === '1') stringfyMeal = '아침';
-  else if (selectedMealTime === '2') stringfyMeal = '점심';
-  else if (selectedMealTime === '3') stringfyMeal = '저녁';
-  else if (selectedMealTime === '4') stringfyMeal = '간식';
-  else stringfyMeal = '아침';
+  const mapSelectMealToMsg: { [key: string]: string } = {
+    1: '아침',
+    2: '점심',
+    3: '저녁',
+    4: '간식',
+  };
 
-  const [selectedMeal, setSelectedMeal] = useState(stringfyMeal);
+  const mealMsg = mapSelectMealToMsg[selectedMealTime];
+  const [selectedMeal, setSelectedMeal] = useState(mealMsg);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const mealTypes = ['아침', '점심', '저녁', '간식'];
 
@@ -38,15 +39,6 @@ const MealPage = () => {
 
   return (
     <>
-      <div className={style.header}>
-        <img
-          className={style.arrow}
-          src='/icons/left_arrow.png'
-          alt='뒤로가기'
-          onClick={() => navigate(-1)}
-        />
-        <div>AI 식단기록</div>
-      </div>
       <div className={style.container}>
         <div className={style.pageTitle}>
           <div>{formatDate}</div>
