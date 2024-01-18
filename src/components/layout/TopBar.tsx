@@ -4,11 +4,15 @@ import Qicon from '@assets/Qicon';
 import Toast from '@components/UI/Toast';
 import ToastText from '@components/UI/ToastText';
 import styles from '@components/layout/layout.module.css';
+import { getKeyFromUrl } from '@utils/getNavProps';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { TopBarPropsType } from 'typings/propTypes';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { TopBarPropsType, TopNavKeyType } from 'typings/propTypes';
 
 const TopBar = ({ home, title, back, qIcon, icon }: TopBarPropsType) => {
+  const location = useLocation();
+  const nowLocation = location.pathname.slice(1);
+  const key: TopNavKeyType | string = getKeyFromUrl(nowLocation);
   const [showToast, setShowToast] = useState(false);
   const [position, setPosition] = useState({
     x: window.innerWidth / 2,
@@ -16,6 +20,9 @@ const TopBar = ({ home, title, back, qIcon, icon }: TopBarPropsType) => {
   });
   const navigate = useNavigate();
   const onClickBack = () => {
+    if (key === 'recordymdmeal') {
+      return navigate(`/record/${nowLocation.split('/')[1]}`);
+    }
     navigate(-1);
   };
 
@@ -23,8 +30,6 @@ const TopBar = ({ home, title, back, qIcon, icon }: TopBarPropsType) => {
     setShowToast(true);
     setPosition((prev) => ({ ...prev, x: e.clientX, y: e.clientY }));
   };
-
-  //onClick에 record/날짜일때
 
   return (
     <div className={styles.top}>
