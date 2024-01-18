@@ -61,6 +61,7 @@ export class UserRepository{
     // soft Delete
     public async softDeleteUserByUserId(userId: string, manager: EntityManager){       
         try{
+            console.log(userId);
             return await manager.createQueryBuilder(User, "user").softDelete().where("user_id = :userId",{userId}).execute();
         }catch(err){
             throw err;

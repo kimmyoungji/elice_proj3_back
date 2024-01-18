@@ -49,13 +49,13 @@ export class UpdateUserAndHealthInfoDto{
     @IsOptional()
     targetWeight: number
     
-    @ApiProperty( { example:1 , description: 'MUSCLE_GAIN = 1, WEIGHT_LOSS = 2,MAINTENANCE = 3,' } )
+    @ApiProperty( { example: 1 , description: 'MUSCLE_GAIN = 1, WEIGHT_LOSS = 2,MAINTENANCE = 3,' } )
     @IsOptional()
-    goal: string
+    goal: DietGoal
     
     @ApiProperty({example: 1 , description: 'LOW = 1, MEDIUM = 2, HIGH = 3'})
     @IsOptional()
-    activityAmount: string
+    activityAmount: ActivityAmount
     
     @ApiProperty({ example: '2000', description: '유저의 하루 권장 칼로리 섭취량'  })
     @IsNumber()

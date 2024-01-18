@@ -62,8 +62,8 @@ export class User {
   @UpdateDateColumn()
   updatedDate: Timestamp;
 
-  @Column({ type: 'timestamp with time zone', nullable: true })
-  @DeleteDateColumn({name: 'deletedat' })
+  // @Column({ type: 'timestamp with time zone', nullable: true })
+  @DeleteDateColumn()
   deletedat: Timestamp;
 
   @OneToOne(() => HealthInfo, healthInfo => healthInfo.user, { cascade:true })

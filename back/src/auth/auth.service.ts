@@ -66,11 +66,13 @@ export class AuthService {
                 const isMatch = await bcrypt.compare(password, user.password);
                 if (isMatch) {
                     delete user.password;
+                    await queryRunner.commitTransaction();
                     return user; // 로그인 성공
                 }
                 else throw new HttpException('비밀번호가 일치하지 않습니다.', HttpStatus.UNAUTHORIZED);
             }
             else throw new HttpException('등록되지 않은 이메일입니다.', HttpStatus.UNAUTHORIZED);
+            
             // return null; // 로그인 실패
         }catch(err){
             await queryRunner.rollbackTransaction();
@@ -106,9 +108,9 @@ export class AuthService {
             // newUser 생성하기
             const newUser = new User().mapLocalSignupDto(localSignupDto);
             // saveUser 호출하기
-            const saveResult = await this.userRepository.saveUser(newUser, queryRunner.manager);
+            const result = await this.userRepository.saveUser(newUser, queryRunner.manager);
             await queryRunner.commitTransaction();
-            return saveResult;
+            return result;
         }catch(err){
             await queryRunner.rollbackTransaction();
             throw err;
@@ -123,7 +125,9 @@ export class AuthService {
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try{
-            return await this.userRepository.findUserByUserId(userId, queryRunner.manager);
+            const result = await this.userRepository.findUserByUserId(userId, queryRunner.manager);
+            await queryRunner.commitTransaction();
+            return result;
         }catch(err){
             await queryRunner.rollbackTransaction();
             throw err;
@@ -144,6 +148,7 @@ export class AuthService {
             const result1 = await this.healthInfoRepository.deleteHealthInfoByHealthInfoId(tempUser.healthInfo.healthInfoId, queryRunner.manager);
             const result2 = await this.userRepository.softDeleteUserByUserId(userId, queryRunner.manager );
             if( result1.affected !== 1 || result2.affected !== 1 ) throw new HttpException('회원탈퇴 실패', HttpStatus.INTERNAL_SERVER_ERROR);
+            await queryRunner.commitTransaction();
             return {result1, result2};
         }catch(err){
             await queryRunner.rollbackTransaction();

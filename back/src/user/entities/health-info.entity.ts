@@ -3,6 +3,7 @@ import { IsNotEmpty, IsInt, IsString, IsDate } from 'class-validator';
 import { User } from './user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateUserAndHealthInfoDto } from '../dto/UpdateUserAndHealthInfo.dto';
+import { ActivityAmount, DietGoal } from '../utils/health-info.enums';
 
 @Entity()
 export class HealthInfo {
@@ -28,11 +29,11 @@ export class HealthInfo {
     @IsInt()
     targetWeight: number;
 
-    @Column({ type: 'varchar', nullable: true })
-    goal: string;
+    @Column({ type: 'enum', name: "diet_goal", enum: DietGoal,  nullable: true })
+    goal: DietGoal; // Diet_goal
 
-    @Column({ type: 'varchar', nullable: true })
-    activityAmount: string;
+    @Column({ type: 'enum', name:'activity_amount', enum: ActivityAmount, nullable: true })
+    activityAmount: ActivityAmount;
 
     @Column({ type: 'int', nullable: true})
     @IsInt()

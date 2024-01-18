@@ -85,6 +85,7 @@ export class UserService {
             // healthInfoId에 해당되는 건강정보 삭제하기
             const result1 = await this.healthInfoRepository.deleteHealthInfoByHealthInfoId(healthInfoId, queryRunner.manager);
             if (result1.affected === 0) throw new HttpException('유저 건강정보 삭제 실패', 500);
+            await queryRunner.commitTransaction();
             return '유저 건강정보 삭제 성공';
         }catch(err){
             await queryRunner.rollbackTransaction();

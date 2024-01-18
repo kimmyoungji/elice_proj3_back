@@ -4,11 +4,15 @@ import { typeORMConfig } from './conifg/database/typorm.config.mj';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from './user/user.module';
-// import * as dotenv from "dotenv";
-// import * as config from "config";
+import * as dotenv from "dotenv";
+import * as config from "config";
+import { HealthInfo } from './user/entities/health-info.entity';
+import { User } from './user/entities/user.entity';
+import * as TypeOrmNamingStrategies from "typeorm-naming-strategies";
 
-// dotenv.config({path: __dirname + '/../.env'});
-// const dbConfig = config.get("db");
+dotenv.config({path: __dirname + '/../.env'});
+const dbConfig = config.get("db");
+console.log(typeORMConfig)
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeORMConfig),
@@ -17,26 +21,4 @@ import { UserModule } from './user/user.module';
     UserModule,
   ],
 })
-export class AppModule {
-  //   constructor() {
-  //     createConnection({
-  //     type: dbConfig.type,
-  //     host: process.env.RDS_HOSTNAME || dbConfig.host,
-  //     port: process.env.RDS_PORT || dbConfig.post,
-  //     username: process.env.RDS_USERNAME || dbConfig.username,
-  //     password: process.env.RDS_PASSWORD || dbConfig.password,
-  //     database: process.env.RDS_DB_NAME || dbConfig.database,
-  //     entities: [__dirname + "/../../**/*.entity.{js, ts}"],
-  //     synchronize: false,
-  //   })
-  //     .then((connection) => {
-  //       console.log('연결 되었나!', connection.entityMetadatas.length);
-  //       console.log(process.env.RDS_HOSTNAME)
-  //       console.log(process.env.RDS_PORT)
-  //       console.log(process.env.RDS_USERNAME)
-  //       console.log(process.env.GOOGLE_CLIENT_ID)
-  //       console.log(process.env.GOOGLE_CLIENT_PW)
-  //     })
-  //     .catch((error) => console.log(error));
-  // }
-}
+export class AppModule {}
