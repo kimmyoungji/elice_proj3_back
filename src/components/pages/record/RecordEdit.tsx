@@ -50,17 +50,9 @@ const RecordEdit = () => {
 
   useEffect(() => {
     if (state) {
-      let newFoods:Food[] = [];
-      state.map((tag:string) => (
-        newFoods.push({
-          foodName: tag,
-          foodImage: '/images/9gram_logo.png',
-          XYCoordinate: [0, 0],
-        })
-      ))
-      setFoods(newFoods);
-      }      
-  },[])
+      setFoods(state);
+    }
+  }, [])
 
   const [focus, setFocus] = useState<string | undefined | null>('');
 
@@ -77,7 +69,7 @@ const RecordEdit = () => {
           {
             foodName: '음식명',
             foodImage: '/images/9gram_logo.png',
-            XYCoordinate: [0, 0],
+            XYCoordinate: [],
           },
           ...foods,
         ]);
@@ -176,7 +168,7 @@ const RecordEdit = () => {
           {foods.map((food: Food, index: number) => (
             <div key={index} className={styles.tagitem}>
               <div className={styles.tagimgwrap}>
-                {food.XYCoordinate[0] === 0 && food.XYCoordinate[1] === 0 ? (
+                {food.XYCoordinate.length === 0 ? (
                   <img
                     className={`${styles.tagimg} ${
                       focus === food.foodName && styles.focusimg

@@ -21,8 +21,19 @@ const AddPhotoSearch = () => {
     //api 호출 로직 작성 예정 (로직 완료 시, setClicked false)
   };
 
+  const tagsArr:object[] = [];
+  tags.map((tag) => (
+    tagsArr.push(
+      {
+        foodName: tag,
+        foodImage: '/images/9gram_logo.png',
+        XYCoordinate: [],
+      },
+    )
+  ));
+
   const addMeal = () => {
-    navigate(`/record/${date}/${mealTime}/edit`, { state: tags });
+    navigate(`/record/${date}/${mealTime}/edit`, { state: tagsArr });
   }
 
   return (
