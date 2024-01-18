@@ -1,7 +1,8 @@
 ## 백엔드 실행 방법
-cd back
+```shell 
+cd back  
 npm run start:dev
-
+```
 ---
 
 ## swagger 접속방법
