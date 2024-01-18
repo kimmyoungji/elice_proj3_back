@@ -14,11 +14,15 @@ const AddPhoto = () => {
 
   useEffect(() => {
     getWebcam((stream: MediaProvider) => {
-      if (!videoRef.current) {
-        throw new Error('참조할 내용이 없습니다!');
-      }
+      if(!videoRef.current) return
       videoRef.current.srcObject = stream;
     })
+    return () => {
+      if(!videoRef.current) return
+      let s = videoRef.current.srcObject as MediaStream | null;
+      if(!s) return
+      s.getTracks()[0].stop();
+    }
   }, []);
 
   const getWebcam = (callback:(stream: MediaProvider)=>void) => {
@@ -41,24 +45,28 @@ const AddPhoto = () => {
     const video = document.getElementById("videoCam");
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
-    context?.drawImage(video as CanvasImageSource, 0, 0, 390, 580);
-    canvas?.toBlob((blob) => {
-      let file = blob && new File([blob], "fileName.jpg", { type: "image/jpeg" });
-      const uploadFile = [file];  
-    }, "image/jpeg");
+    if (!video) {
+      return
+    }
+    const cropX = (video?.offsetWidth - 350) / 2;
+    const cropY = (video?.offsetHeight - 200) / 2;  
 
+    context?.drawImage(video as CanvasImageSource, cropX, cropY, 350, 200, 0, 0, 350, 200);
+    
     const image = canvas?.toDataURL(); 
     const link = document.createElement("a");
     link.href = image as string;
-    link.download = "PaintJS[🎨]";
+    link.download = "사진촬영 테스트";
     link.click();
+
   }
 
 
   return (
     <>
       <div className={styles.cambox}>
-        <canvas width="390" height="480" style={{ display:'none', position:'absolute'}} ref={canvasRef} />
+        <div className={styles.guide}></div>
+        <canvas width="350" height="200" style={{ display:'none',position:'absolute'}} ref={canvasRef} />
         <video
           id="videoCam"
           className={styles.cam}

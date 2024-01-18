@@ -7,6 +7,14 @@
   position: relative;
 }
 
+.guide {
+  position: absolute;
+  border: 4px solid var(--main-blue);
+  border-radius: 10px;
+  width: 350px;
+  height:200px;
+}
+
 .addbox {
   height: 123px;
   padding: 0 10px;
