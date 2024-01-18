@@ -55,14 +55,14 @@ const Toast = ({
   ...props
 }: ToastPropsType) => {
   const onClickBackDrop = (e: React.MouseEvent) => {
-    console.log(e);
     setShow?.(false);
   };
 
-  const positionStyle = position && {
+  const positionStyle = {
     position: 'absolute',
-    left: `${position.x + 20}px`,
-    top: `${position.y + 20}px`,
+    left: position ? `${position.x + 20}px` : '50%',
+    top: position ? `${position.y + 20}px` : '50%',
+    transform: !position && 'translate(-50%, -50%)',
   };
 
   const positionedElement = Children.map(children, (ch) => {
@@ -72,7 +72,6 @@ const Toast = ({
       show,
     });
   });
-  console.log(positionedElement);
 
   useEffect(() => {
     setTimeout(() => {
