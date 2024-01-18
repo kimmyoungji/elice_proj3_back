@@ -3,17 +3,20 @@ import { useParams, useNavigate } from 'react-router-dom';
 import style from './mealpage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates from '@utils/getDates';
+import { MealPageProps } from './RecordTypes';
 import MealDeatilPage from './MealDetailPage';
-import { mealDetailData } from './mealDetailData';
+import { mealDetailData } from './DummyMealData';
 
 // ✅ MealPage : 날짜, 특정 meal로 MealPage를 그려주기
 // ✅ 토글로 다른 meal을 선택하면 MealTime만 다시 받아와서 그려주기
 // ✅ meal data가 있으면 그려주고 없으면 default 그리기
 
-interface MealPageProps {
-  selectedMeal: string;
-  date: string;
-}
+const mapSelectMealToMsg: { [key: string]: string } = {
+  1: '아침',
+  2: '점심',
+  3: '저녁',
+  4: '간식',
+};
 
 const MealPage = () => {
   const params = useParams();
@@ -25,18 +28,13 @@ const MealPage = () => {
   const dateSplit = date.split('-');
   const formatDate = `${dateSplit[0]}년 ${dateSplit[1]}월 ${dateSplit[2]}일`;
 
-  const mapSelectMealToMsg: { [key: string]: string } = {
-    1: '아침',
-    2: '점심',
-    3: '저녁',
-    4: '간식',
-  };
-
-  const findMealNumber = (meal: string) => {
-    const mealNumber = Object.keys(mapSelectMealToMsg).find(
-      (key) => mapSelectMealToMsg[key] === meal
+  const findMealNumber = (meal: string): 1 | 2 | 3 | 4 => {
+    const mealNumber = Number(
+      Object.keys(mapSelectMealToMsg).find(
+        (key) => mapSelectMealToMsg[key] === meal
+      )
     );
-    return mealNumber || 1;
+    return (mealNumber as 1 | 2 | 3 | 4) || 1;
   };
 
   const mealMsg = mapSelectMealToMsg[selectedMealTime];
@@ -45,11 +43,17 @@ const MealPage = () => {
     findMealNumber(selectedMeal)
   );
   const [data, setData] = useState(mealDetailData);
-  const [coordinate, setCoordinate] = useState(data[selectedMeal].food);
+  const [coordinate, setCoordinate] = useState(data[selectedMealNumber].food);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const mealTypes = ['아침', '점심', '저녁', '간식'];
 
-  console.log(coordinate);
+  useEffect(() => {
+    const mealData = mealDetailData[selectedMealNumber];
+    if (mealData && mealData.food) {
+      setCoordinate(mealData.food);
+    }
+  }, [selectedMealNumber, data]);
+
   useEffect(() => {
     if (selectedMealNumber) {
       navigate(`/record/${date}/${selectedMealNumber}`);
@@ -106,6 +110,7 @@ const MealPage = () => {
         <MealDeatilPage
           meal={selectedMeal}
           date={date}
+          data={data}
           selectedMealNumber={selectedMealNumber}
         />
       </div>

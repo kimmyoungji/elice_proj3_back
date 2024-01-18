@@ -1,55 +1,16 @@
 import { useEffect, useState } from 'react';
 import styles from '@components/pages/record/nutritiongraph.module.css';
 import getNutritionStandard from '@utils/getNutritionStandard';
-import { mealDetailData } from './mealDetailData';
+import { NutritionGraphProps, Nutrient } from './RecordTypes';
+import { userData } from '../my-page/DummyUserData';
 
-interface NutritionGraphProps {
-  meal: string;
-}
-
-interface Nutrient {
-  key: string;
-  value: number;
-  nutrientRatio: number;
-  strokeDashoffset: number;
-  customStyle: React.CSSProperties & {
-    '--initialOffset': string;
-    '--finalOffset': string;
-  };
-}
-
-interface UserData {
-  email: string;
-  username: string;
-  password: string;
-  birthday: string;
-  gender: 1 | 2 | 3;
-  weight: number;
-  height: number;
-  goal: 1 | 2 | 3 | 4;
-  targetWeight: number;
-  targetCalories: number;
-  activity: number;
-  img: string | undefined;
-}
-const userData: UserData = {
-  email: 'elice@gmail.com',
-  username: 'elice',
-  password: 'Elice1234@!',
-  birthday: '2005-02-03',
-  gender: 1,
-  weight: 90,
-  height: 190,
-  goal: 2,
-  targetWeight: 80,
-  targetCalories: 1200,
-  activity: 4,
-  img: undefined,
-};
-
-const NutritionGraph = ({ meal }: NutritionGraphProps) => {
-  const [data, setData] = useState(userData);
-  const [mealData, setMealData] = useState(mealDetailData);
+const NutritionGraph = ({
+  meal,
+  data,
+  selectedMealNumber,
+}: NutritionGraphProps) => {
+  const [userNutritionData, setUserNutritionData] = useState(userData);
+  const [mealData, setMealData] = useState(data);
   const [animationTrigger, setAnimationTrigger] = useState(false);
 
   useEffect(() => {
@@ -59,17 +20,17 @@ const NutritionGraph = ({ meal }: NutritionGraphProps) => {
     }, 100);
   }, [meal]);
 
-  const result = getNutritionStandard(data);
+  const result = getNutritionStandard(userNutritionData);
   const radius = 22;
   const circumference = 2 * Math.PI * radius;
   const standard = result
-    ? [result.x, result.y, result.z, result.k]
+    ? [result.carbohydrates, result.proteins, result.fats, result.dietaryFiber]
     : [0, 0, 0, 0];
 
   let nutrients: Nutrient[] = [];
 
-  if (result && mealData[meal]) {
-    nutrients = Object.entries(mealData[meal].totalNutrient).map(
+  if (result && mealData[selectedMealNumber]) {
+    nutrients = Object.entries(mealData[selectedMealNumber].totalNutrient).map(
       ([key, value], idx) => {
         let nutrientKey;
         if (key === 'carbohydrates') nutrientKey = '탄수화물';

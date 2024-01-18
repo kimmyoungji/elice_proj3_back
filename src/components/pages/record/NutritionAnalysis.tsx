@@ -2,19 +2,20 @@ import style from './nutritionanalysis.module.css';
 import { BarChart } from './BarChart';
 import Bar from './Bar';
 import NutritionGraph from './NutritionGraph';
-import { mealDetailData } from './mealDetailData';
 import { useEffect, useState } from 'react';
+import { NutritionAnalysisProps } from './RecordTypes';
+import { userData } from '../my-page/DummyUserData';
 
-interface NutritionAnalysisProps {
-  meal: string;
-  className: string;
-}
+const goalCalories = userData.targetCalories;
 
-const goalCalories = 1300;
-
-const NutritionAnalysis = ({ meal, className }: NutritionAnalysisProps) => {
+const NutritionAnalysis = ({
+  meal,
+  className,
+  data,
+  selectedMealNumber,
+}: NutritionAnalysisProps) => {
   const [animationTrigger, setAnimationTrigger] = useState(false);
-  const totalCalories = mealDetailData[meal].totalCalories;
+  const totalCalories = data[selectedMealNumber].totalCalories;
   const percentage =
     totalCalories === 0
       ? 0
@@ -52,7 +53,11 @@ const NutritionAnalysis = ({ meal, className }: NutritionAnalysisProps) => {
             fill={barFill}
           />
         </BarChart>
-        <NutritionGraph meal={meal} />
+        <NutritionGraph
+          meal={meal}
+          data={data}
+          selectedMealNumber={selectedMealNumber}
+        />
       </div>
     </>
   );

@@ -3,8 +3,14 @@ import MealImg from './MealImg';
 import MealTag from './MealTag';
 import NutritionAnalysis from './NutritionAnalysis';
 import style from './mealdetailpage.module.css';
+import { MealDetailProps } from './RecordTypes';
 
-const MealDeatilPage = ({ meal, key, date, selectedMealNumber }: any) => {
+const MealDeatilPage = ({
+  meal,
+  date,
+  data,
+  selectedMealNumber,
+}: MealDetailProps) => {
   const navigate = useNavigate();
 
   return (
@@ -13,6 +19,7 @@ const MealDeatilPage = ({ meal, key, date, selectedMealNumber }: any) => {
         meal={meal}
         className={style.imgBox}
         date={date}
+        data={data}
         selectedMealNumber={selectedMealNumber}
       />
       <div
@@ -31,8 +38,18 @@ const MealDeatilPage = ({ meal, key, date, selectedMealNumber }: any) => {
           AI가 말아주는 오늘의 한 끼 추천이 궁금하다면?{' '}
         </div>
       </div>
-      <MealTag meal={meal} className={style.mealTag} />
-      <NutritionAnalysis meal={meal} className={style.nutritionBox} />
+      <MealTag
+        meal={meal}
+        data={data}
+        selectedMealNumber={selectedMealNumber}
+        className={style.mealTag}
+      />
+      <NutritionAnalysis
+        meal={meal}
+        data={data}
+        selectedMealNumber={selectedMealNumber}
+        className={style.nutritionBox}
+      />
     </>
   );
 };
