@@ -1,7 +1,6 @@
 import styles from '@components/pages/ai-analyze/box.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import { useState } from 'react';
-import UserBox from './UserBox';
 
 interface Props {
   toSave: boolean;
