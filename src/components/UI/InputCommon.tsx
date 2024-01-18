@@ -6,7 +6,7 @@ import { InputVariant, getClassNameType } from 'typings/commontypes';
 import { CommonSizeType } from 'typings/commontypes';
 
 type InputPropsType = {
-  value?: string | number | undefined;
+  value?: string | number;
   defaultValue?: string | number | readonly string[];
   className?: string;
   onBlur?: any;
@@ -73,19 +73,6 @@ const InputCommon = forwardRef(
       controlled: controlledId,
       unControlled: uncontrolledId,
     })[0];
-
-    //focus기능
-    useImperativeHandle(
-      ref,
-      () => {
-        return {
-          focus() {
-            inputRef.current?.focus();
-          },
-        };
-      },
-      []
-    );
 
     const inputClass = getModuleClassName(className, {
       variant,

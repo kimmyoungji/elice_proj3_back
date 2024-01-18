@@ -1,12 +1,13 @@
 import CarlendarHeader from './CalendarHeader';
 import CalendarBody from './CalendarBody';
 import CalendarTitle from './CalendarTitle';
-import { createContext } from 'react';
+import { createContext, useEffect } from 'react';
 import { Dispatch, ReactElement, useContext, useState } from 'react';
 import getDates from '../../../utils/getDates';
 import Toast from '@components/UI/Toast';
 import ToastText from '@components/UI/ToastText';
 import ButtonCommon from '@components/UI/ButtonCommon';
+import InputNumber from '@components/UI/InputNumber';
 
 const CalendarContext = createContext<
   | {
@@ -89,6 +90,21 @@ const Calendar = () => {
     console.log({ x: e.clientX, y: e.clientY });
     setPosition((prev) => ({ ...prev, x: e.clientX, y: e.clientY }));
   };
+  const [value, setValue] = useState(1);
+  const [value2, setValue2] = useState(1);
+
+  const valueChangeFn: React.ChangeEventHandler<HTMLInputElement> = (value) => {
+    value && setValue(Number(value));
+  };
+  const valueChangeFn2: React.ChangeEventHandler<HTMLInputElement> = (
+    value
+  ) => {
+    value2 && setValue2(Number(value));
+  };
+
+  useEffect(() => {
+    console.log(value);
+  }, [value]);
 
   return (
     <>
@@ -96,6 +112,18 @@ const Calendar = () => {
       <Toast show={showToast} setShow={setShowToast} position={position}>
         <ToastText>hello</ToastText>
       </Toast>
+
+      <InputNumber
+        value={value}
+        onValueChange={valueChangeFn}
+        maxiumValue={23}
+      />
+      <InputNumber
+        value={value2}
+        onValueChange={valueChangeFn2}
+        maxiumValue={23}
+      />
+
       <CalendarProvider>
         <CarlendarHeader />
         <CalendarBody />
