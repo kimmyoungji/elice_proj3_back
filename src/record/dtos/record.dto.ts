@@ -64,6 +64,12 @@ export class RecordDto {
     totalCalories?: number;
 
     @Expose()
+    @IsString()
+    @IsOptional()
+    @ApiProperty({ description: "이미지", required: false })
+    foodImage?: string;
+
+    @Expose()
     @IsDate()
     @IsOptional()
     @ApiProperty({ description: "첫 기록 날짜", required: false, type: Date })

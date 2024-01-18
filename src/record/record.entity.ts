@@ -4,8 +4,7 @@ export enum MealType {
   breakfast = 'breakfast',
   lunch = 'lunch',
   dinner = 'dinner',
-  snack = 'snack',
-  // LateNightSnack = 'late night snack'
+  snack = 'snack'
 }
 
 @Entity()
@@ -43,6 +42,9 @@ export class Record extends BaseEntity {
 
   @Column({ type: "int", nullable: true })
   totalCalories: number;
+
+  @Column({ type: "varchar", nullable: true })
+  foodImage: string;
 
   @Column({ type: "date", nullable: true })
   firstRecordDate: Date;

@@ -9,7 +9,7 @@ import { response } from "express";
 export class RecordController {
   constructor(private recordService: RecordService) {}
 
-  // GET /records?date=yyyy-mm-dd&mealType
+  // GET /records?date=yyyy-mm-dd&mealType=
   @Get()
   @ApiOperation({ summary: "특정 날짜의 식단 조회" })
   async getDailyRecords(
