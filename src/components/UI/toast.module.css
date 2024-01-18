@@ -10,6 +10,21 @@
   transform: translate(-50%, -50%); */
 }
 
+.top {
+  top: 20%;
+  left: 20%;
+}
+
+.middle {
+  top: 50%;
+  left: 50%;
+}
+
+.bottom {
+  top: 80%;
+  left: 80%;
+}
+
 .fadeOut {
   animation: 0.5s fadeOut;
 }
