@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styles from './recordedit.module.css';
 import RecordEditDetail from './RecordEditDetail';
 import { useEffect, useRef, useState } from 'react';
@@ -10,9 +10,26 @@ interface Food {
   XYCoordinate: number[];
 }
 
+interface MealTime {
+  [key: string]: string;
+}
+
 const RecordEdit = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+
+  const params = useParams();
+  const date = params.date;
+  const mealTime = params.mealTime;
+  const dateSplit = date?.split("-");
+  const mealTimetoStr: MealTime = {
+    "1": "아침",
+    "2": "점심",
+    "3": "저녁",
+    "4": "간식",
+  };
+  
+
   const [foods, setFoods] = useState([
     {
       foodName: '적채',
@@ -30,6 +47,20 @@ const RecordEdit = () => {
       XYCoordinate: [1000, 146.02],
     },
   ]);
+
+  useEffect(() => {
+    if (state) {
+      let newFoods:Food[] = [];
+      state.map((tag:string) => (
+        newFoods.push({
+          foodName: tag,
+          foodImage: '/images/9gram_logo.png',
+          XYCoordinate: [0, 0],
+        })
+      ))
+      setFoods(newFoods);
+      }      
+  },[])
 
   const [focus, setFocus] = useState<string | undefined | null>('');
 
@@ -109,7 +140,9 @@ const RecordEdit = () => {
   return (
     <>
       <div className={styles.datebox}>
-        <p className='b-small'>2024.01.02 (화) 점심</p>
+        {dateSplit && mealTime &&
+          <p className='b-small'>
+            {dateSplit[0]}년 {dateSplit[1]}월 {dateSplit[2]}일 {mealTimetoStr[mealTime]}</p>}
       </div>
 
       <div className={styles.imgbox}>
