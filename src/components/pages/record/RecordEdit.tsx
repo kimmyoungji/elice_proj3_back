@@ -139,6 +139,11 @@ const RecordEdit = () => {
     });
   }, [foods]);
 
+  const editDone = () => {
+    //수정완료 된 foodDate api 
+    navigate(`/record/${date}/${mealTime}`);
+  }
+
   return (
     <>
       <div className={styles.datebox}>
@@ -233,15 +238,30 @@ const RecordEdit = () => {
           setFocus={setFocus}
         />
       )}
+      
       <div className={styles.btnbox}>
-        <ButtonCommon
+      {focus === ''
+        ? (
+          <ButtonCommon
+          size='medium'
+          variant='disabled'
+          onClick={() => navigate(-1)}
+        >
+          취소
+        </ButtonCommon>
+        )
+          : (
+            <ButtonCommon
           size='medium'
           variant='disabled'
           onClick={() => setFocus('')}
         >
           취소
         </ButtonCommon>
-        <ButtonCommon size='medium' variant='default-active'>
+        )
+      }
+        
+        <ButtonCommon size='medium' variant='default-active' onClickBtn={editDone}>
           수정 완료
         </ButtonCommon>
       </div>
