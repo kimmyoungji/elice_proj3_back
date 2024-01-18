@@ -39,7 +39,6 @@ const MyPage = () => {
 
   return (
     <>
-      <div className={style.settingTitle}>설정</div>
       <div className={style.userProfileArea}>
         <div className={style.userProfileContainer}>
           {userData.img ? (

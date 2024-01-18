@@ -3,6 +3,7 @@ import { BarChart } from './BarChart';
 import Bar from './Bar';
 import NutritionGraph from './NutritionGraph';
 import { mealDetailData } from './mealDetailData';
+import Nutrients from '../home/Nutrients';
 
 interface NutritionAnalysisProps {
   meal: string;
@@ -39,6 +40,7 @@ const NutritionAnalysis = ({ meal, className }: NutritionAnalysisProps) => {
           />
         </BarChart>
         <NutritionGraph meal={meal} />
+        {/* <Nutrients totalNutrient= recommendNutrient= /> */}
       </div>
     </>
   );
