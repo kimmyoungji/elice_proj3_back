@@ -24,8 +24,6 @@ const NutritionAnalysis = ({
 
   useEffect(() => {
     setAnimationTrigger(false);
-    console.log('애니메이션 확인');
-
     setTimeout(() => {
       setAnimationTrigger(true);
     }, 100);
