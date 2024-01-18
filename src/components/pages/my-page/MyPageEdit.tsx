@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import style from './mypageedit.module.css';
 import MyPageDropdown from './MyPageDropdwon';
 import getImgPreview from '@utils/getImgPreview';
+import getNutritionStandard from '@utils/getNutritionStandard';
+import { mapGoaltoMsg, mapActivitytoMsg, findKeyByValue } from './mapMsg';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import {
   calAge,
@@ -11,71 +13,16 @@ import {
   adjustCaloriesByGoal,
 } from './calUserData';
 
-type UserData = {
-  email: string;
-  username: string;
-  password: string;
-  birthday: string;
-  gender: number;
-  weight: number;
-  height: number;
-  goal: number;
-  targetWeight: number;
-  targetCalories: number;
-  activity: number;
-  img: string | undefined;
-};
-
-const userData = {
-  email: 'elice@gmail.com',
-  username: 'elice',
-  password: 'Elice1234@!',
-  birthday: '1997-04-26',
-  gender: 2,
-  weight: 90,
-  height: 190,
-  goal: 2,
-  targetWeight: 80,
-  targetCalories: 1200,
-  activity: 4,
-  img: 'https://reclo.s3.ap-northeast-2.amazonaws.com/upload/itemImage/40962e2811b76d1ab5f661013f500061_%ED%9B%84%EB%93%9C.jpg',
-};
-
-const findKeyByValue = (
-  msg: { [key: string]: string },
-  value: string
-): string | undefined => {
-  for (let [key, val] of Object.entries(msg)) {
-    if (val === value) {
-      return key;
-    }
-  }
-};
-
-const mapGoaltoMsg: { [key: string]: string } = {
-  '1': '근육증량',
-  '2': '체중감량',
-  '3': '체중유지',
-  '4': '체중증량',
-};
-
-const mapActivitytoMsg: { [key: string]: string } = {
-  '1': '비활동적',
-  '2': '약간 활동적',
-  '3': '활동적',
-  '4': '매우 활동적',
-};
+import { userData, UserData } from './DummyUserData';
 
 const goalTypes = ['근육증량', '체중감량', '체중유지', '체중증량'];
 const activityType = ['비활동적', '약간 활동적', '활동적', '매우 활동적'];
 
 const MyPageEdit = () => {
   const [data, setData] = useState<UserData>(userData);
-
   const age = calAge({ data });
-  const goalMsg = mapGoaltoMsg[data.goal.toString()];
-  const activityMsg = mapActivitytoMsg[data.activity.toString()];
-
+  const goalMsg = mapGoaltoMsg[data.goal];
+  const activityMsg = mapActivitytoMsg[data.activity];
   const [profileImage, setProfileImage] = useState<string | undefined>(
     userData.img
   );
@@ -93,6 +40,16 @@ const MyPageEdit = () => {
   const [isActivityDropdownVisible, setActivityDropdownVisible] =
     useState(false);
   const [isGoalDropdownVisible, setGoalDropdownVisible] = useState(false);
+
+  // const nutrientMsg = Object.keys(data.targetNutrients).map((key) => {
+  //   const nutrientName = mapNutrientstoMsg[key];
+  //   const nutrientValue = data.targetNutrients[key];
+  //   return `${nutrientName}: ${nutrientValue}`;
+  // });
+  // targetNutrients 영양성분 배열 생성
+  //['탄수화물: 100', '단백질: 60', '지방: 30', '식이섬유: 23']
+
+  // const calNutrients = getNutritionStandard(data);
 
   const navigate = useNavigate();
 
@@ -138,17 +95,31 @@ const MyPageEdit = () => {
   };
 
   const handleSelect = (type: 'goal' | 'activity', value: string) => {
-    if (type === 'goal') {
-      const newGoal = Number(findKeyByValue(mapGoaltoMsg, value));
-      const updatedData = { ...data, goal: newGoal };
-      updateDataAndCalories(updatedData);
-      setSelectedGoal(value);
+    const newGoalValue = findKeyByValue(mapGoaltoMsg, value);
+    if (type === 'goal' && newGoalValue) {
+      const newGoal = parseInt(newGoalValue, 10);
+      if ([1, 2, 3, 4].includes(newGoal)) {
+        const updatedData: UserData = {
+          ...data,
+          goal: newGoal as 1 | 2 | 3 | 4,
+        };
+        updateDataAndCalories(updatedData);
+        setSelectedGoal(value);
+      }
       setGoalDropdownVisible(false);
     } else if (type === 'activity') {
-      const newActivity = Number(findKeyByValue(mapActivitytoMsg, value));
-      const updatedData = { ...data, activity: newActivity };
-      updateDataAndCalories(updatedData);
-      setSelectedActity(value);
+      const newActivityValue = findKeyByValue(mapActivitytoMsg, value);
+      if (newActivityValue) {
+        const newActivity = parseInt(newActivityValue, 10);
+        if ([1, 2, 3, 4].includes(newActivity)) {
+          const updatedData: UserData = {
+            ...data,
+            activity: newActivity as 1 | 2 | 3 | 4,
+          };
+          updateDataAndCalories(updatedData);
+          setSelectedActity(value);
+        }
+      }
       setActivityDropdownVisible(false);
     }
   };
@@ -175,12 +146,22 @@ const MyPageEdit = () => {
   };
 
   const saveAndNavigate = () => {
+    const updatedNutrients = getNutritionStandard(data);
+    const updatedGoalCalories = Math.round(
+      adjustCaloriesByGoal({ data, bmrCalories })
+    );
+
     const updatedData = {
       ...data,
       height: Number(prevHeight),
       weight: Number(prevWeight),
+      targetNutrients: updatedNutrients,
+      targetCalories: updatedGoalCalories,
     };
-    setData(updatedData);
+
+    updateDataAndCalories(updatedData);
+    console.log(updatedData);
+    // store에 저장하는 로직 추가해야함
     navigate('/my-page', { state: { updatedData } });
   };
 

@@ -33,11 +33,9 @@ const getNutritionStandard = (data: UserData) => {
     y = (ratioY / ratioZ) * z;
   }
 
-  if (4 * x + 4 * y + 9 * z === userGoalCalories) {
-    return { x, y, z, k };
-  } else {
-    return null;
-  }
+  return 4 * x + 4 * y + 9 * z === userGoalCalories
+    ? { carbohydrates: x, proteins: y, fats: z, dietaryFiber: k }
+    : { carbohydrates: 200, proteins: 100, fats: 40, dietaryFiber: 30 };
 };
 
 export default getNutritionStandard;

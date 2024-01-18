@@ -1,57 +1,36 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import style from './mypage.module.css';
 import { PencilIcon } from '@assets/PencilIcon';
-
-const userData = {
-  email: 'elice@gmail.com',
-  username: 'elice',
-  password: 'Elice1234@!',
-  birthday: '2005-02-03',
-  gender: '남자',
-  weight: 90,
-  height: 190,
-  goal: '체중감량',
-  targetWeight: 80,
-  targetCalories: 1200,
-  activity: 4,
-  img: 'https://reclo.s3.ap-northeast-2.amazonaws.com/upload/itemImage/40962e2811b76d1ab5f661013f500061_%ED%9B%84%EB%93%9C.jpg',
-};
+import { mapGoaltoMsg, mapActivitytoMsg, findKeyByValue } from './mapMsg';
+import { userData, UserData } from './DummyUserData';
 
 const MyPage = () => {
+  // 스토어에서 값 받아오기
+  const [data, setData] = useState(userData);
+  const goalMsg = mapGoaltoMsg[data.goal];
+  const activityMsg = mapActivitytoMsg[data.activity];
+
   const navigate = useNavigate();
   const handleIconClick = () => {
     navigate(`/my-page/edit`);
   };
 
-  const userActivity = userData.activity;
-
-  let activity;
-
-  if (userActivity === 1) {
-    activity = '비활동적';
-  } else if (userActivity === 2) {
-    activity = '약간 활동적';
-  } else if (userActivity === 3) {
-    activity = '활동적';
-  } else if (userActivity === 4) {
-    activity = '매우 활동적';
-  }
-
   return (
     <>
       <div className={style.userProfileArea}>
         <div className={style.userProfileContainer}>
-          {userData.img ? (
+          {data.img ? (
             <img
               className={style.userProfile}
-              src={userData.img}
+              src={data.img}
               alt='사용자 프로필'
             />
           ) : (
             <div className={style.defaultProfile}></div>
           )}
 
-          <div className={style.userName}>{userData.username}</div>
+          <div className={style.userName}>{data.username}</div>
         </div>
         <div className={style.editUserProfile} onClick={handleIconClick}>
           <PencilIcon width='15px' height='15px' strokeWidth={2} />
@@ -62,25 +41,25 @@ const MyPage = () => {
       <div className={style.goalInfoArea}>
         <div className={style.goalInfoTitle}>
           <div className={style.infoTitle}>목표</div>
-          <div className={style.infoContent}>{userData.goal}</div>
+          <div className={style.infoContent}>{goalMsg}</div>
         </div>
         <div className={style.goaltInfo}>
           <div className={style.goalTitle}>목표 칼로리</div>
-          <div className={style.goalDetail}>{userData.targetCalories}kcal</div>
+          <div className={style.goalDetail}>{data.targetCalories}kcal</div>
         </div>
       </div>
 
       <div className={style.infoArea}>
         <div className={style.infoTitle}>현재 몸상태</div>
         <div className={style.infoContent}>
-          {userData.height} cm <span style={{ color: 'black' }}> / </span>{' '}
-          {userData.weight} kg
+          {data.height} cm <span style={{ color: 'black' }}> / </span>{' '}
+          {data.weight} kg
         </div>
       </div>
 
       <div className={style.activityAccountArea}>
         <div className={style.infoTitle}>활동량</div>
-        <div className={style.infoContent}>{activity}</div>
+        <div className={style.infoContent}>{activityMsg}</div>
       </div>
 
       <div className={style.activityAccountArea}>
