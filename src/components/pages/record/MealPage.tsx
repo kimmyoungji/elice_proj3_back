@@ -17,6 +17,7 @@ const mapSelectMealToMsg: { [key: string]: string } = {
   3: '저녁',
   4: '간식',
 };
+const mealTypes = ['아침', '점심', '저녁', '간식'];
 
 const MealPage = () => {
   const params = useParams();
@@ -45,10 +46,9 @@ const MealPage = () => {
   const [data, setData] = useState(mealDetailData);
   const [coordinate, setCoordinate] = useState(data[selectedMealNumber].food);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const mealTypes = ['아침', '점심', '저녁', '간식'];
 
   useEffect(() => {
-    const mealData = mealDetailData[selectedMealNumber];
+    const mealData = data[selectedMealNumber];
     if (mealData && mealData.food) {
       setCoordinate(mealData.food);
     }
@@ -96,7 +96,7 @@ const MealPage = () => {
               size='tiny'
               onClick={() =>
                 navigate(`/record/${date}/${selectedMealTime}/edit`, {
-                  state: { data, coordinate },
+                  state: coordinate,
                 })
               }
             >
