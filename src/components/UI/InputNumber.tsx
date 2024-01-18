@@ -18,11 +18,11 @@ interface InputBaseProps {
   disabled?: false;
   onValueChange?: (value: any) => void;
   checkAll?: false;
-  maxiumValue?: number;
+  maximumValue?: number;
 }
 
 const InputNumber = (props: InputBaseProps) => {
-  const { onValueChange, defaultValue = +1, value, maxiumValue = +31 } = props;
+  const { onValueChange, defaultValue = +1, value, maximumValue = +31 } = props;
   const [inputNum, setInputNum] = useControlled({
     controlled: value,
     unControlled: defaultValue,
@@ -43,8 +43,14 @@ const InputNumber = (props: InputBaseProps) => {
     let newInputNum: number = 1;
     if (operator === 'minus') {
       newInputNum = Math.max(inputNum - 1, 1);
+      if (inputNum - 1 < 1) {
+        setShowToast(true);
+      }
     } else if (operator === 'sum') {
-      newInputNum = Math.min(inputNum + 1, maxiumValue);
+      newInputNum = Math.min(inputNum + 1, maximumValue);
+      if (inputNum + 1 > maximumValue) {
+        setShowToast(true);
+      }
     }
     setInputNum(newInputNum);
     onValueChange?.(newInputNum);
@@ -54,9 +60,10 @@ const InputNumber = (props: InputBaseProps) => {
     const newValue = Math.max(Number(e.target.value), 1);
     if (
       Number(e.target.value) &&
-      (Number(e.target.value) < 1 || Number(e.target.value) > maxiumValue)
+      (Number(e.target.value) < 1 || Number(e.target.value) > maximumValue)
     ) {
       setShowToast(true);
+      //toast보여주고 value를 1로 하게 ... ?
       setInputNum(1);
       onValueChange?.(1);
     }
@@ -73,7 +80,7 @@ const InputNumber = (props: InputBaseProps) => {
           value={inputNum}
           className={classes.input}
           onChange={onChangeHandler}
-          max={maxiumValue}
+          max={maximumValue}
         />
         <div className={classes.absolute}>
           <div
@@ -93,9 +100,8 @@ const InputNumber = (props: InputBaseProps) => {
             <Down />
           </div>
         </div>
-        <button onClick={() => setShowToast(true)}>버튼</button>
         <Toast show={showToast} setShow={setShowToast}>
-          <ToastText>올바른 값을 입력해주세요 1 ~ {maxiumValue}</ToastText>
+          <ToastText>올바른 값을 입력해주세요 1 ~ {maximumValue}</ToastText>
         </Toast>
       </div>
     </>
