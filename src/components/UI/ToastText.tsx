@@ -4,13 +4,17 @@ import classes from './toast.module.css';
 const ToastText = ({
   children,
   style,
+  toastPosCls,
 }: {
   children: ReactNode | string;
   style?: {};
+  toastPosCls?: 'top' | 'middle' | 'bottom';
 }) => {
-  console.log(children);
   return (
-    <div className={`${classes.wrapper}`} style={style}>
+    <div
+      className={`${classes.wrapper} ${classes[`${toastPosCls}`]}`}
+      style={style}
+    >
       {children}
     </div>
   );

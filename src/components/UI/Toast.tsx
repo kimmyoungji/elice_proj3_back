@@ -1,7 +1,6 @@
 import {
   Children,
   ReactElement,
-  ReactNode,
   SetStateAction,
   cloneElement,
   createContext,
@@ -23,6 +22,7 @@ interface ToastPropsType {
   show?: boolean;
   setShow?: React.Dispatch<SetStateAction<boolean>>;
   position?: { x: number; y: number };
+  toastPosCls?: 'top' | 'middle' | 'bottom';
 }
 
 const ToastContext = createContext<ToastContextType | null>(null);
@@ -52,6 +52,7 @@ const Toast = ({
   setShow,
   show,
   position,
+  toastPosCls = 'middle',
   ...props
 }: ToastPropsType) => {
   const onClickBackDrop = (e: React.MouseEvent) => {
@@ -60,8 +61,8 @@ const Toast = ({
 
   const positionStyle = {
     position: 'absolute',
-    left: position ? `${position.x + 20}px` : '50%',
-    top: position ? `${position.y + 20}px` : '50%',
+    left: position && `${position.x + 20}px`,
+    top: position && `${position.y + 20}px`,
     transform: !position && 'translate(-50%, -50%)',
   };
 
@@ -69,6 +70,7 @@ const Toast = ({
     return cloneElement(ch, {
       ...props,
       style: positionStyle,
+      toastPosCls: toastPosCls,
       show,
     });
   });
