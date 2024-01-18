@@ -4,7 +4,7 @@
     "target": "es5",
     "jsx": "react-jsx",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "node10",
     "allowJs": true,
     "sourceMap": true,
     "outDir": "./dist/",

@@ -35,6 +35,12 @@
   margin-top: 25px;
 }
 
+.userProfile {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
 .defaultProfile {
   width: 80px;
   height: 80px;
@@ -92,7 +98,7 @@
   flex-direction: row;
   justify-content: space-between;
   background-color: #fff;
-  padding: 23px 25px;
+  padding: 29px 25px;
   border-bottom: 1px solid #d9d9d9;
 }
 

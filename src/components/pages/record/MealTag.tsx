@@ -1,13 +1,14 @@
 import style from './mealtag.module.css';
-import { mealDetailData } from './mealDetailData';
+import { mealDetailData } from './DummyMealData';
+import { MealTagProps } from './RecordTypes';
 
-interface MealTagProps {
-  meal: string;
-  className: string;
-}
-
-const MealTag = ({ meal, className }: MealTagProps) => {
-  const tagName = mealDetailData[meal].food;
+const MealTag = ({
+  meal,
+  className,
+  data,
+  selectedMealNumber,
+}: MealTagProps) => {
+  const tagName = data[selectedMealNumber].food;
 
   return (
     <div className={className}>

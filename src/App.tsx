@@ -59,11 +59,11 @@ function App() {
               <Route path='/home' element={<Home />} />
               <Route path='/my-page' element={<MyPage />} />
               <Route path='/my-page/edit' element={<MyPageEdit />} />
-              <Route path='/add-photo' element={<AddPhoto />} />
-              <Route path='/add-photo/search' element={<AddPhotoSearch />} />
+              <Route path='/add-photo/:date/:mealTime' element={<AddPhoto />} />
+              <Route path='/add-photo/:date/:mealTime/search' element={<AddPhotoSearch />} />
               <Route path='/ai-analyze' element={<AiAnalyze />} />
               <Route path='/record/:selectedDate' element={<Record />} />
-              <Route path='/record/edit' element={<RecordEdit />} />
+              <Route path='/record/:date/:mealTime/edit' element={<RecordEdit />} />
               <Route path='/record/:date' element={<MealPage />}>
                 <Route path=':mealTime' element={<MealDeatilPage />} />
               </Route>

@@ -2,22 +2,34 @@ import style from './nutritionanalysis.module.css';
 import { BarChart } from './BarChart';
 import Bar from './Bar';
 import NutritionGraph from './NutritionGraph';
-import { mealDetailData } from './mealDetailData';
+import { useEffect, useState } from 'react';
+import { NutritionAnalysisProps } from './RecordTypes';
+import { userData } from '../my-page/DummyUserData';
 
-interface NutritionAnalysisProps {
-  meal: string;
-  className: string;
-}
+const goalCalories = userData.targetCalories;
 
-const goalCalories = 1300;
-
-const NutritionAnalysis = ({ meal, className }: NutritionAnalysisProps) => {
-  const totalCalories = mealDetailData[meal].totalCalories;
+const NutritionAnalysis = ({
+  meal,
+  className,
+  data,
+  selectedMealNumber,
+}: NutritionAnalysisProps) => {
+  const [animationTrigger, setAnimationTrigger] = useState(false);
+  const totalCalories = data[selectedMealNumber].totalCalories;
   const percentage =
     totalCalories === 0
       ? 0
       : Math.min(100, (totalCalories / goalCalories) * 100);
   const barFill = percentage >= 100 ? '#ff6a6a' : '#007bff';
+
+  useEffect(() => {
+    setAnimationTrigger(false);
+    console.log('애니메이션 확인');
+
+    setTimeout(() => {
+      setAnimationTrigger(true);
+    }, 100);
+  }, [meal]);
 
   return (
     <>
@@ -33,12 +45,19 @@ const NutritionAnalysis = ({ meal, className }: NutritionAnalysisProps) => {
           <Bar key='goal-calories' width='100%' height='20px' fill='#edf3f9' />
           <Bar
             key='consumed-calories'
-            width={`${percentage}%`}
+            width='0%'
+            // className={style.barAnimated}
+            className={`${animationTrigger ? style.startAnimation : ''}`}
+            style={{ '--fillWidth': `${percentage}%` }}
             height='20px'
             fill={barFill}
           />
         </BarChart>
-        <NutritionGraph meal={meal} />
+        <NutritionGraph
+          meal={meal}
+          data={data}
+          selectedMealNumber={selectedMealNumber}
+        />
       </div>
     </>
   );

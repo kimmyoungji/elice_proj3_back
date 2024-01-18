@@ -1,17 +1,13 @@
-import { mealDetailData } from './mealDetailData';
-
-interface PutImgTagProps {
-  mealType: string;
-  imgUrl: string;
-  className: string;
-}
+import { PutImgTagProps } from './RecordTypes';
 
 const PutImgTag: React.FC<PutImgTagProps> = ({
   mealType,
   imgUrl,
   className,
+  data,
+  selectedMealNumber,
 }) => {
-  const tagData = mealDetailData[mealType].food;
+  const tagData = data[selectedMealNumber].food;
 
   const getTags = () => {
     return tagData.map((food, index) => {

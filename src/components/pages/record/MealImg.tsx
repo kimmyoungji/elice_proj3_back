@@ -1,30 +1,33 @@
 import { useNavigate } from 'react-router-dom';
 import style from './mealImg.module.css';
-import { mealDetailData } from './mealDetailData';
 import PutImgTag from './PutImgTag';
+import { MealImgProps } from './RecordTypes';
 
-interface MealImgProps {
-  meal: string;
-  className: string;
-}
-
-const MealImg = ({ meal, className }: MealImgProps) => {
-  const imgUrl = mealDetailData[meal].imgurl;
+const MealImg = ({
+  meal,
+  className,
+  date,
+  data,
+  selectedMealNumber,
+}: MealImgProps) => {
+  const imgUrl = data[selectedMealNumber].imgurl;
   const navigate = useNavigate();
 
   return (
     <>
       <div className={className}>
-        {imgUrl || mealDetailData[meal].food.length > 0 ? (
+        {imgUrl || data[selectedMealNumber].food.length > 0 ? (
           <PutImgTag
             mealType={meal}
+            data={data}
+            selectedMealNumber={selectedMealNumber}
             imgUrl={imgUrl || '/images/9gram_logo.png'}
             className={className}
           />
         ) : (
           <div
             onClick={() => {
-              navigate(`/add-photo`);
+              navigate(`/add-photo/${date}/${selectedMealNumber}`);
             }}
           >
             <div className={style.uploadButton}> + </div>
