@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react';
+import { useId, useState } from 'react';
 import Down from '../../assets/Down';
 import Up from '../../assets/Up';
 import classes from './InputNumber.module.css';
@@ -41,31 +41,26 @@ const InputNumber = (props: InputBaseProps) => {
     operator: 'minus' | 'sum'
   ) => {
     let newInputNum: number = 1;
-    if (operator === 'minus') {
-      newInputNum = Math.max(inputNum - 1, 1);
-      if (inputNum - 1 < 1) {
-        setShowToast(true);
-      }
-    } else if (operator === 'sum') {
-      newInputNum = Math.min(inputNum + 1, maximumValue);
-      if (inputNum + 1 > maximumValue) {
-        setShowToast(true);
-      }
-    }
+    operator === 'minus' &&
+      (newInputNum = inputNum - 1 === 0 ? maximumValue : inputNum - 1);
+    operator === 'sum' &&
+      (newInputNum = inputNum === maximumValue ? 1 : inputNum + 1);
+    const showToast =
+      operator === 'minus' ? newInputNum < 1 : newInputNum > maximumValue;
+
+    setShowToast(showToast);
     setInputNum(newInputNum);
     onValueChange?.(newInputNum);
   };
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = Math.max(Number(e.target.value), 1);
-    if (
-      Number(e.target.value) &&
-      (Number(e.target.value) < 1 || Number(e.target.value) > maximumValue)
-    ) {
+    const inputValue = Number(e.target.value);
+    let newValue;
+    if (!inputValue || inputValue < 1 || inputValue > maximumValue) {
       setShowToast(true);
-      //toast보여주고 value를 1로 하게 ... ?
-      setInputNum(1);
-      onValueChange?.(1);
+      newValue = inputValue <= 0 ? 1 : maximumValue;
+    } else {
+      newValue = Math.max(inputValue, 1);
     }
     setInputNum(newValue);
     onValueChange?.(newValue);
