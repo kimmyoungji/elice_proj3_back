@@ -48,8 +48,17 @@ const TopBar = ({ home, title, back, qIcon, icon }: TopBarPropsType) => {
           <Qicon onClick={onClickQicon} />
         </div>
       </div>
-      <Toast show={showToast} position={position} setShow={setShowToast}>
-        <ToastText>안뇽</ToastText>
+      <Toast
+        show={showToast}
+        position={position}
+        setShow={setShowToast}
+        toastPosCls={key === 'addphotoymdmeal' ? 'middle' : undefined}
+      >
+        <ToastText>
+          {key === 'recordymdmeal' && '식단기록 사이트에 대해 안내 문구 '}
+          {key === 'addphotoymdmeal' &&
+            '촬영 1회 안에 모든 음식이 담길 수 있도록 촬영해주세요.'}
+        </ToastText>
       </Toast>
 
       <div
