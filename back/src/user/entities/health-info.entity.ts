@@ -1,56 +1,69 @@
-import { Entity, Column, PrimaryColumn, UpdateDateColumn, OneToOne, JoinColumn } from 'typeorm';
-import { IsNotEmpty, IsInt, IsOptional, IsString, IsEnum, IsDate } from 'class-validator';
+import { Entity, Column, PrimaryColumn, UpdateDateColumn, OneToOne, JoinColumn, DeleteDateColumn, Timestamp } from 'typeorm';
+import { IsNotEmpty, IsInt, IsString, IsDate } from 'class-validator';
 import { User } from './user.entity';
-import { ActivityAmount, DietGoal } from '../utils/health-info.enums'
+import { v4 as uuidv4 } from 'uuid';
+import { UpdateUserAndHealthInfoDto } from '../dto/UpdateUserAndHealthInfo.dto';
 
 @Entity()
 export class HealthInfo {
+
+    constructor(){
+        this.healthInfoId = uuidv4();
+    }
 
     @PrimaryColumn({ type: 'uuid'})
     @IsString()
     @IsNotEmpty()
     healthInfoId: string;
 
-    @Column({ type: 'int' })
+    @Column({ type: 'int', nullable: true})
     @IsInt()
-    @IsNotEmpty()
     weight: number;
 
-    @Column({ type: 'int'})
+    @Column({ type: 'int', nullable: true})
     @IsInt()
-    @IsNotEmpty()
     height: number;
 
-    @Column({ type: 'int'})
+    @Column({ type: 'int', nullable: true})
     @IsInt()
-    @IsNotEmpty()
     targetWeight: number;
 
-    @Column({ type: 'enum', enum: DietGoal })
-    @IsEnum(DietGoal)
-    @IsNotEmpty()
-    goal: DietGoal;
+    @Column({ type: 'varchar', nullable: true })
+    goal: string;
 
-    @Column({ type: 'enum', enum: ActivityAmount })
-    @IsEnum(ActivityAmount)
-    @IsNotEmpty()
-    activityAmount: ActivityAmount;
+    @Column({ type: 'varchar', nullable: true })
+    activityAmount: string;
 
-    @Column({ type: 'int' })
+    @Column({ type: 'int', nullable: true})
     @IsInt()
-    @IsNotEmpty()
     targetCalories: number;
 
-    @Column({ type: 'int', array: true })
+    @Column({ type: 'int', array: true, nullable: true })
     @IsInt({ each: true })
-    @IsNotEmpty()
     recommendIntake: number[];
 
     @Column({type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP'})
     @UpdateDateColumn()
     @IsDate()
-    updatedDate: Date;
+    updatedDate: Timestamp;
+
+    @Column({ type: 'timestamp with time zone', nullable: true })
+    @DeleteDateColumn({name: 'deletedat'})
+    deletedat: Timestamp;
 
     @OneToOne(() => User, user => user.healthInfo)
     user: User;
+
+    public mapHealthInfoDto(dto: UpdateUserAndHealthInfoDto){
+        const healthInfo = new HealthInfo();
+        healthInfo.weight = dto.weight;
+        healthInfo.height = dto.height;
+        healthInfo.targetWeight = dto.targetWeight;
+        healthInfo.goal = dto.goal;
+        healthInfo.activityAmount = dto.activityAmount;
+        healthInfo.targetCalories = dto.targetCalories;
+        healthInfo.recommendIntake = dto.recommendIntake;
+        delete healthInfo.healthInfoId;
+        return healthInfo;
+    }
 }

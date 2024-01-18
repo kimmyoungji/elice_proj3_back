@@ -19,6 +19,7 @@ export class AuthController {
 
     constructor(private readonly authService: AuthService) {}
 
+    
     /* 구글 로그인 및 사용자등록 */
     @ApiOperation({ summary: '구글 로그인 요청 API' })
     @ApiResponse({ status: 301, description: '구글 로그인 창으로 이동'})
@@ -88,14 +89,15 @@ export class AuthController {
 
     /* 회원 탈퇴 API */
     @ApiOperation({ summary: '회원 탈퇴 API' })
-    @ApiResponse({ status: 200, description: '회원 탈퇴 성공. 쿠키저장소에 sessionID가 삭제됩니다.'})
+    @ApiResponse({ status: 200, description: '회원 탈퇴 성공. 쿠키저장소에 sessionID가 삭제됩니다. 유저건강정보도 삭제됩니다.'})
     @ApiResponse({ status: 401, description: '로그인이 필요합니다.'})
     @UseGuards(isLoggedInGuard)
     @Get('withdrawal')
     async handleWithdrawal(@Req() request: any, @Res() response: any): Promise<void> {
         try{
             // 회원 탈퇴
-            await this.authService.withdrawal(request.user.userId);
+            const result = await this.authService.withdrawal(request.user.userId);
+            console.log(result);
 
             // 세션, req.user, cookie 삭제
             const sessionId = request.signedCookies[process.env.SESSION_COOKIE_NAME];
@@ -103,6 +105,6 @@ export class AuthController {
             request.user = null;
             await response.clearCookie(process.env.SESSION_COOKIE_NAME, {signed: true});
             await response.status(200).send('회월탈퇴 성공, 백엔드에 요청시 로그인 페이지로 리다이렉팅해드립니다.');
-        }catch(err){ throw err; }
+        }catch(err){ console.log(err); throw err; }
     }
 }

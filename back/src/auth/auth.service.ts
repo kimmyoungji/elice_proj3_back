@@ -1,3 +1,5 @@
+import { HealthInfo } from 'src/user/entities/health-info.entity';
+import { HealthInfoRepository } from './../user/health-info.repository';
 import { LocalSignupDto } from './dto/localSignupDto';
 import { GoogleLoginDto } from './dto/googleLoginDto';
 import { User } from '../user/entities/user.entity';
@@ -10,6 +12,7 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
     constructor(
         private readonly userRepository: UserRepository,
+        private readonly healthInfoRepository: HealthInfoRepository,
         private readonly dataSource: DataSource
     ) {}
 
@@ -130,13 +133,18 @@ export class AuthService {
     }
 
     // 회원 탈퇴 메서드
-    async withdrawal(userId: string): Promise<void> {
+    async withdrawal(userId: string) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
         
         try{
-            await this.userRepository.softDeleteUserByUserId(userId, queryRunner.manager );
+            const tempUser = await this.userRepository.findUserAndHealthInfoByUserId(userId, queryRunner.manager)
+            if (!tempUser) throw new HttpException('유저 정보를 찾을 수 없습니다.', HttpStatus.UNAUTHORIZED);
+            const result1 = await this.healthInfoRepository.deleteHealthInfoByHealthInfoId(tempUser.healthInfo.healthInfoId, queryRunner.manager);
+            const result2 = await this.userRepository.softDeleteUserByUserId(userId, queryRunner.manager );
+            if( result1.affected !== 1 || result2.affected !== 1 ) throw new HttpException('회원탈퇴 실패', HttpStatus.INTERNAL_SERVER_ERROR);
+            return {result1, result2};
         }catch(err){
             await queryRunner.rollbackTransaction();
             throw err;

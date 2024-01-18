@@ -1,12 +1,12 @@
-import { IsBoolean, IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsTimeZone, IsUUID } from 'class-validator';
+import { IsBoolean, IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { GoogleLoginDto } from '../../auth/dto/googleLoginDto';
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn, Timestamp, UpdateDateColumn } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { Gender } from '../utils/user.enums';
 import { LocalSignupDto } from '../../auth/dto/localSignupDto';
 import * as bcrypt from 'bcrypt';
 import { HealthInfo } from './health-info.entity';
-import { join } from 'path';
+import { UpdateUserAndHealthInfoDto } from '../dto/UpdateUserAndHealthInfo.dto';
+import { Gender } from '../utils/user.enums';
 
 @Entity('user')
 export class User {
@@ -39,10 +39,10 @@ export class User {
   @IsOptional()
   birthDay: Date;
 
-  @Column({ type: 'enum', enum:Gender, nullable: true})
+  @Column({ type: 'varchar', nullable: true})
   @IsEnum(Gender)
   @IsOptional()
-  gender: Gender;
+  gender: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   @IsString()
@@ -60,11 +60,11 @@ export class User {
 
   @Column({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP'})
   @UpdateDateColumn()
-  updatedDate: Date;
+  updatedDate: Timestamp;
 
   @Column({ type: 'timestamp with time zone', nullable: true })
-  @DeleteDateColumn()
-  deletedDate: Timestamp;
+  @DeleteDateColumn({name: 'deletedat' })
+  deletedat: Timestamp;
 
   @OneToOne(() => HealthInfo, healthInfo => healthInfo.user, { cascade:true })
   @JoinColumn({name: 'health_info_id'})
@@ -91,4 +91,16 @@ export class User {
     user.password = hashedPassword;
     return user;
   }
+
+  public mapUpdateUserDto(dto: UpdateUserAndHealthInfoDto){
+    const user = new User();
+    user.username = dto.username;
+    // user.password = dto.password;
+    user.birthDay = dto.birthDay;
+    user.gender = dto.gender;
+    user.profileImage = dto.profileImage;
+    user.membership = dto.membership;
+    return user;
+  }
+
 }
