@@ -74,9 +74,12 @@ const Toast = ({
   });
 
   useEffect(() => {
-    setTimeout(() => {
+    const timeoutShow = setTimeout(() => {
       setShow?.(false);
     }, time);
+    return () => {
+      clearTimeout(timeoutShow);
+    };
   }, [show]);
 
   return (
