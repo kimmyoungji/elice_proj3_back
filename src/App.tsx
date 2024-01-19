@@ -38,7 +38,6 @@ function App() {
   const nowLocation = location.pathname.slice(1);
   const key: TopNavKeyType | string = getKeyFromUrl(nowLocation);
   const navProps = getNavProps[key];
-  console.log(key);
   return (
     <div className='App'>
       <div className='container'>
@@ -60,10 +59,16 @@ function App() {
               <Route path='/my-page' element={<MyPage />} />
               <Route path='/my-page/edit' element={<MyPageEdit />} />
               <Route path='/add-photo/:date/:mealTime' element={<AddPhoto />} />
-              <Route path='/add-photo/:date/:mealTime/search' element={<AddPhotoSearch />} />
+              <Route
+                path='/add-photo/:date/:mealTime/search'
+                element={<AddPhotoSearch />}
+              />
               <Route path='/ai-analyze' element={<AiAnalyze />} />
               <Route path='/record/:selectedDate' element={<Record />} />
-              <Route path='/record/:date/:mealTime/edit' element={<RecordEdit />} />
+              <Route
+                path='/record/:date/:mealTime/edit'
+                element={<RecordEdit />}
+              />
               <Route path='/record/:date' element={<MealPage />}>
                 <Route path=':mealTime' element={<MealDeatilPage />} />
               </Route>
