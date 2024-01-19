@@ -1,6 +1,5 @@
 import CarlendarHeader from './CalendarHeader';
 import CalendarBody from './CalendarBody';
-import CalendarTitle from './CalendarTitle';
 import { createContext } from 'react';
 import { Dispatch, ReactElement, useContext, useState } from 'react';
 import getDates from '../../../utils/getDates';
@@ -76,7 +75,6 @@ export const useCalendarContext = () => {
 const Calendar = () => {
   return (
     <>
-      <CalendarTitle />
       <CalendarProvider>
         <CarlendarHeader />
         <CalendarBody />
