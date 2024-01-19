@@ -30,6 +30,7 @@ export class RecordController {
     return "식단 기록 성공";
   }
 
+
   // PUT /records?date=yyyy-mm-dd&mealType
   @Put()
   @ApiOperation({ summary: "특정 날짜와 식단 구분 수정" })

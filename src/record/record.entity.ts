@@ -22,8 +22,8 @@ export class Record extends BaseEntity {
   })
   mealType: MealType;
 
-  @Column({ type: "varchar", length: 50, nullable: false })
-  foodInfoId: string;
+  @Column({ type: "json", nullable: false })
+  foods: any[];
 
   @Column({ type: "int", nullable: false })
   foodCounts: number;

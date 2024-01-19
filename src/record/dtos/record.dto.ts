@@ -1,7 +1,9 @@
-import { IsInt, IsNotEmpty, IsUUID, IsString, IsEnum, IsOptional, IsDate } from "class-validator";
+import { IsInt, IsNotEmpty, IsUUID, IsString, IsEnum, IsOptional, IsDate, ValidateNested } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { Exclude, Expose } from "class-transformer";
+import { Exclude, Expose, Type } from "class-transformer";
 import { MealType } from '../record.entity'
+
+  
 
 @Exclude()
 export class RecordDto {

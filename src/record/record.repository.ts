@@ -7,6 +7,7 @@ import { response } from "express";
 
 @Injectable()
 export class RecordRepository extends Repository<Record> {
+  foodInfoRepository: any;
 
 constructor(@InjectRepository(Record) private recordRepository: Repository<Record>) {
   super(recordRepository.target, recordRepository.manager, recordRepository.queryRunner);
@@ -29,13 +30,13 @@ constructor(@InjectRepository(Record) private recordRepository: Repository<Recor
     });
     return records;
   }
- 
-  // 식단 기록
+
+// 식사 기록 생성
   async createRecord(record: {
     recordId: string,
     userId: string,
     mealType: MealType,
-    foodInfoId: string,
+    foods: any[],
     foodCounts: number,
     carbohydrates?: number,
     proteins?: number,
@@ -60,14 +61,14 @@ constructor(@InjectRepository(Record) private recordRepository: Repository<Recor
     }
     const record = await this.recordRepository.findOne({
       where: { 
-        firstRecordDate: Equal(dateObj),
+        firstRecordDate: LessThanOrEqual(dateObj),
         mealType: mealTypeEnum 
       },
     });
     if (!record) {
       throw new NotFoundException(`해당 날짜 레코드가 없거나 식사 유형이 옳지 않습니다`);
     }
-    this.recordRepository.merge(record, updateData);
+    await this.recordRepository.merge(record, updateData);
     record.updatedDate = new Date();
     return await this.recordRepository.save(record);
   }
