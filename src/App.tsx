@@ -38,7 +38,6 @@ function App() {
   const nowLocation = location.pathname.slice(1);
   const key: TopNavKeyType | string = getKeyFromUrl(nowLocation);
   const navProps = getNavProps[key];
-  console.log(key);
   return (
     <div className='App'>
       <div className='container'>
