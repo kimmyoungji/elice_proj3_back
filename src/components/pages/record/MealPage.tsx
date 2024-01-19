@@ -91,20 +91,25 @@ const MealPage = () => {
             )}
           </div>
           <div className={style.headerButton}>
-            <ButtonCommon
-              variant='default-active'
-              size='tiny'
-              onClick={() =>
-                navigate(`/record/${date}/${selectedMealTime}/edit`, {
-                  state: coordinate,
-                })
-              }
-            >
-              <> 수정 </>
-            </ButtonCommon>
-            <ButtonCommon variant='default-active' size='tiny'>
-              <> 삭제 </>
-            </ButtonCommon>
+            {data[selectedMealNumber].food.length > 0 &&
+              data[selectedMealNumber].imgurl && (
+                <>
+                  <ButtonCommon
+                    variant='default-active'
+                    size='tiny'
+                    onClick={() =>
+                      navigate(`/record/${date}/${selectedMealTime}/edit`, {
+                        state: coordinate,
+                      })
+                    }
+                  >
+                    <> 수정 </>
+                  </ButtonCommon>
+                  <ButtonCommon variant='default-active' size='tiny'>
+                    <> 삭제 </>
+                  </ButtonCommon>
+                </>
+              )}
           </div>
         </div>
         <MealDeatilPage
