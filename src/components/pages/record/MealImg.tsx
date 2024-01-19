@@ -4,7 +4,6 @@ import PutImgTag from './PutImgTag';
 import { MealImgProps } from './RecordTypes';
 
 const MealImg = ({
-  meal,
   className,
   date,
   data,
@@ -18,7 +17,6 @@ const MealImg = ({
       <div className={className}>
         {imgUrl || data[selectedMealNumber].food.length > 0 ? (
           <PutImgTag
-            mealType={meal}
             data={data}
             selectedMealNumber={selectedMealNumber}
             imgUrl={imgUrl || '/images/9gram_logo.png'}

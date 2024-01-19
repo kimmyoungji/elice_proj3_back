@@ -60,13 +60,19 @@ function App() {
               <Route path='/my-page' element={<MyPage />} />
               <Route path='/my-page/edit' element={<MyPageEdit />} />
               <Route path='/add-photo/:date/:mealTime' element={<AddPhoto />} />
-              <Route path='/add-photo/:date/:mealTime/search' element={<AddPhotoSearch />} />
+              <Route
+                path='/add-photo/:date/:mealTime/search'
+                element={<AddPhotoSearch />}
+              />
               <Route path='/ai-analyze' element={<AiAnalyze />} />
               <Route path='/record/:selectedDate' element={<Record />} />
-              <Route path='/record/:date/:mealTime/edit' element={<RecordEdit />} />
-              <Route path='/record/:date' element={<MealPage />}>
-                <Route path=':mealTime' element={<MealDeatilPage />} />
-              </Route>
+              <Route
+                path='/record/:date/:mealTime/edit'
+                element={<RecordEdit />}
+              />
+              <Route path='/record/:date/:mealTime' element={<MealPage />} />
+              {/* <Route path=':mealTime' element={<MealDeatilPage />} /> */}
+              {/* </Route> */}
               <Route path='/calendar' element={<Calender />} />
             </Routes>
           </Suspense>
@@ -81,5 +87,4 @@ function App() {
     </div>
   );
 }
-
 export default App;

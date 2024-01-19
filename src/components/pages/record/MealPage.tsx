@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Outlet } from 'react-router-dom';
 import style from './mealpage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates from '@utils/getDates';
@@ -25,7 +25,7 @@ const MealPage = () => {
   const { thisYear, thisMonth, thisDay } = getDates();
   const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
   const date = params.date || todayDate;
-  const selectedMealTime = params.mealTime || 1; // 받아온 아점저간
+  const selectedMealTime = Number(params.mealTime || 1); // 받아온 아점저간
   const dateSplit = date.split('-');
   const formatDate = `${dateSplit[0]}년 ${dateSplit[1]}월 ${dateSplit[2]}일`;
 
@@ -96,7 +96,7 @@ const MealPage = () => {
               size='tiny'
               onClick={() =>
                 navigate(`/record/${date}/${selectedMealTime}/edit`, {
-                  state: { coordinate },
+                  state: coordinate,
                 })
               }
             >
@@ -108,7 +108,6 @@ const MealPage = () => {
           </div>
         </div>
         <MealDeatilPage
-          meal={selectedMeal}
           date={date}
           data={data}
           selectedMealNumber={selectedMealNumber}

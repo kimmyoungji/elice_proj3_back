@@ -6,7 +6,6 @@ import style from './mealdetailpage.module.css';
 import { MealDetailProps } from './RecordTypes';
 
 const MealDeatilPage = ({
-  meal,
   date,
   data,
   selectedMealNumber,
@@ -16,7 +15,6 @@ const MealDeatilPage = ({
   return (
     <>
       <MealImg
-        meal={meal}
         className={style.imgBox}
         date={date}
         data={data}
@@ -39,13 +37,11 @@ const MealDeatilPage = ({
         </div>
       </div>
       <MealTag
-        meal={meal}
         data={data}
         selectedMealNumber={selectedMealNumber}
         className={style.mealTag}
       />
       <NutritionAnalysis
-        meal={meal}
         data={data}
         selectedMealNumber={selectedMealNumber}
         className={style.nutritionBox}

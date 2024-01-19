@@ -1,8 +1,7 @@
 import { PutImgTagProps } from './RecordTypes';
-import { getTags } from './TageUtils';
+import { MergeOverlappingTags } from './MergeOverlappingTags';
 
 const PutImgTag: React.FC<PutImgTagProps> = ({
-  mealType,
   imgUrl,
   className,
   data,
@@ -13,7 +12,7 @@ const PutImgTag: React.FC<PutImgTagProps> = ({
   return (
     <div style={{ position: 'relative' }}>
       {imgUrl && <img className={className} src={imgUrl} alt='식단 이미지' />}
-      {getTags(tagData)}
+      <MergeOverlappingTags tagData={tagData} />
     </div>
   );
 };

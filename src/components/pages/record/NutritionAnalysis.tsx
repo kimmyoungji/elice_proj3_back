@@ -9,7 +9,6 @@ import { userData } from '../my-page/DummyUserData';
 const goalCalories = userData.targetCalories;
 
 const NutritionAnalysis = ({
-  meal,
   className,
   data,
   selectedMealNumber,
@@ -27,7 +26,7 @@ const NutritionAnalysis = ({
     setTimeout(() => {
       setAnimationTrigger(true);
     }, 100);
-  }, [meal]);
+  }, [selectedMealNumber]);
 
   return (
     <>
@@ -51,11 +50,7 @@ const NutritionAnalysis = ({
             fill={barFill}
           />
         </BarChart>
-        <NutritionGraph
-          meal={meal}
-          data={data}
-          selectedMealNumber={selectedMealNumber}
-        />
+        <NutritionGraph data={data} selectedMealNumber={selectedMealNumber} />
       </div>
     </>
   );

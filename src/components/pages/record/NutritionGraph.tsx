@@ -4,11 +4,7 @@ import getNutritionStandard from '@utils/getNutritionStandard';
 import { NutritionGraphProps, Nutrient } from './RecordTypes';
 import { userData } from '../my-page/DummyUserData';
 
-const NutritionGraph = ({
-  meal,
-  data,
-  selectedMealNumber,
-}: NutritionGraphProps) => {
+const NutritionGraph = ({ data, selectedMealNumber }: NutritionGraphProps) => {
   const [userNutritionData, setUserNutritionData] = useState(userData);
   const [mealData, setMealData] = useState(data);
   const [animationTrigger, setAnimationTrigger] = useState(false);
@@ -18,7 +14,7 @@ const NutritionGraph = ({
     setTimeout(() => {
       setAnimationTrigger(true);
     }, 100);
-  }, [meal]);
+  }, [selectedMealNumber]);
 
   const result = getNutritionStandard(userNutritionData);
   const radius = 22;

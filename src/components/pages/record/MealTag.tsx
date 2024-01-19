@@ -2,12 +2,7 @@ import style from './mealtag.module.css';
 import { mealDetailData } from './DummyMealData';
 import { MealTagProps } from './RecordTypes';
 
-const MealTag = ({
-  meal,
-  className,
-  data,
-  selectedMealNumber,
-}: MealTagProps) => {
+const MealTag = ({ className, data, selectedMealNumber }: MealTagProps) => {
   const tagName = data[selectedMealNumber].food;
 
   return (
