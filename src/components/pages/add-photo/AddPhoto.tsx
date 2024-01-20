@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './addphoto.module.css';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import CheckPhotoModal from './CheckPhotoModal';
 
 const AddPhoto = () => {
   const navigate = useNavigate();
@@ -12,13 +13,20 @@ const AddPhoto = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
+  const [showModal, setShowModal] = useState(false);
+  const [imgUrl, setImgUrl] = useState("");
+
   useEffect(() => {
     getWebcam((stream: MediaProvider) => {
-      if (!videoRef.current) {
-        throw new Error('참조할 내용이 없습니다!');
-      }
+      if(!videoRef.current) return
       videoRef.current.srcObject = stream;
     })
+    return () => {
+      if(!videoRef.current) return
+      let s = videoRef.current.srcObject as MediaStream | null;
+      if(!s) return
+      s.getTracks()[0].stop();
+    }
   }, []);
 
   const getWebcam = (callback:(stream: MediaProvider)=>void) => {
@@ -37,28 +45,34 @@ const AddPhoto = () => {
     }
   };
 
+
   const screenShot = () => {
     const video = document.getElementById("videoCam");
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
-    context?.drawImage(video as CanvasImageSource, 0, 0, 390, 580);
-    canvas?.toBlob((blob) => {
-      let file = blob && new File([blob], "fileName.jpg", { type: "image/jpeg" });
-      const uploadFile = [file];  
-    }, "image/jpeg");
+    if (!video) {
+      return
+    }
+    const cropX = (video?.offsetWidth - 350) / 2;
+    const cropY = (video?.offsetHeight - 200) / 2;  
+
+    context?.drawImage(video as CanvasImageSource, cropX, cropY, 350, 200, 0, 0, 350, 200);
 
     const image = canvas?.toDataURL(); 
     const link = document.createElement("a");
     link.href = image as string;
-    link.download = "PaintJS[🎨]";
+    link.download = "사진촬영 테스트";
     link.click();
+    image && setImgUrl(image);
+    setShowModal(true);
   }
 
 
   return (
-    <>
+    <div style={{ position:'relative'}}>
       <div className={styles.cambox}>
-        <canvas width="390" height="480" style={{ display:'none', position:'absolute'}} ref={canvasRef} />
+        <div className={styles.guide}></div>
+        <canvas width="350" height="200" style={{ display:'none',position:'absolute'}} ref={canvasRef} />
         <video
           id="videoCam"
           className={styles.cam}
@@ -81,7 +95,8 @@ const AddPhoto = () => {
           <div className={styles.text}>직접입력</div>
         </div>
       </div>
-    </>
+      {showModal && <CheckPhotoModal imgUrl={imgUrl} setShowModal={setShowModal} />}
+    </div>
   );
 };
 

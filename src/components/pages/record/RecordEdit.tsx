@@ -17,6 +17,8 @@ interface MealTime {
 const RecordEdit = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+  console.log(state)
+
   const params = useParams();
   const date = params.date;
   const mealTime = params.mealTime;
@@ -46,19 +48,11 @@ const RecordEdit = () => {
     },
   ]);
 
-  // useEffect(() => {
-  //   if (state) {
-  //     let newFoods:Food[] = [];
-  //     state.map((tag:string) => (
-  //       newFoods.push({
-  //         foodName: tag,
-  //         foodImage: '/images/9gram_logo.png',
-  //         XYCoordinate: [0, 0],
-  //       })
-  //     ))
-  //     setFoods(newFoods);
-  //     }
-  // },[])
+  useEffect(() => {
+    if (state) {
+      setFoods(state);
+    }
+  }, []);
 
   const [focus, setFocus] = useState<string | undefined | null>('');
 
@@ -75,7 +69,7 @@ const RecordEdit = () => {
           {
             foodName: '음식명',
             foodImage: '/images/9gram_logo.png',
-            XYCoordinate: [0, 0],
+            XYCoordinate: [],
           },
           ...foods,
         ]);
@@ -145,6 +139,11 @@ const RecordEdit = () => {
     });
   }, [foods]);
 
+  const editDone = () => {
+    //수정완료 된 foodDate api 
+    navigate(`/record/${date}/${mealTime}`);
+  }
+
   return (
     <>
       <div className={styles.datebox}>
@@ -187,7 +186,7 @@ const RecordEdit = () => {
           {foods.map((food: Food, index: number) => (
             <div key={index} className={styles.tagitem}>
               <div className={styles.tagimgwrap}>
-                {food.XYCoordinate[0] === 0 && food.XYCoordinate[1] === 0 ? (
+                {food.XYCoordinate.length === 0 ? (
                   <img
                     className={`${styles.tagimg} ${
                       focus === food.foodName && styles.focusimg
@@ -239,15 +238,30 @@ const RecordEdit = () => {
           setFocus={setFocus}
         />
       )}
+      
       <div className={styles.btnbox}>
-        <ButtonCommon
+      {focus === ''
+        ? (
+          <ButtonCommon
+          size='medium'
+          variant='disabled'
+          onClick={() => navigate(-1)}
+        >
+          취소
+        </ButtonCommon>
+        )
+          : (
+            <ButtonCommon
           size='medium'
           variant='disabled'
           onClick={() => setFocus('')}
         >
           취소
         </ButtonCommon>
-        <ButtonCommon size='medium' variant='default-active'>
+        )
+      }
+        
+        <ButtonCommon size='medium' variant='default-active' onClickBtn={editDone}>
           수정 완료
         </ButtonCommon>
       </div>
