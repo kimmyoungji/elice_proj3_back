@@ -39,6 +39,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  border: 3px solid var(--main-skyblue);
 }
 
 .defaultProfile {
@@ -128,7 +129,7 @@
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  text-align: right;
+  margin-right: 20px;
 }
 
 .goaltInfo {
@@ -148,7 +149,7 @@
 }
 
 .goalDetail {
-  color: #000;
+  color: var(--main-skyblue);
   text-align: right;
   font-family: Inter;
   font-size: 15px;

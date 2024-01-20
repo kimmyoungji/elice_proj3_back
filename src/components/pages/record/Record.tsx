@@ -2,7 +2,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import style from './record.module.css';
 import getDates from '@utils/getDates';
 import { recordData } from './RecordData';
-import TopBar from '@components/layout/TopBar';
 
 const mealTimeKeys = Object.keys(recordData);
 
@@ -54,7 +53,7 @@ const Record = () => {
           >
             <div className={style.meal_info}>
               {recordData[meal].totalCalories &&
-                recordData[meal].img !== null ? (
+              recordData[meal].img !== null ? (
                 <>
                   <img
                     className={style.meal_contentBackground}

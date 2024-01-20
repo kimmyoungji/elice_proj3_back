@@ -1,19 +1,18 @@
-import style from './nutritionanalysis.module.css';
-import { BarChart } from './BarChart';
-import Bar from './Bar';
-import NutritionGraph from './NutritionGraph';
+import style from './mealnutritionanalysis.module.css';
+import { NutritionBarChart } from './NutritionBarChart';
+import NutritionBar from './NutritionBar';
 import { useEffect, useState } from 'react';
-import { NutritionAnalysisProps } from './RecordTypes';
+import { MealNutritionAnalysisProps } from './RecordTypes';
 import { userData } from '../my-page/DummyUserData';
+import NutritionDonutChart from './NutritionDonutChart';
 
 const goalCalories = userData.targetCalories;
 
-const NutritionAnalysis = ({
-  meal,
+const MealNutritionAnalysis = ({
   className,
   data,
   selectedMealNumber,
-}: NutritionAnalysisProps) => {
+}: MealNutritionAnalysisProps) => {
   const [animationTrigger, setAnimationTrigger] = useState(false);
   const totalCalories = data[selectedMealNumber].totalCalories;
   const percentage =
@@ -24,12 +23,10 @@ const NutritionAnalysis = ({
 
   useEffect(() => {
     setAnimationTrigger(false);
-    console.log('애니메이션 확인');
-
     setTimeout(() => {
       setAnimationTrigger(true);
     }, 100);
-  }, [meal]);
+  }, [selectedMealNumber]);
 
   return (
     <>
@@ -41,20 +38,23 @@ const NutritionAnalysis = ({
             <div className={style.totalCalories}> /{goalCalories} </div>
           </div>
         </div>
-        <BarChart>
-          <Bar key='goal-calories' width='100%' height='20px' fill='#edf3f9' />
-          <Bar
+        <NutritionBarChart>
+          <NutritionBar
+            key='goal-calories'
+            width='100%'
+            height='20px'
+            fill='#edf3f9'
+          />
+          <NutritionBar
             key='consumed-calories'
             width='0%'
-            // className={style.barAnimated}
             className={`${animationTrigger ? style.startAnimation : ''}`}
             style={{ '--fillWidth': `${percentage}%` }}
             height='20px'
             fill={barFill}
           />
-        </BarChart>
-        <NutritionGraph
-          meal={meal}
+        </NutritionBarChart>
+        <NutritionDonutChart
           data={data}
           selectedMealNumber={selectedMealNumber}
         />
@@ -63,4 +63,4 @@ const NutritionAnalysis = ({
   );
 };
 
-export default NutritionAnalysis;
+export default MealNutritionAnalysis;

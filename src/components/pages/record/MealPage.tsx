@@ -4,7 +4,7 @@ import style from './mealpage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates from '@utils/getDates';
 import { MealPageProps } from './RecordTypes';
-import MealDeatilPage from './MealDetailPage';
+import MealDetail from './MealDetail';
 import { mealDetailData } from './DummyMealData';
 
 // ✅ MealPage : 날짜, 특정 meal로 MealPage를 그려주기
@@ -25,7 +25,7 @@ const MealPage = () => {
   const { thisYear, thisMonth, thisDay } = getDates();
   const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
   const date = params.date || todayDate;
-  const selectedMealTime = params.mealTime || 1; // 받아온 아점저간
+  const selectedMealTime = Number(params.mealTime || 1); // 받아온 아점저간
   const dateSplit = date.split('-');
   const formatDate = `${dateSplit[0]}년 ${dateSplit[1]}월 ${dateSplit[2]}일`;
 
@@ -91,24 +91,27 @@ const MealPage = () => {
             )}
           </div>
           <div className={style.headerButton}>
-            <ButtonCommon
-              variant='default-active'
-              size='tiny'
-              onClick={() =>
-                navigate(`/record/${date}/${selectedMealTime}/edit`, {
-                  state: coordinate,
-                })
-              }
-            >
-              <> 수정 </>
-            </ButtonCommon>
-            <ButtonCommon variant='default-active' size='tiny'>
-              <> 삭제 </>
-            </ButtonCommon>
+            {data[selectedMealNumber].food.length > 0 && (
+              <>
+                <ButtonCommon
+                  variant='default-active'
+                  size='tiny'
+                  onClick={() =>
+                    navigate(`/record/${date}/${selectedMealTime}/edit`, {
+                      state: coordinate,
+                    })
+                  }
+                >
+                  <> 수정 </>
+                </ButtonCommon>
+                <ButtonCommon variant='default-active' size='tiny'>
+                  <> 삭제 </>
+                </ButtonCommon>
+              </>
+            )}
           </div>
         </div>
-        <MealDeatilPage
-          meal={selectedMeal}
+        <MealDetail
           date={date}
           data={data}
           selectedMealNumber={selectedMealNumber}

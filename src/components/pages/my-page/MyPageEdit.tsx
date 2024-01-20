@@ -160,7 +160,6 @@ const MyPageEdit = () => {
     };
 
     updateDataAndCalories(updatedData);
-    console.log(updatedData);
     // store에 저장하는 로직 추가해야함
     navigate('/my-page', { state: { updatedData } });
   };

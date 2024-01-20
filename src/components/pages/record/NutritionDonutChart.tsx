@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
-import styles from '@components/pages/record/nutritiongraph.module.css';
+import styles from '@components/pages/record/nutritiondonutchart.module.css';
 import getNutritionStandard from '@utils/getNutritionStandard';
-import { NutritionGraphProps, Nutrient } from './RecordTypes';
+import { NutritionDonutChartProps, Nutrient } from './RecordTypes';
 import { userData } from '../my-page/DummyUserData';
 
-const NutritionGraph = ({
-  meal,
+const NutritionDonutChart = ({
   data,
   selectedMealNumber,
-}: NutritionGraphProps) => {
+}: NutritionDonutChartProps) => {
   const [userNutritionData, setUserNutritionData] = useState(userData);
   const [mealData, setMealData] = useState(data);
   const [animationTrigger, setAnimationTrigger] = useState(false);
@@ -18,7 +17,7 @@ const NutritionGraph = ({
     setTimeout(() => {
       setAnimationTrigger(true);
     }, 100);
-  }, [meal]);
+  }, [selectedMealNumber]);
 
   const result = getNutritionStandard(userNutritionData);
   const radius = 22;
@@ -108,4 +107,4 @@ const NutritionGraph = ({
   }
 };
 
-export default NutritionGraph;
+export default NutritionDonutChart;

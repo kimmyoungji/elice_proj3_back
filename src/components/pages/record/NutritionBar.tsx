@@ -10,7 +10,7 @@ interface BarProps {
   style?: CustomCSSProperties;
 }
 
-export const Bar: React.FC<BarProps> = ({
+export const NutritionBar: React.FC<BarProps> = ({
   width,
   height,
   fill,
@@ -31,4 +31,4 @@ export const Bar: React.FC<BarProps> = ({
   );
 };
 
-export default Bar;
+export default NutritionBar;

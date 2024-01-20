@@ -1,19 +1,17 @@
 import { MealDetailData } from './DummyMealData';
 
 export interface MealPageProps {
-  selectedMealNumber: 1 | 2 | 3 | 4;
+  selectedMealNumber: 1 | 2 | 3 | 4 | undefined;
   date: string;
 }
 
 export interface MealDetailProps {
-  meal: string;
   date: string;
   selectedMealNumber: 1 | 2 | 3 | 4;
   data: MealDetailData;
 }
 
 export interface MealImgProps {
-  meal: string;
   className: string;
   date: string;
   data: MealDetailData;
@@ -21,29 +19,25 @@ export interface MealImgProps {
 }
 
 export interface MealTagProps {
-  meal: string;
   className: string;
   data: MealDetailData;
   selectedMealNumber: 1 | 2 | 3 | 4;
 }
 
-export interface NutritionAnalysisProps {
-  meal: string;
+export interface MealNutritionAnalysisProps {
   data: MealDetailData;
   className: string;
   selectedMealNumber: 1 | 2 | 3 | 4;
 }
 
-export interface PutImgTagProps {
-  mealType: string;
+export interface ImgTagContentProps {
   imgUrl: string;
   className: string;
   data: MealDetailData;
   selectedMealNumber: 1 | 2 | 3 | 4;
 }
 
-export interface NutritionGraphProps {
-  meal: string;
+export interface NutritionDonutChartProps {
   data: MealDetailData;
   selectedMealNumber: 1 | 2 | 3 | 4;
 }

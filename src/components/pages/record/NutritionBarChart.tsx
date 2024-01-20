@@ -2,7 +2,7 @@ interface chartProps {
   children: React.ReactNode;
 }
 
-export function BarChart({ children }: chartProps): JSX.Element {
+export function NutritionBarChart({ children }: chartProps): JSX.Element {
   return (
     <svg
       viewBox='0 0 600 20'

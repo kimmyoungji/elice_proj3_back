@@ -28,17 +28,22 @@ const mealDetailData: MealDetailData = {
       {
         foodName: '떡만둣국',
         foodImage: 'Image1',
-        XYCoordinate: [160, 13],
+        XYCoordinate: [10, 9],
       },
       {
         foodName: '김치찌개',
         foodImage: 'Image1',
-        XYCoordinate: [12, 4],
+        XYCoordinate: [31, 10],
       },
       {
         foodName: '오징어무침',
         foodImage: 'Image1',
         XYCoordinate: [70, 55],
+      },
+      {
+        foodName: '오징어무침1',
+        foodImage: 'Image1',
+        XYCoordinate: [70, 50],
       },
     ],
 
@@ -94,24 +99,24 @@ const mealDetailData: MealDetailData = {
   3: {
     food: [
       {
-        foodName: '감자탕',
+        foodName: '감자탕면',
         foodImage: 'Image1',
-        XYCoordinate: [35.67, 146.02],
+        XYCoordinate: [50, 130],
       },
       {
         foodName: '뚝배기',
         foodImage: 'Image1',
-        XYCoordinate: [35.67, 146.02],
+        XYCoordinate: [120, 154],
       },
       {
         foodName: '비빔국수',
         foodImage: 'Image1',
-        XYCoordinate: [35.67, 146.02],
+        XYCoordinate: [50, 130.02],
       },
       {
         foodName: '갈비탕',
         foodImage: 'Image1',
-        XYCoordinate: [35.67, 146.02],
+        XYCoordinate: [50, 130.02],
       },
 
       {
@@ -121,32 +126,32 @@ const mealDetailData: MealDetailData = {
       },
 
       {
-        foodName: '올로로롤',
+        foodName: '올로로롤1',
+        foodImage: 'Image1',
+        XYCoordinate: [50, 70],
+      },
+      {
+        foodName: '올로로롤2',
         foodImage: 'Image1',
         XYCoordinate: [35.67, 146.02],
       },
       {
-        foodName: '올로로롤',
+        foodName: '올로로롤3',
         foodImage: 'Image1',
         XYCoordinate: [35.67, 146.02],
       },
       {
-        foodName: '올로로롤',
+        foodName: '올로로롤4',
         foodImage: 'Image1',
         XYCoordinate: [35.67, 146.02],
       },
       {
-        foodName: '올로로롤',
+        foodName: '올로로롤5',
         foodImage: 'Image1',
         XYCoordinate: [35.67, 146.02],
       },
       {
-        foodName: '올로로롤',
-        foodImage: 'Image1',
-        XYCoordinate: [35.67, 146.02],
-      },
-      {
-        foodName: '올로로롤',
+        foodName: '올로로롤6',
         foodImage: 'Image1',
         XYCoordinate: [35.67, 146.02],
       },
