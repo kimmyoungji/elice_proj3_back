@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import style from './mealpage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates from '@utils/getDates';
-import MealDeatilPage from './MealDetailPage';
+import { MealPageProps } from './RecordTypes';
+import MealDetail from './MealDetail';
+import { mealDetailData } from './DummyMealData';
 
 // ✅ MealPage : 날짜, 특정 meal로 MealPage를 그려주기
 // ✅ 토글로 다른 meal을 선택하면 MealTime만 다시 받아와서 그려주기
 // ✅ meal data가 있으면 그려주고 없으면 default 그리기
+
+const mapSelectMealToMsg: { [key: string]: string } = {
+  1: '아침',
+  2: '점심',
+  3: '저녁',
+  4: '간식',
+};
+const mealTypes = ['아침', '점심', '저녁', '간식'];
 
 const MealPage = () => {
   const params = useParams();
@@ -15,24 +25,45 @@ const MealPage = () => {
   const { thisYear, thisMonth, thisDay } = getDates();
   const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
   const date = params.date || todayDate;
-  const selectedMealTime = params.mealTime; // 받아온 아점저간
+  const selectedMealTime = Number(params.mealTime || 1); // 받아온 아점저간
   const dateSplit = date.split('-');
   const formatDate = `${dateSplit[0]}년 ${dateSplit[1]}월 ${dateSplit[2]}일`;
-  let stringfyMeal;
 
-  if (selectedMealTime === '1') stringfyMeal = '아침';
-  else if (selectedMealTime === '2') stringfyMeal = '점심';
-  else if (selectedMealTime === '3') stringfyMeal = '저녁';
-  else if (selectedMealTime === '4') stringfyMeal = '간식';
-  else stringfyMeal = '아침';
+  const findMealNumber = (meal: string): 1 | 2 | 3 | 4 => {
+    const mealNumber = Number(
+      Object.keys(mapSelectMealToMsg).find(
+        (key) => mapSelectMealToMsg[key] === meal
+      )
+    );
+    return (mealNumber as 1 | 2 | 3 | 4) || 1;
+  };
 
-  const [selectedMeal, setSelectedMeal] = useState(stringfyMeal);
+  const mealMsg = mapSelectMealToMsg[selectedMealTime];
+  const [selectedMeal, setSelectedMeal] = useState(mealMsg);
+  const [selectedMealNumber, setSelectedMealNumber] = useState(
+    findMealNumber(selectedMeal)
+  );
+  const [data, setData] = useState(mealDetailData);
+  const [coordinate, setCoordinate] = useState(data[selectedMealNumber].food);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const mealTypes = ['아침', '점심', '저녁', '간식'];
+
+  useEffect(() => {
+    const mealData = data[selectedMealNumber];
+    if (mealData && mealData.food) {
+      setCoordinate(mealData.food);
+    }
+  }, [selectedMealNumber, data]);
+
+  useEffect(() => {
+    if (selectedMealNumber) {
+      navigate(`/record/${date}/${selectedMealNumber}`);
+    }
+  }, [selectedMealNumber, date, navigate]);
 
   const handleMealSelect = (mealType: string) => {
     setSelectedMeal(mealType);
-    // 선택한 mealType로 api 요청해서 data 뿌려주기
+    const newMealNumber = findMealNumber(mealType);
+    setSelectedMealNumber(newMealNumber);
     setDropdownVisible(false);
   };
 
@@ -60,19 +91,31 @@ const MealPage = () => {
             )}
           </div>
           <div className={style.headerButton}>
-            <ButtonCommon
-              variant='default-active'
-              size='tiny'
-              onClick={() => navigate(`/record/edit`)}
-            >
-              <> 수정 </>
-            </ButtonCommon>
-            <ButtonCommon variant='default-active' size='tiny'>
-              <> 삭제 </>
-            </ButtonCommon>
+            {data[selectedMealNumber].food.length > 0 && (
+              <>
+                <ButtonCommon
+                  variant='default-active'
+                  size='tiny'
+                  onClick={() =>
+                    navigate(`/record/${date}/${selectedMealTime}/edit`, {
+                      state: coordinate,
+                    })
+                  }
+                >
+                  <> 수정 </>
+                </ButtonCommon>
+                <ButtonCommon variant='default-active' size='tiny'>
+                  <> 삭제 </>
+                </ButtonCommon>
+              </>
+            )}
           </div>
         </div>
-        <MealDeatilPage meal={selectedMeal} />
+        <MealDetail
+          date={date}
+          data={data}
+          selectedMealNumber={selectedMealNumber}
+        />
       </div>
     </>
   );

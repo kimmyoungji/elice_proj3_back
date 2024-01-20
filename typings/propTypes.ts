@@ -1,14 +1,16 @@
 export type TopNavKeyType =
   | 'join'
-  | 'joinonboarding'
+  | 'onboardingstep'
+  | 'onboardingmeal'
   | 'login'
   | 'home'
   | 'calendar'
   | 'recordymd'
   | 'recordymdmeal'
+  | 'recordymdmealedit'
   | 'addphoto'
   | 'recordeidt'
-  | 'addphotosearch'
+  | 'addphotoymdmealsearch'
   | 'auth';
 
 export interface TopBarPropsType {

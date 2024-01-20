@@ -12,6 +12,8 @@ import { TopNavKeyType } from 'typings/propTypes';
 
 const Home = lazy(() => import('@components/pages/home/Home'));
 const Login = lazy(() => import('@components/pages/login/Login'));
+const Auth = lazy(() => import('@components/pages/join/Auth'));
+const Onboarding = lazy(() => import('@components/pages/join/Onboarding'));
 const Join = lazy(() => import('@components/pages/join/Join'));
 const MyPage = lazy(() => import('@components/pages/my-page/MyPage'));
 const MyPageEdit = lazy(() => import('@components/pages/my-page/MyPageEdit'));
@@ -27,10 +29,13 @@ const AiDrawerDetail = lazy(
 const Record = lazy(() => import('@components/pages/record/Record'));
 const RecordEdit = lazy(() => import('@components/pages/record/RecordEdit'));
 const MealPage = lazy(() => import('@components/pages/record/MealPage'));
-const MealDeatilPage = lazy(
-  () => import('@components/pages/record/MealDetailPage')
-);
+// const MealDeatilPage = lazy(
+//   () => import('@components/pages/record/MealDetailPage')
+// );
 const Calender = lazy(() => import('@components/pages/calendar/Calendar'));
+
+const preventNavArr = ['login', 'join', 'auth', 'onboardingstep'];
+const preventTopNavArr = ['auth', 'sharestep'];
 
 function App() {
   const location = useLocation();
@@ -40,42 +45,52 @@ function App() {
   return (
     <div className='App'>
       <div className='container'>
-        <header style={{ boxSizing: 'border-box' }}>
-          <TopBar {...defaultNavProps} {...navProps} />
-        </header>
+        {!preventTopNavArr.includes(key) && (
+          <header style={{ boxSizing: 'border-box' }}>
+            <TopBar {...defaultNavProps} {...navProps} />
+          </header>
+        )}
         <main className='main'>
           <Suspense fallback='...loading'>
             <Routes>
               <Route path='/' element={<Navigate to='/home' />} />
               <Route path='/login' element={<Login />} />
+              <Route path='/auth' element={<Auth />} />
+              <Route path='/onboarding/:step' element={<Onboarding />} />
               <Route path='/join' element={<Join />} />
               {/* <Route path='/join/onboarding' element={<JoinOnboard />} /> */}
               <Route path='/home' element={<Home />} />
               <Route path='/my-page' element={<MyPage />} />
               <Route path='/my-page/edit' element={<MyPageEdit />} />
-              <Route path='/add-photo' element={<AddPhoto />} />
-              <Route path='/add-photo/search' element={<AddPhotoSearch />} />
+              <Route path='/add-photo/:date/:mealTime' element={<AddPhoto />} />
+              <Route
+                path='/add-photo/:date/:mealTime/search'
+                element={<AddPhotoSearch />}
+              />
               <Route path='/ai-analyze' element={<AiAnalyze />} />
               <Route path='/ai-drawer' element={<AiDrawer />} />
               <Route path='/ai-drawer/detail' element={<AiDrawerDetail />} />
               <Route path='/record/:selectedDate' element={<Record />} />
-              <Route path='/record/edit' element={<RecordEdit />} />
-              <Route path='/record/:date' element={<MealPage />}>
+              <Route
+                path='/record/:date/:mealTime/edit'
+                element={<RecordEdit />}
+              />
+              <Route path='/record/:date/:mealTime' element={<MealPage />} />
+              {/* <Route path='/record/:date' element={<MealPage />}>
                 <Route path=':mealTime' element={<MealDeatilPage />} />
-              </Route>
-              {/* <Route path='/record/edit' element={<RecordEdit />} /> */}
+              </Route> */}
               <Route path='/calendar' element={<Calender />} />
             </Routes>
           </Suspense>
         </main>
-        <nav className='header'>
-          {location.pathname !== '/login' && location.pathname !== '/join' && (
+
+        {!preventNavArr.includes(key) && (
+          <nav className='header'>
             <Layout />
-          )}
-        </nav>
+          </nav>
+        )}
       </div>
     </div>
   );
 }
-
 export default App;

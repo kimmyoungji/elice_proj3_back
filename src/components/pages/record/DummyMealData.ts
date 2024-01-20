@@ -9,36 +9,41 @@ export interface MealDetailData {
     totalNutrient: {
       carbohydrates: number;
       proteins: number;
-      fat: number;
+      fats: number;
       dietaryFiber: number;
     };
-    recommendNutrient: {
-      carbohydrates: number;
-      proteins: number;
-      fat: number;
-      dietaryFiber: number;
-    };
+    // recommendNutrient: {
+    //   carbohydrates: number;
+    //   proteins: number;
+    //   fats: number;
+    //   dietaryFiber: number;
+    // };
     imgurl: string | undefined;
   };
 }
 
 const mealDetailData: MealDetailData = {
-  아침: {
+  1: {
     food: [
       {
         foodName: '떡만둣국',
         foodImage: 'Image1',
-        XYCoordinate: [160, 13],
+        XYCoordinate: [10, 9],
       },
       {
         foodName: '김치찌개',
         foodImage: 'Image1',
-        XYCoordinate: [12, 4],
+        XYCoordinate: [31, 10],
       },
       {
         foodName: '오징어무침',
         foodImage: 'Image1',
         XYCoordinate: [70, 55],
+      },
+      {
+        foodName: '오징어무침1',
+        foodImage: 'Image1',
+        XYCoordinate: [70, 50],
       },
     ],
 
@@ -46,19 +51,13 @@ const mealDetailData: MealDetailData = {
     totalNutrient: {
       carbohydrates: 240,
       proteins: 80,
-      fat: 25,
+      fats: 25,
       dietaryFiber: 2,
-    },
-    recommendNutrient: {
-      carbohydrates: 200,
-      proteins: 80,
-      fat: 50,
-      dietaryFiber: 4,
     },
     imgurl: '/images/record_example.png',
   },
 
-  점심: {
+  2: {
     food: [
       {
         foodName: '감자떡',
@@ -85,39 +84,39 @@ const mealDetailData: MealDetailData = {
     totalNutrient: {
       carbohydrates: 240,
       proteins: 80,
-      fat: 25,
+      fats: 25,
       dietaryFiber: 2,
     },
-    recommendNutrient: {
-      carbohydrates: 200,
-      proteins: 80,
-      fat: 50,
-      dietaryFiber: 4,
-    },
+    // recommendNutrient: {
+    //   carbohydrates: 200,
+    //   proteins: 80,
+    //   fats: 50,
+    //   dietaryFiber: 4,
+    // },
     imgurl: undefined,
   },
 
-  저녁: {
+  3: {
     food: [
       {
-        foodName: '감자탕',
+        foodName: '감자탕면',
         foodImage: 'Image1',
-        XYCoordinate: [35.67, 146.02],
+        XYCoordinate: [50, 130],
       },
       {
         foodName: '뚝배기',
         foodImage: 'Image1',
-        XYCoordinate: [35.67, 146.02],
+        XYCoordinate: [120, 154],
       },
       {
         foodName: '비빔국수',
         foodImage: 'Image1',
-        XYCoordinate: [35.67, 146.02],
+        XYCoordinate: [50, 130.02],
       },
       {
         foodName: '갈비탕',
         foodImage: 'Image1',
-        XYCoordinate: [35.67, 146.02],
+        XYCoordinate: [50, 130.02],
       },
 
       {
@@ -127,62 +126,62 @@ const mealDetailData: MealDetailData = {
       },
 
       {
-        foodName: '올로로롤',
+        foodName: '올로로롤1',
+        foodImage: 'Image1',
+        XYCoordinate: [50, 70],
+      },
+      {
+        foodName: '올로로롤2',
         foodImage: 'Image1',
         XYCoordinate: [35.67, 146.02],
       },
       {
-        foodName: '올로로롤',
+        foodName: '올로로롤3',
         foodImage: 'Image1',
         XYCoordinate: [35.67, 146.02],
       },
       {
-        foodName: '올로로롤',
+        foodName: '올로로롤4',
         foodImage: 'Image1',
         XYCoordinate: [35.67, 146.02],
       },
       {
-        foodName: '올로로롤',
+        foodName: '올로로롤5',
         foodImage: 'Image1',
         XYCoordinate: [35.67, 146.02],
       },
       {
-        foodName: '올로로롤',
-        foodImage: 'Image1',
-        XYCoordinate: [35.67, 146.02],
-      },
-      {
-        foodName: '올로로롤',
+        foodName: '올로로롤6',
         foodImage: 'Image1',
         XYCoordinate: [35.67, 146.02],
       },
     ],
     totalCalories: 5100,
     totalNutrient: {
-      carbohydrates: 240,
-      proteins: 80,
-      fat: 25,
-      dietaryFiber: 2,
+      carbohydrates: 100,
+      proteins: 50,
+      fats: 3,
+      dietaryFiber: 10,
     },
-    recommendNutrient: {
-      carbohydrates: 200,
-      proteins: 80,
-      fat: 50,
-      dietaryFiber: 4,
-    },
+    // recommendNutrient: {
+    //   carbohydrates: 200,
+    //   proteins: 80,
+    //   fats: 50,
+    //   dietaryFiber: 4,
+    // },
     imgurl: '/images/record_example.png',
   },
 
-  간식: {
+  4: {
     food: [],
     totalCalories: 0,
-    totalNutrient: { carbohydrates: 0, proteins: 0, fat: 0, dietaryFiber: 0 },
-    recommendNutrient: {
-      carbohydrates: 200,
-      proteins: 80,
-      fat: 50,
-      dietaryFiber: 4,
-    },
+    totalNutrient: { carbohydrates: 0, proteins: 0, fats: 0, dietaryFiber: 0 },
+    // recommendNutrient: {
+    //   carbohydrates: 200,
+    //   proteins: 80,
+    //   fats: 50,
+    //   dietaryFiber: 4,
+    // },
     imgurl: undefined,
   },
 };

@@ -29,12 +29,38 @@
   border: 2px solid var(--main-blue);
 }
 
+
 .variant-validated {
   border: 2px solid var(--sem-great);
 }
 
 .variant-error {
   border: 2px solid var(--sem-bad);
+}
+
+/* INPUT STYLE */
+
+.white {
+  background-color: #fff;
+  border: 1px solid var(--main-skyblue);
+  color: var(--main-blue);
+}
+
+.lightblue {
+  color: #000;
+  background-color: var(--main-lightblue);
+}
+
+.blue {
+  background-color: #346DFF;
+  border: 1px solid var(--main-blue);
+  color: #fff;
+}
+
+.gray {
+  background-color: #fff;
+  border: 1px solid var(--main-lightblue);
+  color: #3C3C3C;
 }
 
 /* INPUT SIZE CLASS */

@@ -2,7 +2,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import style from './record.module.css';
 import getDates from '@utils/getDates';
 import { recordData } from './RecordData';
-import TopBar from '@components/layout/TopBar';
 
 const mealTimeKeys = Object.keys(recordData);
 

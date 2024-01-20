@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styles from './recordedit.module.css';
 import RecordEditDetail from './RecordEditDetail';
 import { useEffect, useRef, useState } from 'react';
@@ -10,25 +10,50 @@ interface Food {
   XYCoordinate: number[];
 }
 
+interface MealTime {
+  [key: string]: string;
+}
+
 const RecordEdit = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  console.log(state)
+
+  const params = useParams();
+  const date = params.date;
+  const mealTime = params.mealTime;
+  const dateSplit = date?.split('-');
+  const mealTimetoStr: MealTime = {
+    '1': '아침',
+    '2': '점심',
+    '3': '저녁',
+    '4': '간식',
+  };
+
   const [foods, setFoods] = useState([
     {
-      foodName: '떡만둣국',
+      foodName: '적채',
       foodImage: '/images/salad-2756467_1280.jpg',
-      XYCoordinate: [35.67, 146.02],
+      XYCoordinate: [45, 200],
     },
     {
-      foodName: '흰쌀밥',
+      foodName: '버섯',
       foodImage: '/images/salad-2756467_1280.jpg',
-      XYCoordinate: [35.67, 146.02],
+      XYCoordinate: [250, 50],
     },
     {
-      foodName: '김치',
+      foodName: '청포도',
       foodImage: '/images/salad-2756467_1280.jpg',
-      XYCoordinate: [35.67, 146.02],
+      XYCoordinate: [1000, 146.02],
     },
   ]);
+
+  useEffect(() => {
+    if (state) {
+      setFoods(state);
+    }
+  }, []);
+
   const [focus, setFocus] = useState<string | undefined | null>('');
 
   const handleFocus = (
@@ -44,7 +69,7 @@ const RecordEdit = () => {
           {
             foodName: '음식명',
             foodImage: '/images/9gram_logo.png',
-            XYCoordinate: [0, 0],
+            XYCoordinate: [],
           },
           ...foods,
         ]);
@@ -55,8 +80,12 @@ const RecordEdit = () => {
   };
 
   const deletefood = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
-    const delete_target = e.currentTarget.id;
-    setFoods(foods.filter((food) => food.foodName !== delete_target));
+    if (foods.length > 1) {
+      const delete_target = e.currentTarget.id;
+      setFoods(foods.filter((food) => food.foodName !== delete_target));
+    } else {
+      alert('음식은 1개 이상 등록되어야 합니다!');
+    }
   };
 
   const scrollDiv = useRef<HTMLDivElement | null>(null);
@@ -67,50 +96,63 @@ const RecordEdit = () => {
     el.scrollTo({
       left: el.scrollLeft + deltaY,
       behavior: 'smooth',
-    });    
+    });
   };
 
   const handleEnter = () => {
-    const main = document.querySelector(".main") as HTMLElement;
+    const main = document.querySelector('.main') as HTMLElement;
     main.style.overflow = 'hidden';
-  }
+  };
 
   const handleLeave = () => {
-    const main = document.querySelector(".main") as HTMLElement;
+    const main = document.querySelector('.main') as HTMLElement;
     main.style.overflow = 'scroll';
-  }
+  };
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<null[] | HTMLCanvasElement[]>([]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
+  const createCanvas = (food: Food, index: number) => {
+    const canvas = canvasRef.current[index];
     const context = canvas?.getContext('2d');
 
     const image = new Image();
-    image.src = `${foods[foods.length - 1].foodImage}`;
+    image.src = food.foodImage;
 
     image.onload = () => {
-      // props (원본 객체, x좌표, y좌표, 이미지가로길이, 이미지세로길이, 캔버스 x좌표, 캔버스 y좌표, 캔버스에 그려질 가로길이, 캔버스에 그려질 세로길이)
-      context?.drawImage(image, 0, 0, image.width, image.height);
-
-      // props (추출 x좌표, 추출 y좌표, 추출 너비, 추출 높이)
-      const croppedImage = context?.getImageData(0, 0, 90, 90);
-
-      // 자른 이미지를 다시 Canvas에 그립니다.
-      context?.clearRect(
+      context?.drawImage(
+        image,
+        food.XYCoordinate[0],
+        food.XYCoordinate[1],
+        90,
+        90,
         0,
         0,
-        canvas?.width as number,
-        canvas?.height as number
+        90,
+        90
       );
-      context?.putImageData(croppedImage as ImageData, 0, 0);
     };
+  };
+
+  useEffect(() => {
+    foods.map((food, index) => {
+      return createCanvas(food, index);
+    });
   }, [foods]);
+
+  const editDone = () => {
+    //수정완료 된 foodDate api 
+    navigate(`/record/${date}/${mealTime}`);
+  }
 
   return (
     <>
       <div className={styles.datebox}>
-        <p className='b-small'>2024.01.02 (화) 점심</p>
+        {dateSplit && mealTime && (
+          <p className='b-small'>
+            {dateSplit[0]}년 {dateSplit[1]}월 {dateSplit[2]}일{' '}
+            {mealTimetoStr[mealTime]}
+          </p>
+        )}
       </div>
 
       <div className={styles.imgbox}>
@@ -144,7 +186,7 @@ const RecordEdit = () => {
           {foods.map((food: Food, index: number) => (
             <div key={index} className={styles.tagitem}>
               <div className={styles.tagimgwrap}>
-                {food.XYCoordinate[0] === 0 && food.XYCoordinate[1] === 0 ? (
+                {food.XYCoordinate.length === 0 ? (
                   <img
                     className={`${styles.tagimg} ${
                       focus === food.foodName && styles.focusimg
@@ -160,7 +202,9 @@ const RecordEdit = () => {
                       focus === food.foodName && styles.focusimg
                     }`}
                     id={food.foodName}
-                    ref={canvasRef}
+                    ref={(element) => {
+                      canvasRef.current[index] = element;
+                    }}
                     width={90}
                     height={90}
                     onClick={(e) => handleFocus(e)}
@@ -194,11 +238,30 @@ const RecordEdit = () => {
           setFocus={setFocus}
         />
       )}
+      
       <div className={styles.btnbox}>
-        <ButtonCommon size='medium' variant='disabled' onClick={()=>setFocus('')}>
+      {focus === ''
+        ? (
+          <ButtonCommon
+          size='medium'
+          variant='disabled'
+          onClick={() => navigate(-1)}
+        >
           취소
         </ButtonCommon>
-        <ButtonCommon size='medium' variant='default-active'>
+        )
+          : (
+            <ButtonCommon
+          size='medium'
+          variant='disabled'
+          onClick={() => setFocus('')}
+        >
+          취소
+        </ButtonCommon>
+        )
+      }
+        
+        <ButtonCommon size='medium' variant='default-active' onClickBtn={editDone}>
           수정 완료
         </ButtonCommon>
       </div>

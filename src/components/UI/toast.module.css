@@ -1,0 +1,55 @@
+.wrapper {
+  padding: 9px 12px;
+  background-color: var(--main-skyblue);
+  position: absolute;
+  z-index: 99999;
+  animation: 0.5s fadeIn;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  color: white;
+  border-radius: 10px;
+  min-width: 219px;
+  text-align: center;
+  /* transition: opacity 0.5s ease-in-out; */
+  /* top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+}
+
+.top {
+  top: 20%;
+  left: 50%;
+}
+
+.middle {
+  top: 50%;
+  left: 50%;
+}
+
+.bottom {
+  top: 80%;
+  left: 50%;
+}
+
+.fadeOut {
+  animation: 0.5s fadeOut;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

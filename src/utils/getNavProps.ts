@@ -20,6 +20,9 @@ export const getKeyFromUrl = (url: string): TopNavKeyType | string => {
       if (dateExisted) {
         return 'ymd';
       }
+      if (idx === 1 && Number(url)) {
+        return 'step';
+      }
       if (idx === 2) {
         return 'meal';
       }
@@ -43,8 +46,8 @@ interface GetNavPropsType {
 
 export const getNavProps: GetNavPropsType = {
   join: { title: '회원정보 입력', back: true },
-  joinonboarding: { back: true },
-  login: { title: '로그인' },
+  onboardingstep: { back: true },
+  login: { back: true, title: '로그인' },
   home: { home: true, title: '구그램' },
   calendar: { title: '식단달력' },
   recordymd: { title: '하루식단' },
@@ -52,10 +55,11 @@ export const getNavProps: GetNavPropsType = {
     title: 'AI 식단 기록',
     back: true,
     qIcon: true,
+    //뒤로가기 할ㅐ selectedDate로
   },
-  addphoto: { title: 'AI 식단 카메라', back: true, qIcon: true },
-  recordedit: { title: 'AI 식단 확인', back: true },
-  addphotosearch: { title: '식단 검색', back: true },
+  addphotoymdmeal: { title: 'AI 식단 카메라', back: true, qIcon: true },
+  recordymdmealedit: { title: 'AI 식단 확인', back: true },
+  addphotoymdmealsearch: { title: '식단 검색', back: true },
   aianalyze: { title: 'AI 분석', icon: true },
   aidrawer: { back: true, title: 'AI 분석 서랍' },
   aidrawerymd: { back: true, title: 'AI 분석 서랍' }, //날짜 넣어줘야 함
