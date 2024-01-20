@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
-import styles from '@components/pages/record/nutritiongraph.module.css';
+import styles from '@components/pages/record/nutritiondonutchart.module.css';
 import getNutritionStandard from '@utils/getNutritionStandard';
-import { NutritionGraphProps, Nutrient } from './RecordTypes';
+import { NutritionDonutChartProps, Nutrient } from './RecordTypes';
 import { userData } from '../my-page/DummyUserData';
 
-const NutritionGraph = ({ data, selectedMealNumber }: NutritionGraphProps) => {
+const NutritionDonutChart = ({
+  data,
+  selectedMealNumber,
+}: NutritionDonutChartProps) => {
   const [userNutritionData, setUserNutritionData] = useState(userData);
   const [mealData, setMealData] = useState(data);
   const [animationTrigger, setAnimationTrigger] = useState(false);
@@ -104,4 +107,4 @@ const NutritionGraph = ({ data, selectedMealNumber }: NutritionGraphProps) => {
   }
 };
 
-export default NutritionGraph;
+export default NutritionDonutChart;

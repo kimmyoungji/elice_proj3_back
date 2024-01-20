@@ -1,5 +1,4 @@
 import style from './mealtag.module.css';
-import { mealDetailData } from './DummyMealData';
 import { MealTagProps } from './RecordTypes';
 
 const MealTag = ({ className, data, selectedMealNumber }: MealTagProps) => {

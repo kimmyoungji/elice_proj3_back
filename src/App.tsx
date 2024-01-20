@@ -25,9 +25,9 @@ const AiAnalyze = lazy(() => import('@components/pages/ai-analyze/AiAnalyze'));
 const Record = lazy(() => import('@components/pages/record/Record'));
 const RecordEdit = lazy(() => import('@components/pages/record/RecordEdit'));
 const MealPage = lazy(() => import('@components/pages/record/MealPage'));
-const MealDeatilPage = lazy(
-  () => import('@components/pages/record/MealDetailPage')
-);
+// const MealDeatilPage = lazy(
+//   () => import('@components/pages/record/MealDetailPage')
+// );
 const Calender = lazy(() => import('@components/pages/calendar/Calendar'));
 
 const preventNavArr = ['login', 'join', 'auth', 'onboardingstep'];
@@ -70,8 +70,9 @@ function App() {
                 element={<RecordEdit />}
               />
               <Route path='/record/:date/:mealTime' element={<MealPage />} />
-              {/* <Route path=':mealTime' element={<MealDeatilPage />} /> */}
-              {/* </Route> */}
+              {/* <Route path='/record/:date' element={<MealPage />}>
+                <Route path=':mealTime' element={<MealDeatilPage />} />
+              </Route> */}
               <Route path='/calendar' element={<Calender />} />
             </Routes>
           </Suspense>

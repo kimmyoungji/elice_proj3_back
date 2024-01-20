@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import style from './mealImg.module.css';
-import PutImgTag from './PutImgTag';
+import ImgTagContent from './ImgTagContent';
 import { MealImgProps } from './RecordTypes';
 
 const MealImg = ({
@@ -16,7 +16,7 @@ const MealImg = ({
     <>
       <div className={className}>
         {imgUrl || data[selectedMealNumber].food.length > 0 ? (
-          <PutImgTag
+          <ImgTagContent
             data={data}
             selectedMealNumber={selectedMealNumber}
             imgUrl={imgUrl || '/images/9gram_logo.png'}

@@ -1,7 +1,7 @@
 import { MealDetailData } from './DummyMealData';
 
 export interface MealPageProps {
-  selectedMealNumber: 1 | 2 | 3 | 4;
+  selectedMealNumber: 1 | 2 | 3 | 4 | undefined;
   date: string;
 }
 
@@ -24,20 +24,20 @@ export interface MealTagProps {
   selectedMealNumber: 1 | 2 | 3 | 4;
 }
 
-export interface NutritionAnalysisProps {
+export interface MealNutritionAnalysisProps {
   data: MealDetailData;
   className: string;
   selectedMealNumber: 1 | 2 | 3 | 4;
 }
 
-export interface PutImgTagProps {
+export interface ImgTagContentProps {
   imgUrl: string;
   className: string;
   data: MealDetailData;
   selectedMealNumber: 1 | 2 | 3 | 4;
 }
 
-export interface NutritionGraphProps {
+export interface NutritionDonutChartProps {
   data: MealDetailData;
   selectedMealNumber: 1 | 2 | 3 | 4;
 }

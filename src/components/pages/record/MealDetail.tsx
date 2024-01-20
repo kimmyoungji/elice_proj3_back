@@ -1,15 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import MealImg from './MealImg';
 import MealTag from './MealTag';
-import NutritionAnalysis from './NutritionAnalysis';
-import style from './mealdetailpage.module.css';
+import MealNutritionAnalysis from './MealNutritionAnalysis';
+import style from './mealdetail.module.css';
 import { MealDetailProps } from './RecordTypes';
 
-const MealDeatilPage = ({
-  date,
-  data,
-  selectedMealNumber,
-}: MealDetailProps) => {
+const MealDetail = ({ date, data, selectedMealNumber }: MealDetailProps) => {
   const navigate = useNavigate();
 
   return (
@@ -41,7 +37,7 @@ const MealDeatilPage = ({
         selectedMealNumber={selectedMealNumber}
         className={style.mealTag}
       />
-      <NutritionAnalysis
+      <MealNutritionAnalysis
         data={data}
         selectedMealNumber={selectedMealNumber}
         className={style.nutritionBox}
@@ -50,4 +46,4 @@ const MealDeatilPage = ({
   );
 };
 
-export default MealDeatilPage;
+export default MealDetail;

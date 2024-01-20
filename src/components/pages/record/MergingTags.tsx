@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import style from './mergeoverlappingtags.module.css';
+import style from './mergingtags.module.css';
 
 type TagData = {
   XYCoordinate: number[];
@@ -12,9 +12,7 @@ type MergedTagData = {
   foodNames: string[];
 };
 
-export const MergeOverlappingTags: React.FC<{ tagData: TagData[] }> = ({
-  tagData,
-}) => {
+export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
   const [selectedFoods, setSelectedFoods] = useState<string[]>([]);
   const [selectedTagPosition, setSelectedTagPosition] = useState<number[]>([]);
   const tagPadding = 10;
@@ -74,7 +72,6 @@ export const MergeOverlappingTags: React.FC<{ tagData: TagData[] }> = ({
   // const mergedTagNameLength = mergedTagData.map((food) =>
   //   food.foodNames.reduce((sum, mergedTag) => sum + mergedTag.length, 0)
   // );
-  // const mergedTageSize = mergedTagNameLength * 10 + tagPadding;
   // const mergedTageSize = mergedTagNameLength * 10 + tagPadding;
 
   const handleTagClick = (
