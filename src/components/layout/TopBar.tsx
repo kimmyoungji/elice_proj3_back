@@ -55,6 +55,7 @@ const TopBar = ({ home, title, back, qIcon, icon }: TopBarPropsType) => {
 
       <div
         className={`${styles.icon_wrapper} ${icon ? '' : styles['non-visible']}`}
+        onClick={() => navigate(`/ai-drawer`)}
       >
         <svg
           xmlns='http://www.w3.org/2000/svg'

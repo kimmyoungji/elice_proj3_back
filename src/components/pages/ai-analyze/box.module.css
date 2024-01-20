@@ -38,6 +38,10 @@
   gap: 5px;
   margin-top: 10px;
 }
+/* .disable_btn {
+  background-color: var(--main-blue);
+  color: white;
+} */
 
 .scrap_wrapper {
   display: flex;

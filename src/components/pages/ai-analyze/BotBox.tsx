@@ -11,6 +11,7 @@ interface Props {
 
 const BotBox = ({ toSave, text, button, handleOnClick }: Props) => {
   const [scrap, setScrap] = useState(false);
+  const [clicked, setClicked] = useState(false);
 
   const handleScrap = () => {
     setScrap(!scrap);
@@ -30,14 +31,19 @@ const BotBox = ({ toSave, text, button, handleOnClick }: Props) => {
             ></div>
             <div className={styles.button_wrapper}>
               <>
-                {button.map((one, idx) => (
+                {button.map((btn, idx) => (
                   <div key={`chatBtn-${idx}`}>
                     <ButtonCommon
                       variant='default-active'
                       size='med-small'
-                      onClickBtn={(e) => handleOnClick(e, idx)}
+                      onClickBtn={(e) => {
+                        handleOnClick(e, idx);
+                        setClicked(true);
+                      }}
+                      disabled={clicked && true}
+                      customClassName={clicked && styles.disable_btn}
                     >
-                      {one.text}
+                      {btn.text}
                     </ButtonCommon>
                   </div>
                 ))}

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AiAnalyze = () => {
   const [recordText, setRecordText] = useState([]);
-  // 저장된 일주일치 기록이 있는지 API 호출하고 setRecordText(true)
+  // API 호출해서 저장된 일주일치 기록이 있는지 확인하고 setRecordText(true)
 
   // 현재 대화내용 저장
   const [chats, setChats] = useState([questionData['1']]);
@@ -62,7 +62,7 @@ const AiAnalyze = () => {
           return (
             <div key={`chat-${idx}`} className={styles.chats_wrapper}>
               <BotBox
-                toSave={true}
+                toSave={chat.type.question ? true : false}
                 text={chat.text}
                 button={chat.button}
                 handleOnClick={handleOnClick}
