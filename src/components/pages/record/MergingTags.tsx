@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import style from './mergingtags.module.css';
-
-type TagData = {
-  XYCoordinate: number[];
-  foodName: string;
-  foodImage: string;
-};
-
-type MergedTagData = {
-  XYCoordinate: number[];
-  foodNames: string[];
-};
+import { TagData, MergedTagData } from './RecordTypes';
 
 export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
   const [selectedFoods, setSelectedFoods] = useState<string[]>([]);
@@ -39,8 +29,7 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
     tags.forEach((tag) => {
       let isMerged = false;
       const MaxTagWidth = 80;
-      // const charWidth = tag.foodName.length;
-      // const assumedTagWidth = charWidth * 10 + tagPadding;
+
       for (let mergedTag of mergedTags) {
         if (
           Math.abs(mergedTag.XYCoordinate[0] - tag.XYCoordinate[0]) <
@@ -69,10 +58,6 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
   const mergedMaxWidth = 80;
   const validTags = tagData.filter((tag) => tag.XYCoordinate.length > 0);
   const mergedTagData = mergeOverlappingTags(validTags);
-  // const mergedTagNameLength = mergedTagData.map((food) =>
-  //   food.foodNames.reduce((sum, mergedTag) => sum + mergedTag.length, 0)
-  // );
-  // const mergedTageSize = mergedTagNameLength * 10 + tagPadding;
 
   const handleTagClick = (
     event: React.MouseEvent<HTMLElement>,
@@ -93,16 +78,12 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
     <>
       <div>
         {mergedTagData.map((tag: MergedTagData, index: number) => {
-          // const mergedTageSize =
-          //   tag.foodNames.reduce((sum, name) => sum + name.length, 0) * 10 +
-          //   tagPadding;
           return (
             <div className={style.mergeTagContainer} key={index}>
               <p
                 style={{
                   left: `${tag.XYCoordinate[0]}px`,
                   top: `${tag.XYCoordinate[1]}px`,
-                  // maxWidth: `${mergedTageSize}px`,
                   maxWidth: `${mergedMaxWidth}px`,
                 }}
                 className={`${style.tag} b-tiny`}

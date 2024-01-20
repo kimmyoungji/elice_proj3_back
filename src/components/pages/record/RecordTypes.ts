@@ -52,3 +52,14 @@ export interface Nutrient {
     '--finalOffset': string;
   };
 }
+
+export type TagData = {
+  XYCoordinate: number[];
+  foodName: string;
+  foodImage: string;
+};
+
+export type MergedTagData = {
+  XYCoordinate: number[];
+  foodNames: string[];
+};
