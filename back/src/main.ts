@@ -7,7 +7,6 @@ import * as session from 'express-session';
 import * as passport from 'passport';
 import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
-import express from 'express';
 
 dotenv.config({path: __dirname + '/../.env'});
 
