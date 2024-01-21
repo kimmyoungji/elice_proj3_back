@@ -1,8 +1,17 @@
-.header {
+.headerContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  width: 120px;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .title {

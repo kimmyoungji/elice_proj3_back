@@ -10,9 +10,9 @@ export const NutritionBar: React.FC<BarProps> = ({
   return (
     <>
       <rect
-        rx='10' // 바 둥근 모서리 설정을 위해 rx 설정
+        rx='10'
         width={width}
-        height={height} // 바의 높이를 설정하여 바의 두께를 결정
+        height={height}
         fill={fill}
         className={className}
         style={style}

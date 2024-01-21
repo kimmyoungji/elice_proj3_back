@@ -76,19 +76,6 @@ const MyPage = () => {
         </div>
       ))}
 
-      {/* <div className={style.infoArea}>
-        <div className={style.infoTitle}>신체 데이터</div>
-        <div className={style.infoContent}>
-          {data.height} cm <span style={{ color: 'black' }}> / </span>{' '}
-          {data.weight} kg
-        </div>
-      </div>
-
-      <div className={style.activityAccountArea}>
-        <div className={style.infoTitle}>활동량</div>
-        <div className={style.infoContent}>{activityMsg}</div>
-      </div> */}
-
       <div className={style.activityAccountArea}>
         <div className={style.infoTitle}>계정 설정</div>
         <img

@@ -1,29 +1,34 @@
-interface RecordData {
-  [key: string]: {
-    totalCalories: number;
-    img: string | undefined;
+export interface RecordData {
+  food: {
+    [key: number]: {
+      mealCalories: number;
+      img: string | undefined;
+    };
   };
 }
 
+// 유림님이 맡으신 MVP 부분
 const recordData: RecordData = {
-  아침: {
-    totalCalories: 1400,
-    img: '/images/record_example.png',
-  },
+  food: {
+    1: {
+      mealCalories: 1400,
+      img: '/images/record_example.png',
+    },
 
-  점심: {
-    totalCalories: 2500,
-    img: undefined,
-  },
+    2: {
+      mealCalories: 2500,
+      img: undefined,
+    },
 
-  저녁: {
-    totalCalories: 5100,
-    img: '/images/record_example.png',
-  },
+    3: {
+      mealCalories: 5100,
+      img: '/images/record_example.png',
+    },
 
-  간식: {
-    totalCalories: 0,
-    img: undefined,
+    4: {
+      mealCalories: 0,
+      img: undefined,
+    },
   },
 };
 

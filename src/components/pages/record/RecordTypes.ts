@@ -49,7 +49,17 @@ export interface BarProps {
   style?: CustomCSSProperties;
 }
 
+export type totalNutrientsType = {
+  carbohydrates: number;
+  proteins: number;
+  fats: number;
+  dietaryFiber: number;
+};
+
 export interface NutritionDonutChartProps {
+  totalNutrient: totalNutrientsType;
+  isShowingTotal: boolean;
+  totalCalories: number;
   data: MealDetailData;
   selectedMealNumber: 1 | 2 | 3 | 4;
 }

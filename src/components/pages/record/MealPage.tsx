@@ -5,27 +5,12 @@ import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates from '@utils/getDates';
 import MealDetail from './MealDetail';
 import { mealDetailData } from './DummyMealData';
+import { mapSelectMealToMsg } from './recordMappingConstant';
+import { mealTypes, findMealNumber } from './recordMappingConstant';
 
 // ✅ MealPage : 날짜, 특정 meal로 MealPage를 그려주기
 // ✅ 토글로 다른 meal을 선택하면 MealTime만 다시 받아와서 그려주기
 // ✅ meal data가 있으면 그려주고 없으면 default 그리기
-
-const mapSelectMealToMsg: { [key: string]: string } = {
-  1: '아침',
-  2: '점심',
-  3: '저녁',
-  4: '간식',
-};
-const mealTypes = ['아침', '점심', '저녁', '간식'];
-
-const findMealNumber = (meal: string): 1 | 2 | 3 | 4 => {
-  const mealNumber = Number(
-    Object.keys(mapSelectMealToMsg).find(
-      (key) => mapSelectMealToMsg[key] === meal
-    )
-  );
-  return (mealNumber as 1 | 2 | 3 | 4) || 1;
-};
 
 const MealPage = () => {
   const params = useParams();
