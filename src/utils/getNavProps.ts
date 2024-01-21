@@ -61,8 +61,8 @@ export const getNavProps: GetNavPropsType = {
   recordymdmealedit: { title: 'AI 식단 확인', back: true },
   addphotoymdmealsearch: { title: '식단 검색', back: true },
   aianalyze: { title: 'AI 분석', icon: true },
-  aldrawer: { back: true, title: 'AI 분석 서랍' },
-  aldrawerymd: { back: true, title: 'AI 분석 서랍' }, //날짜 넣어줘야 함
+  aidrawer: { back: true, title: 'AI 분석 서랍' },
+  aidrawerymd: { back: true, title: 'AI 분석 서랍' }, //날짜 넣어줘야 함
   share: { title: '구그램' },
   mypage: { title: '설정' },
   mypageedit: { back: true, title: '정보수정' },

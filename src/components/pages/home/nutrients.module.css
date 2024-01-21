@@ -1,7 +1,7 @@
 .nutrients {
   display: flex;
   justify-content: center;
-  gap: 25px;
+  gap: 28px;
 }
 
 .nutrient {
