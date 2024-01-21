@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import style from './mergingtags.module.css';
 import { TagData, MergedTagData } from './RecordTypes';
 
+const tagPadding = 10;
+const assumedTagHeight = 23;
+const MaxTagWidth = 80;
+
 export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
   const [selectedFoods, setSelectedFoods] = useState<string[]>([]);
   const [selectedTagPosition, setSelectedTagPosition] = useState<number[]>([]);
-  const tagPadding = 10;
-  const assumedTagHeight = 23;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -28,7 +30,6 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
 
     tags.forEach((tag) => {
       let isMerged = false;
-      const MaxTagWidth = 80;
 
       for (let mergedTag of mergedTags) {
         if (
@@ -55,7 +56,6 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
     return mergedTags;
   };
 
-  const mergedMaxWidth = 80;
   const validTags = tagData.filter((tag) => tag.XYCoordinate.length > 0);
   const mergedTagData = mergeOverlappingTags(validTags);
 
@@ -84,7 +84,7 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
                 style={{
                   left: `${tag.XYCoordinate[0]}px`,
                   top: `${tag.XYCoordinate[1]}px`,
-                  maxWidth: `${mergedMaxWidth}px`,
+                  maxWidth: `${MaxTagWidth}px`,
                 }}
                 className={`${style.tag} b-tiny`}
                 onClick={(event) =>
@@ -97,7 +97,7 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
                 <div
                   className={style.tagCount}
                   style={{
-                    left: `${tag.XYCoordinate[0] + mergedMaxWidth - 12}px`,
+                    left: `${tag.XYCoordinate[0] + MaxTagWidth - 12}px`,
                     top: `${tag.XYCoordinate[1] - 5}px`,
                   }}
                 >

@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import style from './mealpage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates from '@utils/getDates';
-import { MealPageProps } from './RecordTypes';
 import MealDetail from './MealDetail';
 import { mealDetailData } from './DummyMealData';
 
@@ -19,6 +18,15 @@ const mapSelectMealToMsg: { [key: string]: string } = {
 };
 const mealTypes = ['아침', '점심', '저녁', '간식'];
 
+const findMealNumber = (meal: string): 1 | 2 | 3 | 4 => {
+  const mealNumber = Number(
+    Object.keys(mapSelectMealToMsg).find(
+      (key) => mapSelectMealToMsg[key] === meal
+    )
+  );
+  return (mealNumber as 1 | 2 | 3 | 4) || 1;
+};
+
 const MealPage = () => {
   const params = useParams();
   const navigate = useNavigate();
@@ -28,15 +36,6 @@ const MealPage = () => {
   const selectedMealTime = Number(params.mealTime || 1); // 받아온 아점저간
   const dateSplit = date.split('-');
   const formatDate = `${dateSplit[0]}년 ${dateSplit[1]}월 ${dateSplit[2]}일`;
-
-  const findMealNumber = (meal: string): 1 | 2 | 3 | 4 => {
-    const mealNumber = Number(
-      Object.keys(mapSelectMealToMsg).find(
-        (key) => mapSelectMealToMsg[key] === meal
-      )
-    );
-    return (mealNumber as 1 | 2 | 3 | 4) || 1;
-  };
 
   const mealMsg = mapSelectMealToMsg[selectedMealTime];
   const [selectedMeal, setSelectedMeal] = useState(mealMsg);

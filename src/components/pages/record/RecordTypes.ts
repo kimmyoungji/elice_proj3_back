@@ -37,6 +37,18 @@ export interface ImgTagContentProps {
   selectedMealNumber: 1 | 2 | 3 | 4;
 }
 
+export interface CustomCSSProperties extends React.CSSProperties {
+  '--fillWidth': string;
+}
+
+export interface BarProps {
+  width: string;
+  height: string;
+  fill: string;
+  className?: string;
+  style?: CustomCSSProperties;
+}
+
 export interface NutritionDonutChartProps {
   data: MealDetailData;
   selectedMealNumber: 1 | 2 | 3 | 4;

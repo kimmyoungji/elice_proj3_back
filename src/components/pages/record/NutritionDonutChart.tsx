@@ -4,6 +4,18 @@ import getNutritionStandard from '@utils/getNutritionStandard';
 import { NutritionDonutChartProps, Nutrient } from './RecordTypes';
 import { userData } from '../my-page/DummyUserData';
 
+const radius = 22;
+
+type NutrientKey = 'carbohydrates' | 'proteins' | 'fats' | 'dietaryFiber';
+type NutrientNames = { [key in NutrientKey]: string };
+
+const nutrientNames: NutrientNames = {
+  carbohydrates: '탄수화물',
+  proteins: '단백질',
+  fats: '지방',
+  dietaryFiber: '식이섬유',
+};
+
 const NutritionDonutChart = ({
   data,
   selectedMealNumber,
@@ -20,7 +32,6 @@ const NutritionDonutChart = ({
   }, [selectedMealNumber]);
 
   const result = getNutritionStandard(userNutritionData);
-  const radius = 22;
   const circumference = 2 * Math.PI * radius;
   const standard = result
     ? [result.carbohydrates, result.proteins, result.fats, result.dietaryFiber]
@@ -31,12 +42,7 @@ const NutritionDonutChart = ({
   if (result && mealData[selectedMealNumber]) {
     nutrients = Object.entries(mealData[selectedMealNumber].totalNutrient).map(
       ([key, value], idx) => {
-        let nutrientKey;
-        if (key === 'carbohydrates') nutrientKey = '탄수화물';
-        else if (key === 'proteins') nutrientKey = '단백질';
-        else if (key === 'fats') nutrientKey = '지방';
-        else if (key === 'dietaryFiber') nutrientKey = '식이섬유';
-        else nutrientKey = key;
+        let nutrientKey = nutrientNames[key as NutrientKey] || key;
 
         const nutrientRatio = value / standard[idx];
         const strokeDashoffset =

@@ -1,14 +1,4 @@
-interface CustomCSSProperties extends React.CSSProperties {
-  '--fillWidth': string;
-}
-
-interface BarProps {
-  width: string;
-  height: string;
-  fill: string;
-  className?: string;
-  style?: CustomCSSProperties;
-}
+import { BarProps } from './RecordTypes';
 
 export const NutritionBar: React.FC<BarProps> = ({
   width,
