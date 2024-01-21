@@ -23,9 +23,10 @@ const MealNutritionAnalysis = ({
 
   useEffect(() => {
     setAnimationTrigger(false);
-    setTimeout(() => {
+    const animationTimer = setTimeout(() => {
       setAnimationTrigger(true);
     }, 100);
+    return () => clearTimeout(animationTimer);
   }, [selectedMealNumber]);
 
   return (
