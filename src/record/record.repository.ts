@@ -24,7 +24,7 @@ constructor(@InjectRepository(Record) private recordRepository: Repository<Recor
 
     const records = await this.recordRepository.find({
       where: { 
-        firstRecordDate: LessThanOrEqual(dateObj),
+        firstRecordDate: Equal(dateObj),
         mealType: mealTypeEnum 
        },
     });
@@ -32,12 +32,11 @@ constructor(@InjectRepository(Record) private recordRepository: Repository<Recor
   }
 
 // 식사 기록 생성
-  async createRecord(record: {
+  async createRecord(recordDto: {
     recordId: string,
     userId: string,
     mealType: MealType,
     foods: any[],
-    foodCounts: number,
     carbohydrates?: number,
     proteins?: number,
     fats?: number,
@@ -46,9 +45,9 @@ constructor(@InjectRepository(Record) private recordRepository: Repository<Recor
     firstRecordDate?: Date,
     updatedDate?: Date,
   }): Promise<Record> {
-    record.firstRecordDate = new Date();
-    record.updatedDate = new Date();
-    return await this.recordRepository.save(record);
+    recordDto.firstRecordDate = new Date();
+    recordDto.updatedDate = new Date();
+    return await this.recordRepository.save(recordDto);
   }
 
   // 식단수정

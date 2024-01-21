@@ -1,10 +1,16 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, ValueTransformer } from "typeorm";
 
 export enum MealType {
   breakfast = 'breakfast',
   lunch = 'lunch',
   dinner = 'dinner',
   snack = 'snack'
+}
+
+export class Food {
+  foodName: string;
+  foodCounts: number;
+  foodImage: string;
 }
 
 @Entity()
@@ -23,10 +29,7 @@ export class Record extends BaseEntity {
   mealType: MealType;
 
   @Column({ type: "json", nullable: false })
-  foods: any[];
-
-  @Column({ type: "int", nullable: false })
-  foodCounts: number;
+  foods: Food[]
 
   @Column({ type: "int", nullable: true })
   carbohydrates: number;

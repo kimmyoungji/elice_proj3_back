@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Query, Post, Put, Delete, Body, Req, HttpStatus, Res } from "@nestjs/common";
+import { Controller, Get, Param, Query, Post, Put, Delete, Body, Req, HttpStatus, Res, UsePipes } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { RecordService } from "./record.service";
 import { Record } from "./record.entity";
-import { response } from "express";
+import { RecordDto } from "./dtos/record.dto";
+import { ValidateFoodPipe } from "./pipes/record.pipe";
 
 @Controller("records")
 @ApiTags("Record API")
@@ -22,11 +23,12 @@ export class RecordController {
 
   // POST /records
   @Post()
+  @UsePipes(new ValidateFoodPipe())
   @ApiOperation({ summary: "식단 기록" })
   async createRecord(
-    @Body() record: Record
+    @Body() recordDto: RecordDto
   ): Promise<string> {
-    await this.recordService.createRecord(record);
+    await this.recordService.createRecord(recordDto);
     return "식단 기록 성공";
   }
 

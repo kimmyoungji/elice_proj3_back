@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Record } from "./record.entity";
 import { RecordRepository } from "./record.repository";
+import { RecordDto } from "./dtos/record.dto";
 
 @Injectable()
 export class RecordService {
@@ -16,8 +17,8 @@ export class RecordService {
   }
 
   // 식단을 기록하는 메서드
-  async createRecord(record: Record): Promise<Record> {
-    const savedRecord = await this.recordRepository.createRecord(record);
+  async createRecord(recordDto: RecordDto): Promise<Record> {
+    const savedRecord = await this.recordRepository.createRecord(recordDto);
     return savedRecord;
   }
 

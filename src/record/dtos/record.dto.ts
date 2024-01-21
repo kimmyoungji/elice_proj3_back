@@ -3,7 +3,21 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Exclude, Expose, Type } from "class-transformer";
 import { MealType } from '../record.entity'
 
+class Food {
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty({ description: "음식 이름" })
+    foodName: string;
   
+    @IsInt()
+    @IsNotEmpty()
+    @ApiProperty({ description: "음식 수량" })
+    foodCounts: number;
+
+    @IsString()
+    @ApiProperty({ description: "음식 사진" })
+    foodImage: string;
+}  
 
 @Exclude()
 export class RecordDto {
@@ -30,10 +44,10 @@ export class RecordDto {
     foodInfoId: string;
 
     @Expose()
-    @IsInt()
-    @IsNotEmpty()
-    @ApiProperty({ description: "음식 수량" })
-    foodCounts: number;
+    @ValidateNested({ each: true })
+    @Type(() => Food)
+    @ApiProperty({ description: "음식 목록", type: [Food] })
+    foods: Food[];
 
     @Expose()
     @IsInt()
