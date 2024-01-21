@@ -4,6 +4,7 @@ import { HealthInfo } from "src/user/entities/health-info.entity";
 import { User } from "src/user/entities/user.entity";
 import * as TypeOrmNamingStrategies from "typeorm-naming-strategies";
 import * as dotenv from "dotenv";
+import { Record } from "src/record/record.entity";
 
 dotenv.config({path: __dirname + '/../../../.env'});
 const dbConfig = config.get("db");
@@ -18,7 +19,7 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   username: process.env.DB_USERNAME || dbConfig.username,
   password: process.env.DB_PASSWORD || dbConfig.password,
   database: process.env.DB_NAME || dbConfig.database,
-  entities: [ User, HealthInfo ],
+  entities: [ User, HealthInfo, Record ],
   synchronize: true,
   namingStrategy: new TypeOrmNamingStrategies.SnakeNamingStrategy(),
   logging: true,

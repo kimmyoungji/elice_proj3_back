@@ -16,7 +16,8 @@ export class AuthService {
         private readonly dataSource: DataSource
     ) {}
 
-    // 구글 로그인 메서드  (구글계정 등록 여부 확인 및 등록 기능)
+
+    /* 구글 로그인 메서드  (구글계정 등록 여부 확인 및 등록 기능) */
     // 로그인 성공시 user 반환, super.login() 호출O, 그리고 session에 user 정보 저장O
     // 로그인 실패시 null 반환, super.login() 호출X, 그리고 session에 user 정보 저장X
     async validateGoogleOauthUser(googleLoginDto: GoogleLoginDto): Promise<any> {
@@ -49,7 +50,8 @@ export class AuthService {
         }
     }
 
-    // 로컬 로그인 메서드  (로컬 회원등록 여부 확인 및 비밀번호 검증 기능)
+
+    /* 로컬 로그인 메서드  (로컬 회원등록 여부 확인 및 비밀번호 검증 기능) */
     // 로그인 성공시 user 반환, super.login() 호출O, 그리고 session에 user 정보 저장O
     // 로그인 실패시 null 반환, super.login() 호출X, 그리고 session에 user 정보 저장X
     async validateLocalUser(email: string, password: string): Promise<User> {
@@ -82,9 +84,8 @@ export class AuthService {
         }
     }
 
-    // 구글 회원가입 메서드는 없다. 구글계정은 로그인시에 자동으로 회원가입이 된다.
 
-    // 로컬 회원가입 메서드
+    /* 로컬 회원가입 메서드 */
     async localSignup(localSignupDto: LocalSignupDto): Promise<InsertResult> {
         
         const queryRunner = this.dataSource.createQueryRunner();
@@ -119,6 +120,8 @@ export class AuthService {
         }
     }
 
+
+     /* userId로 사용자 정보 조회하기 */
     // deserializeUser에서 호출됨, 로그인시에 사용자 정보를 세션에 저장하기 위한 메서드
     async findOneByUserId(userId: string): Promise<User> {
         const queryRunner = this.dataSource.createQueryRunner();
@@ -136,7 +139,8 @@ export class AuthService {
         }
     }
 
-    // 회원 탈퇴 메서드
+
+    /* 회원탈퇴 */
     async withdrawal(userId: string) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();

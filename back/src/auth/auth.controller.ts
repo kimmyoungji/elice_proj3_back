@@ -2,14 +2,10 @@ import { Body, Controller, Get, Param, Post, Req, Res, UseFilters, UseGuards } f
 import { GoogleAuthGuard } from './utils/google.guard';
 import { AuthService } from './auth.service';
 import { LocalSignupDto } from './dto/localSignupDto';
-import { InsertResult } from 'typeorm';
-import { ApiBody, ApiConflictResponse, ApiOperation, ApiParam, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from './utils/local.guard';
 import { isLoggedInGuard } from './utils/isLoggedin.guard';
-import { isNotLoggedInGuard } from './utils/isNotLoggedIn.guard';
 import { RedirectFilter } from './utils/redirectFilter';
-import { response } from 'express';
-import session from 'express-session';
 import { LocalLoginDto } from './dto/localLoginDto';
 
 @UseFilters(new RedirectFilter())
@@ -20,13 +16,14 @@ export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     
-    /* 구글 로그인 및 사용자등록 */
+    /* 구글 로그인 요청 */
     @ApiOperation({ summary: '구글 로그인 요청 API' })
     @ApiResponse({ status: 301, description: '구글 로그인 창으로 이동'})
     @Get('google/login')
     @UseGuards(GoogleAuthGuard)
     handleGoogleLogin() {}
 
+    /* 구글 로그인 후 홈 화면으로 리이렉트 */
     @ApiOperation({ summary: '구글서버에서 사용자인증 후 accessToken을 보내는 주소'})
     @ApiResponse({ status: 200, description: '구글 로그인 성공. 쿠키저장소에 sessionID가 등록됩니다.'})
     @ApiResponse({ status: 409, description: '이미 로컬계정으로 등록된 이메일입니다.'})
@@ -38,7 +35,7 @@ export class AuthController {
     }
 
 
-    /* 로컬 로그인 및 회원가입 */
+    /* 로컬 회원가입 */
     @ApiOperation({ summary: '로컬 회원가입 요청 API' })
     @ApiBody({ type: LocalSignupDto, description: '회원가입 정보'})
     @ApiResponse({ status: 200, description: '로컬 회원가입 성공.'})
@@ -50,6 +47,7 @@ export class AuthController {
         response.status(200).send('로컬 회원가입 성공, 백엔드에 요청시 로그인페이지로 리다이렉팅해드립니다.');
     }
 
+    /* 로컬 로그인 */
     @ApiOperation({ summary: '로컬 로그인 요청 API' })
     @ApiBody({ type: LocalLoginDto, description: '로그인 정보'})
     @ApiResponse({ status: 200, description: '로컬 로그인 성공. 쿠키저장소에 sessionID가 등록됩니다.'})
@@ -85,7 +83,6 @@ export class AuthController {
         // finally{ console.log('로그아웃 후의 세션저장소: ', request.sessionStore); }
     }
 
-    
 
     /* 회원 탈퇴 API */
     @ApiOperation({ summary: '회원 탈퇴 API' })
