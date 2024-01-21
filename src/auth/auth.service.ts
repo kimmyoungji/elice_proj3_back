@@ -1,5 +1,5 @@
 import { HealthInfo } from 'src/user/entities/health-info.entity';
-import { HealthInfoRepository } from './../user/health-info.repository';
+import { HealthInfoRepository } from '../user/health-info.repository';
 import { LocalSignupDto } from './dto/localSignupDto';
 import { GoogleLoginDto } from './dto/googleLoginDto';
 import { User } from '../user/entities/user.entity';
