@@ -238,6 +238,7 @@ input[type='number'] {
 }
 
 .activityAccountArea {
+  height: 83px;
   position: relative;
   display: flex;
   flex-direction: row;
@@ -245,6 +246,7 @@ input[type='number'] {
   align-items: center;
   background-color: #fff;
   padding: 23px 25px;
+  margin-bottom: 3px;
   border-bottom: 1px solid #d9d9d9;
 }
 

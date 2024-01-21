@@ -16,6 +16,26 @@ const MyPage = () => {
     navigate(`/my-page/edit`);
   };
 
+  const mypageInfo = [
+    {
+      title: '신체 데이터',
+      content: (
+        <>
+          {data.height} cm <span style={{ color: 'black' }}>/</span>{' '}
+          {data.weight} kg
+        </>
+      ),
+      titleClass: style.infoTitle,
+      contentClass: style.infoContent,
+    },
+    {
+      title: '활동량',
+      content: activityMsg,
+      titleClass: style.infoTitle,
+      contentClass: style.infoContent,
+    },
+  ];
+
   return (
     <>
       <div className={style.userProfileArea}>
@@ -49,8 +69,15 @@ const MyPage = () => {
         </div>
       </div>
 
-      <div className={style.infoArea}>
-        <div className={style.infoTitle}>현재 몸상태</div>
+      {mypageInfo.map((info, idx) => (
+        <div key={idx} className={style.infoArea}>
+          <div className={info.titleClass}>{info.title}</div>
+          <div className={info.contentClass}>{info.content}</div>
+        </div>
+      ))}
+
+      {/* <div className={style.infoArea}>
+        <div className={style.infoTitle}>신체 데이터</div>
         <div className={style.infoContent}>
           {data.height} cm <span style={{ color: 'black' }}> / </span>{' '}
           {data.weight} kg
@@ -60,7 +87,7 @@ const MyPage = () => {
       <div className={style.activityAccountArea}>
         <div className={style.infoTitle}>활동량</div>
         <div className={style.infoContent}>{activityMsg}</div>
-      </div>
+      </div> */}
 
       <div className={style.activityAccountArea}>
         <div className={style.infoTitle}>계정 설정</div>

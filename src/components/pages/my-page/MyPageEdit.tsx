@@ -41,16 +41,6 @@ const MyPageEdit = () => {
     useState(false);
   const [isGoalDropdownVisible, setGoalDropdownVisible] = useState(false);
 
-  // const nutrientMsg = Object.keys(data.targetNutrients).map((key) => {
-  //   const nutrientName = mapNutrientstoMsg[key];
-  //   const nutrientValue = data.targetNutrients[key];
-  //   return `${nutrientName}: ${nutrientValue}`;
-  // });
-  // targetNutrients 영양성분 배열 생성
-  //['탄수화물: 100', '단백질: 60', '지방: 30', '식이섬유: 23']
-
-  // const calNutrients = getNutritionStandard(data);
-
   const navigate = useNavigate();
 
   const imgInputRef = useRef<HTMLInputElement>(null);
@@ -217,7 +207,7 @@ const MyPageEdit = () => {
       </div>
 
       <div className={style.infoArea}>
-        <div className={style.infoTitle}>현재 몸상태</div>
+        <div className={style.infoTitle}>신체 데이터</div>
         <div className={style.infoContent}>
           {isEditingData ? (
             <>

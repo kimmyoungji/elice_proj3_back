@@ -1,14 +1,6 @@
 import toggle from './mypageedit.module.css';
+import { MyPageDropdownProps } from './MypageTypes';
 import { DownArrow } from '@assets/DownArrow';
-
-interface MyPageDropdownProps {
-  items: string[];
-  selectedItem: string;
-  onSelectItem: (item: string) => void;
-  toggleDropdown: () => void;
-  isDropdownVisible: boolean;
-  style?: React.CSSProperties;
-}
 
 const MyPageDropdown = ({
   items,
