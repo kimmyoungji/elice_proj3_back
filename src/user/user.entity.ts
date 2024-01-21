@@ -12,7 +12,7 @@ import { ApiProperty } from "@nestjs/swagger";
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   @ApiProperty({ description: "user_id" })
-  user_id: string;
+  userId: string;
 
   @Column()
   @ApiProperty({ description: "이메일" })
@@ -36,7 +36,7 @@ export class User extends BaseEntity {
 
   @Column()
   @ApiProperty({ description: "프로필 이미지" })
-  profile_image: string;
+  profileImage: string;
 
   @Column({ default: false })
   @ApiProperty({ description: "멤버십 여부" })
@@ -44,13 +44,13 @@ export class User extends BaseEntity {
 
   @Column()
   @ApiProperty({ description: "회원가입 날짜" })
-  created_date: Date;
+  createdDate: Date;
 
   @UpdateDateColumn()
   @ApiProperty({ description: "회원 정보 수정날짜" })
-  updated_date: Date;
+  updatedDate: Date;
 
   @DeleteDateColumn()
   @ApiProperty({ description: "탈퇴 날짜" })
-  deleted_date: Date;
+  deletedDate: Date;
 }
