@@ -1,9 +1,24 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import store from '@components/store';
+import { ToastProvider } from '@components/UI/Toast';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById('root') as HTMLElement
 );
-root.render(<App />);
+root.render(
+  <ErrorBoundary fallback={<div>하이 에러 </div>}>
+    <ToastProvider>
+      <BrowserRouter>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </BrowserRouter>
+    </ToastProvider>
+  </ErrorBoundary>
+);
