@@ -33,6 +33,7 @@
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+<<<<<<< HEAD:back/package.json
     "config": "^3.3.10",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -42,12 +43,20 @@
     "passport-local": "^1.0.0",
     "@types/cron": "^2.4.0",
     "axios": "^1.6.5",
+=======
+    "config": "^3.3.9",
+    "dotenv": "^16.3.2",
+>>>>>>> cumulativeRecord/UL:package.json
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.19",
+<<<<<<< HEAD:back/package.json
     "typeorm-naming-strategies": "^4.1.0",
     "uuid": "^9.0.1"
+=======
+    "typeorm-naming-strategies": "^4.1.0"
+>>>>>>> cumulativeRecord/UL:package.json
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
