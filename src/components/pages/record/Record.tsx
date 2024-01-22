@@ -23,8 +23,8 @@ const Record = () => {
     : todayDate.split('-');
   const formatDate =
     dateSplit.length === 3
-      ? `${dateSplit[0]}년 ${dateSplit[1]}월 ${dateSplit[2]}일`
-      : `${thisYear}년 ${thisMonth}월 ${thisDay}일`;
+      ? `${dateSplit[0]}.${dateSplit[1]}.${dateSplit[2]}`
+      : `${thisYear}.${thisMonth}.${thisDay}`;
 
   const headerDate = formatDate || `${thisYear}.${thisMonth}.${thisDay}`;
 
