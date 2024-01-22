@@ -4,7 +4,11 @@ import { HealthInfo } from "src/user/entities/health-info.entity";
 import { User } from "src/user/entities/user.entity";
 import * as TypeOrmNamingStrategies from "typeorm-naming-strategies";
 import * as dotenv from "dotenv";
-import { Record } from "src/record/record.entity";
+import { Food, Record } from "src/record/record.entity";
+import { CumulativeRecord } from "src/cumulative-record/cumulative-record.entity";
+import { FoodInfoNara } from "src/food-info-api/food-info-nara-api.entity";
+import { FoodInfo } from "src/food-info-api/food-info-api.entity";
+import { Image } from "src/image/image.entity";
 
 dotenv.config({path: __dirname + '/../../../.env'});
 const dbConfig = config.get("db");
@@ -19,7 +23,7 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   username: process.env.DB_USERNAME || dbConfig.username,
   password: process.env.DB_PASSWORD || dbConfig.password,
   database: process.env.DB_NAME || dbConfig.database,
-  entities: [ User, HealthInfo, Record ],
+  entities: [ User, HealthInfo, Record, CumulativeRecord, FoodInfo, FoodInfoNara, Image ],
   synchronize: true,
   namingStrategy: new TypeOrmNamingStrategies.SnakeNamingStrategy(),
   logging: true,

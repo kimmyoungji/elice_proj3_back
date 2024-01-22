@@ -23,6 +23,7 @@ export class FoodInfoApiService {
     const url = `http://openapi.foodsafetykorea.go.kr/api/${keyId}/${serviceId}/${dataType}/${this.startIdx}/${endIdx}`;
 
     const res = await axios.get(url);
+    console.log('식품안전나라 데이터', res.data)
     const data = res.data.I2790.row;
     console.log(data);
     const count = endIdx - this.startIdx + 1;
@@ -37,7 +38,7 @@ export class FoodInfoApiService {
 
   async getDataPortal(): Promise<string> {
     const params = {
-      serviceKey: process.env.PORTAL_SERVICE_KEY,
+      serviceKey: process.env.PORTAL_SERVICE_KEY_COOKED,
       pageNo: this.startIdx,
       numOfRows: 200,
       type: "json",
@@ -68,7 +69,7 @@ export class FoodInfoApiService {
 
   async getDataPortalProcess(): Promise<string> {
     const params = {
-      serviceKey: process.env.PORTAL_SERVICE_KEY,
+      serviceKey: process.env.PORTAL_SERVICE_KEY_PROCESSED,
       pageNo: this.startIdx,
       numOfRows: 1000,
       type: "json",

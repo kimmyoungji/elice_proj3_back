@@ -27,6 +27,7 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
   // }
 
   // 데이터 추가 api - test용
+<<<<<<< Updated upstream:src/cumulative-record/cumulative.repository.ts
   // async addData(): Promise<CumulativeRecord> {
   //   const data = this.create({
   //     record_ids: ["A01", "A02"],
@@ -38,6 +39,19 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
   //   await this.save(data);
   //   return data;
   // }
+=======
+  async addData(): Promise<CumulativeRecord> {
+    const data = this.create({
+      record_ids: ["A01", "A02"],
+      user_id: "02",
+      meal_type: "lunch",
+      meal_total_calories: 800,
+      date: new Date("2024-01-09"),
+    });
+    await this.save(data);
+    return data;
+  }
+>>>>>>> Stashed changes:old_src/cumulative-record/cumulative.repository.ts
 
   async getDateRecord(date: Date, userId: string): Promise<CumulativeRecord[]> {
     const result = await this.createQueryBuilder("entity")

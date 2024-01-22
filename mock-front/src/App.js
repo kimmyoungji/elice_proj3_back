@@ -6,13 +6,11 @@ import {
   Route,
   NavLink,
 } from "react-router-dom";
-import Home from "./pages/home/Home";
+import Home from "./pages/home/Login";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Google from "./components/callback/Google";
-import Kakao from "./components/callback/Kakao";
-import Git from "./components/callback/Git";
 import { UserContext } from "./context/LoginContext";
+import ImageUploader from "./pages/home/ImageUploader/ImageUploader";
 
 function App() {
   const [accessToken, setAccessToken] = useState(null);
@@ -57,8 +55,9 @@ function App() {
         >
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/auth/callback/git" element={<Git />} />
-            <Route path="/auth/callback/google" element={<Google />} />
+            <Route path="/image" element={<ImageUploader />} />
+            {/* <Route path="/auth/callback/git" element={<Git />} /> */}
+            {/* <Route path="/auth/callback/google" element={<Google />} /> */}
             {/* <Route path="/auth/callback/kakao" element={<Kakao />} /> */}
           </Routes>
         </UserContext.Provider>

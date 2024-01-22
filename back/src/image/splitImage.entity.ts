@@ -9,10 +9,10 @@ export class SplitImage {
   imageId: string;
 
   @Column()
-  x_coordinate: number;
+  xCoordinate: number;
 
   @Column()
-  y_coordinate: number;
+  yCoordinate: number;
 
   @Column()
   createdAt: Timestamp;

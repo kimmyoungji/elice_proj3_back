@@ -12,6 +12,7 @@ import { FoodInfoApiModule } from "./food-info-api/food-info-api.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { ConfigModule } from "@nestjs/config";
 import { FoodInfoModule } from "./food-info/food-info.module";
+import { ImageModule } from './image/image.module';
 
 dotenv.config({path: __dirname + '/../.env'});
 const dbConfig = config.get("db");
@@ -27,6 +28,7 @@ console.log(typeORMConfig)
     FoodInfoApiModule,
     ScheduleModule.forRoot(),
     FoodInfoModule,
+    ImageModule
   ],
 })
 export class AppModule {}
