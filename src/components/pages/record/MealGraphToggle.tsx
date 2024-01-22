@@ -14,7 +14,7 @@ const MealGraphToggle = ({
 
   return (
     <div
-      className={`${style.toggleButton} ${isShowingTotal ? style.toggleButtonActive : ''}`}
+      className={`${style.toggleButton} ${isShowingTotal ? '' : style.toggleButtonActive}`}
       onClick={onClickBtn}
     >
       <div></div>
