@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import ButtonCommon from "../../UI/ButtonCommon";
+// import InputNumber from "../../UI/InputNumber";
 import InputCommon from '@components/UI/InputCommon';
 import './Onboarding.css';
 
 const Onboarding_birth = () => {
     const [year, setYear] = useState('');
     const [month, setMonth] = useState('');
+    // const [value, setValue] = useState('');
     const [date, setDate] = useState('');
-    const [selectedBirth, setSelectedBirth] = useState<string | null>(null);
+    // const [selectedBirth, setSelectedBirth] = useState<string | null>(null);
 
     const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setYear(e.target.value);
@@ -15,6 +16,9 @@ const Onboarding_birth = () => {
     const handleMonthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMonth(e.target.value);
     };
+    // const valueChangeFn: React.ChangeEventHandler<HTMLInputElement> = (value) => {
+    //     value && setValue(Number(value));
+    // };
     const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDate(e.target.value);
     };
@@ -30,16 +34,20 @@ const Onboarding_birth = () => {
                     onChange={handleYearChange}
                 />
             </div>
-            <div style={{ marginTop: '15px' }}>
-                <InputCommon
+            <div style={{ display: "flex", gap: '10px', width: "350px", margin: '15px auto' }}>
+                {/* <InputNumber
+                    value={value}
+                    maximumValue={12}
+                    placeholder='월'
+                    onValueChange={valueChangeFn}
+                /> */}
+                <InputCommon style={{ width: "170px" }}
                     variant="default"
                     value={month}
                     placeholder='월'
                     onChange={handleMonthChange}
                 />
-            </div>
-            <div style={{ marginTop: '15px' }}>
-                <InputCommon
+                <InputCommon style={{ width: "170px" }}
                     variant="default"
                     value={date}
                     placeholder='일'
