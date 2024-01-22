@@ -1,12 +1,12 @@
-import React, { useId, useImperativeHandle, forwardRef, useRef } from 'react';
+import React, { useId, forwardRef, useRef } from 'react';
 import classes from './buttonCommon.module.css';
 import { useButtonProps } from '@hooks/useButtonProps';
 import { getClassNamesArr } from '@utils/getClassesArr';
-import { ButtonPropsType, getClassNameType } from 'typings/commontypes';
+import { ButtonPropsType, GetClassNameType } from 'typings/commontypes';
 
 const getModuleClassName = (
   customClassName: string | undefined,
-  { variant, disabled, active, size, prefix }: getClassNameType
+  { variant, disabled, active, size, prefix }: GetClassNameType
 ) => {
   //get = ['variant-active', '', 'active-true', 'size-large']
   const get = getClassNamesArr(
@@ -52,18 +52,6 @@ const ButtonCommon = forwardRef<HTMLButtonElement, ButtonPropsType>(
       onClick: onClickBtn,
       ...props,
     });
-
-    // useImperativeHandle(
-    //   ref,
-    //   () => {
-    //     return {
-    //       focus() {
-    //         buttonRef.current?.focus();
-    //       },
-    //     };
-    //   },
-    //   []
-    // );
 
     const buttonClass = getModuleClassName(customClassName, {
       variant,

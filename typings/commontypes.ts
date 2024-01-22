@@ -55,7 +55,7 @@ export interface ButtonPropsType extends ComponentPropsWithRef<'button'> {
   fontSize?: CommonFontSizeType;
 }
 
-export interface getClassNameType {
+export interface GetClassNameType {
   variant?: ButtonVariant;
   disabled?: boolean;
   active?: boolean;

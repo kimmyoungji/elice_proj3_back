@@ -37,7 +37,6 @@
 }
 
 .meal-img {
-  z-index: -1;
   border-radius: 7px;
   position: relative;
   overflow: hidden;

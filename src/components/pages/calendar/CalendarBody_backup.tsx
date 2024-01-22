@@ -1,4 +1,4 @@
-import { ReactElement, SyntheticEvent, createElement } from 'react';
+import { ReactElement } from 'react';
 import classes from './calendarbody.module.css';
 import { useCalendarContext } from './Calendar';
 import Album from './Album';
@@ -12,6 +12,14 @@ const DUMMYCumulative_cal_Date = {
 
 const DUMMYtargetCalories = 1200;
 
+const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+
+const dayOfWeekArray = dayOfWeek.map((day, idx) => (
+  <div className={classes['week-wrapper']} key={`day-${idx}`}>
+    <p className={`${classes['day-arr']} r-big`}>{day}</p>
+  </div>
+));
+
 const CalendarBody = () => {
   const {
     thisYear,
@@ -22,14 +30,6 @@ const CalendarBody = () => {
     setThisYear,
     isAlbum,
   } = useCalendarContext();
-
-  const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
-
-  const dayOfWeekArray = dayOfWeek.map((day, idx) => (
-    <div className={classes['week-wrapper']} key={`day-${idx}`}>
-      <p className={`${classes['day-arr']} r-big`}>{day}</p>
-    </div>
-  ));
 
   const onClickDate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const clickedElementId = Number(

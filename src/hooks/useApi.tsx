@@ -4,17 +4,15 @@ import { useErrorBoundary } from 'react-error-boundary';
 import { AxiosError, AxiosResponse } from 'axios';
 import axios from 'axios';
 
-interface UseApipropsType {
+interface UseApiParams {
   method?: ApiMethods;
-  path?: string | undefined;
-  data?: {} | any | undefined;
-  shouldInitFetch?: boolean | undefined;
-  initialResult?: string | undefined;
+  path?: string;
+  data?: any;
+  shouldInitFetch?: boolean;
+  initialResult?: string;
 }
-interface TriggerPropsType {
-  method: ApiMethods;
-  path: UseApipropsType['path'];
-  data: UseApipropsType['data'];
+interface TriggerPropsType
+  extends Omit<UseApiParams, 'shouldInitFetch' | 'initialResult'> {
   applyResult?: boolean;
   isShowBoundary?: boolean;
 }
@@ -29,7 +27,7 @@ const useApi = ({
   data = {},
   shouldInitFetch = false,
   initialResult = '',
-}: UseApipropsType) => {
+}: UseApiParams) => {
   const [result, setResult] = useState(initialResult);
   const [loading, setLoading] = useState(false);
   const [reqIdentifier, setReqIdentifier] = useState('');

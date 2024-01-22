@@ -6,16 +6,19 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import store from '@components/store';
 import { ToastProvider } from '@components/UI/Toast';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <ToastProvider>
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>
-  </ToastProvider>
+  <ErrorBoundary fallback={<div>하이 에러 </div>}>
+    <ToastProvider>
+      <BrowserRouter>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </BrowserRouter>
+    </ToastProvider>
+  </ErrorBoundary>
 );

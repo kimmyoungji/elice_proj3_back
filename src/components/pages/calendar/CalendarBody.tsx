@@ -11,23 +11,22 @@ const DUMMYCumulative_cal_Date = {
 
 const DUMMYtargetCalories = 1200;
 
+const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+
+const dayOfWeekArray = dayOfWeek.map((day, idx) => (
+  <div className={classes['week-wrapper']} key={`day-${idx}`}>
+    <p className={`${classes['day-arr']} r-big`}>{day}</p>
+  </div>
+));
+
 const CalendarBody = () => {
   const { thisYear, thisMonth, selectedIndex, setSelectedIndex, isAlbum } =
     useCalendarContext();
-
-  const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
-
-  const dayOfWeekArray = dayOfWeek.map((day, idx) => (
-    <div className={classes['week-wrapper']} key={`day-${idx}`}>
-      <p className={`${classes['day-arr']} r-big`}>{day}</p>
-    </div>
-  ));
 
   const onClickDate = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const clickedElementId = Number(
       (e.target as HTMLDivElement).id.split('-')[1]
     );
-    console.log(clickedElementId);
     //기존에 index가 동일하면 삭제
     setSelectedIndex((prev) => {
       return prev === clickedElementId ? NaN : clickedElementId;
