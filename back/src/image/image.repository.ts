@@ -5,8 +5,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 
 
-@Injectable()
-export class ImageRepository extends Repository<Image> {
+export class ImageRepository {
       foodImage: 'any';
 
 }

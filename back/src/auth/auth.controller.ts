@@ -59,8 +59,7 @@ export class AuthController {
         console.log('로그인 진행중...', request.user);
         response.status(200).send('로컬 로그인 성공, 백엔드에 요청시 메인페이지로 리다이렉팅해드립니다.');
     }
-
-
+    
 
     /* 구글 로그아웃, 로컬 로그아웃 공용 API */
     @ApiOperation({ summary: '로그아웃 uri' })

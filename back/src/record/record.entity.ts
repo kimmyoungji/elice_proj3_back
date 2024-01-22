@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, ValueTransformer } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+// import { MealType } from "./record.enum";
 
 export enum MealType {
   breakfast = 'breakfast',

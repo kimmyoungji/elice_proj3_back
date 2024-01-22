@@ -6,6 +6,6 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 
 
 @Injectable()
-export class SplitImageRepository extends Repository<SplitImage> {
+export class SplitImageRepository {
    
 }

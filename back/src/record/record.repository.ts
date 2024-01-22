@@ -1,5 +1,6 @@
 import { DataSource, Equal, LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
-import { MealType, Record } from "./record.entity";
+import { Record } from "./record.entity";
+import { MealType } from "./record.enum";
 import { InjectRepository } from "@nestjs/typeorm";
 // import { User } from "src/user/user.entity";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
