@@ -4,6 +4,7 @@ import { AppService } from "./app.service";
 import { CumulativeRecordModule } from "./cumulative-record/cumulative-record.module";
 import { typeORMConfig } from "./config/database/typeorm.config";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { RecordModule } from "./record/record.module";
 import { FoodInfoApiModule } from "./food-info-api/food-info-api.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { ConfigModule } from "@nestjs/config";
@@ -34,6 +35,7 @@ dotenv.config();
       }
     ),
     CumulativeRecordModule,
+    RecordModule
     FoodInfoApiModule,
     ScheduleModule.forRoot(),
     FoodInfoModule,
@@ -42,3 +44,4 @@ dotenv.config();
   providers: [AppService],
 })
 export class AppModule {}
+
