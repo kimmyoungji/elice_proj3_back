@@ -20,7 +20,7 @@ const MealPage = () => {
   const date = params.date || todayDate;
   const selectedMealTime = Number(params.mealTime || 1); // 받아온 아점저간
   const dateSplit = date.split('-');
-  const formatDate = `${dateSplit[0]}년 ${dateSplit[1]}월 ${dateSplit[2]}일`;
+  const formatDate = `${dateSplit[0]}.${dateSplit[1]}.${dateSplit[2]}`;
 
   const mealMsg = mapSelectMealToMsg[selectedMealTime];
   const [selectedMeal, setSelectedMeal] = useState(mealMsg);

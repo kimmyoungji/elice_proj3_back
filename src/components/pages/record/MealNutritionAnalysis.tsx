@@ -21,7 +21,7 @@ const MealNutritionAnalysis = ({
   data,
   selectedMealNumber,
 }: MealNutritionAnalysisProps) => {
-  const [isShowingTotal, setIsShowingTotal] = useState(false);
+  const [isShowingTotal, setIsShowingTotal] = useState(true);
   const [animationTrigger, setAnimationTrigger] = useState(false);
   const [totalNutrient, setTotalNutrient] = useState(initialNutrients);
 
