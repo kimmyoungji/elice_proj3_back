@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import ButtonCommon from '@components/UI/ButtonCommon';
-import './Join.css';
+import './Auth.css';
 import logo from './9g_logo.png';
 
 const Auth = () => {
   const navigate = useNavigate();
   const [state, setState] = useState(0);
 
-  const onClick = () => {
-    console.log("btn is clicked!");
-    setState((prev) => prev + 1);
-  };
+  const handleClickGoogleAuth = () => {
+    window.location.href = "http://localhost:5001/api/auth/google/login";
+  }
 
   return (
     <div className="center-container">
@@ -43,7 +42,7 @@ const Auth = () => {
           <ButtonCommon
             customClassName="lightblue"
             size="big"
-            onClickBtn={() => navigate(`/join`)}
+            onClickBtn={handleClickGoogleAuth}
           >
             Google로 계속하기
           </ButtonCommon>

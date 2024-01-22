@@ -11,6 +11,8 @@ const Join = () => {
   const [verifiedemail, setVerifiedemail] = useState('');
   const [password, setPassword] = useState('');
   const [verifiedpassword, setVerifiedpassword] = useState('');
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -25,11 +27,30 @@ const Join = () => {
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+    const newPassword = e.target.value;
+
+    if (newPassword && !isPasswordValid(newPassword)) {
+      setPasswordError("영문 대소문자, 숫자, 특수기호를 포함해 8자 이상으로 설정해주세요.");
+    } else {
+      setPasswordError("");
+    }
+    setPassword(newPassword);
   };
 
   const handleVerifiedpasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVerifiedpassword(e.target.value);
+    const confirmPassword = e.target.value;
+
+    if (confirmPassword && confirmPassword !== password) {
+      setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
+    } else {
+      setConfirmPasswordError("");
+    }
+    setVerifiedpassword(confirmPassword);
+  };
+
+  const isPasswordValid = (value: string) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+    return regex.test(value);
   };
 
   return (
@@ -53,35 +74,60 @@ const Join = () => {
           value={email}
           onChange={handleEmailChange}
         />
+        <ButtonCommon
+          variant="default-active"
+          size="ssmall"
+          style={{ position: 'relative', right: '-75%', top: '-30%', transform: 'translateY(-50%)' }}
+        >
+          이메일 인증
+        </ButtonCommon>
       </div>
-      <div style={{ marginTop: '15px' }}>
+      <div style={{ marginTop: '-20px' }}>
         <InputCommon
           variant="default"
           value={verifiedemail}
           onChange={handleVerifiedemailChange}
         />
+        <ButtonCommon
+          variant="default-active"
+          size="ssmall"
+          style={{ position: 'relative', right: '-75%', top: '-30%', transform: 'translateY(-50%)' }}
+        >
+          인증하기
+        </ButtonCommon>
       </div>
       < div className='body' >
-        <p className="r-large">비밀번호</p>
+        <div style={{ marginTop: '-25px' }}>
+          <p className="r-large">비밀번호</p>
+        </div>
       </div>
       <div style={{ marginTop: '15px' }}>
         <InputCommon
-          variant="default"
+          variant={passwordError ? "error" : "default"}
+
           type="password"
           value={password}
           onChange={handlePasswordChange}
         />
+        <div style={{ marginTop: '6px', marginLeft: '10px', textAlign: 'left' }}>
+          {passwordError && <p className="r-regular">{passwordError}</p>}
+        </div>
       </div>
       < div className='body' >
         <p className="r-large">비밀번호 확인</p>
       </div>
       <div style={{ marginTop: '15px' }}>
         <InputCommon
-          variant="default"
+          variant={confirmPasswordError ? "error" : "default"}
           type="password"
           value={verifiedpassword}
           onChange={handleVerifiedpasswordChange}
         />
+        <div style={{ marginTop: '6px', marginLeft: '10px', textAlign: 'left' }}>
+          {confirmPasswordError && (
+            <p className="r-regular">{confirmPasswordError}</p>
+          )}
+        </div>
       </div>
       <div className='button-container'>
         <ButtonCommon
@@ -92,7 +138,7 @@ const Join = () => {
           가입하기
         </ButtonCommon>
       </div>
-    </div>
+    </div >
   );
 };
 

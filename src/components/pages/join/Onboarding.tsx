@@ -39,7 +39,7 @@ const Onboarding = () => {
     const progressBarSteps = [];
 
     for (let i = 1; i <= steps; i++) {
-      const isActive = i === currentStep;
+      const isActive = i <= currentStep;
       progressBarSteps.push(
         <div
           key={i}
