@@ -9,6 +9,10 @@ export interface DummyAlbumArrType {
   dateArr: [MealType, number, string][];
 }
 
+export const returnWithZero = (num: string | number) => {
+  return Number(num) < 10 ? `0${num}` : num;
+};
+
 const DUMMYAlbumArr: DummyAlbumArrType[] = [
   {
     date: '01',
@@ -44,7 +48,9 @@ const Album = () => {
 
   const onClickCards = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const clickedId = (e.target as HTMLDivElement).id;
-    navigate(`/record/${thisYear}-${thisMonth}-${clickedId}`);
+    navigate(
+      `/record/${thisYear}-${returnWithZero(thisMonth)}-${returnWithZero(clickedId)}`
+    );
   };
 
   return (
@@ -53,10 +59,10 @@ const Album = () => {
         <div key={`album-${idx}`} className={classes.date}>
           <div
             className={`b-regular`}
-          >{`${thisYear}.${thisMonth}.${day.date}`}</div>
+          >{`${thisYear}.${returnWithZero(thisMonth)}.${day.date}`}</div>
           <div className={classes.cards} onClick={onClickCards}>
             {day.dateArr.map((arr, idx) => (
-              <Albumbody arr={arr} idx={idx} day={day} key={`album-${idx}`} />
+              <Albumbody arr={arr} idx={idx} day={day} />
             ))}
           </div>
         </div>

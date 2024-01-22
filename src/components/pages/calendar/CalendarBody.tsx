@@ -1,6 +1,6 @@
 import classes from './calendarbody.module.css';
 import { useCalendarContext } from './Calendar';
-import Album from './Album';
+import Album, { returnWithZero } from './Album';
 import ButtonCommon from '@components/UI/ButtonCommon';
 
 //필요한 전역 정보 나의 목표칼로리 (유저 정보에 포함)
@@ -124,7 +124,7 @@ const CalendarBody = () => {
             variant='default-active'
             size='big'
             disabled={!selectedIndex}
-            href={`/record/${thisYear}-${thisMonth}-${selectedIndex}`}
+            href={`/record/${thisYear}-${returnWithZero(thisMonth)}-${returnWithZero(selectedIndex)}`}
           >
             {DUMMYCumulative_cal_Date['existedDate'].includes(selectedIndex)
               ? '기록 보러 가기'
