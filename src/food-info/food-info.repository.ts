@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { FoodInfo } from "src/food-info-api/food-info-api.entity";
+import { FoodInfo } from "./food-info.entity";
 import { Repository } from "typeorm";
+import { FoodInfoDto } from "./dtos/food-info.dto";
 
 @Injectable()
 export class FoodInfoRepository extends Repository<FoodInfo> {
@@ -16,13 +17,19 @@ export class FoodInfoRepository extends Repository<FoodInfo> {
     );
   }
 
-  async getFoodList(keyword: string) {
-    const result = await this.createQueryBuilder("entity").where("").getMany();
+  async getFoodList(keyword: string): Promise<FoodInfo[]> {
+    const result = await this.createQueryBuilder("entity")
+      .select("entity.foodName")
+      .where("entity.food_name like :keyword", { keyword: `%${keyword}%` })
+      .getMany();
     return result;
   }
 
-  async getFoodInfo(foodName: string) {
-    const result = await this.createQueryBuilder("entity").where("").getMany();
+  async getFoodInfo(foodName: string): Promise<FoodInfoDto> {
+    const result = await this.createQueryBuilder("entity")
+      .where("entity.food_name = :foodName", { foodName })
+      .getOneOrFail();
+    //getOneOrFail: 결과값 없을 경우 EntityNotFoundError 던짐
     return result;
   }
 }

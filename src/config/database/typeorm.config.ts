@@ -1,15 +1,32 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import * as config from "config";
+const SnakeNamingStrategy =
+  require("typeorm-naming-strategies").SnakeNamingStrategy;
 
 const dbConfig = config.get("db");
 
 export const typeORMConfig: TypeOrmModuleOptions = {
-  type: "postgres", //dbConfig.type,
-  host: process.env.RDS_HOSTNAME, // || dbConfig.host,
-  port: Number(process.env.RDS_PORT), // || dbConfig.post,
-  username: process.env.RDS_USERNAME, // || dbConfig.username,
-  password: process.env.RDS_PASSWORD, // || dbConfig.password,
-  database: process.env.RDS_DB_NAME, // || dbConfig.database,
+  type: dbConfig.type,
+  host: process.env.DB_HOSTNAME, // || dbConfig.host,
+  port: Number(process.env.DB_PORT), // || dbConfig.post,
+  username: process.env.DB_USERNAME, // || dbConfig.username,
+  password: process.env.DB_PASSWORD, // || dbConfig.password,
+  database: process.env.DB_NAME, // || dbConfig.database,
   entities: [__dirname + "/../../**/*.entity.{js, ts}"],
   synchronize: false,
+  namingStrategy: new SnakeNamingStrategy(),
+  ssl: {
+    rejectUnauthorized: false,
+  },
 };
+
+// export const typeORMConfig: TypeOrmModuleOptions = {
+//   type: dbConfig.type,
+//   host: dbConfig.host,
+//   port: dbConfig.post,
+//   username: dbConfig.username,
+//   password: dbConfig.password,
+//   database: dbConfig.database,
+//   entities: [__dirname + "/../../**/*.entity.{js, ts}"],
+//   synchronize: false,
+// };

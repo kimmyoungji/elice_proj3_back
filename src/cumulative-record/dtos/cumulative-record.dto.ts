@@ -8,7 +8,7 @@ export class CumulativeRecordDateDto {
   @ApiProperty({ description: "식사별 섭취한 총 칼로리" })
   @IsNotEmpty()
   @IsInt()
-  meal_total_calories: number;
+  mealTotalCalories: number;
 
   @Expose()
   @ApiProperty({ description: "식사별 섭취한 탄수화물" })
@@ -32,7 +32,7 @@ export class CumulativeRecordDateDto {
   @ApiProperty({ description: "식사별 섭취한 식이섬유" })
   @IsNotEmpty()
   @IsInt()
-  dietary_fiber: number;
+  dietaryFiber: number;
 }
 
 @Exclude()
@@ -46,5 +46,5 @@ export class CumulativeRecordMonthDto {
   @ApiProperty({ description: "하루 섭취한 총 칼로리" })
   @IsNotEmpty()
   @IsInt()
-  meal_total_calories: number;
+  mealTotalCalories: number;
 }

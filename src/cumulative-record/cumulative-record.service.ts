@@ -12,9 +12,9 @@ export class CumulativeRecordService {
   constructor(private cumulativeRepository: CumulativeRecordRepository) {}
 
   // 데이터 추가 api - test용
-  async addData() {
-    return this.cumulativeRepository.addData();
-  }
+  // async addData() {
+  //   return this.cumulativeRepository.addData();
+  // }
 
   async getDateRecord(
     date: Date,

@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
-export class FoodInfo extends BaseEntity {
+export class FoodInfoApi extends BaseEntity {
   @PrimaryColumn()
   food_info_id: string;
 

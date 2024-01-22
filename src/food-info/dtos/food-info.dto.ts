@@ -5,12 +5,12 @@ import { IsInt, IsNotEmpty } from "class-validator";
 export class FoodInfoDto {
   @Expose()
   @IsNotEmpty()
-  food_name: string;
+  foodName: string;
 
   @Expose()
   @IsNotEmpty()
   @IsInt()
-  total_capacity: number;
+  totalCapacity: number;
 
   @Expose()
   @IsNotEmpty()
@@ -31,5 +31,5 @@ export class FoodInfoDto {
 
   @Expose()
   @IsInt()
-  dietary_fiber: number;
+  dietaryFiber: number;
 }

@@ -1,22 +1,17 @@
 import { Controller, Get, Param, Query } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CumulativeRecordService } from "./cumulative-record.service";
-// import { UserService } from "src/user/user.service";
-// import { User } from "src/user/user.entity";
 
 @Controller("cumulative-record")
 @ApiTags("Cumulative Record API")
 export class CumulativeRecordController {
-  constructor(
-    private cumulariveRecordService: CumulativeRecordService
-    // private userService: UserService
-  ) {}
+  constructor(private cumulariveRecordService: CumulativeRecordService) {}
 
   // 데이터 추가 api - test용
-  @Get()
-  addData() {
-    return this.cumulariveRecordService.addData();
-  }
+  // @Get()
+  // addData() {
+  //   return this.cumulariveRecordService.addData();
+  // }
 
   @Get("/")
   @ApiOperation({
@@ -25,16 +20,15 @@ export class CumulativeRecordController {
   })
   async getRecord(@Query("date") date: Date, @Query("month") month: Date) {
     // JWT토큰으로 유저 id 확인하기
-    // const user = this.userService.getUserId(); // 추후 user api 보고 수정 필요
-    const userId = "02"; // 임의로
+    const userId = "90936edf-2aab-4cbe-b06f-0d4f0bf5da23";
     if (date) {
       const data = await this.cumulariveRecordService.getDateRecord(
         date,
         userId
       );
-      const { daily_total_calories, ...datas } = data[0];
+      const { mealTotalCalories, ...datas } = data[0];
       const result = {
-        totalCalories: daily_total_calories,
+        totalCalories: mealTotalCalories,
         totalNutrient: datas,
       };
       return result;
@@ -50,9 +44,8 @@ export class CumulativeRecordController {
       const calories_arr = [];
       for (let i = 0; i < count; i++) {
         date_arr.push(data[i].date.getDate());
-        calories_arr.push(data[i].daily_total_calories);
+        calories_arr.push(data[i].dailyTotalCalories);
       }
-      console.log(date_arr, calories_arr);
       const result = {
         existedDate: date_arr,
         totalCalData: calories_arr,
@@ -68,10 +61,8 @@ export class CumulativeRecordController {
     description: "유저의 월별 아침, 점심, 저녁 누적 식단 데이터를 조회한다.",
   })
   async getMonthDetailRecord(@Query("page") page: Number) {
-    console.log("page", page);
     // JWT토큰으로 유저 id 확인하기
-    // const user = this.userService.getUserId(); // 추후 user api 보고 수정 필요
-    const userId = "02"; // 임의로
+    const userId = "90936edf-2aab-4cbe-b06f-0d4f0bf5da23"; // 임의로
     const result = await this.cumulariveRecordService.getMonthDetailRecord(
       page,
       userId

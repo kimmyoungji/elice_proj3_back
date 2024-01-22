@@ -27,25 +27,22 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
   // }
 
   // 데이터 추가 api - test용
-  async addData(): Promise<CumulativeRecord> {
-    const data = this.create({
-      record_ids: ["A01", "A02"],
-      user_id: "02",
-      meal_type: "점심",
-      meal_total_calories: 800,
-      date: new Date("2024-01-09"),
-    });
-    await this.save(data);
-    return data;
-  }
+  // async addData(): Promise<CumulativeRecord> {
+  //   const data = this.create({
+  //     record_ids: ["A01", "A02"],
+  //     user_id: "02",
+  //     meal_type: "점심",
+  //     meal_total_calories: 800,
+  //     date: new Date("2024-01-09"),
+  //   });
+  //   await this.save(data);
+  //   return data;
+  // }
 
-  async getDateRecord(
-    date: Date,
-    userId: string
-  ): Promise<CumulativeRecordDateDto[]> {
+  async getDateRecord(date: Date, userId: string): Promise<CumulativeRecord[]> {
     const result = await this.createQueryBuilder("entity")
-      .where(`DATE_TRUNC('day', entity.date) = :date`, { date })
-      .andWhere(`entity.user_id = :userId`, { userId })
+      .where("DATE_TRUNC('day', entity.date) = :date", { date })
+      .andWhere("entity.user_id = :userId", { userId })
       .getMany();
     return result;
   }
@@ -53,10 +50,10 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
   async getMonthRecord(
     month: Date,
     userId: string
-  ): Promise<CumulativeRecordMonthDto[]> {
+  ): Promise<CumulativeRecord[]> {
     const result = await this.createQueryBuilder("entity")
       .where("entity.user_id = :userId", { userId })
-      .where(`DATE_TRUNC('month', entity.date) = :month`, { month })
+      .andWhere("DATE_TRUNC('month', entity.date) = :month", { month })
       .getMany();
     return result;
   }
@@ -65,7 +62,7 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
     const recordIds = ["3", "5"]; // record-table에서 가져옴
     const result = await this.createQueryBuilder("entity")
       .where("entity.user_id = :userId", { userId })
-      .where("entity.record_ids IN :recordIds", { recordIds })
+      .andWhere("entity.record_ids IN :recordIds", { recordIds })
       .getMany();
     return result;
   }

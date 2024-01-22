@@ -9,10 +9,11 @@ export class FoodInfoService {
 
   async getFoodList(keyword: string) {
     const result = await this.foodInfoRepository.getFoodList(keyword);
-    return;
+    const resultArr = result.map((value) => value.foodName);
+    return resultArr;
   }
 
-  async getFoodInfo(foodName: string) {
+  async getFoodInfo(foodName: string): Promise<FoodInfoDto> {
     const result = await this.foodInfoRepository.getFoodInfo(foodName);
     return plainToInstance(FoodInfoDto, result);
   }

@@ -1,72 +1,11 @@
 import { DataSource, Repository } from "typeorm";
-import { FoodInfoNara } from "./food-info-nara-api.entity";
-import { FoodInfo } from "./food-info-api.entity";
+import { FoodInfoApi } from "./food-info-api.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 
-export class FoodInfoNaraRepository extends Repository<FoodInfoNara> {
-  constructor(@InjectRepository(FoodInfoNara) private dataSource: DataSource) {
-    super(FoodInfoNara, dataSource.manager);
+export class FoodInfoAPIRepository extends Repository<FoodInfoApi> {
+  constructor(@InjectRepository(FoodInfoApi) private dataSource: DataSource) {
+    super(FoodInfoApi, dataSource.manager);
   }
-
-  async saveDataNara(data, count: number) {
-    // let message = false;
-    for (let i = 0; i < count; i++) {
-      const food_info = data[i];
-      // console.log(food_info);
-      const food_info_id = food_info["FOOD_CD"];
-      const food_name = food_info["DESC_KOR"];
-      const brand =
-        food_info["MAKER_NAME"] !== "" ? food_info["MAKER_NAME"] : null;
-      const total_capacity =
-        food_info["SERVING_SIZE"] !== ""
-          ? parseInt(food_info["SERVING_SIZE"]) * 100
-          : null;
-      const total_capacity_unit =
-        food_info["SERVING_UNIT"] !== "" ? food_info["SERVING_UNIT"] : null;
-      const calories =
-        food_info["NUTR_CONT1"] !== ""
-          ? parseInt(food_info["NUTR_CONT1"]) * 100
-          : null;
-      const carbohydrates =
-        food_info["NUTR_CONT2"] !== ""
-          ? parseInt(food_info["NUTR_CONT2"]) * 100
-          : null;
-      const proteins =
-        food_info["NUTR_CONT3"] !== ""
-          ? parseInt(food_info["NUTR_CONT3"]) * 100
-          : null;
-      const fats =
-        food_info["NUTR_CONT4"] !== ""
-          ? parseInt(food_info["NUTR_CONT4"]) * 100
-          : null;
-      const research_year = food_info["RESEARCH_YEAR"];
-      const result = this.create({
-        food_info_id,
-        food_name,
-        brand,
-        total_capacity,
-        total_capacity_unit,
-        calories,
-        carbohydrates,
-        proteins,
-        fats,
-        research_year,
-      });
-
-      await this.save(result);
-      // message = true;
-    }
-    console.log("저장 완료");
-    // return message;
-  }
-}
-
-export class FoodInfoAPIRepository extends Repository<FoodInfo> {
-  // constructor(
-  //   @InjectRepository(FoodInfoPortal) private dataSource: DataSource
-  // ) {
-  //   super(FoodInfoPortal, dataSource.manager);
-  // }
 
   async saveDataPortal(data) {
     const count = data.length;
