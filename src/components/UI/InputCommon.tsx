@@ -2,7 +2,7 @@ import { forwardRef, useId, useImperativeHandle, useRef } from 'react';
 import { useControlled } from '@hooks/useControlled';
 import classes from './inputCommon.module.css';
 import { getClassNamesArr } from '@utils/getClassesArr';
-import { InputVariant, getClassNameType } from 'typings/commontypes';
+import { InputVariant, GetClassNameType } from 'typings/commontypes';
 import { CommonSizeType } from 'typings/commontypes';
 
 type InputPropsType = {
@@ -19,10 +19,11 @@ type InputPropsType = {
   variant?: InputVariant;
   active?: boolean;
   size?: CommonSizeType;
+  style?: {};
 };
 const getModuleClassName = (
   customClassName: string | undefined,
-  { variant, disabled, active, size, prefix }: getClassNameType
+  { variant, disabled, active, size, prefix }: GetClassNameType
 ) => {
   //get = ['variant-active', '', 'active-true', 'size-large']
   const get = getClassNamesArr(
