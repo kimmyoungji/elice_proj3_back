@@ -6,13 +6,15 @@ import { CumulativeRecordModule } from "./cumulative-record/cumulative-record.mo
 import { typeORMConfig } from "./config/database/typeorm.config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { RecordModule } from "./record/record.module";
+import { FoodInfo } from "./food-info-api/food-info-api.entity";
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeORMConfig),
     UserModule,
     CumulativeRecordModule,
-    RecordModule
+    RecordModule,
+    FoodInfo
   ],
   controllers: [AppController],
   providers: [AppService],

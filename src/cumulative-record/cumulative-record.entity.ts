@@ -11,9 +11,9 @@ import {
 
 @Entity()
 export class CumulativeRecord extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   @ApiProperty({ description: "누적 기록 id" })
-  record_id: string;
+  cumulative_record_id: string;
 
   // User module 합칠 때
   // @JoinColumn()
@@ -23,11 +23,15 @@ export class CumulativeRecord extends BaseEntity {
 
   // 데이터 추가 컬럼 - test용
   @Column()
-  user_id: string;
+  userId: string;
 
   @Column({ default: 0 })
-  @ApiProperty({ description: "일별 섭취한 총 칼로리" })
-  daily_total_calories: number;
+  @ApiProperty({ description: "식단 구분" })
+  mealType: string;
+
+  @Column({ default: 0 })
+  @ApiProperty({ description: "일일 총 섭취 칼로리" })
+  mealTotalCalories: number;
 
   @Column()
   @ApiProperty({ description: "날짜" })
@@ -47,5 +51,10 @@ export class CumulativeRecord extends BaseEntity {
 
   @Column({ default: 0 })
   @ApiProperty({ description: "섭취한 식이섬유" })
-  dietary_fiber: number;
+  dietaryFiber: number;
+
+  // 여러 'record' ID를 저장하는 필드 추가
+  @Column({ type: "json", array: true, nullable: true })
+  @ApiProperty({ description: "관련된 식사 기록 ID 배열" })
+  recordIds: string;
 }

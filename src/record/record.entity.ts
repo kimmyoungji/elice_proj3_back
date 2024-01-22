@@ -29,7 +29,7 @@ export class Record extends BaseEntity {
   mealType: MealType;
 
   @Column({ type: "json", nullable: false })
-  foods: Food[]
+  foods: Food[];
 
   @Column({ type: "int", nullable: true })
   carbohydrates: number;

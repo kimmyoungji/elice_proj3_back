@@ -1,29 +1,38 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import * as config from "config";
 import { Record } from "src/record/record.entity";
+import * as dotenv from "dotenv";
 import * as TypeOrmNamingStrategies from "typeorm-naming-strategies";
+import { FoodInfo } from "src/food-info-api/food-info-api.entity";
+import { CumulativeRecord } from "src/cumulative-record/cumulative-record.entity";
 
+dotenv.config({path: __dirname + '/../../../.env'});
 // const dbConfig = config.get("db");
 
-// export const typeORMConfig: TypeOrmModuleOptions = {
-//   type: dbConfig.type,
-//   host: process.env.RDS_HOSTNAME || dbConfig.host,
-//   port: process.env.RDS_PORT || dbConfig.post,
-//   username: process.env.RDS_USERNAME || dbConfig.username,
-//   password: process.env.RDS_PASSWORD || dbConfig.password,
-//   database: process.env.RDS_DB_NAME || dbConfig.database,
-//   entities: [Record],
-//   synchronize: false,
-// };
-
-export const typeORMConfig : TypeOrmModuleOptions = {
-  type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: '0000',
-  database: 'ggu',
-  entities: [Record],
+export const typeORMConfig: TypeOrmModuleOptions = {
+  type: "postgres",
+  host: process.env.DB_HOSTNAME ,
+  port: Number(process.env.DB_PORT), //|| dbConfig.port,
+  username: process.env.DB_USERNAME, // || dbConfig.username,
+  password: process.env.DB_PASSWORD, // || dbConfig.password,
+  database: process.env.DB_NAME, // || dbConfig.database,
+  entities: [ Record, FoodInfo, CumulativeRecord ],
   synchronize: true,
-  namingStrategy: new TypeOrmNamingStrategies.SnakeNamingStrategy()
-}
+  namingStrategy: new TypeOrmNamingStrategies.SnakeNamingStrategy(),
+  logging: true,
+  ssl: {
+    rejectUnauthorized: false
+  }
+};
+
+// export const typeORMConfig : TypeOrmModuleOptions = {
+//   type: 'postgres',
+//   host: 'localhost',
+//   port: 5432,
+//   username: 'postgres',
+//   password: '0000',
+//   database: 'ggu',
+//   entities: [Record],
+//   synchronize: true,
+//   namingStrategy: new TypeOrmNamingStrategies.SnakeNamingStrategy()
+// }
