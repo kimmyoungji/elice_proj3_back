@@ -7,14 +7,14 @@ import axios from 'axios';
 interface UseApipropsType {
   method?: ApiMethods;
   path?: string | undefined;
-  data?: {} | any | undefined;
+  data?: any | undefined;
   shouldInitFetch?: boolean | undefined;
   initialResult?: string | undefined;
 }
 interface TriggerPropsType {
-  method: ApiMethods;
-  path: UseApipropsType['path'];
-  data: UseApipropsType['data'];
+  method?: ApiMethods;
+  path?: UseApipropsType['path'];
+  data?: UseApipropsType['data'];
   applyResult?: boolean;
   isShowBoundary?: boolean;
 }
