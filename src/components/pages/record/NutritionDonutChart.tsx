@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from '@components/pages/record/nutritiondonutchart.module.css';
 import getNutritionStandard from '@utils/getNutritionStandard';
-import { NutritionDonutChartProps, Nutrient } from './RecordTypes';
+import { NutritionDonutChartProps } from './RecordTypes';
 import { userData } from '../my-page/DummyUserData';
 import { nutrientNames, NutrientKey } from './recordMappingConstant';
 
@@ -58,36 +58,6 @@ const NutritionDonutChart = ({
       customStyle,
     };
   });
-  // if (result && mealData[selectedMealNumber]) {
-  //   nutrients = Object.entries(mealData[selectedMealNumber].totalNutrient).map(
-  //     ([key, value], idx) => {
-  //       let nutrientKey = nutrientNames[key as NutrientKey] || key;
-
-  //       const nutrientRatio = value / standard[idx]
-  //       const strokeDashoffset =
-  //         nutrientRatio < 1 ? circumference * (1 - nutrientRatio) : 0;
-
-  //       const customStyle: React.CSSProperties & {
-  //         '--initialOffset': string;
-  //         '--finalOffset': string;
-  //       } = {
-  //         '--initialOffset': `${circumference}px`,
-  //         '--finalOffset': `${strokeDashoffset}px`,
-  //       };
-
-  //       return {
-  //         key: nutrientKey,
-  //         value,
-  //         nutrientRatio,
-  //         strokeDashoffset,
-  //         customStyle,
-  //       };
-  //     }
-  //   )
-
-  // const nutrients = isShowingTotal
-  // ? mealData[selectedMealNumber].totalNutrient
-  // : totalNutrient
 
   return (
     <div className={styles.nutrients}>

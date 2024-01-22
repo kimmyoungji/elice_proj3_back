@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import style from './record.module.css';
 import getDates from '@utils/getDates';
-import { recordData } from './RecordData';
+import { recordData } from './DummyRecordData';
 import { useState } from 'react';
 import { mapSelectMealToMsg } from './recordMappingConstant';
 const mealLogo = '/images/9gram_logo_box.png';

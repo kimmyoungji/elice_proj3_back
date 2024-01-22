@@ -78,7 +78,6 @@ export interface Nutrient {
 export type TagData = {
   XYCoordinate: number[];
   foodName: string;
-  foodImage: string;
 };
 
 export type MergedTagData = {

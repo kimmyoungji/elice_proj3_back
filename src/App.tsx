@@ -9,6 +9,7 @@ import {
 import { lazy, Suspense } from 'react';
 import { useLocation, Navigate, Route, Routes } from 'react-router-dom';
 import { TopNavKeyType } from 'typings/propTypes';
+import Loading from '@components/UI/Loading';
 
 const Home = lazy(() => import('@components/pages/home/Home'));
 const Login = lazy(() => import('@components/pages/login/Login'));
@@ -48,7 +49,7 @@ function App() {
           </header>
         )}
         <main className='main'>
-          <Suspense fallback='...loading'>
+          <Suspense fallback={<Loading />}>
             <Routes>
               <Route path='/' element={<Navigate to='/home' />} />
               <Route path='/login' element={<Login />} />
