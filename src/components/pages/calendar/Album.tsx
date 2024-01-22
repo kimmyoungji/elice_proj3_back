@@ -62,7 +62,7 @@ const Album = () => {
           >{`${thisYear}.${returnWithZero(thisMonth)}.${day.date}`}</div>
           <div className={classes.cards} onClick={onClickCards}>
             {day.dateArr.map((arr, idx) => (
-              <Albumbody arr={arr} idx={idx} day={day} />
+              <Albumbody arr={arr} idx={idx} day={day} key={`album-${idx}`} />
             ))}
           </div>
         </div>
