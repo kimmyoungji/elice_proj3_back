@@ -2,7 +2,13 @@ import { useEffect, useRef, useState, useImperativeHandle } from "react";
 import { useNavigate } from 'react-router-dom';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import InputCommon from '@components/UI/InputCommon';
+import useApi from '@hooks/useApi';
 import './Onboarding.css';
+
+const isPasswordValid = (value: string) => {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+  return regex.test(value);
+};
 
 const Join = () => {
   const navigate = useNavigate();
@@ -13,6 +19,18 @@ const Join = () => {
   const [verifiedpassword, setVerifiedpassword] = useState('');
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+  const { result, loading, trigger } = useApi({
+    method: 'post',
+    path: '/auth/local/signup',
+    data: { name, email, password },
+  });
+
+  useEffect(() => {
+    if (result) {
+      navigate('/onboarding/1');
+    }
+  }, [result]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -48,9 +66,10 @@ const Join = () => {
     setVerifiedpassword(confirmPassword);
   };
 
-  const isPasswordValid = (value: string) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
-    return regex.test(value);
+  const handleSignUp = () => {
+    trigger({
+      data: { name, email, password },
+    });
   };
 
   return (
@@ -133,9 +152,10 @@ const Join = () => {
         <ButtonCommon
           variant="default-active"
           size="big"
-          onClickBtn={() => navigate(`/onboarding/1`)}
+          onClickBtn={handleSignUp}
+          disabled={loading}
         >
-          가입하기
+          {loading ? '가입 하는중' : '가입하기'}
         </ButtonCommon>
       </div>
     </div >
