@@ -26,12 +26,6 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^7.1.17",
     "@nestjs/typeorm": "^10.0.1",
-<<<<<<< HEAD:package.json
-    "pg": "^8.11.3",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1",
-    "typeorm": "^0.3.19"
-=======
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
@@ -48,7 +42,6 @@
     "typeorm": "^0.3.19",
     "typeorm-naming-strategies": "^4.1.0",
     "uuid": "^9.0.1"
->>>>>>> 8383df236ade9db5d593882ccb412886c64ac513:back/package.json
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
