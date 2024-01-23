@@ -14,28 +14,28 @@ export class ImageRepository {
             }     
       }
 
-      // get image by record id
-      async getImageByRecordId(recordId: string, manager: EntityManager){
+      // get image by imageId
+      async getImageByImageId(imageId: string, manager: EntityManager){
             try{
-                  return await manager.createQueryBuilder(Image, 'image').where('record_id = :recordId', {recordId}).getOne();
+                  return await manager.createQueryBuilder(Image, 'image').where('image_id = :imageId', {imageId}).getOne();
             }catch(err){
                   throw err;
             }
       }
 
-      // update image
-      async updateImage(recordId:string, toUpdate:UpdateImageDto, manager: EntityManager){
+      // update image by imageId
+      async updateImage(imageId:string, toUpdate:UpdateImageDto, manager: EntityManager){
             try{
-                  return await manager.createQueryBuilder(Image, 'image').update().set(toUpdate).where('record_id = :recordId', {recordId}).execute();
+                  return await manager.createQueryBuilder(Image, 'image').update().set(toUpdate).where('image_id = :imageId', {imageId}).execute();
             }catch(err){
                   throw err;
             }
       }
 
       // delete image
-      async deleteImage(recordId:string, manager: EntityManager){
+      async deleteImage(imageId:string, manager: EntityManager){
             try{
-                  return await manager.createQueryBuilder(Image, 'image').delete().where('record_id = :recordId', {recordId}).execute();
+                  return await manager.createQueryBuilder(Image, 'image').delete().where('image_id = :imageId', {imageId}).execute();
             }catch(err){
                   throw err;
             }

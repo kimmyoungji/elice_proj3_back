@@ -7,15 +7,11 @@ export class Image {
   imageId: number;
 
   @Column()
-  recordId: string;
-
-  @Column()
   foodImageUrl: string;
 
   mapCreateImageDtoToEntity(createImageDto: CreateImageDto) {
     const image = new Image();
-    image.recordId = createImageDto.recordId;
-    image.foodImageUrl = createImageDto.foodImgUrl;
+    image.foodImageUrl = createImageDto.foodImageUrl;
     return image;
   }
 }

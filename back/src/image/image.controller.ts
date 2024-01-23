@@ -27,12 +27,4 @@ export class ImageController {
     async handleGetPresignedUrlForProfile(@Param('filename') fileName: string) {
         return this.imageService.getPresignedUrlForPut(`profile/${fileName}`);
     }
-
-    @Post('test')
-    async test(@Res() res: any){
-        // const result = await this.imageService.saveImage(createImageDto)
-        const result = await this.imageService.getImageByRecordId('asdf')
-        console.log(result)
-        res.send(result);
-    }
 }
