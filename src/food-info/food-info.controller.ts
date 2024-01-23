@@ -9,14 +9,20 @@ export class FoodInfoController {
   @ApiOperation({ summary: "음식 조회하기" })
   @Get("/foods")
   async getFoodInfo(
+    @Query("keyword") keyword: string,
     @Query("foodName") foodName: string,
-    @Query("keyword") keyword: string
+    @Query("foodInfoId") foodInfoId: string
   ) {
+    if (keyword) {
+      return await this.foodInfoService.getFoodList(keyword);
+    }
+    // 리스트에 없던 경우
     if (foodName) {
       return await this.foodInfoService.getFoodInfo(foodName);
     }
-    if (keyword) {
-      return await this.foodInfoService.getFoodList(keyword);
+    // 리스트에 있는 경우
+    if (foodInfoId) {
+      return await this.foodInfoService.getFoodInfoById(foodInfoId);
     }
   }
 }
