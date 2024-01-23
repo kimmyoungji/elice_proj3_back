@@ -7,14 +7,14 @@ import {
 } from "./dtos/cumulative-record.dto";
 import { plainToInstance } from "class-transformer";
 import { DataSource } from "typeorm";
-// import { HealthInfoRepository } from "src/user/health-info.repository";
+import { HealthInfoRepository } from "../user/health-info.repository";
 
 @Injectable()
 export class CumulativeRecordService {
   constructor(
     private cumulativeRepository: CumulativeRecordRepository,
-    private readonly dataSource?: DataSource
-    // private healthInfoRepository: HealthInfoRepository
+    private healthInfoRepository: HealthInfoRepository,
+    private readonly dataSource: DataSource
   ) {}
 
   async getDateRecord(
@@ -39,19 +39,20 @@ export class CumulativeRecordService {
       );
 
       // [HealthInfo Table] - 3) targetCalories, 4) recommendNutrient
-      // const result = this.cumulativeRepository.findHealthInfoByUserId(date, userId)
-      // findHealthInfoByUserId에 date 추가되어야 하는 부분 명지님께 !
-      // const HealthInfoResult = this.healthInfoRepository.findHealthInfoByUserId(
-      //   date,
-      //   userId
-      // );
+      // findHealthInfoByUserId에 date 추가 필요
+      const HealthInfoResult = this.healthInfoRepository.findHealthInfoByUserId(
+        // date,
+        userId,
+        queryRunner.manager
+      );
+      console.log("HealthInfoResult", HealthInfoResult);
 
       // [Cumulative Table] - 5) dateArr
       const mealTypeResult =
         await this.cumulativeRepository.getDateMealTypeRecord(date, userId);
 
       // [Image Table] - 5) dateArr
-      // mealTypeResult에서 받아온 record_ids로 이미지들 가져오기
+      // mealTypeResult에서 받아온 image_id로 이미지들 가져오기
       // const mealTypeImage = this.cumulativeRepository.getDateMealTypeRecord(
       //   date,
       //   userId

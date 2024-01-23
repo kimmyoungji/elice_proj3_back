@@ -1,6 +1,7 @@
-import { Controller, Get, Query } from "@nestjs/common";
+import { Controller, Get, Query, UseGuards } from "@nestjs/common";
 import { FoodInfoService } from "./food-info.service";
 import { ApiOperation } from "@nestjs/swagger";
+import { isLoggedInGuard } from "src/auth/utils/isLoggedin.guard";
 
 @Controller("food-info")
 export class FoodInfoController {
@@ -8,6 +9,7 @@ export class FoodInfoController {
 
   @ApiOperation({ summary: "음식 조회하기" })
   @Get("/foods")
+  @UseGuards(isLoggedInGuard)
   async getFoodInfo(
     @Query("keyword") keyword: string,
     @Query("foodName") foodName: string,
