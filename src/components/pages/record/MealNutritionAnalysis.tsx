@@ -8,7 +8,7 @@ import NutritionDonutChart from './NutritionDonutChart';
 import MealGraphToggle from './MealGraphToggle';
 import { mapSelectMealToMsg } from './recordMappingConstant';
 
-const goalCalories = userData.targetCalories;
+const goalCalories = userData.healthInfo.targetCalories;
 const initialNutrients = {
   carbohydrates: 0,
   proteins: 0,
