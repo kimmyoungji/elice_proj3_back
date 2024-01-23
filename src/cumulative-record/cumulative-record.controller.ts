@@ -7,12 +7,6 @@ import { CumulativeRecordService } from "./cumulative-record.service";
 export class CumulativeRecordController {
   constructor(private cumulariveRecordService: CumulativeRecordService) {}
 
-  // 데이터 추가 api - test용
-  // @Get()
-  // addData() {
-  //   return this.cumulariveRecordService.addData();
-  // }
-
   @Get("/")
   @ApiOperation({
     summary: "월별/일별 누적 식단 데이터 조회하기",
@@ -26,6 +20,7 @@ export class CumulativeRecordController {
         date,
         userId
       );
+      // return 값 다시 확인 필요
       const { mealTotalCalories, ...datas } = data[0];
       const result = {
         totalCalories: mealTotalCalories,
@@ -54,7 +49,21 @@ export class CumulativeRecordController {
     }
   }
 
-  // 아직 구현중
+  @Get("/meal")
+  @ApiOperation({
+    summary: "일별/meal 타입별 누적 식단 데이터 조회하기",
+    description: "유저의 누적 식단 데이터를 조회한다.",
+  })
+  async getDateMealTypeRecord(@Query("date") date: Date) {
+    // JWT토큰으로 유저 id 확인하기
+    const userId = "90936edf-2aab-4cbe-b06f-0d4f0bf5da23";
+    const result = await this.cumulariveRecordService.getDateMealTypeRecord(
+      date,
+      userId
+    );
+    return result;
+  }
+
   @Get("/month")
   @ApiOperation({
     summary: "월별 식사별 누적 식단 데이터 조회하기",

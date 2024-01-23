@@ -39,12 +39,37 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
   //   return data;
   // }
 
-  async getDateRecord(date: Date, userId: string): Promise<CumulativeRecord[]> {
+  // 일별 데이터 - totalCalories, totalNutrient
+  async getDateRecord(
+    date: Date,
+    userId: string
+  ): Promise<CumulativeRecordDateDto[]> {
+    const cumulativeResult = await this.createQueryBuilder("entity")
+      .select([
+        "entity.userId",
+        "entity.date",
+        "SUM(entity.mealTotalCalories)",
+        "SUM(entity.carbohydrates)",
+        "SUM(entity.proteins)",
+        "SUM(entity.fats)",
+        "SUM(entity.dietaryFiber)",
+      ])
+      .where("DATE_TRUNC('day', entity.date) = :date", { date })
+      .andWhere("entity.user_id = :userId", { userId })
+      .groupBy("entity.user_id, entity.date") // 순서에 따른 조회 속도
+      .getMany();
+    return cumulativeResult;
+  }
+
+  // 일별/타입별 데이터 - mealType, calories, imgURL
+  async getDateMealTypeRecord(date: Date, userId: string) {
     const result = await this.createQueryBuilder("entity")
       .where("DATE_TRUNC('day', entity.date) = :date", { date })
       .andWhere("entity.user_id = :userId", { userId })
       .getMany();
     return result;
+    // record_id로 img 테이블과 조인
+    // 날짜를 먼저 조회하는 것 vs 유저 id를 먼저 조회하는 것 -> 무엇이 더 빠를까?
   }
 
   async getMonthRecord(
