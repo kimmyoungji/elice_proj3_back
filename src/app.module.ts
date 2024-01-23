@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
+import { AuthModule } from "./auth/auth.module";
+import { PassportModule } from "@nestjs/passport";
 import { CumulativeRecordModule } from "./cumulative-record/cumulative-record.module";
 import { typeORMConfig } from "./config/database/typeorm.config";
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -10,9 +10,13 @@ import { ConfigModule } from "@nestjs/config";
 import { FoodInfoModule } from "./food-info/food-info.module";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import * as dotenv from "dotenv";
+import * as config from "config";
+import { UserModule } from "./user/user.module";
 
 dotenv.config();
-
+dotenv.config({ path: __dirname + "/../.env" });
+const dbConfig = config.get("db");
+console.log(typeORMConfig);
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -33,12 +37,13 @@ dotenv.config();
         },
       }
     ),
+    PassportModule.register({ session: true }),
+    AuthModule,
+    UserModule,
     CumulativeRecordModule,
     FoodInfoApiModule,
     ScheduleModule.forRoot(),
     FoodInfoModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
