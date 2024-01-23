@@ -12,7 +12,7 @@ const isPasswordValid = (value: string) => {
 
 const Join = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState('');
+  const [username, setName] = useState('');
   const [email, setEmail] = useState('');
   const [verifiedemail, setVerifiedemail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,7 +23,7 @@ const Join = () => {
   const { result, loading, trigger } = useApi({
     method: 'post',
     path: '/auth/local/signup',
-    data: { name, email, password },
+    data: { username, email, password },
   });
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const Join = () => {
 
   const handleSignUp = () => {
     trigger({
-      data: { name, email, password },
+      data: { username, email, password },
     });
   };
 
@@ -80,7 +80,7 @@ const Join = () => {
       <div style={{ marginTop: '15px' }}>
         <InputCommon
           variant="default"
-          value={name}
+          value={username}
           onChange={handleNameChange}
         />
       </div>
