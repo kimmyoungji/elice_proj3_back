@@ -1,6 +1,6 @@
 ## 백엔드 실행 방법
 ```shell 
-cd back  
+cd src
 npm run start:dev
 ```
 ---
