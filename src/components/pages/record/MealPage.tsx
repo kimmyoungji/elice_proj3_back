@@ -28,6 +28,7 @@ const MealPage = () => {
     findMealNumber(selectedMeal)
   );
   const [data, setData] = useState(mealDetailData);
+  const [imgData, setImgData] = useState(data[selectedMealNumber].imgurl);
   const [coordinate, setCoordinate] = useState(data[selectedMealNumber].food);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
@@ -82,7 +83,7 @@ const MealPage = () => {
                   size='tiny'
                   onClick={() =>
                     navigate(`/record/${date}/${selectedMealTime}/edit`, {
-                      state: coordinate,
+                      state: { coordinate, imgData },
                     })
                   }
                 >
