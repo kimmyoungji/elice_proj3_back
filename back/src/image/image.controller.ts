@@ -7,19 +7,19 @@ import { ApiParam, ApiProperty, ApiTags } from "@nestjs/swagger";
 export class ImageController {
     constructor(private imageService: ImageService) { }
 
-    // get presigned url for downloading image
-    @Post('/presigned-url/download/:filename')
+    // presigned url for uploading food image
+    @Post('/presigned-url/upload/food/:filename')
     @ApiProperty( {description: "get presigned url for put"} )
-    @ApiParam({ name: 'filename', type: 'string', description: 'Name of the file to download' })
-    async getPresignedUrlForDownload(@Param('filename') fileName: string) {
+    @ApiParam({ name: 'filename', type: 'string', description: 'Name of the file to upload' })
+    async handleGetPresignedUrlForFoodImg(@Param('filename') fileName: string) {
         return this.imageService.getPresignedUrlForPut(fileName);
     }
 
-    // presigned url for uploading image
-    @Post('/presigned-url/upload/:filename')
+    // presigned url for uploading profile image
+    @Post('/presigned-url/upload/profile/:filename')
     @ApiProperty( {description: "get presigned url for put"} )
     @ApiParam({ name: 'filename', type: 'string', description: 'Name of the file to upload' })
-    async getPresignedUrlForUpload(@Param('filename') fileName: string) {
+    async handleGetPresignedUrlForProfileImg(@Param('filename') fileName: string) {
         return this.imageService.getPresignedUrlForPut(fileName);
     }
     

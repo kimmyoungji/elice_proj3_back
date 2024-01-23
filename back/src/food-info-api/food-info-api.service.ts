@@ -1,5 +1,4 @@
 import {
-  FoodInfoNaraRepository,
   FoodInfoAPIRepository,
 } from "./food-info-api.repository";
 import { Injectable } from "@nestjs/common";
@@ -10,31 +9,30 @@ import axios from "axios";
 export class FoodInfoApiService {
   private startIdx = 1;
   constructor(
-    private foodInfoNaraRepository: FoodInfoNaraRepository,
     private foodInfoAPIRepository: FoodInfoAPIRepository
   ) {}
 
-  async getDataNara(): Promise<string> {
-    const keyId = process.env.NARA_SERVICE_KEY;
-    const serviceId = process.env.NARA_SERVICE_ID;
-    const dataType = "json";
-    let endIdx = this.startIdx + 999;
-    console.log("Range", this.startIdx, endIdx);
-    const url = `http://openapi.foodsafetykorea.go.kr/api/${keyId}/${serviceId}/${dataType}/${this.startIdx}/${endIdx}`;
+  // async getDataNara(): Promise<string> {
+  //   const keyId = process.env.NARA_SERVICE_KEY;
+  //   const serviceId = process.env.NARA_SERVICE_ID;
+  //   const dataType = "json";
+  //   let endIdx = this.startIdx + 999;
+  //   console.log("Range", this.startIdx, endIdx);
+  //   const url = `http://openapi.foodsafetykorea.go.kr/api/${keyId}/${serviceId}/${dataType}/${this.startIdx}/${endIdx}`;
 
-    const res = await axios.get(url);
-    console.log('식품안전나라 데이터', res.data)
-    const data = res.data.I2790.row;
-    console.log(data);
-    const count = endIdx - this.startIdx + 1;
-    const result = this.foodInfoNaraRepository.saveDataNara(data, count);
-    if (result) {
-      this.startIdx += 1000;
-      return "성공";
-    } else {
-      return "실패";
-    }
-  }
+  //   const res = await axios.get(url);
+  //   console.log('식품안전나라 데이터', res.data)
+  //   const data = res.data.I2790.row;
+  //   console.log(data);
+  //   const count = endIdx - this.startIdx + 1;
+  //   const result = this.foodInfoNaraRepository.saveDataNara(data, count);
+  //   if (result) {
+  //     this.startIdx += 1000;
+  //     return "성공";
+  //   } else {
+  //     return "실패";
+  //   }
+  // }
 
   async getDataPortal(): Promise<string> {
     const params = {
