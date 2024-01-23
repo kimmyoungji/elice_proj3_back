@@ -14,7 +14,7 @@ function ImageUploader() {
     console.log('멀티파트 폼데이터',formData)
 
     // Get the presigned URL from the backend
-    const presignedResponse = await fetch(`http://localhost:5001/image/presigned-url/upload/${image.name}`, {
+    const presignedResponse = await fetch(`http://localhost:5001/image/presigned-url/upload/food/${image.name}`, {
       method: 'POST',
       body: formData,
     });
@@ -31,18 +31,13 @@ function ImageUploader() {
     });
 
     console.log('업로드 응답', uploadResponse);
+    console.log('이미지 유알엘', imageUrl);
 
     if (!uploadResponse.ok) {
       throw new Error('Upload failed');
     }
 
-    // Get the image URL from the backend
-    const imageUrlResponse = await fetch(`http://localhost:5001/image/presigned-url/download/${image.name}`,{
-      method: 'POST'
-    });
-    const imageUrlData = await imageUrlResponse.json();
-
-    setImageUrl(imageUrlData.url);
+    setImageUrl(uploadResponse.url);
   };
 
   return (
@@ -50,6 +45,7 @@ function ImageUploader() {
       <input type="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" onChange={handleFileChange} />
       <button onClick={uploadImage}>Upload</button>
       {imageUrl && <img src={imageUrl} alt="Uploaded" />}
+
     </div>
   );
 }
