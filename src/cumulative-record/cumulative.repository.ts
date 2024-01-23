@@ -4,6 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 // import { User } from "src/user/user.entity";
 import { Injectable } from "@nestjs/common";
 import {
+  CumulativeDateMealTypeDto,
   CumulativeRecordDateDto,
   CumulativeRecordMonthDto,
 } from "./dtos/cumulative-record.dto";
@@ -20,24 +21,6 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
       cumulativeRecordRepository.queryRunner
     );
   }
-  // constructor(
-  //   @InjectRepository(CumulativeRecord) private dataSource: DataSource
-  // ) {
-  //   super(CumulativeRecord, dataSource.manager);
-  // }
-
-  // 데이터 추가 api - test용
-  // async addData(): Promise<CumulativeRecord> {
-  //   const data = this.create({
-  //     record_ids: ["A01", "A02"],
-  //     user_id: "02",
-  //     meal_type: "점심",
-  //     meal_total_calories: 800,
-  //     date: new Date("2024-01-09"),
-  //   });
-  //   await this.save(data);
-  //   return data;
-  // }
 
   // 일별 데이터 - totalCalories, totalNutrient
   async getDateRecord(
@@ -45,49 +28,66 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
     userId: string
   ): Promise<CumulativeRecordDateDto[]> {
     const cumulativeResult = await this.createQueryBuilder("entity")
-      .select([
-        "entity.userId",
-        "entity.date",
-        "SUM(entity.mealTotalCalories)",
-        "SUM(entity.carbohydrates)",
-        "SUM(entity.proteins)",
-        "SUM(entity.fats)",
-        "SUM(entity.dietaryFiber)",
-      ])
+      .select("entity.userId", "userId")
+      .addSelect("entity.date", "data")
+      .addSelect("SUM(entity.mealTotalCalories)", "totalCalories")
+      .addSelect("SUM(entity.carbohydrates)", "carbohydrates")
+      .addSelect("SUM(entity.proteins)", "proteins")
+      .addSelect("SUM(entity.fats)", "fats")
+      .addSelect("SUM(entity.dietaryFiber)", "dietaryFiber")
       .where("DATE_TRUNC('day', entity.date) = :date", { date })
       .andWhere("entity.user_id = :userId", { userId })
-      .groupBy("entity.user_id, entity.date") // 순서에 따른 조회 속도
-      .getMany();
+      .groupBy("entity.user_id, entity.date") // 순서에 따른 조회 속도 확인하기
+      .getRawMany();
     return cumulativeResult;
   }
 
-  // 일별/타입별 데이터 - mealType, calories, imgURL
+  // 일별/타입별 데이터 - mealType, calories, (imgURL)
   async getDateMealTypeRecord(date: Date, userId: string) {
     const result = await this.createQueryBuilder("entity")
+      .select([
+        "entity.mealType",
+        "entity.mealTotalCalories",
+        "entity.recordIds",
+      ])
       .where("DATE_TRUNC('day', entity.date) = :date", { date })
       .andWhere("entity.user_id = :userId", { userId })
       .getMany();
     return result;
-    // record_id로 img 테이블과 조인
     // 날짜를 먼저 조회하는 것 vs 유저 id를 먼저 조회하는 것 -> 무엇이 더 빠를까?
   }
 
+  // 월별 데이터 - date, totalCalories
   async getMonthRecord(
     month: Date,
     userId: string
-  ): Promise<CumulativeRecord[]> {
+  ): Promise<CumulativeRecordMonthDto[]> {
     const result = await this.createQueryBuilder("entity")
+      .select("entity.userId", "userId")
+      .addSelect("DATE_TRUNC('day', entity.date)", "date")
+      .addSelect("SUM(entity.mealTotalCalories)", "totalCalories")
+      // .select([
+      //   "entity.userId",
+      //   "DATE_TRUNC('day', entity.date)",
+      //   "SUM(entity.mealTotalCalories)",
+      // ])
       .where("entity.user_id = :userId", { userId })
-      .andWhere("DATE_TRUNC('month', entity.date) = :month", { month })
-      .getMany();
+      .andWhere("DATE_TRUNC('month', entity.date) = :month", {
+        month: `${month}-01`,
+      })
+      .groupBy("entity.user_id, DATE_TRUNC('day', entity.date)")
+      .getRawMany();
+    // .getMany();
     return result;
   }
 
+  // 월별 데이터 - date, mealType, calories, (imgURL)
   async getMonthDetailRecord(page: Number, userId: string) {
-    const recordIds = ["3", "5"]; // record-table에서 가져옴
+    // 날짜 범위 지정
     const result = await this.createQueryBuilder("entity")
       .where("entity.user_id = :userId", { userId })
-      .andWhere("entity.record_ids IN :recordIds", { recordIds })
+      .andWhere("DATE_TRUNC('day', entity.date) = :date", { page }) // 수정
+      // .andWhere("entity.record_ids IN :recordIds", { recordIds })
       .getMany();
     return result;
   }

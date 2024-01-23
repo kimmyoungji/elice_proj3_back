@@ -39,7 +39,7 @@ export class CumulativeRecordController {
       const calories_arr = [];
       for (let i = 0; i < count; i++) {
         date_arr.push(data[i].date.getDate());
-        calories_arr.push(data[i].dailyTotalCalories);
+        calories_arr.push(data[i].totalCalories);
       }
       const result = {
         existedDate: date_arr,
