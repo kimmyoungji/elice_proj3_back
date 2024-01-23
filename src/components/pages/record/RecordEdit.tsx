@@ -17,7 +17,6 @@ interface MealTime {
 const RecordEdit = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  console.log(state)
 
   const params = useParams();
   const date = params.date;
@@ -149,7 +148,7 @@ const RecordEdit = () => {
       <div className={styles.datebox}>
         {dateSplit && mealTime && (
           <p className='b-small'>
-            {dateSplit[0]}년 {dateSplit[1]}월 {dateSplit[2]}일{' '}
+            {dateSplit[0]}. {dateSplit[1]}. {dateSplit[2]}{' '}
             {mealTimetoStr[mealTime]}
           </p>
         )}
