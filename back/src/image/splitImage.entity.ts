@@ -15,5 +15,11 @@ export class SplitImage {
   yCoordinate: number;
 
   @Column()
+  width: number;
+
+  @Column()
+  height: number;
+
+  @Column()
   createdAt: Timestamp;
 }
