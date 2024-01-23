@@ -20,6 +20,6 @@ export class SplitImage {
   @Column()
   height: number;
 
-  @Column()
+  @Column({type: "timestamp with time zone", default: () => "CURRENT_TIMESTAMP"})
   createdAt: Timestamp;
 }

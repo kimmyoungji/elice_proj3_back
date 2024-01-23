@@ -7,13 +7,11 @@ import * as dotenv from "dotenv";
 import { Food, Record } from "src/record/record.entity";
 import { CumulativeRecord } from "src/cumulative-record/cumulative-record.entity";
 import { FoodInfo } from "src/food-info/food-info.entity";
-import { Image } from "src/image/image.entity";
+import { Image } from "src/image/entities/image.entity";
+import { SplitImage } from "src/image/entities/splitImage.entity";
 
-dotenv.config({path: __dirname + '/../../../.env'});
+dotenv.config();
 const dbConfig = config.get("db");
-
-console.log(process.env.DB_HOSTNAME);
-console.log(dbConfig);
 
 export const typeORMConfig: TypeOrmModuleOptions = {
   type: dbConfig.type,
@@ -22,7 +20,7 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   username: process.env.DB_USERNAME || dbConfig.username,
   password: process.env.DB_PASSWORD || dbConfig.password,
   database: process.env.DB_NAME || dbConfig.database,
-  entities: [ User, HealthInfo, Record, CumulativeRecord, FoodInfo, Image ],
+  entities: [ User, HealthInfo, Record, CumulativeRecord, FoodInfo, Image, SplitImage],
   synchronize: false,
   namingStrategy: new TypeOrmNamingStrategies.SnakeNamingStrategy(),
   logging: true,
