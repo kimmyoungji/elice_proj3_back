@@ -10,12 +10,12 @@ export class Image {
   recordId: string;
 
   @Column()
-  foodImage: string;
+  foodImageUrl: string;
 
   mapCreateImageDtoToEntity(createImageDto: CreateImageDto) {
     const image = new Image();
     image.recordId = createImageDto.recordId;
-    image.foodImage = createImageDto.image;
+    image.foodImageUrl = createImageDto.foodImgUrl;
     return image;
   }
 }

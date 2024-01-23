@@ -1,7 +1,8 @@
 import { UserService } from 'src/user/user.service';
-import { Controller,Param, Post } from "@nestjs/common";
+import { Body, Controller,Param, Post, Res } from "@nestjs/common";
 import { ImageService } from "./image.service";
 import { ApiParam, ApiProperty, ApiTags } from "@nestjs/swagger";
+import { CreateImageDto } from './dtos/CreateImage.dto';
 
 @ApiTags('image')
 @Controller("image")
@@ -25,5 +26,13 @@ export class ImageController {
     @ApiParam({ name: 'filename', type: 'string', description: 'Name of the file to upload' })
     async handleGetPresignedUrlForProfile(@Param('filename') fileName: string) {
         return this.imageService.getPresignedUrlForPut(`profile/${fileName}`);
+    }
+
+    @Post('test')
+    async test(@Res() res: any){
+        // const result = await this.imageService.saveImage(createImageDto)
+        const result = await this.imageService.getImageByRecordId('asdf')
+        console.log(result)
+        res.send(result);
     }
 }

@@ -1,6 +1,7 @@
 import { EntityManager } from "typeorm";
 import { CreateImageDto } from '../dtos/CreateImage.dto';
 import { Image } from "../entities/image.entity";
+import { UpdateImageDto } from "../dtos/UpdateImage.dto";
 
 export class ImageRepository {
 
@@ -23,13 +24,21 @@ export class ImageRepository {
       }
 
       // update image
-      async updateImage(){
-
+      async updateImage(recordId:string, toUpdate:UpdateImageDto, manager: EntityManager){
+            try{
+                  return await manager.createQueryBuilder(Image, 'image').update().set(toUpdate).where('record_id = :recordId', {recordId}).execute();
+            }catch(err){
+                  throw err;
+            }
       }
 
       // delete image
-      async deleteImage(){
-      
+      async deleteImage(recordId:string, manager: EntityManager){
+            try{
+                  return await manager.createQueryBuilder(Image, 'image').delete().where('record_id = :recordId', {recordId}).execute();
+            }catch(err){
+                  throw err;
+            }
       }
 
 }

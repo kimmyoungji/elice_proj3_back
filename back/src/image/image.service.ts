@@ -4,6 +4,8 @@ import { Injectable } from "@nestjs/common";
 import { ImageRepository } from "./repositories/image.repository";
 import * as AWS from 'aws-sdk';
 import { Image } from './entities/image.entity';
+import { Update } from 'aws-sdk/clients/dynamodb';
+import { UpdateImageDto } from './dtos/UpdateImage.dto';
 
 
 @Injectable()
@@ -30,13 +32,15 @@ export class ImageService {
         return url;
     }
 
-    async createImage(CreateImageDto: CreateImageDto) {
+    async saveImage(CreateImageDto: CreateImageDto) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try{
             const image = new Image().mapCreateImageDtoToEntity(CreateImageDto);
-            await this.imageRepository.saveImage(image, queryRunner.manager);
+            const result =  this.imageRepository.saveImage(image, queryRunner.manager);
+            await queryRunner.commitTransaction();
+            return result;
         }catch(err){
             await queryRunner.rollbackTransaction();
             throw err;
@@ -45,6 +49,53 @@ export class ImageService {
         }
     }
 
-    
+    async getImageByRecordId(recordId: string) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try{
+            const result = await this.imageRepository.getImageByRecordId(recordId, queryRunner.manager);
+            await queryRunner.commitTransaction();
+            return result;
+        }catch(err){
+            await queryRunner.rollbackTransaction();
+            throw err;
+        }finally{
+            await queryRunner.release();
+        }
+    }
+
+    async updateImageByRecordId(recordId: string, updateImageDto: UpdateImageDto) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try{
+            const result =  this.imageRepository.updateImage(recordId,updateImageDto, queryRunner.manager);
+            await queryRunner.commitTransaction();
+            return result;
+        }catch(err){
+            await queryRunner.rollbackTransaction();
+            throw err;  
+        }finally{
+            await queryRunner.release();
+        }
+    }
+
+
+    async deleteImageByRecordId(recordId: string) {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try{
+            const result = this.imageRepository.deleteImage(recordId, queryRunner.manager);
+            await queryRunner.commitTransaction();
+            return result;
+        }catch(err){
+            await queryRunner.rollbackTransaction();
+            throw err;
+        }finally{
+            await queryRunner.release();
+        }
+    }
 
 }

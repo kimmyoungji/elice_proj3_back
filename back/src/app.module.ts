@@ -12,6 +12,8 @@ import { FoodInfoModule } from "./food-info/food-info.module";
 import { ImageModule } from './image/image.module';
 import { SplitImage } from './image/entities/splitImage.entity';
 
+console.log(typeORMConfig)
+
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeORMConfig),
