@@ -13,7 +13,7 @@ export class HealthInfoRepository{
         }
     }
 
-    // Read
+    // find healthInfo by userId and most recent date
     public async findHealthInfoByUserId(userId: string, manager: EntityManager): Promise<HealthInfo>{
         try{
             return await manager.createQueryBuilder(HealthInfo, "health_info").where("user_id = :userId", {userId}).getOne();
@@ -22,7 +22,7 @@ export class HealthInfoRepository{
         }
     }
 
-    // Update
+    // update healthInfo by userId and most recent date
     public async updateHealthInfoByUserId(healthInfoId: string, healthInfo:HealthInfo,  manager: EntityManager): Promise<UpdateResult>{
         try{
             return await manager.createQueryBuilder(HealthInfo, "health_info").update(HealthInfo).set(healthInfo).where("health_info_id = :healthInfoId",{healthInfoId}).execute();
@@ -31,7 +31,7 @@ export class HealthInfoRepository{
         }
     }
 
-    // Delete
+    // Delete heatlhInfo by userId
     public async deleteHealthInfoByHealthInfoId(healthInfoId: string, manager: EntityManager): Promise<DeleteResult>{       
         try{
             return await manager.createQueryBuilder(HealthInfo, "health_info").softDelete().where("health_info_id = :healthInfoId",{healthInfoId}).execute();

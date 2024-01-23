@@ -15,7 +15,6 @@ export class UserRepository{
        
     }
 
-    // Read
     public async findUserByEmail(email: string, manager: EntityManager): Promise<User>{
         try{
             return await manager.createQueryBuilder(User, "user").where("email = :email", {email}).getOne();
@@ -61,7 +60,6 @@ export class UserRepository{
     // soft Delete
     public async softDeleteUserByUserId(userId: string, manager: EntityManager){       
         try{
-            console.log(userId);
             return await manager.createQueryBuilder(User, "user").softDelete().where("user_id = :userId",{userId}).execute();
         }catch(err){
             throw err;

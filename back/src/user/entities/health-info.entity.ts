@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryColumn, UpdateDateColumn, OneToOne, JoinColumn, DeleteDateColumn, Timestamp } from 'typeorm';
+import { Entity, Column, PrimaryColumn, UpdateDateColumn, OneToOne, JoinColumn, DeleteDateColumn, Timestamp, OneToMany, ManyToOne } from 'typeorm';
 import { IsNotEmpty, IsInt, IsString, IsDate } from 'class-validator';
 import { User } from './user.entity';
 import { v4 as uuidv4 } from 'uuid';
-import { UpdateUserAndHealthInfoDto } from '../dto/UpdateUserAndHealthInfo.dto';
 import { ActivityAmount, DietGoal } from '../utils/health-info.enums';
+import { UpdateHealthInfoDto } from '../dto/UpdateHealthInfo.dto';
 
 @Entity()
 export class HealthInfo {
@@ -52,10 +52,10 @@ export class HealthInfo {
     @DeleteDateColumn({name: 'deletedat'})
     deletedat: Timestamp;
 
-    @OneToOne(() => User, user => user.healthInfo)
+    @ManyToOne(() => User, user => user.healthInfo)
     user: User;
 
-    public mapHealthInfoDto(dto: UpdateUserAndHealthInfoDto){
+    public mapHealthInfoDto(dto: UpdateHealthInfoDto){
         const healthInfo = new HealthInfo();
         healthInfo.weight = dto.weight;
         healthInfo.height = dto.height;

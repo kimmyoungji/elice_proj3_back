@@ -1,12 +1,13 @@
 import { IsBoolean, IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { GoogleLoginDto } from '../../auth/dto/googleLoginDto';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn, Timestamp, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn, Timestamp, UpdateDateColumn } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { LocalSignupDto } from '../../auth/dto/localSignupDto';
 import * as bcrypt from 'bcrypt';
 import { HealthInfo } from './health-info.entity';
-import { UpdateUserAndHealthInfoDto } from '../dto/UpdateUserAndHealthInfo.dto';
 import { Gender } from '../utils/user.enums';
+import { CreateUserDto } from '../dto/CreateUser.dto';
+import { UpdateUserDto } from '../dto/UpdateUser.dto';
 
 @Entity('user')
 export class User {
@@ -39,10 +40,9 @@ export class User {
   @IsOptional()
   birthDay: Date;
 
-  @Column({ type: 'varchar', nullable: true})
-  @IsEnum(Gender)
+  @Column({ type: 'enum', enum: Gender, nullable: true})
   @IsOptional()
-  gender: string;
+  gender: Gender;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
   @IsString()
@@ -66,7 +66,7 @@ export class User {
   @DeleteDateColumn()
   deletedat: Timestamp;
 
-  @OneToOne(() => HealthInfo, healthInfo => healthInfo.user, { cascade:true })
+  @OneToMany(() => HealthInfo, healthInfo => healthInfo.user, { cascade:true })
   @JoinColumn({name: 'health_info_id'})
   healthInfo: HealthInfo;
 
@@ -92,14 +92,32 @@ export class User {
     return user;
   }
 
-  public mapUpdateUserDto(dto: UpdateUserAndHealthInfoDto){
+  public mapCreateUserDto(dto: CreateUserDto){
     const user = new User();
+    user.userId =  uuidv4();
+    user.email = dto.email;
+    user.providerId = dto.providerId;
+    user.password = dto.password;
     user.username = dto.username;
-    // user.password = dto.password;
     user.birthDay = dto.birthDay;
     user.gender = dto.gender;
     user.profileImage = dto.profileImage;
     user.membership = dto.membership;
+    user.healthInfo = dto.healthInfo;
+    return user;
+  }
+
+  public mapUpdateUserDto(dto: UpdateUserDto){
+    const user = new User();
+    user.email = dto.email;
+    user.providerId = dto.providerId;
+    user.password = dto.password;
+    user.username = dto.username;
+    user.birthDay = dto.birthDay;
+    user.gender = dto.gender;
+    user.profileImage = dto.profileImage;
+    user.membership = dto.membership;
+    user.healthInfo = dto.healthInfo;
     return user;
   }
 
