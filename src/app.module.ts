@@ -12,6 +12,7 @@ import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import * as dotenv from "dotenv";
 import * as config from "config";
 import { UserModule } from "./user/user.module";
+import { FeedbackModule } from "./feedback/feedback.module";
 
 dotenv.config();
 dotenv.config({ path: __dirname + "/../.env" });
@@ -44,6 +45,7 @@ console.log(typeORMConfig);
     FoodInfoApiModule,
     ScheduleModule.forRoot(),
     FoodInfoModule,
+    FeedbackModule,
   ],
 })
 export class AppModule {}

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { FoodInfoRepository } from "./food-info.repository";
-import { FoodInfoDto } from "./dtos/food-info.dto";
+import { FoodInfoDto } from "./dto/food-info.dto";
 import { plainToInstance } from "class-transformer";
 
 @Injectable()

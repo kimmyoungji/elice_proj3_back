@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FoodInfo } from "./food-info.entity";
 import { Repository } from "typeorm";
-import { FoodInfoDto } from "./dtos/food-info.dto";
+import { FoodInfoDto } from "./dto/food-info.dto";
 
 @Injectable()
 export class FoodInfoRepository extends Repository<FoodInfo> {
