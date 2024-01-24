@@ -63,6 +63,10 @@ const AiAnalyze = () => {
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const timeoutId = setTimeout(() => {
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 805);
+    return () => clearTimeout(timeoutId);
   }, [chats]);
 
   return (
