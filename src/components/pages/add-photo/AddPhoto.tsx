@@ -2,7 +2,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './addphoto.module.css';
 import { useEffect, useRef, useState } from 'react';
 import CheckPhotoModal from './CheckPhotoModal';
-import useApi from '@hooks/useApi';
 
 const AddPhoto = () => {
   const navigate = useNavigate();
@@ -18,12 +17,6 @@ const AddPhoto = () => {
   const [showModal, setShowModal] = useState(false);
   const [imgUrl, setImgUrl] = useState("");
   const [pre, setPre] = useState("선택");
-
-  // const { result, trigger } = useApi({
-  //   method: 'post',
-  //   path: '/image/classification',
-  //   data: {imgUrl}
-  // })
 
   useEffect(() => {
     getWebcam((stream: MediaProvider) => {
@@ -67,10 +60,6 @@ const AddPhoto = () => {
     context?.drawImage(video as CanvasImageSource, cropX, cropY, 350, 200, 0, 0, 350, 200);
 
     const image = canvas?.toDataURL(); 
-    const link = document.createElement("a");
-    link.href = image as string;
-    link.download = "사진촬영 테스트";
-    link.click();
     image && setImgUrl(image);
     setPre("촬영");
     setShowModal(true);
