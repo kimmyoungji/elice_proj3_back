@@ -118,8 +118,11 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
             size='medium'
             variant='default'
             value={searchInput}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setSearchInput(e.target.value)
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setSearchInput(e.target.value);
+              setSearching(false);
+            }
+              
             }
           />
           <ButtonCommon

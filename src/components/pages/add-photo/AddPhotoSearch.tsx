@@ -13,11 +13,11 @@ const AddPhotoSearch = () => {
   const mealTime = params.mealTime;
 
   const [searchInput, setSearchInput] = useState('');
-  const [clicked, setClicked] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
 
   const handleClick = () => {
-    setClicked(true);
+    setIsSearching(true);
     //api 호출 로직 작성 예정 (로직 완료 시, setClicked false)
   };
 
@@ -43,8 +43,10 @@ const AddPhotoSearch = () => {
           size='medium'
           variant='default'
           value={searchInput}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setSearchInput(e.target.value)
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setSearchInput(e.target.value);
+            setIsSearching(false);
+          }
           }
         />
         <ButtonCommon
@@ -56,8 +58,8 @@ const AddPhotoSearch = () => {
         </ButtonCommon>
       </div>
       <div className={styles.resultbox}>
-        {clicked && (
-          <AddTag props={searchInput} tags={tags} setTags={setTags} />
+        {isSearching && (
+          <AddTag props={searchInput} tags={tags} setTags={setTags} setIsSearching={setIsSearching} />
         )}
       </div>
       <div className={styles.tagbox}>
