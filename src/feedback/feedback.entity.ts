@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 import { IsNotEmpty, IsUUID } from "class-validator";
-import { MakeFeedbackDataDto } from "./dto/feedback.dto";
+import { CheckFeedbackDataDto, MakeFeedbackDataDto } from "./dto/feedback.dto";
 
 @Entity()
 export class Feedback {
@@ -52,6 +52,19 @@ export class Feedback {
     feedbackData.feedbackId = uuidv4();
     feedbackData.userId = userId;
     feedbackData.feedback = feedback;
+    feedbackData.feedbackDate = feedbackDate;
+    feedbackData.question = question;
+    feedbackData.questionType = questionType;
+    return feedbackData;
+  }
+
+  public checkfeedbackDataDto(
+    checkFeedbackDataDto: CheckFeedbackDataDto
+  ): Feedback {
+    const { userId, feedbackDate, question, questionType } =
+      checkFeedbackDataDto;
+    const feedbackData = new Feedback();
+    feedbackData.userId = userId;
     feedbackData.feedbackDate = feedbackDate;
     feedbackData.question = question;
     feedbackData.questionType = questionType;

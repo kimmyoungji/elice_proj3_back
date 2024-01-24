@@ -7,7 +7,7 @@ import { CumulativeRecordRepository } from "./cumulative.repository";
 import { HealthInfoRepository } from "src/user/health-info.repository";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CumulativeRecord])],
+  // imports: [TypeOrmModule.forFeature([CumulativeRecord])],
   controllers: [CumulativeRecordController],
   providers: [
     CumulativeRecordService,

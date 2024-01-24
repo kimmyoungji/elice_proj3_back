@@ -6,11 +6,12 @@ import {
   Post,
   Query,
   Req,
+  Res,
 } from "@nestjs/common";
 import { FeedbackService } from "./feedback.service";
 import { request } from "http";
 import { Timestamp } from "typeorm";
-import { MakeFeedbackDataDto } from "./dto/feedback.dto";
+import { ResponseDataDto } from "./dto/feedback.dto";
 
 @Controller("feedback")
 export class FeedbackController {
@@ -20,14 +21,14 @@ export class FeedbackController {
   async getFeedbacktoAI(
     @Req() request: any,
     @Query("date") date: Timestamp,
-    @Body() makefeedbackDataDto: MakeFeedbackDataDto
+    @Body() responseDataDto: ResponseDataDto
   ) {
-    const userId = "1c52fabf-4b73-45a8-9d0c-75c907bbb5ca";
+    const userId = "2600b4fc-bc00-482a-9474-08c5fedbecda";
     // const userId = request.user.userId;
     return await this.feedbackService.getFeedbacktoAI(
       userId,
       date,
-      makefeedbackDataDto
+      responseDataDto
     );
   }
 
@@ -53,9 +54,14 @@ export class FeedbackController {
 
   @Delete("/")
   async deleteFeedbackData(
-    @Req() request: any,
-    @Query("feedbackId") feedbackId: string
+    @Query("feedbackId") feedbackId: string,
+    @Res() response: any
   ) {
-    return await this.feedbackService.deleteFeedbackData(feedbackId);
+    try {
+      await this.feedbackService.deleteFeedbackData(feedbackId);
+      response.status(200).json({ message: "피드백 삭제 성공" });
+    } catch (error) {
+      throw error;
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { DataSource, Repository } from "typeorm";
+import { EntityManager, Repository } from "typeorm";
 import { CumulativeRecord } from "./cumulative-record.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 // import { User } from "src/user/user.entity";
@@ -11,23 +11,14 @@ import {
 
 @Injectable()
 export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
-  constructor(
-    @InjectRepository(CumulativeRecord)
-    private cumulativeRecordRepository: Repository<CumulativeRecord>
-  ) {
-    super(
-      cumulativeRecordRepository.target,
-      cumulativeRecordRepository.manager,
-      cumulativeRecordRepository.queryRunner
-    );
-  }
-
   // 일별 데이터 - totalCalories, totalNutrient
   async getDateRecord(
     date: Date,
-    userId: string
+    userId: string,
+    manager: EntityManager
   ): Promise<CumulativeRecordDateDto[]> {
-    const cumulativeResult = await this.createQueryBuilder("entity")
+    const cumulativeResult = await manager
+      .createQueryBuilder(CumulativeRecord, "entity")
       .select("entity.userId", "userId")
       .addSelect("entity.date", "data")
       .addSelect("SUM(entity.mealTotalCalories)", "totalCalories")
@@ -43,8 +34,13 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
   }
 
   // 일별/타입별 데이터 - mealType, calories, (imgURL)
-  async getDateMealTypeRecord(date: Date, userId: string) {
-    const result = await this.createQueryBuilder("entity")
+  async getDateMealTypeRecord(
+    date: Date,
+    userId: string,
+    manager: EntityManager
+  ) {
+    const result = await manager
+      .createQueryBuilder(CumulativeRecord, "entity")
       .select(["entity.mealType", "entity.mealTotalCalories", "entity.imageId"])
       .where("DATE_TRUNC('day', entity.date) = :date", { date })
       .andWhere("entity.user_id = :userId", { userId })
@@ -56,9 +52,11 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
   // 월별 데이터 - date, totalCalories
   async getMonthRecord(
     month: Date,
-    userId: string
+    userId: string,
+    manager: EntityManager
   ): Promise<CumulativeRecordMonthDto[]> {
-    const result = await this.createQueryBuilder("entity")
+    const result = await manager
+      .createQueryBuilder(CumulativeRecord, "entity")
       .select("entity.userId", "userId")
       .addSelect("DATE_TRUNC('day', entity.date)", "date")
       .addSelect("SUM(entity.mealTotalCalories)", "totalCalories")
@@ -78,9 +76,14 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
   }
 
   // 월별 데이터 - date, mealType, calories, (imgURL)
-  async getMonthDetailRecord(page: Number, userId: string) {
+  async getMonthDetailRecord(
+    page: Number,
+    userId: string,
+    manager: EntityManager
+  ) {
     // 날짜 범위 지정
-    const result = await this.createQueryBuilder("entity")
+    const result = await manager
+      .createQueryBuilder(CumulativeRecord, "entity")
       .where("entity.user_id = :userId", { userId })
       .andWhere("DATE_TRUNC('day', entity.date) = :date", { page }) // 수정
       // .andWhere("entity.record_ids IN :recordIds", { recordIds })

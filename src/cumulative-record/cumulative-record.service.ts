@@ -35,7 +35,8 @@ export class CumulativeRecordService {
       // [Cumulative Table] - 1) totalCalories, 2) totalNutrient
       const totalResult = await this.cumulativeRepository.getDateRecord(
         date,
-        userId
+        userId,
+        queryRunner.manager
       );
 
       console.log("totalResult", totalResult);
@@ -53,7 +54,11 @@ export class CumulativeRecordService {
 
       // [Cumulative Table] - 5) dateArr
       const mealTypeResult =
-        await this.cumulativeRepository.getDateMealTypeRecord(date, userId);
+        await this.cumulativeRepository.getDateMealTypeRecord(
+          date,
+          userId,
+          queryRunner.manager
+        );
 
       // [Image Table] - 5) dateArr
       // mealTypeResult에서 받아온 image_id로 이미지들 가져오기
@@ -79,7 +84,11 @@ export class CumulativeRecordService {
 
     try {
       const mealTypeResult =
-        await this.cumulativeRepository.getDateMealTypeRecord(date, userId);
+        await this.cumulativeRepository.getDateMealTypeRecord(
+          date,
+          userId,
+          queryRunner.manager
+        );
 
       // img url 추가
       await queryRunner.commitTransaction();
@@ -102,7 +111,8 @@ export class CumulativeRecordService {
     try {
       const result = await this.cumulativeRepository.getMonthRecord(
         month,
-        userId
+        userId,
+        queryRunner.manager
       );
       await queryRunner.commitTransaction();
       return plainToInstance(CumulativeRecordMonthDto, result);
@@ -121,7 +131,8 @@ export class CumulativeRecordService {
     try {
       const result = await this.cumulativeRepository.getMonthDetailRecord(
         page,
-        userId
+        userId,
+        queryRunner.manager
       );
       await queryRunner.commitTransaction();
       return result;
