@@ -30,7 +30,7 @@ export class HealthInfo {
     targetWeight: number;
 
     @Column({ type: 'enum', name: "diet_goal", enum: DietGoal,  nullable: true })
-    goal: DietGoal; // Diet_goal
+    goal: DietGoal; 
 
     @Column({ type: 'enum', name:'activity_amount', enum: ActivityAmount, nullable: true })
     activityAmount: ActivityAmount;
@@ -49,11 +49,11 @@ export class HealthInfo {
     updatedDate: Timestamp;
 
     @Column({ type: 'timestamp with time zone', nullable: true })
-    @DeleteDateColumn({name: 'deletedat'})
-    deletedat: Timestamp;
+    @DeleteDateColumn()
+    deletedDate: Timestamp;
 
-    @ManyToOne(() => User, user => user.healthInfo)
-    @JoinColumn({ name: 'user_id' })
+    @ManyToOne((type) => User, user => user.healthInfos)
+    @JoinColumn({ name: 'user_id'})
     user: User;
 
     public mapHealthInfoDto(dto: SaveHealthInfoDto){

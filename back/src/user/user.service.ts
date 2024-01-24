@@ -17,6 +17,7 @@ export class UserService {
         private readonly dataSource: DataSource
     ) {}
 
+    /* 유저정보들 가져오기 */
     public async getUserInfos(userId:string){
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
@@ -28,11 +29,12 @@ export class UserService {
             if (!user) throw new HttpException('해당 유저를 찾을 수 없습니다.', 404); 
 
             // 만약 유저의 healthInfo가 null이라면 사용자 건강 정보 등록하기
-            if(user.healthInfo === null){
+            if(user.recentHealthInfoId === null){
                 // healthInfo tabel에 등록하기
                 const newHealthInfo = new HealthInfo();
                 await this.healthInfoRepository.saveHealthInfo(newHealthInfo, queryRunner.manager);
-                await this.userRepository.updateHealthInfoIdByUserId(userId, newHealthInfo.healthInfoId, queryRunner.manager);
+                const resutl = await this.userRepository.updateRecentHealthInfoIdByUserId(userId, newHealthInfo.healthInfoId, queryRunner.manager);
+                console.log("업데이트 최신 헬스인포아이디", resutl);
                 user =  await this.userRepository.findUserInfosByUserId(userId, queryRunner.manager);
             }
 
@@ -47,7 +49,7 @@ export class UserService {
         }   
     }
 
-    // 유저정보와 유저건강정보 수정하기
+    /* 유저개인정보 수정 & 유저건강정보 새로저장 */
     public async updateUserInfos(userId:string, updateUserInfos: UpdateUserDto | SaveHealthInfoDto){
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();

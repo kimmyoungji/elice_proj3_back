@@ -67,8 +67,8 @@ export class User {
   @DeleteDateColumn()
   deletedat: Timestamp;
 
-  @OneToMany(() => HealthInfo, healthInfo => healthInfo.user, { cascade: true })
-  healthInfo: HealthInfo[];
+  @OneToMany((type) => HealthInfo, healthInfo => healthInfo.user, { cascade: true })
+  healthInfos: HealthInfo[];
 
   @Column({type:'uuid', nullable: true})
   recentHealthInfoId: string;
