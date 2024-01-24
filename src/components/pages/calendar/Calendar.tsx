@@ -78,17 +78,21 @@ const Calendar = () => {
   const formData = new FormData();
   const onImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-    formData.append('image', e.target.files[0]);
+    formData.append('image', e.target.files[0], e.target.files[0].name);
     console.log(e.target.files[0]);
   };
 
   const onClickButton = async () => {
-    const getData = await api2.post('/classification', formData);
+    const getData = await api2.post('/classification', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     console.log(getData);
   };
   return (
     <>
-      <input type='file' onChange={onImageUpload} />
+      <input type='file' onChange={onImageUpload} accept='image/*' />
       <button onClick={onClickButton}>이미지로</button>
       <CalendarProvider>
         <CarlendarHeader />
