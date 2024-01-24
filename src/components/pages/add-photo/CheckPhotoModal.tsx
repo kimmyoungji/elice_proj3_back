@@ -2,6 +2,7 @@ import ButtonCommon from '@components/UI/ButtonCommon';
 import styles from './checkphotomodal.module.css';
 import React, { useRef } from 'react';
 import { api2 } from '@utils/axiosConfig';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface Props {
   pre: string;
@@ -11,11 +12,15 @@ interface Props {
 
 const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
   const cropRef = useRef<HTMLCanvasElement | null>(null);
-  const date = new Date();
-  const fileName = date.getTime() + Math.random().toString().split(".")[0];
+  const dates = new Date();
+  const fileName = dates.getTime() + Math.random().toString().split(".")[0];
   const formData = new FormData();
+  const params = useParams();
+  const date = params.date;
+  const mealTime = params.mealTime;
+  const navigate = useNavigate();
   
-
+  let canvasUrl:string|undefined;
   const uploadImg = () => {
     const canvas = cropRef.current;
     const context = canvas?.getContext('2d');
@@ -37,19 +42,26 @@ const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
       image.height * scale
     );
 
-    const canvasUrl = canvas?.toDataURL();
+    canvasUrl = canvas?.toDataURL();
     const file = base64toFile(canvasUrl as string, fileName);
     formData.append('image', file);
-    uploadFile();
+    postFile();
   };
 
-  const uploadFile = async () => {
-    const getData = await api2.post('/classification', formData, {
+  const postFile = async () => {
+    const res = await api2.post('/classification', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log(getData);
+    const data = {
+      imgUrl: canvasUrl,
+      foods: [
+        res.data.map((datas: {}) => datas),
+      ]
+    };
+    console.log(data);
+    navigate(`/record/${date}/${mealTime}/edit`,{state:data})
   };
 
   function base64toFile(base_data: string, filename: string) {
