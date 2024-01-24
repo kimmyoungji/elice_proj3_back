@@ -6,7 +6,7 @@ import ToastText from '@components/UI/ToastText';
 import styles from '@components/layout/layout.module.css';
 import { getKeyFromUrl } from '@utils/getNavProps';
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { TopBarPropsType, TopNavKeyType } from 'typings/propTypes';
 
 const TopBar = ({ home, title, back, qIcon, icon }: TopBarPropsType) => {
@@ -30,6 +30,10 @@ const TopBar = ({ home, title, back, qIcon, icon }: TopBarPropsType) => {
     setShowToast(true);
     setPosition((prev) => ({ ...prev, x: e.clientX, y: e.clientY }));
   };
+
+  if (key === 'aidrawerdetail') {
+    title += `${new URLSearchParams(window.location.search).get('date')} 답변`;
+  }
 
   return (
     <div className={styles.top}>
