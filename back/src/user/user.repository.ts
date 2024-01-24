@@ -50,13 +50,13 @@ export class UserRepository{
         }
     }
 
-    public async updateHealthInfoIdByUserId(userId: string, recentHealthInfoId: string, manager: EntityManager){
-        try{
-            return await manager.createQueryBuilder(User, "user").leftJoin('user.healthInfo', "healthInfo").update(User).set({recentHealthInfoId}).where("user_id = :userId",{userId}).execute();
-        }catch(err){
-            throw err;
-        }
-    }
+    // public async updateHealthInfoIdByUserId(userId: string, recentHealthInfoId: string, manager: EntityManager){
+    //     try{
+    //         return await manager.createQueryBuilder(User, "user").leftJoin('user.healthInfo', "healthInfo").update(User).set({recentHealthInfoId}).where("user_id = :userId",{userId}).execute();
+    //     }catch(err){
+    //         throw err;
+    //     }
+    // }
 
     // soft Delete
     public async softDeleteUserByUserId(userId: string, manager: EntityManager){       

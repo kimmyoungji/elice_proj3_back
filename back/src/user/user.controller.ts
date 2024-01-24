@@ -16,8 +16,8 @@ export class UserController {
     @ApiOperation({summary: '유저정보와 유저건강정보 가져오기'})
     @Get()
     @UseGuards(isLoggedInGuard)
-    public async handleGetUserInfo(@Req() request: any, @Res() response: any){
-        const result =  await this.userService.getUserAndHealthInfo(request.user.userId);
+    public async handleGetUserInfos(@Req() request: any, @Res() response: any){
+        const result =  await this.userService.getUserInfos(request.user.userId);
         response.status(200).json(result);
     }
 
@@ -27,13 +27,12 @@ export class UserController {
     @ApiResponse({ status: 404, description: '해당 유저를 찾을 수 없습니다.'})
     @Put()
     @UseGuards(isLoggedInGuard)
-    public async updateUserInfo(
+    public async handleUpdateUserInfos(
         @Req() request: any, 
-        @Body() updateUserAndHealthInfoDto: UpdateUserDto | SaveHealthInfoDto, 
+        @Body() updateUserInfosDto: UpdateUserDto | SaveHealthInfoDto, 
         @Res() response: any){
                 console.log('사용자 정보 업데이트 시작...')
-                const result = await this.userService.updateUserAndHealthInfo(request.user.userId, updateUserAndHealthInfoDto);
+                const result = await this.userService.updateUserInfos(request.user.userId, updateUserInfosDto);
                 response.status(204).send(result);      
     }
-
 }

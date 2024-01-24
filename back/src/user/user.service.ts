@@ -17,7 +17,7 @@ export class UserService {
         private readonly dataSource: DataSource
     ) {}
 
-    public async getUserAndHealthInfo(userId:string){
+    public async getUserInfos(userId:string){
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -48,7 +48,7 @@ export class UserService {
     }
 
     // 유저정보와 유저건강정보 수정하기
-    public async updateUserAndHealthInfo(userId:string, updateUserInfos: UpdateUserDto | SaveHealthInfoDto){
+    public async updateUserInfos(userId:string, updateUserInfos: UpdateUserDto | SaveHealthInfoDto){
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
