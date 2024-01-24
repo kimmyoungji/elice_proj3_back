@@ -1,9 +1,11 @@
 import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import * as config from "config";
+import * as dotenv from "dotenv";
 const SnakeNamingStrategy =
   require("typeorm-naming-strategies").SnakeNamingStrategy;
 
 const dbConfig = config.get("db");
+dotenv.config();
 
 export const typeORMConfig: TypeOrmModuleOptions = {
   type: dbConfig.type,
@@ -20,13 +22,3 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   },
 };
 
-// export const typeORMConfig: TypeOrmModuleOptions = {
-//   type: dbConfig.type,
-//   host: dbConfig.host,
-//   port: dbConfig.post,
-//   username: dbConfig.username,
-//   password: dbConfig.password,
-//   database: dbConfig.database,
-//   entities: [__dirname + "/../../**/*.entity.{js, ts}"],
-//   synchronize: false,
-// };
