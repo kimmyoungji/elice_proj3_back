@@ -11,6 +11,7 @@ const AddPhoto = () => {
 
   const selectFile = useRef<HTMLInputElement|null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream>();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [showModal, setShowModal] = useState(false);
@@ -20,12 +21,14 @@ const AddPhoto = () => {
     getWebcam((stream: MediaProvider) => {
       if(!videoRef.current) return
       videoRef.current.srcObject = stream;
+      streamRef.current = stream as MediaStream;
     })
     return () => {
-      if(!videoRef.current) return
-      let s = videoRef.current.srcObject as MediaStream | null;
-      if(!s) return
-      s.getTracks()[0].stop();
+      if(!streamRef.current) return
+      streamRef.current.getTracks().forEach((track) => {
+        streamRef.current?.removeTrack(track);
+        track.stop();
+      })
     }
   }, []);
 
