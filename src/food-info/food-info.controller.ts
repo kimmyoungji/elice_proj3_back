@@ -9,7 +9,7 @@ export class FoodInfoController {
 
   @ApiOperation({ summary: "음식 조회하기" })
   @Get("/foods")
-  @UseGuards(isLoggedInGuard)
+  // @UseGuards(isLoggedInGuard)
   async getFoodInfo(
     @Query("keyword") keyword: string,
     @Query("foodName") foodName: string,

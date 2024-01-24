@@ -45,11 +45,7 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
   // 일별/타입별 데이터 - mealType, calories, (imgURL)
   async getDateMealTypeRecord(date: Date, userId: string) {
     const result = await this.createQueryBuilder("entity")
-      .select([
-        "entity.mealType",
-        "entity.mealTotalCalories",
-        "entity.recordIds",
-      ])
+      .select(["entity.mealType", "entity.mealTotalCalories", "entity.imageId"])
       .where("DATE_TRUNC('day', entity.date) = :date", { date })
       .andWhere("entity.user_id = :userId", { userId })
       .getMany();

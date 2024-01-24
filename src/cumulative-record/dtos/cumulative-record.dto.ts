@@ -8,7 +8,7 @@ export class CumulativeRecordDateDto {
   @ApiProperty({ description: "식사별 섭취한 총 칼로리" })
   @IsNotEmpty()
   @IsInt()
-  mealTotalCalories: number;
+  totalCalories: number;
 
   @Expose()
   @ApiProperty({ description: "식사별 섭취한 탄수화물" })

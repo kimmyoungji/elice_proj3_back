@@ -16,8 +16,8 @@ export class CumulativeRecord extends BaseEntity {
   // Record module과 합칠 때
   @Column({ type: "text", array: true })
   // @JoinColumn()
-  // @OneToMany(() => Record, (record) => record.recordIds, { cascade: true })
-  recordIds: string[];
+  // @OneToOne(() => Image, (image) => image.imageIds, { cascade: true })
+  imageId: string;
 
   // Record moduler과 합칠 때
   @Column()

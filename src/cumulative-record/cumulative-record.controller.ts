@@ -9,7 +9,7 @@ export class CumulativeRecordController {
   constructor(private cumulariveRecordService: CumulativeRecordService) {}
 
   @Get("/")
-  @UseGuards(isLoggedInGuard)
+  // @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "월별/일별 누적 식단 데이터 조회하기",
     description: "유저의 누적 식단 데이터를 조회한다.",
@@ -19,7 +19,7 @@ export class CumulativeRecordController {
     @Query("date") date: Date,
     @Query("month") month: Date
   ) {
-    const userId = "90936edf-2aab-4cbe-b06f-0d4f0bf5da23";
+    const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
     // const userId = request.user.userId;
     if (date) {
       const data = await this.cumulariveRecordService.getDateRecord(
@@ -27,9 +27,9 @@ export class CumulativeRecordController {
         userId
       );
       // return 값 다시 확인 필요
-      const { mealTotalCalories, ...datas } = data[0];
+      const { totalCalories, ...datas } = data[0];
       const result = {
-        totalCalories: mealTotalCalories,
+        totalCalories: totalCalories,
         totalNutrient: datas,
       };
       return result;
@@ -56,13 +56,13 @@ export class CumulativeRecordController {
   }
 
   @Get("/meal")
-  @UseGuards(isLoggedInGuard)
+  // @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "일별/meal 타입별 누적 식단 데이터 조회하기",
     description: "유저의 누적 식단 데이터를 조회한다.",
   })
   async getDateMealTypeRecord(@Req() request: any, @Query("date") date: Date) {
-    const userId = "90936edf-2aab-4cbe-b06f-0d4f0bf5da23";
+    const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
     // const userId = request.user.userId;
     const result = await this.cumulariveRecordService.getDateMealTypeRecord(
       date,
@@ -72,13 +72,13 @@ export class CumulativeRecordController {
   }
 
   @Get("/month")
-  @UseGuards(isLoggedInGuard)
+  // @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "월별 식사별 누적 식단 데이터 조회하기",
     description: "유저의 월별 아침, 점심, 저녁 누적 식단 데이터를 조회한다.",
   })
   async getMonthDetailRecord(@Req() request: any, @Query("page") page: Number) {
-    const userId = "90936edf-2aab-4cbe-b06f-0d4f0bf5da23"; // 임의로
+    const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1"; // 임의로
     // const userId = request.user.userId;
     const result = await this.cumulariveRecordService.getMonthDetailRecord(
       page,
