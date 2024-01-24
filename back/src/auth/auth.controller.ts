@@ -13,8 +13,8 @@ import session from 'express-session';
 import { LocalLoginDto } from './dto/localLoginDto';
 
 @UseFilters(new RedirectFilter())
-@ApiTags('api/auth')
-@Controller('api/auth')
+@ApiTags('auth')
+@Controller('auth')
 export class AuthController {
 
     constructor(private readonly authService: AuthService) {}
