@@ -161,23 +161,28 @@ const MyPageEdit = () => {
 
   const saveAndNavigate = () => {
     const updatedNutrients = getNutritionStandard(data);
-    const updatedGoalCalories = Math.round(
-      adjustCaloriesByGoal({ data, bmrCalories })
-    );
+    // const updatedGoalCalories = Math.round(
+    //   adjustCaloriesByGoal({ data, bmrCalories })
+    // );
 
     const updatedData = {
       ...data,
       healthInfo: {
         ...healthData,
+        goal: Number(findKeyByValue(mapGoaltoMsg, selectedGoal)),
+        activityAmount: Number(
+          findKeyByValue(mapActivitytoMsg, selectedActity)
+        ),
         height: Number(prevHeight),
         weight: Number(prevWeight),
-        targetNutrients: updatedNutrients,
-        targetCalories: updatedGoalCalories,
+        recommendIntake: updatedNutrients,
+        targetCalories: goalCalories,
       },
     };
 
-    updateDataAndCalories(data);
+    updateDataAndCalories(updatedData);
     // store에 저장하는 로직 추가해야함
+    console.log(updatedData);
     navigate('/my-page', { state: { updatedData } });
   };
 

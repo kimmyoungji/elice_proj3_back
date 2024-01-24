@@ -19,7 +19,6 @@ export type HealthInfoProps = {
   weight: number;
   height: number;
   goal: 1 | 2 | 3 | 4;
-  targetWeight: number;
   targetCalories: number;
   recommendIntake: TargetNutrients;
   activityAmount: 1 | 2 | 3 | 4;
