@@ -2,12 +2,17 @@ import { useEffect, useRef, useState, useImperativeHandle } from "react";
 import { useNavigate } from 'react-router-dom';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import InputCommon from '@components/UI/InputCommon';
+import useApi from '@hooks/useApi';
 import './Login.css';
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { loading, trigger } = useApi({
+    method: 'post',
+    path: '/auth/local/login',
+  });
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -15,6 +20,16 @@ const Login = () => {
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+  };
+
+  const handleLogin = async () => {
+    const result = await trigger({
+      data: { email, password },
+    });
+
+    if (result && result.status === 200) {
+      navigate('/home');
+    }
   };
 
   return (
@@ -48,9 +63,10 @@ const Login = () => {
         <ButtonCommon
           variant="default-active"
           size="big"
-          onClickBtn={() => navigate(`/home`)}
+          onClickBtn={handleLogin}
+          disabled={loading}
         >
-          로그인
+          {loading ? '로그인 하는중' : '로그인'}
         </ButtonCommon>
       </div>
     </div>
