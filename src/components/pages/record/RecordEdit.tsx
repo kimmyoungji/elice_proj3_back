@@ -3,6 +3,7 @@ import styles from './recordedit.module.css';
 import RecordEditDetail from './RecordEditDetail';
 import { useEffect, useRef, useState } from 'react';
 import ButtonCommon from '@components/UI/ButtonCommon';
+import { MergingTags } from './MergingTags';
 
 interface Food {
   foodName: string;
@@ -154,7 +155,8 @@ const RecordEdit = () => {
         )}
       </div>
 
-      <div className={styles.imgbox}>
+      <div className={styles.imgbox} style={{position: 'relative'}}>
+        <MergingTags tagData={foods} />
         <img
           className={styles.mealimg}
           src='https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_1280.jpg'

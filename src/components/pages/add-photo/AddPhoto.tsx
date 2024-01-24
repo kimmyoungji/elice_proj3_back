@@ -48,14 +48,11 @@ const AddPhoto = () => {
     }
   };
 
-
   const screenShot = () => {
     const video = document.getElementById("videoCam");
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
-    if (!video) {
-      return
-    }
+    if (!video) return;
     const cropX = (video?.offsetWidth - 350) / 2;
     const cropY = (video?.offsetHeight - 200) / 2;  
 
