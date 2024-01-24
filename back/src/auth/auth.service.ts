@@ -136,16 +136,16 @@ export class AuthService {
         }
     }
 
-    // 회원 탈퇴 메서드
+    //회원 탈퇴 메서드
     async withdrawal(userId: string) {
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
         
         try{
-            const tempUser = await this.userRepository.findUserAndHealthInfoByUserId(userId, queryRunner.manager)
+            const tempUser = await this.userRepository.findUserInfosByUserId(userId, queryRunner.manager)
             if (!tempUser) throw new HttpException('유저 정보를 찾을 수 없습니다.', HttpStatus.UNAUTHORIZED);
-            const result1 = await this.healthInfoRepository.deleteHealthInfoByHealthInfoId(tempUser.healthInfo.healthInfoId, queryRunner.manager);
+            const result1 = await this.healthInfoRepository.deleteHealthInfoByHealthInfoId(tempUser.recentHealthInfoId, queryRunner.manager);
             const result2 = await this.userRepository.softDeleteUserByUserId(userId, queryRunner.manager );
             if( result1.affected !== 1 || result2.affected !== 1 ) throw new HttpException('회원탈퇴 실패', HttpStatus.INTERNAL_SERVER_ERROR);
             await queryRunner.commitTransaction();

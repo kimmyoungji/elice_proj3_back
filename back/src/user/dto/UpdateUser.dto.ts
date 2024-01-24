@@ -36,4 +36,18 @@ export class UpdateUserDto{
     @IsOptional()
     membership: boolean
 
+    @ApiProperty( { example: '2021asdf', description: '최근 health info 의 아이디' } )
+    recentHealthInfoId: string;
+
+    mapUpdateDtoToEntity(dto: UpdateUserDto){
+        const user = new User();
+        user.username = dto.username;
+        user.password = dto.password;
+        user.birthDay = dto.birthDay;
+        user.gender = dto.gender;
+        user.profileImage = dto.profileImage;
+        user.membership = dto.membership;
+        return user;
+    }
+
 }

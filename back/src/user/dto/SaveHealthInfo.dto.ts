@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger"
 import { IsArray, IsBoolean, IsDate, IsEnum, IsNumber, IsOptional, IsString } from "class-validator"
 import { Gender } from "../utils/user.enums"
 import { ActivityAmount, DietGoal } from "../utils/health-info.enums"
+import { HealthInfo } from "../entities/health-info.entity"
 
 export class SaveHealthInfoDto{
 
@@ -38,4 +39,15 @@ export class SaveHealthInfoDto{
     @IsOptional()
     recommendIntake: number[]
 
+    mapSaveDtoToEntity(dto: SaveHealthInfoDto){
+        const healthInfo = new HealthInfo();
+        healthInfo.weight = dto.weight;
+        healthInfo.height = dto.height;
+        healthInfo.targetWeight = dto.targetWeight;
+        healthInfo.goal = dto.goal;
+        healthInfo.activityAmount = dto.activityAmount;
+        healthInfo.targetCalories = dto.targetCalories;
+        healthInfo.recommendIntake = dto.recommendIntake;
+        return healthInfo;
+    }
 }

@@ -24,7 +24,7 @@ export class UserRepository{
         }
     }
 
-    public async findUserAndHealthInfoByUserId(userId: string, manager: EntityManager){
+    public async findUserInfosByUserId(userId: string, manager: EntityManager){
         try{
             return await manager.createQueryBuilder(User, "user").leftJoinAndSelect("user.healthInfo", "healthInfo").where("user.user_id = :userId", {userId}).getOne();
         }catch(err){
@@ -50,9 +50,9 @@ export class UserRepository{
         }
     }
 
-    public async updateHealthInfoIdByUserId(userId: string, healthInfo: HealthInfo, manager: EntityManager){
+    public async updateHealthInfoIdByUserId(userId: string, recentHealthInfoId: string, manager: EntityManager){
         try{
-            return await manager.createQueryBuilder(User, "user").leftJoin('user.healthInfo', "healthInfo").update(User).set({healthInfo}).where("user_id = :userId",{userId}).execute();
+            return await manager.createQueryBuilder(User, "user").leftJoin('user.healthInfo', "healthInfo").update(User).set({recentHealthInfoId}).where("user_id = :userId",{userId}).execute();
         }catch(err){
             throw err;
         }

@@ -22,6 +22,15 @@ export class HealthInfoRepository{
         }
     }
 
+    // Read
+    public async findRecentHealthInfo(healthInfoId: string, manager: EntityManager): Promise<HealthInfo>{
+        try{
+            return await manager.createQueryBuilder(HealthInfo, "health_info").where("health_info_if = :healthInfoId", {healthInfoId}).getOne();
+        }catch(err){
+            throw err;
+        }
+    }
+
     // Update
     public async updateHealthInfoByUserId(healthInfoId: string, healthInfo:HealthInfo,  manager: EntityManager): Promise<UpdateResult>{
         try{
