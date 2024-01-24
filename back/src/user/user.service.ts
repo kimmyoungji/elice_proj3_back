@@ -35,7 +35,6 @@ export class UserService {
             delete user[0].created_date;
             delete user[0].updated_date;
             delete user[0].deleted_date;
-            delete user[0].recent_health_info_id;
             delete user[0].health_info_id;
             delete user[0].user_id;
 

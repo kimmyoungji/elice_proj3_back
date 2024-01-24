@@ -10,10 +10,11 @@ import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './utils/local.strategy';
 import { HealthInfo } from 'src/user/entities/health-info.entity';
 import { HealthInfoRepository } from 'src/user/health-info.repository';
+import { UserService } from 'src/user/user.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, HealthInfo]), PassportModule],
-  providers: [AuthService, LocalStrategy, GoogleStrategy, SessionSerializer, UserRepository, HealthInfoRepository],
+  providers: [AuthService, LocalStrategy, GoogleStrategy, SessionSerializer, UserRepository, HealthInfoRepository, UserService],
   controllers: [AuthController]
 })
 export class AuthModule {}

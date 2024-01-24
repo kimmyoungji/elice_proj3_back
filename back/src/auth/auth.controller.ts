@@ -1,15 +1,12 @@
+import { UserService } from 'src/user/user.service';
 import { Body, Controller, Get, Param, Post, Req, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { GoogleAuthGuard } from './utils/google.guard';
 import { AuthService } from './auth.service';
 import { LocalSignupDto } from './dto/localSignupDto';
-import { InsertResult } from 'typeorm';
-import { ApiBody, ApiConflictResponse, ApiOperation, ApiParam, ApiProperty, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from './utils/local.guard';
 import { isLoggedInGuard } from './utils/isLoggedin.guard';
-import { isNotLoggedInGuard } from './utils/isNotLoggedIn.guard';
 import { RedirectFilter } from './utils/redirectFilter';
-import { response } from 'express';
-import session from 'express-session';
 import { LocalLoginDto } from './dto/localLoginDto';
 
 @UseFilters(new RedirectFilter())
@@ -17,7 +14,10 @@ import { LocalLoginDto } from './dto/localLoginDto';
 @Controller('api/auth')
 export class AuthController {
 
-    constructor(private readonly authService: AuthService) {}
+    constructor(
+        private readonly authService: AuthService,
+        private readonly userService: UserService
+    ) {}
 
     
     /* 구글 로그인 및 사용자등록 */
@@ -32,9 +32,14 @@ export class AuthController {
     @ApiResponse({ status: 409, description: '이미 로컬계정으로 등록된 이메일입니다.'})
     @Get('google/redirect')
     @UseGuards(GoogleAuthGuard) // 여기서 req.user에 user 정보가 담김
-    handleGoogleRedirect(@Req() request:any ,@Res() response:any) {
+    async handleGoogleRedirect(@Req() request:any ,@Res() response:any) {
         console.log('구글로그인 진행중...')
-        response.status(200).send('구글 로그인 성공, 백엔드에 요청시 메인페이지로 리다이렉팅해드립니다.');
+        const user = await this.userService.getUserInfos(request.user.userId);
+        if(user.recent_health_info_id === null){
+            response.status(200).redirect('http://localhost:3000/onboarding/1');
+        }else{
+            response.status(200).redirect('http://localhost:3000/home');
+        }    
     }
 
 
@@ -47,7 +52,7 @@ export class AuthController {
     async handleLocalSignup(@Body() localSignupDto: LocalSignupDto, @Res() response: any) {
         console.log('회원가입진행중...', localSignupDto);
         await this.authService.localSignup(localSignupDto);
-        response.status(200).send('로컬 회원가입 성공, 백엔드에 요청시 로그인페이지로 리다이렉팅해드립니다.');
+        response.status(200).redirect('http://localhost:3000/onboarding/1');
     }
 
     @ApiOperation({ summary: '로컬 로그인 요청 API' })
@@ -59,7 +64,12 @@ export class AuthController {
     async handleLocalLogin(
         @Req() request: any, @Res() response: any){
         console.log('로그인 진행중...', request.user);
-        response.status(200).send('로컬 로그인 성공, 백엔드에 요청시 메인페이지로 리다이렉팅해드립니다.');
+        const user = await this.userService.getUserInfos(request.user.userId);
+        if(user.recent_health_info_id === null){
+            response.status(200).redirect('http://localhost:3000/onboarding/1');
+        }else{
+            response.status(200).redirect('http://localhost:3000/home');
+        }   
     }
 
 
@@ -104,7 +114,7 @@ export class AuthController {
             await request.sessionStore.destroy(sessionId, (err)=>err && {msg: 'logout fail', err: err});
             request.user = null;
             await response.clearCookie(process.env.SESSION_COOKIE_NAME, {signed: true});
-            await response.status(200).send('회월탈퇴 성공, 백엔드에 요청시 로그인 페이지로 리다이렉팅해드립니다.');
+            await response.status(200).redirect('http://localhost:3000/');
         }catch(err){ console.log(err); throw err; }
     }
 }
