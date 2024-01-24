@@ -5,7 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { LocalSignupDto } from '../../auth/dto/localSignupDto';
 import * as bcrypt from 'bcrypt';
 import { HealthInfo } from './health-info.entity';
-import { UpdateUserAndHealthInfoDto } from '../dto/UpdateUserAndHealthInfo.dto';
+import { UpdateUserDto } from '../dto/UpdateUser.dto';
+import { SaveHealthInfoDto } from '../dto/SaveHealthInfo.dto'
 import { Gender } from '../utils/user.enums';
 
 @Entity('user')
@@ -94,7 +95,7 @@ export class User {
     return user;
   }
 
-  public mapUpdateUserDto(dto: UpdateUserAndHealthInfoDto){
+  public mapUpdateUserDto(dto: UpdateUserDto){
     const user = new User();
     user.username = dto.username;
     // user.password = dto.password;
@@ -104,5 +105,4 @@ export class User {
     user.membership = dto.membership;
     return user;
   }
-
 }

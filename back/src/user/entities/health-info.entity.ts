@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryColumn, UpdateDateColumn, OneToOne, JoinColumn, 
 import { IsNotEmpty, IsInt, IsString, IsDate } from 'class-validator';
 import { User } from './user.entity';
 import { v4 as uuidv4 } from 'uuid';
-import { UpdateUserAndHealthInfoDto } from '../dto/UpdateUserAndHealthInfo.dto';
+import { SaveHealthInfoDto } from '../dto/SaveHealthInfo.dto';
 import { ActivityAmount, DietGoal } from '../utils/health-info.enums';
 
 @Entity()
@@ -56,7 +56,7 @@ export class HealthInfo {
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    public mapHealthInfoDto(dto: UpdateUserAndHealthInfoDto){
+    public mapHealthInfoDto(dto: SaveHealthInfoDto){
         const healthInfo = new HealthInfo();
         healthInfo.weight = dto.weight;
         healthInfo.height = dto.height;

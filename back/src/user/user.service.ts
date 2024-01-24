@@ -4,7 +4,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
 import { DataSource } from 'typeorm';
 import { User } from './entities/user.entity';
-import { UpdateUserAndHealthInfoDto } from './dto/UpdateUserAndHealthInfo.dto';
+import { UpdateUserDto | SaveHealthInfoDto } from './dto/UpdateUserAndHealthInfo.dto';
 
 
 @Injectable()
@@ -46,7 +46,7 @@ export class UserService {
     }
 
     // 유저정보와 유저건강정보 수정하기
-    public async updateUserAndHealthInfo(userId:string, udpateUserAndHealthInfoDto: UpdateUserAndHealthInfoDto){
+    public async updateUserAndHealthInfo(userId:string, udpateUserAndHealthInfoDto: UpdateUserDto | SaveHealthInfoDto){
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
