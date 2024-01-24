@@ -4,6 +4,7 @@ import BotBox from './BotBox';
 import UserBox from './UserBox';
 import { questionData } from './QuestionData';
 import { useNavigate } from 'react-router-dom';
+import getDates from '@utils/getDates';
 
 const AiAnalyze = () => {
   const [recordText, setRecordText] = useState([]);
@@ -18,6 +19,8 @@ const AiAnalyze = () => {
   const [prevQuestionIdx, setPrevQuestionIdx] = useState('1');
 
   const navigate = useNavigate();
+  const { thisYear, thisMonth, thisDay } = getDates();
+  const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
 
   const handleOnClick = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -33,7 +36,13 @@ const AiAnalyze = () => {
     if (questionData[questionIdx].button[idx].type === 'follow-up') {
     } else if (questionData[questionIdx].button[idx].type === 'navigate') {
       // chats 저장, 캐싱?
-      navigate('/');
+      if (questionData[questionIdx].type.questionType === '식단추천') {
+        navigate(`/record/${todayDate}`);
+      } else if (questionData[questionIdx].type.questionType === '목표추천') {
+        navigate('/my-page');
+      } else {
+        navigate('/');
+      }
     } else if (questionData[questionIdx].button[idx].type === 'ai') {
       // questionData[questionIdx].type을 body에 담아서 api 호출
       console.log('api 호출');

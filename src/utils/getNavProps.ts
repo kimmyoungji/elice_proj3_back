@@ -62,7 +62,10 @@ export const getNavProps: GetNavPropsType = {
   addphotoymdmealsearch: { title: '식단 검색', back: true },
   aianalyze: { title: 'AI 분석', icon: true },
   aidrawer: { back: true, title: 'AI 분석 서랍' },
-  aidrawerymd: { back: true, title: 'AI 분석 서랍' }, //날짜 넣어줘야 함
+  aidrawerdetail: {
+    back: true,
+    title: `${new URLSearchParams(window.location.search).get('date')} 답변`,
+  }, //날짜 넣어줘야 함
   share: { title: '구그램' },
   mypage: { title: '설정' },
   mypageedit: { back: true, title: '정보수정' },
