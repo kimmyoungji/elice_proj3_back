@@ -36,21 +36,12 @@ export class CumulativeRecordDateDto {
 }
 
 @Exclude()
-export class CumulativeRecordMonthDto {
+export class CumulativeDateMealTypeDto {
   @Expose()
   @ApiProperty({ description: "날짜" })
   @IsNotEmpty()
   date: Date;
 
-  @Expose()
-  @ApiProperty({ description: "하루 섭취한 총 칼로리" })
-  @IsNotEmpty()
-  @IsInt()
-  totalCalories: number;
-}
-
-@Exclude()
-export class CumulativeDateMealTypeDto {
   @Expose()
   @ApiProperty({ description: "식사 종류" })
   @IsNotEmpty()

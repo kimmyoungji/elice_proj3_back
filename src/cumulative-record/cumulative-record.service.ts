@@ -3,7 +3,7 @@ import { CumulativeRecordRepository } from "./cumulative.repository";
 import {
   CumulativeDateMealTypeDto,
   CumulativeRecordDateDto,
-  CumulativeRecordMonthDto,
+  // CumulativeRecordMonthDto,
 } from "./dtos/cumulative-record.dto";
 import { plainToInstance } from "class-transformer";
 import { DataSource } from "typeorm";
@@ -103,7 +103,7 @@ export class CumulativeRecordService {
   async getMonthRecord(
     month: Date,
     userId: string
-  ): Promise<CumulativeRecordMonthDto[]> {
+  ): Promise<CumulativeDateMealTypeDto[]> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -115,7 +115,7 @@ export class CumulativeRecordService {
         queryRunner.manager
       );
       await queryRunner.commitTransaction();
-      return plainToInstance(CumulativeRecordMonthDto, result);
+      return plainToInstance(CumulativeDateMealTypeDto, result);
     } catch (error) {
       await queryRunner.rollbackTransaction();
     } finally {
@@ -123,19 +123,20 @@ export class CumulativeRecordService {
     }
   }
 
-  async getMonthDetailRecord(page: Number, userId: string) {
+  async getMonthDetailRecord(month: Date, page: Number, userId: string) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
       const result = await this.cumulativeRepository.getMonthDetailRecord(
+        month,
         page,
         userId,
         queryRunner.manager
       );
       await queryRunner.commitTransaction();
-      return result;
+      return plainToInstance(CumulativeDateMealTypeDto, result);
     } catch (error) {
       await queryRunner.rollbackTransaction();
     } finally {

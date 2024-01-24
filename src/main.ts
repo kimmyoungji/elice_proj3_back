@@ -1,4 +1,4 @@
-import { NestFactory, Reflector } from "@nestjs/core";
+import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { setupSwagger } from "./util/swagger";
 import { ValidationPipe } from "@nestjs/common";
@@ -7,10 +7,8 @@ import * as session from "express-session";
 import * as passport from "passport";
 import * as cookieParser from "cookie-parser";
 import * as cors from "cors";
-import express from "express";
 
 dotenv.config({ path: __dirname + "/../.env" });
-import { ClassSerializerInterceptor } from "@nestjs/common";
 
 async function bootstrap() {
   // app 생성
@@ -35,7 +33,7 @@ async function bootstrap() {
 
   // swagger 설정
   setupSwagger(app);
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
   //cookie 설정
   app.use(cookieParser(process.env.SESSION_SECRET));
 

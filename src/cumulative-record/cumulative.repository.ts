@@ -1,12 +1,11 @@
 import { EntityManager, Repository } from "typeorm";
 import { CumulativeRecord } from "./cumulative-record.entity";
-import { InjectRepository } from "@nestjs/typeorm";
 // import { User } from "src/user/user.entity";
 import { Injectable } from "@nestjs/common";
 import {
   CumulativeDateMealTypeDto,
   CumulativeRecordDateDto,
-  CumulativeRecordMonthDto,
+  // CumulativeRecordMonthDto,
 } from "./dtos/cumulative-record.dto";
 
 @Injectable()
@@ -38,13 +37,14 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
     date: Date,
     userId: string,
     manager: EntityManager
-  ) {
+  ): Promise<CumulativeDateMealTypeDto[]> {
     const result = await manager
       .createQueryBuilder(CumulativeRecord, "entity")
       .select(["entity.mealType", "entity.mealTotalCalories", "entity.imageId"])
       .where("DATE_TRUNC('day', entity.date) = :date", { date })
       .andWhere("entity.user_id = :userId", { userId })
       .getMany();
+    console.log("getDateMealTypeRecord result", result);
     return result;
     // 날짜를 먼저 조회하는 것 vs 유저 id를 먼저 조회하는 것 -> 무엇이 더 빠를까?
   }
@@ -54,21 +54,19 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
     month: Date,
     userId: string,
     manager: EntityManager
-  ): Promise<CumulativeRecordMonthDto[]> {
+  ): Promise<CumulativeDateMealTypeDto[]> {
     const result = await manager
       .createQueryBuilder(CumulativeRecord, "entity")
       .select("entity.userId", "userId")
       .addSelect("DATE_TRUNC('day', entity.date)", "date")
-      .addSelect("SUM(entity.mealTotalCalories)", "totalCalories")
+      .addSelect("SUM(entity.mealTotalCalories)", "mealTotalCalories")
       // .select([
       //   "entity.userId",
       //   "DATE_TRUNC('day', entity.date)",
       //   "SUM(entity.mealTotalCalories)",
       // ])
       .where("entity.user_id = :userId", { userId })
-      .andWhere("DATE_TRUNC('month', entity.date) = :month", {
-        month: `${month}-01`,
-      })
+      .andWhere("DATE_TRUNC('month', entity.date) = :month", { month })
       .groupBy("entity.user_id, DATE_TRUNC('day', entity.date)")
       .getRawMany();
     // .getMany();
@@ -77,6 +75,7 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
 
   // 월별 데이터 - date, mealType, calories, (imgURL)
   async getMonthDetailRecord(
+    month: Date,
     page: Number,
     userId: string,
     manager: EntityManager
@@ -85,7 +84,7 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
     const result = await manager
       .createQueryBuilder(CumulativeRecord, "entity")
       .where("entity.user_id = :userId", { userId })
-      .andWhere("DATE_TRUNC('day', entity.date) = :date", { page }) // 수정
+      .andWhere("DATE_TRUNC('month', entity.date) = :month", { month })
       // .andWhere("entity.record_ids IN :recordIds", { recordIds })
       .getMany();
     return result;
