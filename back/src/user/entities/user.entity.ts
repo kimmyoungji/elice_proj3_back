@@ -1,6 +1,6 @@
 import { IsBoolean, IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { GoogleLoginDto } from '../../auth/dto/googleLoginDto';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn, Timestamp, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn, Timestamp, UpdateDateColumn } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { LocalSignupDto } from '../../auth/dto/localSignupDto';
 import * as bcrypt from 'bcrypt';
@@ -66,9 +66,11 @@ export class User {
   @DeleteDateColumn()
   deletedat: Timestamp;
 
-  @OneToOne(() => HealthInfo, healthInfo => healthInfo.user, { cascade:true })
-  @JoinColumn({name: 'health_info_id'})
-  healthInfo: HealthInfo;
+  @OneToMany(() => HealthInfo, healthInfo => healthInfo.user, { cascade: true })
+  healthInfo: HealthInfo[];
+
+  @Column({type:'uuid', nullable: true})
+  recentHealthInfoId: string;
 
   public mapGoogleLoginDto(googleLoginDto: GoogleLoginDto):User {
     const {providerId, email, displayName} = googleLoginDto;

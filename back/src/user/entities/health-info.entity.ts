@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, UpdateDateColumn, OneToOne, JoinColumn, DeleteDateColumn, Timestamp } from 'typeorm';
+import { Entity, Column, PrimaryColumn, UpdateDateColumn, OneToOne, JoinColumn, DeleteDateColumn, Timestamp, ManyToOne } from 'typeorm';
 import { IsNotEmpty, IsInt, IsString, IsDate } from 'class-validator';
 import { User } from './user.entity';
 import { v4 as uuidv4 } from 'uuid';
@@ -52,7 +52,8 @@ export class HealthInfo {
     @DeleteDateColumn({name: 'deletedat'})
     deletedat: Timestamp;
 
-    @OneToOne(() => User, user => user.healthInfo)
+    @ManyToOne(() => User, user => user.healthInfo)
+    @JoinColumn({ name: 'user_id' })
     user: User;
 
     public mapHealthInfoDto(dto: UpdateUserAndHealthInfoDto){
