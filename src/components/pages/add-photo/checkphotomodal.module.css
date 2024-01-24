@@ -38,6 +38,7 @@
   height:200px;
   border-radius: 7px;
   background-color: black;
+  object-fit: cover;
 }
 
 .btnbox {

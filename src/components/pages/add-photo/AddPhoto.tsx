@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './addphoto.module.css';
 import { useEffect, useRef, useState } from 'react';
 import CheckPhotoModal from './CheckPhotoModal';
+import useApi from '@hooks/useApi';
 
 const AddPhoto = () => {
   const navigate = useNavigate();
@@ -16,6 +17,13 @@ const AddPhoto = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [imgUrl, setImgUrl] = useState("");
+  const [pre, setPre] = useState("선택");
+
+  // const { result, trigger } = useApi({
+  //   method: 'post',
+  //   path: '/image/classification',
+  //   data: {imgUrl}
+  // })
 
   useEffect(() => {
     getWebcam((stream: MediaProvider) => {
@@ -64,9 +72,24 @@ const AddPhoto = () => {
     link.download = "사진촬영 테스트";
     link.click();
     image && setImgUrl(image);
+    setPre("촬영");
     setShowModal(true);
   }
 
+  
+  const checkImg = () => {
+    if (!selectFile.current) return;
+    if (!selectFile.current.files) return;
+    const file = selectFile.current.files[0];
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImgUrl(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+    setPre("선택");
+    setShowModal(true);
+  };
 
   return (
     <div style={{ position:'relative'}}>
@@ -81,8 +104,8 @@ const AddPhoto = () => {
         />
       </div>
       <div className={styles.addbox}>
-        <input type="file" accept="image/*" style={{display:"none"}} ref={selectFile}/>
-        <div className={styles.item} onClick={()=>{selectFile.current?.click()}}>
+        <input type="file" accept="image/*" style={{display:"none"}} ref={selectFile} onChange={checkImg}/>
+        <div className={styles.item} onClick={()=>selectFile.current?.click()}>
           <img className={styles.icon} src='/icons/album.png' alt='앨범' />
           <div className={styles.text}>앨범</div>
         </div>
@@ -95,7 +118,7 @@ const AddPhoto = () => {
           <div className={styles.text}>직접입력</div>
         </div>
       </div>
-      {showModal && <CheckPhotoModal imgUrl={imgUrl} setShowModal={setShowModal} />}
+      {showModal && <CheckPhotoModal pre={pre} imgUrl={imgUrl} setShowModal={setShowModal} />}
     </div>
   );
 };
