@@ -14,36 +14,26 @@ export class HealthInfoRepository{
     }
 
     // Read
-    public async findHealthInfoByUserId(userId: string, manager: EntityManager): Promise<HealthInfo>{
+    public async findRecentHealthInfoById(healthInfoId: string, manager: EntityManager): Promise<HealthInfo>{
         try{
-            return await manager.createQueryBuilder(HealthInfo, "health_info").where("user_id = :userId", {userId}).getOne();
+            return await manager.createQueryBuilder(HealthInfo, "health_info").where("health_info_id = :healthInfoId", {healthInfoId}).getOne();
         }catch(err){
             throw err;
         }
     }
 
-    // Read
-    public async findRecentHealthInfo(healthInfoId: string, manager: EntityManager): Promise<HealthInfo>{
+    public async findRecentHealthInfoByUserId(userId: string, manager: EntityManager): Promise<HealthInfo>{
         try{
-            return await manager.createQueryBuilder(HealthInfo, "health_info").where("health_info_if = :healthInfoId", {healthInfoId}).getOne();
-        }catch(err){
-            throw err;
-        }
-    }
-
-    // Update
-    public async updateHealthInfoByUserId(healthInfoId: string, healthInfo:HealthInfo,  manager: EntityManager): Promise<UpdateResult>{
-        try{
-            return await manager.createQueryBuilder(HealthInfo, "health_info").update(HealthInfo).set(healthInfo).where("health_info_id = :healthInfoId",{healthInfoId}).execute();
+            return await manager.createQueryBuilder(HealthInfo, "health_info").where("user_id = :userId", {userId}).orderBy('updated_date','DESC').getOne();
         }catch(err){
             throw err;
         }
     }
 
     // Delete
-    public async deleteHealthInfoByHealthInfoId(healthInfoId: string, manager: EntityManager): Promise<DeleteResult>{       
+    public async deleteHealthInfoById(userId: string, manager: EntityManager): Promise<DeleteResult>{       
         try{
-            return await manager.createQueryBuilder(HealthInfo, "health_info").softDelete().where("health_info_id = :healthInfoId",{healthInfoId}).execute();
+            return await manager.createQueryBuilder(HealthInfo, "health_info").softDelete().where("user_id = :userId",{userId}).execute();
         }catch(err){
             throw err;
         }

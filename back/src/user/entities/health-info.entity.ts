@@ -30,7 +30,7 @@ export class HealthInfo {
     targetWeight: number;
 
     @Column({ type: 'enum', name: "diet_goal", enum: DietGoal,  nullable: true })
-    goal: DietGoal; 
+    dietGoal: DietGoal; 
 
     @Column({ type: 'enum', name:'activity_amount', enum: ActivityAmount, nullable: true })
     activityAmount: ActivityAmount;
@@ -52,20 +52,24 @@ export class HealthInfo {
     @DeleteDateColumn()
     deletedDate: Timestamp;
 
-    @ManyToOne((type) => User, user => user.healthInfos)
-    @JoinColumn({ name: 'user_id'})
-    user: User;
+    // @ManyToOne((type) => User, user => user.healthInfos)
+    // @JoinColumn({ name: 'user_id'})
+    // user: User;
+
+    @Column({ type: 'uuid', nullable: true })
+    @IsString()
+    @IsNotEmpty()
+    userId: string;
 
     public mapHealthInfoDto(dto: SaveHealthInfoDto){
         const healthInfo = new HealthInfo();
         healthInfo.weight = dto.weight;
         healthInfo.height = dto.height;
         healthInfo.targetWeight = dto.targetWeight;
-        healthInfo.goal = dto.goal;
+        healthInfo.dietGoal = dto.dietGoal;
         healthInfo.activityAmount = dto.activityAmount;
         healthInfo.targetCalories = dto.targetCalories;
         healthInfo.recommendIntake = dto.recommendIntake;
-        delete healthInfo.healthInfoId;
         return healthInfo;
     }
 }

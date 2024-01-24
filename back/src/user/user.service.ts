@@ -7,6 +7,7 @@ import { DataSource } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dto/UpdateUser.dto';
 import { SaveHealthInfoDto } from './dto/SaveHealthInfo.dto';
+import { calculateAge } from 'src/util/calculate-age';
 
 
 @Injectable()
@@ -23,23 +24,25 @@ export class UserService {
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try{
-            
             // 등록된 사용자 정보 가져오기;
-            let user = await this.userRepository.findUserInfosByUserId(userId, queryRunner.manager);
+            const user: User = await this.userRepository.findUserInfosByUserId(userId, queryRunner.manager);
             if (!user) throw new HttpException('해당 유저를 찾을 수 없습니다.', 404); 
-
-            // 만약 유저의 healthInfo가 null이라면 사용자 건강 정보 등록하기
-            if(user.recentHealthInfoId === null){
-                // healthInfo tabel에 등록하기
-                const newHealthInfo = new HealthInfo();
-                await this.healthInfoRepository.saveHealthInfo(newHealthInfo, queryRunner.manager);
-                const resutl = await this.userRepository.updateRecentHealthInfoIdByUserId(userId, newHealthInfo.healthInfoId, queryRunner.manager);
-                console.log("업데이트 최신 헬스인포아이디", resutl);
-                user =  await this.userRepository.findUserInfosByUserId(userId, queryRunner.manager);
-            }
-
             await queryRunner.commitTransaction();
-            return user;
+
+            // 불필요한 정보 지워주기
+            delete user[0].password;
+            delete user[0].provider_id;
+            delete user[0].created_date;
+            delete user[0].updated_date;
+            delete user[0].deleted_date;
+            delete user[0].recent_health_info_id;
+            delete user[0].health_info_id;
+            delete user[0].user_id;
+
+            // 나이정보 추가하기
+            user[0].age = calculateAge(user[0].birth_day);
+
+            return user[0];
 
         }catch(err){
             await queryRunner.rollbackTransaction();
@@ -59,18 +62,18 @@ export class UserService {
             const updateUserDto = updateUserInfos as UpdateUserDto;
             const saveHealthInfoDto = updateUserInfos as SaveHealthInfoDto;
 
-            // user, healthInfo 가져오기
-            const user = await this.userRepository.findUserInfosByUserId(userId, queryRunner.manager);
-            const healthInfo = await this.healthInfoRepository.findRecentHealthInfo(user.recentHealthInfoId, queryRunner.manager);
+            // userId로 유저정보 가져오기
+            const healthInfo: HealthInfo = await this.healthInfoRepository.findRecentHealthInfoByUserId(userId, queryRunner.manager);
 
-            // healthInfoToSave 만들고 저장하기
-            const newHealthInto = Object.assign(healthInfo, saveHealthInfoDto);
-            console.log(newHealthInto);
-            await this.healthInfoRepository.saveHealthInfo(newHealthInto, queryRunner.manager);
+            const userToUpdate = new User().mapUpdateUserDto(updateUserDto);
+            const newHealthInfos = new HealthInfo().mapHealthInfoDto(saveHealthInfoDto);
+            Object.assign(healthInfo, newHealthInfos);
+            delete healthInfo.updatedDate;
+            userToUpdate.recentHealthInfoId = healthInfo.healthInfoId;
 
-            // user 수정하기
-            updateUserDto.recentHealthInfoId = newHealthInto.healthInfoId;
-
+            const result1 = await this.healthInfoRepository.saveHealthInfo(healthInfo, queryRunner.manager);
+            const result2 = await this.userRepository.updateUserByUserId(userId, userToUpdate, queryRunner.manager);
+            // console.log(result1, result2)
 
             await queryRunner.commitTransaction();
             return '유저정보 및 유저건강정보 업데이트 성공';
@@ -82,29 +85,5 @@ export class UserService {
             await queryRunner.release();
         }   
     }
-
-    // 유저 건강정보 삭제하기
-    public async deleteHealthInfoByUserId(userId:string){
-        const queryRunner = this.dataSource.createQueryRunner();
-        await queryRunner.connect();
-        await queryRunner.startTransaction();
-        try{
-            // userId에 해당되는 아이디 가져오기
-            const user = await this.userRepository.findUserInfosByUserId(userId, queryRunner.manager);
-            if(!user) throw new HttpException('해당 유저를 찾을 수 없습니다.', 404);
-            // user의 healthInfoId 가져오기
-            const healthInfoId = user.recentHealthInfoId;
-            // healthInfoId에 해당되는 건강정보 삭제하기
-            const result1 = await this.healthInfoRepository.deleteHealthInfoByHealthInfoId(healthInfoId, queryRunner.manager);
-            if (result1.affected === 0) throw new HttpException('유저 건강정보 삭제 실패', 500);
-            await queryRunner.commitTransaction();
-            return '유저 건강정보 삭제 성공';
-        }catch(err){
-            await queryRunner.rollbackTransaction();
-            throw err;
-        }finally{
-            await queryRunner.release();
-        }   
-    }   
 
 }

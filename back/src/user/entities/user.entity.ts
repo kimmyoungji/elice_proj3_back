@@ -65,10 +65,10 @@ export class User {
 
   // @Column({ type: 'timestamp with time zone', nullable: true })
   @DeleteDateColumn()
-  deletedat: Timestamp;
+  deletedDate: Timestamp;
 
-  @OneToMany((type) => HealthInfo, healthInfo => healthInfo.user, { cascade: true })
-  healthInfos: HealthInfo[];
+  // @OneToMany((type) => HealthInfo, healthInfo => healthInfo.user, { cascade: true })
+  // healthInfos: HealthInfo[];
 
   @Column({type:'uuid', nullable: true})
   recentHealthInfoId: string;

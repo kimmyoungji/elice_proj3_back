@@ -143,13 +143,10 @@ export class AuthService {
         await queryRunner.startTransaction();
         
         try{
-            const tempUser = await this.userRepository.findUserInfosByUserId(userId, queryRunner.manager)
-            if (!tempUser) throw new HttpException('유저 정보를 찾을 수 없습니다.', HttpStatus.UNAUTHORIZED);
-            const result1 = await this.healthInfoRepository.deleteHealthInfoByHealthInfoId(tempUser.recentHealthInfoId, queryRunner.manager);
-            const result2 = await this.userRepository.softDeleteUserByUserId(userId, queryRunner.manager );
-            if( result1.affected !== 1 || result2.affected !== 1 ) throw new HttpException('회원탈퇴 실패', HttpStatus.INTERNAL_SERVER_ERROR);
+            await this.userRepository.deleteUserByUserId(userId, queryRunner.manager);
+            await this.healthInfoRepository.deleteHealthInfoById(userId, queryRunner.manager);
             await queryRunner.commitTransaction();
-            return {result1, result2};
+            return "회원탈퇴 성공"
         }catch(err){
             await queryRunner.rollbackTransaction();
             throw err;
