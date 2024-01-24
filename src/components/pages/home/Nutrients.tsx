@@ -20,10 +20,10 @@ const keyToKorean: Record<string, string> = {
   dietaryFiber: '식이섬유',
 };
 
-const Nutrients = ({ totalNutrient, recommendNutrient }: Props) => {
-  const radius = 22;
-  const circumference = 2 * Math.PI * radius;
+const radius = 22;
+const circumference = 2 * Math.PI * radius;
 
+const Nutrients = ({ totalNutrient, recommendNutrient }: Props) => {
   return (
     <div className={styles.nutrients}>
       {Object.keys(totalNutrient).map((idx) => (

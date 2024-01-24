@@ -26,6 +26,7 @@
   border-radius: 10px;
   border: 1px solid var(--main-skyblue);
   padding: 10px;
+  white-space: pre-line;
 }
 .text {
   text-align: left;

@@ -1,6 +1,7 @@
+import { Scrap } from '@assets/Scrap';
 import styles from '@components/pages/ai-analyze/box.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Props {
   toSave: boolean;
@@ -19,16 +20,23 @@ const BotBox = ({ toSave, text, button, handleOnClick }: Props) => {
     // 스크랩 API 호출
   };
 
+  const [delayed, setDelayed] = useState(false);
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setDelayed(true);
+    }, 800);
+    return () => clearTimeout(timeoutId);
+  }, []);
+  // 딜레이를 css keyframe이랑, animation으로 display : none -> block으로 처리하기
+  // 걱정은 단 하나.. 이쁠깡?
+
   return (
     <div className={styles.question_wrapper}>
       <div className={styles.box_wrapper}>
         <img src='/images/9gram_logo.png' alt='ai bot' />
         <div className={styles.chat_wrapper}>
           <div className={styles.text_wrapper}>
-            <div
-              className={`${styles.text} r-regular`}
-              dangerouslySetInnerHTML={{ __html: text }}
-            ></div>
+            <div className={`${styles.text} r-regular`}>{text}</div>
             <div className={styles.button_wrapper}>
               <>
                 {button.map((btn, idx) => (
@@ -52,21 +60,7 @@ const BotBox = ({ toSave, text, button, handleOnClick }: Props) => {
           </div>
           {toSave && (
             <div className={styles.scrap_wrapper} onClick={handleScrap}>
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                viewBox='0 0 24 24'
-                fill='none'
-                strokeWidth='2'
-                stroke='currentColor'
-                className={scrap ? `w-6 h-6 ${styles.scrapped}` : 'w-6 h-6'}
-                width='13'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  d='M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z'
-                />
-              </svg>
+              <Scrap scrap={scrap} />
             </div>
           )}
         </div>
