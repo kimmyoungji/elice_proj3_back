@@ -10,6 +10,8 @@ interface UseApiParams {
   shouldInitFetch?: boolean;
   initialResult?: string;
   gcTime?: number;
+  applyResult: boolean;
+  isShowBoundary: boolean;
 }
 
 const useCachingApi = async ({
@@ -17,14 +19,14 @@ const useCachingApi = async ({
   path: triggerPath = '',
   data: triggerData = {},
   shouldInitFetch = false,
+  applyResult = true,
+  isShowBoundary = true,
   // initialResult = '',
   gcTime = 0,
 }: UseApiParams) => {
   // }) => {
-  const key = getKeyFromUrl(triggerPath);
-  //     applyResult = true,
-  //     isShowBoundary = true,
-  console.log(key);
+  const key = triggerPath;
+
   const keyArr: string[] = [];
   keyArr.push(key);
 
@@ -37,7 +39,10 @@ const useCachingApi = async ({
     keyArr,
     async (data) =>
       await API_FETCHER[triggerMethod as ApiMethods](triggerPath, data),
-    gcTime
+    gcTime,
+    applyResult,
+    isShowBoundary,
+    triggerMethod
   );
 
   useEffect(() => {

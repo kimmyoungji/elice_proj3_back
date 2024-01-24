@@ -4,45 +4,57 @@ import {
   QueryKey,
   useMutation,
 } from '@tanstack/react-query';
+import { ApiMethods } from '@utils/axiosConfig';
 import { useErrorBoundary } from 'react-error-boundary';
 
 const queryClient = new QueryClient({});
 const useMutationggu = (
   itemId: QueryKey,
   trigger: MutationFunction<unknown, {}>,
-  gc?: number
+  gc: number,
+  applyResult: boolean,
+  isShowBoundary: boolean,
+  method: ApiMethods
 ) => {
   const { showBoundary } = useErrorBoundary();
 
   return useMutation({
     mutationFn: trigger,
+    //method get이고 gcTime적용해야 할때는 기존 값을 반환해서 캐싱을 적용해야 함
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: itemId });
+      if (method === 'get' && gc > 0) {
+        await queryClient.cancelQueries({ queryKey: itemId });
 
-      // 기존 Query를 가져오는 함수 ( 존재하지 않으면 undefind 반환 )
-      const previousValue = queryClient.getQueryData(itemId);
+        // 기존 Query를 가져오는 함수 ( 존재하지 않으면 undefind 반환 )
+        const previousValue = queryClient.getQueryData(itemId);
 
-      // if (previousValue) {
-      //   // setQueryData(): Query의 캐시된 데이터를 즉시 업데이트하는 동기 함수 ( Query가 존재하지 않으면 생성 )
-      //   // 전달받은 variables값을 즉시 새로운 데이터로 업데이트
-      //   queryClient.setQueryData(itemId, (oldData) => [...oldData, variables]);
-      // }
+        //optimistic UI 현재는 필요없음
+        // if (previousValue) {
+        //   // setQueryData(): Query의 캐시된 데이터를 즉시 업데이트하는 동기 함수 ( Query가 존재하지 않으면 생성 )
+        //   // 전달받은 variables값을 즉시 새로운 데이터로 업데이트
+        //   queryClient.setQueryData(itemId, (oldData) => [...oldData, variables]);
+        // }
 
-      // 이전 값 리턴
-      return { previousValue };
+        // 이전 값 리턴
+        return { previousValue };
+      }
     },
 
-    onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: itemId });
+    onSuccess: async (data) => {
+      if (applyResult) {
+        queryClient.invalidateQueries({ queryKey: itemId });
+        queryClient.setQueriesData(itemId, data);
+        return;
+      }
+      return;
     },
     onError: async (error, variables, context) => {
-      //confirm을 받았을 때 재요청하기
-      showBoundary(error);
-      console.log(error);
+      isShowBoundary && showBoundary(error);
     },
     onSettled: async () => {},
     throwOnError: true,
     gcTime: gc,
+    //gcTime만 해도 될지? staleTime은 refetch의 기능이므로 필요 없을지?
   });
 };
 
