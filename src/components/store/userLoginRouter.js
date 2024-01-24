@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { UserData } from '@components/pages/my-page/DummyUserData';
 
 const initialState = { userId: '', userInfo: {} };
 
@@ -18,6 +19,6 @@ const userLoginSlice = createSlice({
   },
 });
 
-export const userLoginActions = userLoginSlice.actions;
+export const { userLoginActions, storeUserInfo } = userLoginSlice.actions;
 
 export default userLoginSlice.reducer;

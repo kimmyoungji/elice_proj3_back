@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import style from './mypageedit.module.css';
 import MyPageDropdown from './MyPageDropdwon';
 import getImgPreview from '@utils/getImgPreview';
@@ -7,24 +7,30 @@ import getNutritionStandard from '@utils/getNutritionStandard';
 import { mapGoaltoMsg, mapActivitytoMsg, findKeyByValue } from './mapMsg';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import {
-  calAge,
+  // calAge,
   calBMR,
   calBMRCalories,
   adjustCaloriesByGoal,
 } from './calUserData';
 
-import { userData, UserData } from './DummyUserData';
+// import { userData } from './DummyUserData';
+import { UserData, HealthInfoProps, MyPageEditProps } from './MypageTypes';
 
 const goalTypes = ['근육증량', '체중감량', '체중유지', '체중증량'];
 const activityType = ['비활동적', '약간 활동적', '활동적', '매우 활동적'];
 
 const MyPageEdit = () => {
-  const [data, setData] = useState<UserData>(userData);
-  const age = calAge({ data });
-  const goalMsg = mapGoaltoMsg[data.goal];
-  const activityMsg = mapActivitytoMsg[data.activity];
+  const location = useLocation();
+  const { userData, goalMsg, activityMsg } = location.state;
+  const [data, setData] = useState(userData);
+  const [healthData, setHealthData] = useState(data.healthInfo);
+  // const age = calAge({ data });
+  // const goalMsg = mapGoaltoMsg[data.goal];
+  // const activityMsg = mapActivitytoMsg[data.activity];
+  const age = data.age;
+
   const [profileImage, setProfileImage] = useState<string | undefined>(
-    userData.img
+    data.profileImage
   );
   const [file, setFile] = useState<File | null>(null);
   const [bmr, setBmr] = useState(calBMR({ data, age }));
@@ -33,8 +39,8 @@ const MyPageEdit = () => {
     Math.round(adjustCaloriesByGoal({ data, bmrCalories }))
   );
   const [isEditingData, setIsEditingData] = useState(false);
-  const [prevWeight, setPrevWeight] = useState(data.weight);
-  const [prevHeight, setPrevHeight] = useState(data.weight);
+  const [prevWeight, setPrevWeight] = useState(healthData.weight);
+  const [prevHeight, setPrevHeight] = useState(healthData.weight);
   const [selectedGoal, setSelectedGoal] = useState(goalMsg);
   const [selectedActity, setSelectedActity] = useState(activityMsg);
   const [isActivityDropdownVisible, setActivityDropdownVisible] =
@@ -66,6 +72,10 @@ const MyPageEdit = () => {
   };
 
   const updateDataAndCalories = (updatedData: UserData) => {
+    // const updateUserData: UserData = {
+    //   ...data,
+    //   ...updatedData,
+    // };
     const updatedBmr = calBMR({ data: updatedData, age });
     const updatedBmrCalories = calBMRCalories({
       bmr: updatedBmr,
@@ -89,9 +99,14 @@ const MyPageEdit = () => {
     if (type === 'goal' && newGoalValue) {
       const newGoal = parseInt(newGoalValue, 10);
       if ([1, 2, 3, 4].includes(newGoal)) {
-        const updatedData: UserData = {
-          ...data,
+        const updatedHealthData = {
+          ...data.healthInfo,
           goal: newGoal as 1 | 2 | 3 | 4,
+        };
+
+        const updatedData = {
+          ...data,
+          healthInfo: updatedHealthData,
         };
         updateDataAndCalories(updatedData);
         setSelectedGoal(value);
@@ -102,9 +117,13 @@ const MyPageEdit = () => {
       if (newActivityValue) {
         const newActivity = parseInt(newActivityValue, 10);
         if ([1, 2, 3, 4].includes(newActivity)) {
-          const updatedData: UserData = {
+          const updatedHealthData = {
+            ...data.healthInfo,
+            activityAmount: newActivity as 1 | 2 | 3 | 4,
+          };
+          const updatedData = {
             ...data,
-            activity: newActivity as 1 | 2 | 3 | 4,
+            healthInfo: updatedHealthData,
           };
           updateDataAndCalories(updatedData);
           setSelectedActity(value);
@@ -116,17 +135,22 @@ const MyPageEdit = () => {
 
   const editHeightAndWeight = () => {
     setIsEditingData(!isEditingData);
-    setPrevHeight(data.height);
-    setPrevWeight(data.weight);
+    setPrevHeight(healthData.height);
+    setPrevWeight(healthData.weight);
   };
 
   const updateProfileData = async () => {
     try {
-      const updatedData = {
-        ...data,
-        img: profileImage,
+      const updatedHealthData = {
+        ...healthData,
         height: Number(prevHeight),
         weight: Number(prevWeight),
+      };
+      setHealthData(updatedHealthData);
+      const updatedData = {
+        ...data,
+        profileImage: profileImage,
+        healthInfo: updatedHealthData,
       };
       // 데이터 업데이트
       updateDataAndCalories(updatedData);
@@ -143,13 +167,16 @@ const MyPageEdit = () => {
 
     const updatedData = {
       ...data,
-      height: Number(prevHeight),
-      weight: Number(prevWeight),
-      targetNutrients: updatedNutrients,
-      targetCalories: updatedGoalCalories,
+      healthInfo: {
+        ...healthData,
+        height: Number(prevHeight),
+        weight: Number(prevWeight),
+        targetNutrients: updatedNutrients,
+        targetCalories: updatedGoalCalories,
+      },
     };
 
-    updateDataAndCalories(updatedData);
+    updateDataAndCalories(data);
     // store에 저장하는 로직 추가해야함
     navigate('/my-page', { state: { updatedData } });
   };
@@ -235,8 +262,9 @@ const MyPageEdit = () => {
                 onClick={editHeightAndWeight}
                 className={style.userDataDetail}
               >
-                {data.height} cm <span style={{ color: 'black' }}> / </span>
-                {data.weight} kg
+                {healthData.height} cm{' '}
+                <span style={{ color: 'black' }}> / </span>
+                {healthData.weight} kg
               </div>
             </>
           )}
