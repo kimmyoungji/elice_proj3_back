@@ -1,7 +1,5 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect } from 'react';
 import { API_FETCHER, ApiMethods } from '@utils/axiosConfig';
-import { useErrorBoundary } from 'react-error-boundary';
-import axios from 'axios';
 import useMutationggu from './useMutationggu';
 import { getKeyFromUrl } from '@utils/getNavProps';
 
@@ -14,12 +12,6 @@ interface UseApiParams {
   gcTime?: number;
 }
 
-// interface TriggerPropsType
-//   extends Omit<UseApiParams, 'shouldInitFetch' | 'initialResult'> {
-//   applyResult?: boolean;
-//   isShowBoundary?: boolean;
-// }
-
 const useCachingApi = async ({
   method: triggerMethod = 'get',
   path: triggerPath = '',
@@ -28,28 +20,25 @@ const useCachingApi = async ({
   // initialResult = '',
   gcTime = 0,
 }: UseApiParams) => {
+  // }) => {
   const key = getKeyFromUrl(triggerPath);
   //     applyResult = true,
   //     isShowBoundary = true,
-  const { showBoundary } = useErrorBoundary();
+  console.log(key);
+  const keyArr: string[] = [];
+  keyArr.push(key);
 
   const {
     mutate: trigger,
     data: result,
-    isLoading: loading,
+    isPending: loading,
     error,
   } = useMutationggu(
-    key,
-    gcTime,
+    keyArr,
     async (data) =>
-      await API_FETCHER[triggerMethod as ApiMethods](triggerPath, data)
+      await API_FETCHER[triggerMethod as ApiMethods](triggerPath, data),
+    gcTime
   );
-
-  useEffect(() => {
-    if (axios.isAxiosError(error)) {
-      showBoundary(error);
-    }
-  }, [error]);
 
   useEffect(() => {
     shouldInitFetch && console.log('초기 요청합니다!!');

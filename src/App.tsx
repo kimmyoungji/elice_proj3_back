@@ -10,6 +10,12 @@ import { lazy, Suspense } from 'react';
 import { useLocation, Navigate, Route, Routes } from 'react-router-dom';
 import { TopNavKeyType } from 'typings/propTypes';
 import Loading from '@components/UI/Loading';
+import { ErrorBoundary } from 'react-error-boundary';
+import Error from '@components/error/Error';
+import {
+  QueryErrorResetBoundary,
+  useQueryErrorResetBoundary,
+} from '@tanstack/react-query';
 
 const Home = lazy(() => import('@components/pages/home/Home'));
 const Login = lazy(() => import('@components/pages/login/Login'));
@@ -40,52 +46,67 @@ function App() {
   const nowLocation = location.pathname.slice(1);
   const key: TopNavKeyType | string = getKeyFromUrl(nowLocation);
   const navProps = getNavProps[key];
-  return (
-    <div className='App'>
-      <div className='container'>
-        {!preventTopNavArr.includes(key) && (
-          <header style={{ boxSizing: 'border-box' }}>
-            <TopBar {...defaultNavProps} {...navProps} />
-          </header>
-        )}
-        <main className='main'>
-          <Suspense fallback={<Loading />}>
-            <Routes>
-              <Route path='/' element={<Navigate to='/home' />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/auth' element={<Auth />} />
-              <Route path='/onboarding/:step' element={<Onboarding />} />
-              <Route path='/join' element={<Join />} />
-              {/* <Route path='/join/onboarding' element={<JoinOnboard />} /> */}
-              <Route path='/home' element={<Home />} />
-              <Route path='/my-page' element={<MyPage />} />
-              <Route path='/my-page/edit' element={<MyPageEdit />} />
-              <Route path='/add-photo/:date/:mealTime' element={<AddPhoto />} />
-              <Route
-                path='/add-photo/:date/:mealTime/search'
-                element={<AddPhotoSearch />}
-              />
-              <Route path='/ai-analyze' element={<AiAnalyze />} />
-              <Route path='/ai-drawer' element={<AiDrawer />} />
-              <Route path='/ai-drawer/detail' element={<AiDrawerDetail />} />
-              <Route path='/record/:selectedDate' element={<Record />} />
-              <Route
-                path='/record/:date/:mealTime/edit'
-                element={<RecordEdit />}
-              />
-              <Route path='/record/:date/:mealTime' element={<MealPage />} />
-              <Route path='/calendar' element={<Calender />} />
-            </Routes>
-          </Suspense>
-        </main>
+  const { reset } = useQueryErrorResetBoundary();
 
-        {!preventNavArr.includes(key) && (
-          <nav className='header'>
-            <Layout />
-          </nav>
-        )}
-      </div>
-    </div>
+  return (
+    <QueryErrorResetBoundary>
+      <ErrorBoundary onReset={reset} fallback={<Error />}>
+        <div className='App'>
+          <div className='container'>
+            {!preventTopNavArr.includes(key) && (
+              <header style={{ boxSizing: 'border-box' }}>
+                <TopBar {...defaultNavProps} {...navProps} />
+              </header>
+            )}
+            <main className='main'>
+              <Suspense fallback={<Loading />}>
+                <Routes>
+                  <Route path='/' element={<Navigate to='/home' />} />
+                  <Route path='/login' element={<Login />} />
+                  <Route path='/auth' element={<Auth />} />
+                  <Route path='/onboarding/:step' element={<Onboarding />} />
+                  <Route path='/join' element={<Join />} />
+                  {/* <Route path='/join/onboarding' element={<JoinOnboard />} /> */}
+                  <Route path='/home' element={<Home />} />
+                  <Route path='/my-page' element={<MyPage />} />
+                  <Route path='/my-page/edit' element={<MyPageEdit />} />
+                  <Route
+                    path='/add-photo/:date/:mealTime'
+                    element={<AddPhoto />}
+                  />
+                  <Route
+                    path='/add-photo/:date/:mealTime/search'
+                    element={<AddPhotoSearch />}
+                  />
+                  <Route path='/ai-analyze' element={<AiAnalyze />} />
+                  <Route path='/ai-drawer' element={<AiDrawer />} />
+                  <Route
+                    path='/ai-drawer/detail'
+                    element={<AiDrawerDetail />}
+                  />
+                  <Route path='/record/:selectedDate' element={<Record />} />
+                  <Route
+                    path='/record/:date/:mealTime/edit'
+                    element={<RecordEdit />}
+                  />
+                  <Route
+                    path='/record/:date/:mealTime'
+                    element={<MealPage />}
+                  />
+                  <Route path='/calendar' element={<Calender />} />
+                </Routes>
+              </Suspense>
+            </main>
+
+            {!preventNavArr.includes(key) && (
+              <nav className='header'>
+                <Layout />
+              </nav>
+            )}
+          </div>
+        </div>
+      </ErrorBoundary>
+    </QueryErrorResetBoundary>
   );
 }
 export default App;

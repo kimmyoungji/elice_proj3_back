@@ -6,9 +6,8 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import store from '@components/store';
 import { ToastProvider } from '@components/UI/Toast';
-import { ErrorBoundary } from 'react-error-boundary';
-import Error from '@components/error/Error';
-import { QueryClient, QueryClientProvider } from 'react-query';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -17,7 +16,7 @@ const root = ReactDOM.createRoot(
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 20 * 60 * 1000, //20분
+      gcTime: 20 * 60 * 1000, //20분 //캐싱시간
       retry: 1,
       retryDelay: 0,
     },
@@ -25,15 +24,13 @@ const queryClient = new QueryClient({
 });
 
 root.render(
-  <ErrorBoundary fallback={<Error />}>
-    <QueryClientProvider client={queryClient}>
-      <ToastProvider>
-        <BrowserRouter>
-          <Provider store={store}>
-            <App />
-          </Provider>
-        </BrowserRouter>
-      </ToastProvider>
-    </QueryClientProvider>
-  </ErrorBoundary>
+  <QueryClientProvider client={queryClient}>
+    <ToastProvider>
+      <BrowserRouter>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </BrowserRouter>
+    </ToastProvider>
+  </QueryClientProvider>
 );
