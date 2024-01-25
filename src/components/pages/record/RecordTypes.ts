@@ -1,5 +1,9 @@
 import { MealDetailData } from './DummyMealData';
 
+export interface RecordProps {
+  dateArr: Array<[number, number, string | null]>;
+}
+
 export interface MealPageProps {
   selectedMealNumber: 1 | 2 | 3 | 4 | undefined;
   date: string;

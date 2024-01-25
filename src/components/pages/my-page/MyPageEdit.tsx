@@ -11,6 +11,7 @@ import { calBMR, calBMRCalories, adjustCaloriesByGoal } from './calUserData';
 import { storeUserInfo } from '@components/store/userLoginRouter';
 // import { userData } from './DummyUserData';
 import { UserData, HealthInfoProps, MyPageEditProps } from './MypageTypes';
+import useApi, { TriggerType } from '@hooks/useApi';
 
 const goalTypes = ['근육증량', '체중감량', '체중유지', '체중증량'];
 const activityType = ['비활동적', '약간 활동적', '활동적', '매우 활동적'];
@@ -170,7 +171,7 @@ const MyPageEdit = () => {
     updateDataAndCalories(updatedData);
     // store에 업데이트된 userInfo 저장하는 로직
     dispatch(storeUserInfo(updatedData));
-    console.log(updatedData);
+    // console.log(updatedData);
     setUpdated(true);
   };
 
