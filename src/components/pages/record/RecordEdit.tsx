@@ -3,10 +3,10 @@ import styles from './recordedit.module.css';
 import RecordEditDetail from './RecordEditDetail';
 import { useEffect, useRef, useState } from 'react';
 import ButtonCommon from '@components/UI/ButtonCommon';
+import { MergingTags } from './MergingTags';
 
 interface Food {
   foodName: string;
-  foodImage: string;
   XYCoordinate: number[];
 }
 
@@ -17,7 +17,6 @@ interface MealTime {
 const RecordEdit = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  console.log(state)
 
   const params = useParams();
   const date = params.date;
@@ -33,24 +32,23 @@ const RecordEdit = () => {
   const [foods, setFoods] = useState([
     {
       foodName: '적채',
-      foodImage: '/images/salad-2756467_1280.jpg',
       XYCoordinate: [45, 200],
     },
     {
       foodName: '버섯',
-      foodImage: '/images/salad-2756467_1280.jpg',
       XYCoordinate: [250, 50],
     },
     {
       foodName: '청포도',
-      foodImage: '/images/salad-2756467_1280.jpg',
       XYCoordinate: [1000, 146.02],
     },
   ]);
+  const [imgUrl, setImgUrl] = useState("");
 
   useEffect(() => {
     if (state) {
-      setFoods(state);
+      setFoods(state.foods);
+      setImgUrl(state.imgUrl);
     }
   }, []);
 
@@ -68,7 +66,6 @@ const RecordEdit = () => {
       : setFoods([
           {
             foodName: '음식명',
-            foodImage: '/images/9gram_logo.png',
             XYCoordinate: [],
           },
           ...foods,
@@ -116,7 +113,7 @@ const RecordEdit = () => {
     const context = canvas?.getContext('2d');
 
     const image = new Image();
-    image.src = food.foodImage;
+    image.src = imgUrl;
 
     image.onload = () => {
       context?.drawImage(
@@ -149,16 +146,17 @@ const RecordEdit = () => {
       <div className={styles.datebox}>
         {dateSplit && mealTime && (
           <p className='b-small'>
-            {dateSplit[0]}년 {dateSplit[1]}월 {dateSplit[2]}일{' '}
+            {dateSplit[0]}. {dateSplit[1]}. {dateSplit[2]}{' '}
             {mealTimetoStr[mealTime]}
           </p>
         )}
       </div>
 
-      <div className={styles.imgbox}>
+      <div className={styles.imgbox} style={{position: 'relative'}}>
+        <MergingTags tagData={foods} />
         <img
           className={styles.mealimg}
-          src='https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_1280.jpg'
+          src={imgUrl || '/images/9gram_logo.png'}
           alt='식단이미지'
         />
       </div>
@@ -192,7 +190,7 @@ const RecordEdit = () => {
                       focus === food.foodName && styles.focusimg
                     }`}
                     id={food.foodName}
-                    src={food.foodImage}
+                    src='/images/9gram_logo.png'
                     alt={food.foodName}
                     onClick={(e) => handleFocus(e)}
                   />

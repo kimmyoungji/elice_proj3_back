@@ -11,21 +11,25 @@ const AddPhoto = () => {
 
   const selectFile = useRef<HTMLInputElement|null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream>();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [showModal, setShowModal] = useState(false);
   const [imgUrl, setImgUrl] = useState("");
+  const [pre, setPre] = useState("선택");
 
   useEffect(() => {
     getWebcam((stream: MediaProvider) => {
       if(!videoRef.current) return
       videoRef.current.srcObject = stream;
+      streamRef.current = stream as MediaStream;
     })
     return () => {
-      if(!videoRef.current) return
-      let s = videoRef.current.srcObject as MediaStream | null;
-      if(!s) return
-      s.getTracks()[0].stop();
+      if(!streamRef.current) return
+      streamRef.current.getTracks().forEach((track) => {
+        streamRef.current?.removeTrack(track);
+        track.stop();
+      })
     }
   }, []);
 
@@ -45,28 +49,36 @@ const AddPhoto = () => {
     }
   };
 
-
   const screenShot = () => {
     const video = document.getElementById("videoCam");
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
-    if (!video) {
-      return
-    }
+    if (!video) return;
     const cropX = (video?.offsetWidth - 350) / 2;
     const cropY = (video?.offsetHeight - 200) / 2;  
 
     context?.drawImage(video as CanvasImageSource, cropX, cropY, 350, 200, 0, 0, 350, 200);
 
     const image = canvas?.toDataURL(); 
-    const link = document.createElement("a");
-    link.href = image as string;
-    link.download = "사진촬영 테스트";
-    link.click();
     image && setImgUrl(image);
+    setPre("촬영");
     setShowModal(true);
   }
 
+  
+  const checkImg = () => {
+    if (!selectFile.current) return;
+    if (!selectFile.current.files) return;
+    const file = selectFile.current.files[0];
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImgUrl(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+    setPre("선택");
+    setShowModal(true);
+  };
 
   return (
     <div style={{ position:'relative'}}>
@@ -81,8 +93,8 @@ const AddPhoto = () => {
         />
       </div>
       <div className={styles.addbox}>
-        <input type="file" accept="image/*" style={{display:"none"}} ref={selectFile}/>
-        <div className={styles.item} onClick={()=>{selectFile.current?.click()}}>
+        <input type="file" accept="image/*" style={{display:"none"}} ref={selectFile} onChange={checkImg}/>
+        <div className={styles.item} onClick={()=>selectFile.current?.click()}>
           <img className={styles.icon} src='/icons/album.png' alt='앨범' />
           <div className={styles.text}>앨범</div>
         </div>
@@ -95,7 +107,7 @@ const AddPhoto = () => {
           <div className={styles.text}>직접입력</div>
         </div>
       </div>
-      {showModal && <CheckPhotoModal imgUrl={imgUrl} setShowModal={setShowModal} />}
+      {showModal && <CheckPhotoModal pre={pre} imgUrl={imgUrl} setShowModal={setShowModal} />}
     </div>
   );
 };

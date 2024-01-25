@@ -6,29 +6,30 @@
 
 .searchbox {
   width: 100%;
-  padding: 20px 20px 15px 20px;
+  padding: 20px 20px 5px 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  
 }
 
 .resultbox {
-  height: 435px;
+  flex: auto;
   padding: 0px 20px;
   align-items: start;
+  position: relative;
 }
 
 .tagbox {
-  min-height: 110px;
-  max-height: 150px;
-  padding: 19px 20px 0px 20px;
+  min-height: 80px;
+  margin: 19px 20px 0px 20px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
 }
 
 .btnbox {
-  padding: 19px 20px 25px 20px;
+  margin: 19px 20px 25px 20px;
   justify-content: flex-end;
 }
