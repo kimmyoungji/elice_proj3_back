@@ -12,7 +12,7 @@ export const userData = {
     weight: 90,
     height: 190,
     goal: 2 as 1 | 2 | 3 | 4,
-    targetCalories: 1200,
+    targetCalories: 2535,
     recommendIntake: {
       carbohydrates: 100,
       proteins: 60,

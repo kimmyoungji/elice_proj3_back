@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import style from './mypageedit.module.css';
 import MyPageDropdown from './MyPageDropdwon';
 import getImgPreview from '@utils/getImgPreview';
@@ -12,7 +13,7 @@ import {
   calBMRCalories,
   adjustCaloriesByGoal,
 } from './calUserData';
-
+import { storeUserInfo } from '@components/store/userLoginRouter';
 // import { userData } from './DummyUserData';
 import { UserData, HealthInfoProps, MyPageEditProps } from './MypageTypes';
 
@@ -21,12 +22,10 @@ const activityType = ['비활동적', '약간 활동적', '활동적', '매우 �
 
 const MyPageEdit = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
   const { userData, goalMsg, activityMsg } = location.state;
   const [data, setData] = useState(userData);
   const [healthData, setHealthData] = useState(data.healthInfo);
-  // const age = calAge({ data });
-  // const goalMsg = mapGoaltoMsg[data.goal];
-  // const activityMsg = mapActivitytoMsg[data.activity];
   const age = data.age;
 
   const [profileImage, setProfileImage] = useState<string | undefined>(
@@ -40,12 +39,13 @@ const MyPageEdit = () => {
   );
   const [isEditingData, setIsEditingData] = useState(false);
   const [prevWeight, setPrevWeight] = useState(healthData.weight);
-  const [prevHeight, setPrevHeight] = useState(healthData.weight);
+  const [prevHeight, setPrevHeight] = useState(healthData.height);
   const [selectedGoal, setSelectedGoal] = useState(goalMsg);
   const [selectedActity, setSelectedActity] = useState(activityMsg);
   const [isActivityDropdownVisible, setActivityDropdownVisible] =
     useState(false);
   const [isGoalDropdownVisible, setGoalDropdownVisible] = useState(false);
+  const [updated, setUpdated] = useState(false);
 
   const navigate = useNavigate();
 
@@ -72,10 +72,6 @@ const MyPageEdit = () => {
   };
 
   const updateDataAndCalories = (updatedData: UserData) => {
-    // const updateUserData: UserData = {
-    //   ...data,
-    //   ...updatedData,
-    // };
     const updatedBmr = calBMR({ data: updatedData, age });
     const updatedBmrCalories = calBMRCalories({
       bmr: updatedBmr,
@@ -161,10 +157,6 @@ const MyPageEdit = () => {
 
   const saveAndNavigate = () => {
     const updatedNutrients = getNutritionStandard(data);
-    // const updatedGoalCalories = Math.round(
-    //   adjustCaloriesByGoal({ data, bmrCalories })
-    // );
-
     const updatedData = {
       ...data,
       healthInfo: {
@@ -181,10 +173,17 @@ const MyPageEdit = () => {
     };
 
     updateDataAndCalories(updatedData);
-    // store에 저장하는 로직 추가해야함
+    // store에 업데이트된 userInfo 저장하는 로직
+    dispatch(storeUserInfo(updatedData));
     console.log(updatedData);
-    navigate('/my-page', { state: { updatedData } });
+    setUpdated(true);
   };
+
+  useEffect(() => {
+    if (updated) {
+      navigate('/my-page');
+    }
+  }, [updated, navigate]);
 
   return (
     <>

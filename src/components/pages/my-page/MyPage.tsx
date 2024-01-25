@@ -1,18 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import style from './mypage.module.css';
 import { PencilIcon } from '@assets/PencilIcon';
 import { mapGoaltoMsg, mapActivitytoMsg, findKeyByValue } from './mapMsg';
-import { userData } from './DummyUserData';
+// import { userData } from './DummyUserData';
+import { useSelector } from 'react-redux';
+import { RootState } from '@components/store';
+import { storeUserInfo } from '@components/store/userLoginRouter';
 
 const MyPage = () => {
   // 스토어에서 값 받아오기
+  const userData = useSelector((state: RootState) => state.user.userInfo);
   const [data, setData] = useState(userData);
   const [healthData, setHealthData] = useState(userData.healthInfo);
   const goalMsg = mapGoaltoMsg[healthData.goal];
   const activityMsg = mapActivitytoMsg[healthData.activityAmount];
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setData(userData);
+    setHealthData(userData.healthInfo);
+  }, [userData]);
 
   const handleIconClick = () => {
     navigate(`/my-page/edit`, {
