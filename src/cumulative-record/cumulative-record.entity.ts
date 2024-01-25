@@ -29,6 +29,10 @@ export class CumulativeRecord extends BaseEntity {
   @ApiProperty({ description: "식단 구분" })
   mealType: string;
 
+  @Column({ type: "int", nullable: true })
+  @ApiProperty({ description: "이미지 id" })
+  imageId: number;
+
   @Column({ default: 0 })
   @ApiProperty({ description: "일일 총 섭취 칼로리" })
   mealTotalCalories: number;
@@ -54,7 +58,7 @@ export class CumulativeRecord extends BaseEntity {
   dietaryFiber: number;
 
   // 여러 'record' ID를 저장하는 필드 추가
-  @Column({ type: "json", array: true, nullable: true })
-  @ApiProperty({ description: "관련된 식사 기록 ID 배열" })
-  recordIds: string;
+  // @Column({ type: "varchar", array: true, nullable: true })
+  // @ApiProperty({ description: "관련된 식사 기록 ID 배열" })
+  // recordIds: string;
 }

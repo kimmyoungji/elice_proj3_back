@@ -14,7 +14,7 @@ export class ValidateFoodPipe implements PipeTransform {
 
   private isValidFood(food: any): boolean {
     return food.hasOwnProperty('foodName') && typeof food.foodName === 'string' &&
-           food.hasOwnProperty('foodCounts') && typeof food.foodCounts === 'number' &&
+           food.hasOwnProperty('counts') && typeof food.counts === 'number' &&
            food.hasOwnProperty('foodImage') && typeof food.foodImage === 'string';
   }
 }

@@ -12,7 +12,7 @@ class Food {
     @IsInt()
     @IsNotEmpty()
     @ApiProperty({ description: "음식 수량" })
-    foodCounts: number;
+    counts: number;
 
     @IsString()
     @ApiProperty({ description: "음식 사진" })
@@ -40,8 +40,8 @@ export class RecordDto {
     @Expose()
     @IsString()
     @IsNotEmpty()
-    @ApiProperty({ description: "음식/영양 정보 id" })
-    foodInfoId: string;
+    @ApiProperty({ description: "음식 이름" })
+    foodName: string;
 
     @Expose()
     @ValidateNested({ each: true })

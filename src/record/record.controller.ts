@@ -10,14 +10,13 @@ import { ValidateFoodPipe } from "./pipes/record.pipe";
 export class RecordController {
   constructor(private recordService: RecordService) {}
 
-  // GET /records?date=yyyy-mm-dd&mealType=
+  // GET /records?date=yyyy-mm-dd
   @Get()
   @ApiOperation({ summary: "특정 날짜의 식단 조회" })
   async getDailyRecords(
-    @Query("date") date: string,      
-    @Query('mealType') mealType: string,
+    @Query("date") date: string
   ): Promise<Record[]> {
-    const records = await this.recordService.getDailyRecord(date, mealType);
+    const records = await this.recordService.getDailyRecord(date);
     return records;
   }
 
