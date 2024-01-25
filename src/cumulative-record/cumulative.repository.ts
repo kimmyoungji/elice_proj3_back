@@ -5,7 +5,7 @@ import { Injectable } from "@nestjs/common";
 import {
   CumulativeDateMealTypeDto,
   CumulativeRecordDateDto,
-} from "./dtos/cumulative-record.dto";
+} from "./dto/cumulative-record.dto";
 
 @Injectable()
 export class CumulativeRecordRepository extends Repository<CumulativeRecord> {

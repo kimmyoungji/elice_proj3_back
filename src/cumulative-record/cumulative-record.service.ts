@@ -3,8 +3,7 @@ import { CumulativeRecordRepository } from "./cumulative.repository";
 import {
   CumulativeDateMealTypeDto,
   CumulativeRecordDateDto,
-  // CumulativeRecordMonthDto,
-} from "./dtos/cumulative-record.dto";
+} from "./dto/cumulative-record.dto";
 import { plainToInstance } from "class-transformer";
 import { DataSource } from "typeorm";
 import { HealthInfoRepository } from "../user/health-info.repository";
