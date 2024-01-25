@@ -44,7 +44,6 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
       .where("DATE_TRUNC('day', entity.date) = :date", { date })
       .andWhere("entity.user_id = :userId", { userId })
       .getMany();
-    console.log("getDateMealTypeRecord result", result);
     return result;
     // 날짜를 먼저 조회하는 것 vs 유저 id를 먼저 조회하는 것 -> 무엇이 더 빠를까?
   }
