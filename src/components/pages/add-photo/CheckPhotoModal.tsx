@@ -54,12 +54,17 @@ const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
         'Content-Type': 'multipart/form-data',
       },
     });
+
+    const foodsArr = res.data.map((food: any) => ({ ...food, counts: 1 }))
+
     const data = {
       imgUrl: canvasUrl,
-      foods: res.data,
+      foods: foodsArr,
     };
-    navigate(`/record/${date}/${mealTime}/edit`,{state:data})
+    
+    navigate(`/record/${date}/${mealTime}/edit`, { state: data })
   };
+  
 
   function base64toFile(base_data: string, filename: string) {
     const arr = base_data.split(',');
