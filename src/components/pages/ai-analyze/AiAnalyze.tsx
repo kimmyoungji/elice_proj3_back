@@ -35,7 +35,7 @@ const AiAnalyze = () => {
     });
     if (questionData[questionIdx].button[idx].type === 'follow-up') {
     } else if (questionData[questionIdx].button[idx].type === 'navigate') {
-      // chats 저장, 캐싱?
+      // chats 저장
       if (questionData[questionIdx].type.questionType === '식단추천') {
         navigate(`/record/${todayDate}`);
       } else if (questionData[questionIdx].type.questionType === '목표추천') {

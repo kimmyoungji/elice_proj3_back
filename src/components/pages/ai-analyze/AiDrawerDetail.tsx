@@ -3,6 +3,8 @@ import styles from '@components/pages/ai-analyze/drawer.module.css';
 import Option from './Option';
 import { Share } from '@assets/Share';
 import { DeleteBox } from '@assets/DeleteBox';
+import { useState } from 'react';
+import MiniToast from './MiniToast';
 
 const typeType: Record<string, string> = {
   식단추천: styles.recommend,
@@ -28,48 +30,61 @@ const AiDrawerDetail = () => {
   const queryParams = new URLSearchParams(location.search);
   const date = queryParams.get('date');
 
-  const handleShare = () => {
+  const [shareToast, setShareToast] = useState(false);
+  const [deleteToast, setDeleteToast] = useState(false);
+  const handleShare = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     // 공유 API 호출
-    // 공유 toast
+    setShareToast(true);
   };
-  const handleDelete = () => {
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     // 삭제 API 호출
+    setDeleteToast(true);
   };
 
   return (
-    <div className={styles.drawer_wrapper}>
-      <div className={styles.detail_wrapper}>
-        <div className={`${styles.date} b-regular`}>{date}</div>
-        <div
-          className={`${styles.type} ${typeType[DUMMYdetaildata.questionType]} s-regular`}
-        >
-          {DUMMYdetaildata.questionType}
-        </div>
-        <div
-          className={`${styles.tag} ${tagType[DUMMYdetaildata.questionType]} b-small`}
-        >
-          {DUMMYdetaildata.question}
-        </div>
-        <Option
-          type={DUMMYdetaildata.questionType}
-          tag={DUMMYdetaildata.question}
-          option={DUMMYdetaildata.option}
-        />
-        <div className={`${styles.detail_text} r-big`}>
-          {DUMMYdetaildata.text}
-        </div>
-        <div className={styles.button_wrapper}>
-          <button className={`r-small`} onClick={handleShare}>
-            <Share />
-            공유하기
-          </button>
-          <button className={`r-small`} onClick={handleDelete}>
-            <DeleteBox />
-            삭제하기
-          </button>
+    <>
+      <div className={styles.drawer_wrapper}>
+        <div className={styles.detail_wrapper}>
+          <div className={`${styles.date} b-regular`}>{date}</div>
+          <div
+            className={`${styles.type} ${typeType[DUMMYdetaildata.questionType]} s-regular`}
+          >
+            {DUMMYdetaildata.questionType}
+          </div>
+          <div
+            className={`${styles.tag} ${tagType[DUMMYdetaildata.questionType]} b-small`}
+          >
+            {DUMMYdetaildata.question}
+          </div>
+          <Option
+            type={DUMMYdetaildata.questionType}
+            tag={DUMMYdetaildata.question}
+            option={DUMMYdetaildata.option}
+          />
+          <div className={`${styles.detail_text} r-big`}>
+            {DUMMYdetaildata.text}
+          </div>
+          <div className={styles.button_wrapper}>
+            <button className={`r-small`} onClick={handleShare}>
+              <Share />
+              공유하기
+            </button>
+            <button className={`r-small`} onClick={handleDelete}>
+              <DeleteBox />
+              삭제하기
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+      {shareToast && (
+        <MiniToast setToast={setShareToast} text='답변 URL이 복사되었습니다.' />
+      )}
+      {deleteToast && (
+        <MiniToast setToast={setDeleteToast} text='답변이 삭제되었습니다.' />
+      )}
+    </>
   );
 };
 

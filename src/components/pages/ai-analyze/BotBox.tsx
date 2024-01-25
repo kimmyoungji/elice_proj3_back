@@ -2,6 +2,7 @@ import { Scrap } from '@assets/Scrap';
 import styles from '@components/pages/ai-analyze/box.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import { useEffect, useState } from 'react';
+import MiniToast from './MiniToast';
 
 interface Props {
   toSave: boolean;
@@ -13,11 +14,17 @@ interface Props {
 const BotBox = ({ toSave, text, button, handleOnClick }: Props) => {
   const [scrap, setScrap] = useState(false);
   const [clicked, setClicked] = useState(false);
+  const [toast, setToast] = useState(false);
 
-  const handleScrap = () => {
+  const handleScrap = (e: React.MouseEvent<HTMLDivElement>) => {
     setScrap(!scrap);
-    // 스크랩되었음을 안내
-    // 스크랩 API 호출
+    if (!scrap) {
+      setToast(true);
+      // 스크랩 추가 API 호출
+    } else {
+      setToast(false);
+      // 스크랩 삭제 API 호출
+    }
   };
 
   const [delayed, setDelayed] = useState(false);
@@ -66,6 +73,9 @@ const BotBox = ({ toSave, text, button, handleOnClick }: Props) => {
             </div>
           </div>
         </div>
+      )}
+      {toast && (
+        <MiniToast setToast={setToast} text='서랍에 답변이 저장되었습니다.' />
       )}
     </>
   );
