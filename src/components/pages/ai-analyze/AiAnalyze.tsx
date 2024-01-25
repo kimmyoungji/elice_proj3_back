@@ -6,21 +6,140 @@ import { questionData } from './QuestionData';
 import { useNavigate } from 'react-router-dom';
 import getDates from '@utils/getDates';
 
-const AiAnalyze = () => {
-  const [recordText, setRecordText] = useState([]);
-  // API 호출해서 저장된 일주일치 기록이 있는지 확인하고 setRecordText(true) 혹은 chats 초기값 업데이트
+const DUMMYrecordData = [
+  {
+    date: '2024-01-01',
+    questionIdx: '1',
+    question: questionData['1'],
+    answer: '3',
+  },
+  {
+    date: '2024-01-01',
+    questionIdx: '1-3',
+    question: questionData['1-3'],
+    answer: '나에게 맞는 목표를 추천해줄래?',
+  },
+  {
+    date: '2024-01-05',
+    questionIdx: '1',
+    question: questionData['1'],
+    answer: '3',
+  },
+  {
+    date: '2024-01-05',
+    questionIdx: '1-1',
+    question: questionData['1-1'],
+    answer: '오늘 식단 추천이 필요해!',
+  },
+  {
+    date: '2024-01-05',
+    questionIdx: '1-1-2',
+    question: questionData['1-1-2'],
+    answer: '내 목표에 맞게 추천 받고 싶어!',
+  },
+  {
+    date: '2024-01-05',
+    questionIdx: '1',
+    question: questionData['1'],
+    answer: '다른 질문도 할래!',
+  },
+  {
+    date: '2024-01-05',
+    questionIdx: '1-2',
+    question: questionData['1-2'],
+    answer: '잘 하고 있는지, 식단 평가가 필요해!',
+  },
+  {
+    date: '2024-01-12',
+    questionIdx: '1',
+    question: questionData['1'],
+    answer: '3',
+  },
+  {
+    date: '2024-01-12',
+    questionIdx: '1-2',
+    question: questionData['1-2'],
+    answer: '잘 하고 있는지, 식단 평가가 필요해!',
+  },
+  {
+    date: '2024-01-12',
+    questionIdx: '1-2-1',
+    question: questionData['1-2-1'],
+    answer: '오늘 하루 내 식단은 어땠어?',
+  },
+  // {
+  //   date: '2024-01-25',
+  //   questionIdx: '1',
+  //   question: questionData['1'],
+  //   answer: '3',
+  // },
+  // {
+  //   date: '2024-01-25',
+  //   questionIdx: '1-2',
+  //   question: questionData['1-2'],
+  //   answer: '잘 하고 있는지, 식단 평가가 필요해!',
+  // },
+  // {
+  //   date: '2024-01-25',
+  //   questionIdx: '1-2-1',
+  //   question: questionData['1-2-1'],
+  //   answer: '오늘 하루 내 식단은 어땠어?',
+  // },
+];
 
-  // 현재 대화내용 저장
-  const [chats, setChats] = useState([questionData['1']]);
-  const [answer, setAnswer] = useState(['3']);
+const AiAnalyze = () => {
+  const [recordText, setRecordText] = useState(false);
+  // 저장된 일주일치 기록이 있는지 확인하고 setRecordText(true) 혹은 chats 초기값 업데이트
+
+  const { thisYear, thisMonth, thisDay } = getDates();
+  const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
+
+  const [chats, setChats] = useState([
+    {
+      date: todayDate,
+      questionIdx: '1',
+      question: questionData['1'],
+      answer: '3',
+    },
+  ]);
+  const [chatDate, setChatDate] = useState(todayDate);
 
   const [answerIdx, setAnswerIdx] = useState(3);
   const [questionIdx, setQuestionIdx] = useState('1');
   const [prevQuestionIdx, setPrevQuestionIdx] = useState('1');
 
+  useEffect(() => {
+    if (recordText) {
+      if (DUMMYrecordData[DUMMYrecordData.length - 1].date !== todayDate) {
+        setChats((prev) => [
+          ...prev,
+          ...DUMMYrecordData,
+          {
+            date: todayDate,
+            questionIdx: '1',
+            question: questionData['1'],
+            answer: '3',
+          },
+        ]);
+      } else {
+        setChats((prev) => [...prev, ...DUMMYrecordData]);
+        setQuestionIdx(DUMMYrecordData[DUMMYrecordData.length - 1].questionIdx);
+      }
+      setChatDate(DUMMYrecordData[1].date);
+    } else {
+      setChats((prev) => [
+        ...prev,
+        {
+          date: todayDate,
+          questionIdx: '1',
+          question: questionData['1'],
+          answer: '3',
+        },
+      ]);
+    }
+  }, []);
+
   const navigate = useNavigate();
-  const { thisYear, thisMonth, thisDay } = getDates();
-  const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
 
   const handleOnClick = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -52,12 +171,16 @@ const AiAnalyze = () => {
 
   useEffect(() => {
     if (answerIdx < 3) {
-      setAnswer((pre) => [
-        ...pre,
-        questionData[prevQuestionIdx].button[answerIdx].text,
+      setChats((prev) => [
+        ...prev,
+        {
+          date: todayDate,
+          questionIdx: questionIdx,
+          question: questionData[questionIdx],
+          answer: questionData[prevQuestionIdx].button[answerIdx].text,
+        },
       ]);
     }
-    setChats((prev) => [...prev, questionData[questionIdx]]);
   }, [questionIdx]);
 
   const chatEndRef = useRef<HTMLDivElement | null>(null);
@@ -65,7 +188,7 @@ const AiAnalyze = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     const timeoutId = setTimeout(() => {
       chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, 805);
+    }, 900);
     return () => clearTimeout(timeoutId);
   }, [chats]);
 
@@ -74,11 +197,14 @@ const AiAnalyze = () => {
       <>
         {chats.slice(1).map((chat, idx) => (
           <div key={`chat-${idx}`} className={styles.chats_wrapper}>
-            {idx !== 0 && <UserBox text={answer[idx]} />}
+            {(idx === 0 || chat.date !== chats[idx].date) && (
+              <div className={`${styles.date} s-regular`}>{chat.date}</div>
+            )}
+            {idx !== 0 && chat.answer !== '3' && <UserBox text={chat.answer} />}
             <BotBox
-              toSave={chat.type.question ? true : false}
-              text={chat.text}
-              button={chat.button}
+              toSave={chat.question.type.question ? true : false}
+              text={chat.question.text}
+              button={chat.question.button}
               handleOnClick={handleOnClick}
             />
           </div>
