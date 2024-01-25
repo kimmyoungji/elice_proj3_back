@@ -19,11 +19,7 @@ export class FeedbackService {
     private readonly dataSource: DataSource
   ) {}
 
-  async getFeedbacktoAI(
-    userId: string,
-    date: Timestamp,
-    responseDataDto: ResponseDataDto
-  ) {
+  async getFeedbacktoAI(userId: string, responseDataDto: ResponseDataDto) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -31,7 +27,7 @@ export class FeedbackService {
       // const question =
       //   "내가 오늘 하루 동안 먹은 식단의 영양성분은 탄수화물 500g, 단백질 50g, 지방 400g이야. 내 식단의 영양성분 구성을 평가해줘.";
       // const questionType = "식단평가";
-      const { question, questionType } = responseDataDto;
+      const { question, questionType, date } = responseDataDto;
 
       // 만약 동일 유저의 질문이 있다면, api 호출 x
       const checkdata = {
@@ -45,6 +41,7 @@ export class FeedbackService {
         feedbackData,
         queryRunner.manager
       );
+      console.log("checkResult", checkResult);
 
       if (checkResult) {
         await queryRunner.commitTransaction();
@@ -71,7 +68,7 @@ export class FeedbackService {
         // });
 
         // const outputText = chatCompletion.choices[0].message.content;
-        const outputText = "test";
+        const outputText = "test111";
         const data = {
           userId,
           question,
@@ -79,6 +76,7 @@ export class FeedbackService {
           feedback: outputText,
           feedbackDate: date,
         };
+        console.log("data", data);
         const feedbackData = new Feedback().makefeedbackDataDto(data);
         await this.feedBackRepository.saveFeedBack(
           feedbackData,

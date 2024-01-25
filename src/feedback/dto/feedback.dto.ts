@@ -10,6 +10,9 @@ export class ResponseDataDto {
   @IsNotEmpty()
   @IsString()
   question: string;
+
+  @IsNotEmpty()
+  date: Timestamp;
 }
 
 @Exclude()

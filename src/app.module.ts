@@ -26,8 +26,8 @@ console.log(typeORMConfig);
     FoodInfoApiModule,
     ScheduleModule.forRoot(),
     FoodInfoModule,
-    // FeedbackModule,
-    ImageModule
+    FeedbackModule,
+    ImageModule,
   ],
 })
 export class AppModule {}

@@ -20,16 +20,11 @@ export class FeedbackController {
   @Post("/")
   async getFeedbacktoAI(
     @Req() request: any,
-    @Query("date") date: Timestamp,
     @Body() responseDataDto: ResponseDataDto
   ) {
-    const userId = "2600b4fc-bc00-482a-9474-08c5fedbecda";
+    const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
     // const userId = request.user.userId;
-    return await this.feedbackService.getFeedbacktoAI(
-      userId,
-      date,
-      responseDataDto
-    );
+    return await this.feedbackService.getFeedbacktoAI(userId, responseDataDto);
   }
 
   @Get("/")
@@ -38,7 +33,7 @@ export class FeedbackController {
     @Query("date") date: Timestamp,
     @Query("feedbackId") feedbackId: string
   ) {
-    const userId = "1c52fabf-4b73-45a8-9d0c-75c907bbb5ca";
+    const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
     // const userId = request.user.userId;
     if (date) {
       return await this.feedbackService.getFeedbackData(userId, date);
