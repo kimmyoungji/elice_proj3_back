@@ -10,7 +10,7 @@ import { ConfigModule } from "@nestjs/config";
 import { FoodInfoModule } from "./food-info/food-info.module";
 import * as dotenv from "dotenv";
 import { UserModule } from "./user/user.module";
-import { FeedbackModule } from "./feedback/feedback.module";
+// import { FeedbackModule } from "./feedback/feedback.module";
 import { ImageModule } from "./image/image.module";
 dotenv.config();
 console.log(typeORMConfig);
@@ -26,7 +26,7 @@ console.log(typeORMConfig);
     FoodInfoApiModule,
     ScheduleModule.forRoot(),
     FoodInfoModule,
-    FeedbackModule,
+    // FeedbackModule,
     ImageModule,
   ],
 })
