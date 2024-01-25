@@ -12,14 +12,12 @@ interface Props {
   focus: string;
   foods: {
     foodName: string;
-    foodImage: string;
     XYCoordinate: number[];
   }[];
   setFoods: React.Dispatch<
     React.SetStateAction<
       {
         foodName: string;
-        foodImage: string;
         XYCoordinate: number[];
       }[]
     >
