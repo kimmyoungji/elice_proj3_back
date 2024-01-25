@@ -2,8 +2,8 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { RootState } from '../store/index';
 
-const withAuth = (WrappedComponent: React.ComponentType<any>): React.FC => {
-  const WithAuth: React.FC = (props) => {
+const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
+  const AuthComponent: React.FC = (props: any) => {
     const isLoggedIn = useSelector(
       (state: RootState) => state.user.username !== ''
     );
@@ -15,7 +15,7 @@ const withAuth = (WrappedComponent: React.ComponentType<any>): React.FC => {
 
     return <WrappedComponent {...props} />;
   };
-  return WithAuth;
+  return AuthComponent;
 };
 
-export default withAuth;
+export default WithAuth;

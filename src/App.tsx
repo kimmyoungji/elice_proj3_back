@@ -11,44 +11,44 @@ import { lazy, Suspense } from 'react';
 import { useLocation, Navigate, Route, Routes } from 'react-router-dom';
 import { TopNavKeyType } from 'typings/propTypes';
 import Loading from '@components/UI/Loading';
-// import withAuth from '@components/hoc/withAuth';
+// import WithAuth from '@components/hoc/WithAuth';
 
 const Login = lazy(() => import('@components/pages/login/Login'));
 const Auth = lazy(() => import('@components/pages/join/Auth'));
 const Join = lazy(() => import('@components/pages/join/Join'));
 
 //hoc 적용 필요시 주석 해제 후 사용
-// const Onboarding = withAuth(
+// const Onboarding = WithAuth(
 //   lazy(() => import('@components/pages/join/Onboarding'))
 // );
-// const Home = withAuth(lazy(() => import('@components/pages/home/Home')));
-// const MyPage = withAuth(lazy(() => import('@components/pages/my-page/MyPage')));
-// const MyPageEdit = withAuth(
+// const Home = WithAuth(lazy(() => import('@components/pages/home/Home')));
+// const MyPage = WithAuth(lazy(() => import('@components/pages/my-page/MyPage')));
+// const MyPageEdit = WithAuth(
 //   lazy(() => import('@components/pages/my-page/MyPageEdit'))
 // );
-// const AddPhoto = withAuth(
+// const AddPhoto = WithAuth(
 //   lazy(() => import('@components/pages/add-photo/AddPhoto'))
 // );
-// const AddPhotoSearch = withAuth(
+// const AddPhotoSearch = WithAuth(
 //   lazy(() => import('@components/pages/add-photo/AddPhotoSearch'))
 // );
-// const AiAnalyze = withAuth(
+// const AiAnalyze = WithAuth(
 //   lazy(() => import('@components/pages/ai-analyze/AiAnalyze'))
 // );
-// const AiDrawer = withAuth(
+// const AiDrawer = WithAuth(
 //   lazy(() => import('@components/pages/ai-analyze/AiDrawer'))
 // );
-// const AiDrawerDetail = withAuth(
+// const AiDrawerDetail = WithAuth(
 //   lazy(() => import('@components/pages/ai-analyze/AiDrawerDetail'))
 // );
-// // const Record = withAuth(lazy(() => import('@components/pages/record/Record')));
-// // const RecordEdit = withAuth(
+// // const Record = WithAuth(lazy(() => import('@components/pages/record/Record')));
+// // const RecordEdit = WithAuth(
 // //   lazy(() => import('@components/pages/record/RecordEdit'))
 // // );
-// const MealPage = withAuth(
+// const MealPage = WithAuth(
 //   lazy(() => import('@components/pages/record/MealPage'))
 // );
-// const Calender = withAuth(
+// const Calender = WithAuth(
 //   lazy(() => import('@components/pages/calendar/Calendar'))
 // );
 
