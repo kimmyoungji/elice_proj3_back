@@ -15,6 +15,7 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   password: process.env.DB_PASSWORD, // || dbConfig.password,
   database: process.env.DB_NAME, // || dbConfig.database,
   entities: [__dirname + "/../../**/*.entity.{js, ts}"],
+  logging: true,
   synchronize: false,
   namingStrategy: new SnakeNamingStrategy(),
   ssl: {

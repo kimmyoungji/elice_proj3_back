@@ -8,6 +8,8 @@ import { LocalAuthGuard } from './utils/local.guard';
 import { isLoggedInGuard } from './utils/isLoggedin.guard';
 import { RedirectFilter } from './utils/redirectFilter';
 import { LocalLoginDto } from './dto/localLoginDto';
+import { HealthInfo } from 'src/user/entities/health-info.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @UseFilters(new RedirectFilter())
 @ApiTags('auth')
@@ -34,8 +36,8 @@ export class AuthController {
     @UseGuards(GoogleAuthGuard) // 여기서 req.user에 user 정보가 담김
     async handleGoogleRedirect(@Req() request:any ,@Res() response:any) {
         console.log('구글로그인 진행중...')
-        const user = await this.userService.getUserInfos(request.user.userId);
-        if(user.recent_health_info_id === null){
+        const user: User & HealthInfo = await this.userService.getUserInfos(request.user.userId);
+        if(user.recentHealthInfoId === null){
             response.status(200).redirect('http://localhost:3000/onboarding/1');
         }else{
             response.status(200).redirect('http://localhost:3000/home');
@@ -65,7 +67,7 @@ export class AuthController {
         @Req() request: any, @Res() response: any){
         console.log('로그인 진행중...', request.user);
         const user = await this.userService.getUserInfos(request.user.userId);
-        if(user.recent_health_info_id === null){
+        if(user.recentHealthInfoId === null){
             response.status(200).redirect('http://localhost:3000/onboarding/1');
         }else{
             response.status(200).redirect('http://localhost:3000/home');

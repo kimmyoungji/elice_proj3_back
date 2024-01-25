@@ -2,9 +2,7 @@ import { HealthInfo } from "src/user/entities/health-info.entity";
 import {
   DeleteResult,
   EntityManager,
-  InsertResult,
-  Timestamp,
-  UpdateResult,
+  InsertResult
 } from "typeorm";
 
 export class HealthInfoRepository {

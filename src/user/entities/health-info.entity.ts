@@ -4,6 +4,7 @@ import { User } from './user.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { SaveHealthInfoDto } from '../dto/SaveHealthInfo.dto';
 import { ActivityAmount, DietGoal } from '../utils/health-info.enums';
+import { removeUndefined } from 'src/util/remove-undefined';
 
 @Entity()
 export class HealthInfo {
@@ -30,7 +31,7 @@ export class HealthInfo {
     targetWeight: number;
 
     @Column({ type: 'enum', name: "diet_goal", enum: DietGoal,  nullable: true })
-    dietGoal: DietGoal; 
+    dietGoal: DietGoal;
 
     @Column({ type: 'enum', name:'activity_amount', enum: ActivityAmount, nullable: true })
     activityAmount: ActivityAmount;
@@ -62,7 +63,7 @@ export class HealthInfo {
     userId: string;
 
     public mapHealthInfoDto(dto: SaveHealthInfoDto){
-        const healthInfo = new HealthInfo();
+        let healthInfo = new HealthInfo();
         healthInfo.weight = dto.weight;
         healthInfo.height = dto.height;
         healthInfo.targetWeight = dto.targetWeight;
@@ -70,6 +71,7 @@ export class HealthInfo {
         healthInfo.activityAmount = dto.activityAmount;
         healthInfo.targetCalories = dto.targetCalories;
         healthInfo.recommendIntake = dto.recommendIntake;
+        healthInfo = removeUndefined(healthInfo);
         return healthInfo;
     }
 }
