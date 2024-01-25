@@ -26,6 +26,9 @@ export const getKeyFromUrl = (url: string): TopNavKeyType | string => {
       if (idx === 2) {
         return 'meal';
       }
+      if (urlArr[idx - 1] === 'share') {
+        return 'id';
+      }
       return deleteHypen;
     })
     .join('');
@@ -63,7 +66,7 @@ export const getNavProps: GetNavPropsType = {
   aianalyze: { title: 'AI 분석', icon: true },
   aidrawer: { back: true, title: 'AI 분석 서랍' },
   aidrawerdetail: { back: true, title: '' },
-  share: { title: '구그램' },
+  shareid: { home: true, title: '구그램' },
   mypage: { title: '설정' },
   mypageedit: { back: true, title: '정보수정' },
 };

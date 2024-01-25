@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MiniToast from './MiniToast';
 interface Props {
+  id: string;
   date: string;
   type: string;
   tag: string | undefined;
@@ -18,12 +19,21 @@ const typeType: Record<string, string> = {
   목표추천: styles.goal,
 };
 
-const DrawerCard = ({ date, type, tag, text, option }: Props) => {
+const handleCopyClipBoard = async (text: string) => {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const DrawerCard = ({ id, date, type, tag, text, option }: Props) => {
   const [shareToast, setShareToast] = useState(false);
   const [deleteToast, setDeleteToast] = useState(false);
   const handleShare = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    // 공유 API 호출
+    handleCopyClipBoard(`http://localhost:3000/share/${id}`);
+    // 나중에 배포 url로 변경 필요!
     setShareToast(true);
   };
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {

@@ -27,6 +27,7 @@ const AiDrawer = lazy(() => import('@components/pages/ai-analyze/AiDrawer'));
 const AiDrawerDetail = lazy(
   () => import('@components/pages/ai-analyze/AiDrawerDetail')
 );
+const ShareCard = lazy(() => import('@components/pages/ai-analyze/ShareCard'));
 const Record = lazy(() => import('@components/pages/record/Record'));
 const RecordEdit = lazy(() => import('@components/pages/record/RecordEdit'));
 const MealPage = lazy(() => import('@components/pages/record/MealPage'));
@@ -68,6 +69,7 @@ function App() {
               <Route path='/ai-analyze' element={<AiAnalyze />} />
               <Route path='/ai-drawer' element={<AiDrawer />} />
               <Route path='/ai-drawer/detail' element={<AiDrawerDetail />} />
+              <Route path='/share/:id' element={<ShareCard />} />
               <Route path='/record/:selectedDate' element={<Record />} />
               <Route
                 path='/record/:date/:mealTime/edit'

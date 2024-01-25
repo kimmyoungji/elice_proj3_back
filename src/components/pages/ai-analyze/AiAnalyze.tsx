@@ -88,7 +88,7 @@ const DUMMYrecordData = [
 ];
 
 const AiAnalyze = () => {
-  const [recordText, setRecordText] = useState(false);
+  const [recordText, setRecordText] = useState(true);
   // 저장된 일주일치 기록이 있는지 확인하고 setRecordText(true) 혹은 chats 초기값 업데이트
 
   const { thisYear, thisMonth, thisDay } = getDates();
@@ -102,7 +102,6 @@ const AiAnalyze = () => {
       answer: '3',
     },
   ]);
-  const [chatDate, setChatDate] = useState(todayDate);
 
   const [answerIdx, setAnswerIdx] = useState(3);
   const [questionIdx, setQuestionIdx] = useState('1');
@@ -125,7 +124,6 @@ const AiAnalyze = () => {
         setChats((prev) => [...prev, ...DUMMYrecordData]);
         setQuestionIdx(DUMMYrecordData[DUMMYrecordData.length - 1].questionIdx);
       }
-      setChatDate(DUMMYrecordData[1].date);
     } else {
       setChats((prev) => [
         ...prev,
@@ -163,8 +161,10 @@ const AiAnalyze = () => {
         navigate('/');
       }
     } else if (questionData[questionIdx].button[idx].type === 'ai') {
-      // questionData[questionIdx].type을 body에 담아서 api 호출
-      console.log('api 호출');
+      console.log(
+        questionData[questionIdx + '-' + String(idx + 1)].type,
+        ' api 호출'
+      );
       // 결과 기다리기
     }
   };
