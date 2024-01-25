@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { userData } from '@components/pages/my-page/DummyUserData';
 
-const initialState = { userId: '', userInfo: {} };
+const initialState = { username: '', userInfo: userData };
 
 const userLoginSlice = createSlice({
   name: 'userLogin',
   initialState: initialState,
   reducers: {
     loginUser(state, action) {
-      state.userId = action.payload;
+      state.username = action.payload;
     },
     logoutUser(state) {
       Object.assign(state, initialState);
@@ -18,6 +19,6 @@ const userLoginSlice = createSlice({
   },
 });
 
-export const userLoginActions = userLoginSlice.actions;
+export const { loginUser, logoutUser, storeUserInfo } = userLoginSlice.actions;
 
 export default userLoginSlice.reducer;

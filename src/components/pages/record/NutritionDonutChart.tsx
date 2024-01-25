@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import styles from '@components/pages/record/nutritiondonutchart.module.css';
-import getNutritionStandard from '@utils/getNutritionStandard';
 import { NutritionDonutChartProps } from './RecordTypes';
 import { userData } from '../my-page/DummyUserData';
 import { nutrientNames, NutrientKey } from './recordMappingConstant';
@@ -14,7 +13,9 @@ const NutritionDonutChart = ({
   data,
   selectedMealNumber,
 }: NutritionDonutChartProps) => {
-  const [userNutritionData, setUserNutritionData] = useState(userData);
+  const [userNutritionData, setUserNutritionData] = useState(
+    userData.healthInfo
+  );
   const [mealData, setMealData] = useState(data);
   const [animationTrigger, setAnimationTrigger] = useState(false);
 
@@ -25,7 +26,7 @@ const NutritionDonutChart = ({
     }, 100);
   }, [selectedMealNumber, isShowingTotal]);
 
-  const result = getNutritionStandard(userNutritionData);
+  const result = data[selectedMealNumber].recommendNutrient;
   const circumference = 2 * Math.PI * radius;
   const standard = result
     ? [result.carbohydrates, result.proteins, result.fats, result.dietaryFiber]
