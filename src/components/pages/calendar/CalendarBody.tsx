@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import useCachingApi from '@hooks/useCachingApi';
 import useApi, { TriggerType } from '@hooks/useApi';
 
-const Cumulative_cal_DateArr = {
+const cumulative_cal_DateArr = {
   existedDate: [1, 5, 9, 30, 29],
   totalCalData: [1200, 1100, 1500, 1000, 400],
 };
@@ -23,10 +23,14 @@ const dayOfWeekArray = dayOfWeek.map((day, idx) => (
   </div>
 ));
 
-interface CalendarBodyResult {
-  existedDate: number[];
-  totalCalData: number[];
+export interface CalendarBodyResult {
+  existedDate: number[] | any[];
+  totalCalData: number[] | any[];
 }
+
+export type CumulativeCalDateArr = {
+  data: { existedDate: number[] | any[]; totalCalData: number[] | any[] };
+};
 
 const CalendarBody = () => {
   const { thisYear, thisMonth, selectedIndex, setSelectedIndex, isAlbum } =
@@ -36,7 +40,7 @@ const CalendarBody = () => {
     result: data,
   }: {
     trigger: TriggerType;
-    result: { data: CalendarBodyResult[] };
+    result: CumulativeCalDateArr;
   } = useApi({
     path: `/cumulative-record?month=${thisYear}-${returnWithZero(thisMonth)}-01`,
   });
@@ -63,7 +67,7 @@ const CalendarBody = () => {
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
           targetCalories={DUMMYtargetCalories}
-          Cumulative_cal_DateArr={data.data}
+          cumulative_cal_DateArr={data.data}
         />
       );
     });
@@ -86,7 +90,7 @@ const CalendarBody = () => {
             disabled={!selectedIndex}
             href={`/record/${thisYear}-${returnWithZero(thisMonth)}-${returnWithZero(selectedIndex)}`}
           >
-            {Cumulative_cal_DateArr['existedDate'].includes(selectedIndex)
+            {cumulative_cal_DateArr['existedDate'].includes(selectedIndex)
               ? '기록 보러 가기'
               : '기록 추가하러 가기'}
           </ButtonCommon>

@@ -6,9 +6,9 @@ interface CalendarCellsProps {
   idx: number;
   selectedIndex: number;
   setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
-  Cumulative_cal_DateArr?: {
-    existedDate: number[];
-    totalCalData: number[];
+  cumulative_cal_DateArr?: {
+    existedDate: number[] | any[];
+    totalCalData: number[] | any[];
   };
   targetCalories: number;
 }
@@ -20,7 +20,7 @@ const CalendarCells = ({
   selectedIndex,
   setSelectedIndex,
   targetCalories,
-  Cumulative_cal_DateArr,
+  cumulative_cal_DateArr,
 }: CalendarCellsProps) => {
   //눈에 보이는 실제 날짜
   const getDayNumber = (idx: number): number => {
@@ -33,9 +33,9 @@ const CalendarCells = ({
 
   //현재 날짜의 existedDate의 index
   const existedDateIndex =
-    Cumulative_cal_DateArr &&
-    Cumulative_cal_DateArr['existedDate'] &&
-    Cumulative_cal_DateArr['existedDate']?.findIndex(
+    cumulative_cal_DateArr &&
+    cumulative_cal_DateArr['existedDate'] &&
+    cumulative_cal_DateArr['existedDate']?.findIndex(
       (el) => el === getDayNumber(idx)
     );
 
@@ -46,10 +46,10 @@ const CalendarCells = ({
 
   //상태에 따른 className
   const colorCls =
-    Cumulative_cal_DateArr &&
+    cumulative_cal_DateArr &&
     existedDateIndex &&
-    Cumulative_cal_DateArr['totalCalData'] &&
-    Cumulative_cal_DateArr?.['totalCalData'][existedDateIndex] > targetCalories
+    cumulative_cal_DateArr['totalCalData'] &&
+    cumulative_cal_DateArr?.['totalCalData'][existedDateIndex] > targetCalories
       ? 'over-eat'
       : 'moderate';
 
@@ -65,7 +65,7 @@ const CalendarCells = ({
       : ``;
 
   //calory데이터 있는지 여부
-  const existedCalData = Cumulative_cal_DateArr?.['existedDate']?.includes(
+  const existedCalData = cumulative_cal_DateArr?.['existedDate']?.includes(
     getDayNumber(idx)
   );
   //데이터 있으면 타겟 칼로리 대비 섭취량에 따라 색상다르게 적용(colorCls)
@@ -98,14 +98,17 @@ const CalendarCells = ({
         {isDate && getDayNumber(idx)}
       </div>
 
-      {existedCalData && Cumulative_cal_DateArr && existedDateIndex > -1 && (
-        <p
-          key={`p-${idx}`}
-          className={`r-regular ${colorFonts + selectedFontsStyle}`}
-        >
-          {`+${Cumulative_cal_DateArr['totalCalData'][existedDateIndex]}`}
-        </p>
-      )}
+      {existedCalData &&
+        cumulative_cal_DateArr &&
+        typeof existedDateIndex === 'number' &&
+        existedDateIndex > -1 && (
+          <p
+            key={`p-${idx}`}
+            className={`r-regular ${colorFonts + selectedFontsStyle}`}
+          >
+            {`+${cumulative_cal_DateArr['totalCalData'][existedDateIndex]}`}
+          </p>
+        )}
     </div>
   );
 };
