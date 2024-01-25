@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCalendarContext } from './Calendar';
 import classes from './album.module.css';
 import Albumbody from './Albumbody';
+import { getMealsNumber } from '@utils/getMealNum';
 export type MealType = '아침' | '점심' | '저녁' | '간식';
 
 export interface DummyAlbumArrType {
@@ -46,10 +47,10 @@ const Album = () => {
   const { thisYear, thisMonth } = useCalendarContext();
   const navigate = useNavigate();
 
-  const onClickCards = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const clickedId = (e.target as HTMLDivElement).id;
+  const onClickCards = (val: string) => {
+    console.log(val);
     navigate(
-      `/record/${thisYear}-${returnWithZero(thisMonth)}-${returnWithZero(clickedId)}`
+      `/record/${thisYear}-${returnWithZero(thisMonth)}-${returnWithZero(val)}`
     );
   };
 
@@ -60,9 +61,15 @@ const Album = () => {
           <div
             className={`b-regular`}
           >{`${thisYear}.${returnWithZero(thisMonth)}.${day.date}`}</div>
-          <div className={classes.cards} onClick={onClickCards}>
+          <div className={classes.cards}>
             {day.dateArr.map((arr, idx) => (
-              <Albumbody arr={arr} idx={idx} day={day} key={`album-${idx}`} />
+              <div
+                onClick={() =>
+                  onClickCards(`${day.date}/${getMealsNumber[arr[0]]}`)
+                }
+              >
+                <Albumbody arr={arr} idx={idx} key={`album-${idx}`} />
+              </div>
             ))}
           </div>
         </div>

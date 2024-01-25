@@ -28,6 +28,7 @@ const MealPage = () => {
     findMealNumber(selectedMeal)
   );
   const [data, setData] = useState(mealDetailData);
+  const [imgData, setImgData] = useState(data[selectedMealNumber].imgurl);
   const [coordinate, setCoordinate] = useState(data[selectedMealNumber].food);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
@@ -80,11 +81,12 @@ const MealPage = () => {
                 <ButtonCommon
                   variant='default-active'
                   size='tiny'
-                  onClick={() =>
+                  onClick={() => {
+                    console.log(imgData);
                     navigate(`/record/${date}/${selectedMealTime}/edit`, {
-                      state: coordinate,
-                    })
-                  }
+                      state: { foods: coordinate, imgUrl: imgData },
+                    });
+                  }}
                 >
                   <> 수정 </>
                 </ButtonCommon>
