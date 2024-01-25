@@ -1,24 +1,16 @@
 import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
 import { FoodInfo } from "./food-info.entity";
-import { Repository } from "typeorm";
+import { EntityManager } from "typeorm";
 import { FoodInfoDto } from "./dto/food-info.dto";
 
 @Injectable()
-export class FoodInfoRepository extends Repository<FoodInfo> {
-  constructor(
-    @InjectRepository(FoodInfo)
-    private foodInfoRepository: Repository<FoodInfo>
-  ) {
-    super(
-      foodInfoRepository.target,
-      foodInfoRepository.manager,
-      foodInfoRepository.queryRunner
-    );
-  }
-
-  async getFoodList(keyword: string): Promise<FoodInfo[]> {
-    const result = await this.createQueryBuilder("entity")
+export class FoodInfoRepository {
+  async getFoodList(
+    keyword: string,
+    manager: EntityManager
+  ): Promise<FoodInfo[]> {
+    const result = await manager
+      .createQueryBuilder(FoodInfo, "entity")
       .select(["entity.foodInfoId", "entity.foodName"])
       .where("REPLACE(entity.food_name, ' ', '') like :keyword", {
         keyword: `%${keyword}%`,
@@ -29,8 +21,13 @@ export class FoodInfoRepository extends Repository<FoodInfo> {
     return result;
   }
 
-  async getFoodNextList(keyword: string, lastFoodId: string) {
-    const result = await this.createQueryBuilder("entity")
+  async getFoodNextList(
+    keyword: string,
+    lastFoodId: string,
+    manager: EntityManager
+  ) {
+    const result = await manager
+      .createQueryBuilder(FoodInfo, "entity")
       .select(["entity.foodInfoId", "entity.foodName"])
       .where("REPLACE(entity.food_name, ' ', '') like :keyword", {
         keyword: `%${keyword}%`,
@@ -42,8 +39,12 @@ export class FoodInfoRepository extends Repository<FoodInfo> {
     return result;
   }
 
-  async getFoodInfo(foodName: string): Promise<FoodInfoDto> {
-    const result = await this.createQueryBuilder("entity")
+  async getFoodInfo(
+    foodName: string,
+    manager: EntityManager
+  ): Promise<FoodInfoDto> {
+    const result = await manager
+      .createQueryBuilder(FoodInfo, "entity")
       .where("REPLACE(entity.food_name, ' ', '') like :foodName", {
         foodName: `%${foodName}%`,
       })
@@ -52,8 +53,12 @@ export class FoodInfoRepository extends Repository<FoodInfo> {
     return result;
   }
 
-  async getFoodInfoById(foodInfoId: string): Promise<FoodInfoDto> {
-    const result = await this.createQueryBuilder("entity")
+  async getFoodInfoById(
+    foodInfoId: string,
+    manager: EntityManager
+  ): Promise<FoodInfoDto> {
+    const result = await manager
+      .createQueryBuilder(FoodInfo, "entity")
       .where("entity.food_info_id = :foodInfoId", { foodInfoId })
       .getOneOrFail();
     //getOneOrFail: 결과값 없을 경우 EntityNotFoundError 던짐
