@@ -1,17 +1,16 @@
 import { useEffect } from 'react';
 import { API_FETCHER, ApiMethods } from '@utils/axiosConfig';
 import useMutationggu from './useMutationggu';
-import { getKeyFromUrl } from '@utils/getNavProps';
 
 interface UseApiParams {
   method?: ApiMethods;
-  path?: string;
+  path: string;
   data?: any;
   shouldInitFetch?: boolean;
   initialResult?: string;
   gcTime?: number;
-  applyResult: boolean;
-  isShowBoundary: boolean;
+  applyResult?: boolean;
+  isShowBoundary?: boolean;
 }
 
 const useCachingApi = async ({
@@ -37,7 +36,7 @@ const useCachingApi = async ({
     error,
   } = useMutationggu(
     keyArr,
-    async (data) =>
+    async (data = triggerData) =>
       await API_FETCHER[triggerMethod as ApiMethods](triggerPath, data),
     gcTime,
     applyResult,
