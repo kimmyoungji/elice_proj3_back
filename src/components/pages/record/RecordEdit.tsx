@@ -169,7 +169,7 @@ const RecordEdit = () => {
           onMouseEnter={handleEnter}
           onMouseLeave={handleLeave}
         >
-          {foods.map((food: Food, index: number) => (
+          {foods && foods.map((food: Food, index: number) => (
             <div key={index} className={styles.tagitem}>
               <div className={styles.tagimgwrap}>
                 {food.XYCoordinate.length === 0 ? (

@@ -1,10 +1,16 @@
 import ButtonCommon from '@components/UI/ButtonCommon';
 import InputCommon from '../../UI/InputCommon';
 import styles from './addphotosearch.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AddTag from './AddTag';
 import DeleteTag from './DeleteTag';
 import { useNavigate, useParams } from 'react-router-dom';
+import useApi from '@hooks/useApi';
+
+interface FoodInfo {
+  foodInfoId: string;
+  foodName: string;
+}
 
 const AddPhotoSearch = () => {
   const navigate = useNavigate();
@@ -15,26 +21,43 @@ const AddPhotoSearch = () => {
   const [searchInput, setSearchInput] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
+  const [searchResults, setSearchResults] = useState(['']);
+  const [foodInfo, setFoodInfo] = useState<FoodInfo[]>([]);
+
+  const { result, trigger } = useApi({
+    path: `/food-info/foods?keyword=${searchInput}`,
+  });
 
   const handleClick = () => {
-    setIsSearching(true);
-    //api 호출 로직 작성 예정 (로직 완료 시, setClicked false)
+    if (!searchInput) return;
+    if (searchResults.length >= 10) return;
+    trigger({});
   };
 
-  const tagsArr:object[] = [];
-  tags.map((tag) => (
-    tagsArr.push(
-      {
-        foodName: tag,
-        foodImage: '/images/9gram_logo.png',
-        XYCoordinate: [],
-      },
-    )
+  useEffect(() => {
+    if (!result) return;
+    const newResults = result.data.map((food: FoodInfo) => (
+      food.foodName.includes('_')
+        ? food.foodName.split('_')[1]
+        : food.foodName
   ));
+    setSearchResults(newResults);
+    setFoodInfo(result.data);
+    setIsSearching(true);
+  },[result])
+
+  const tagsArr: object[] = [];
+  tags.map((tag) =>
+    tagsArr.push({
+      foodName: tag,
+      XYCoordinate: [],
+      counts: 1,
+    })
+  );
 
   const addMeal = () => {
     navigate(`/record/${date}/${mealTime}/edit`, { state: tagsArr });
-  }
+  };
 
   return (
     <div className={styles.container}>
@@ -46,8 +69,9 @@ const AddPhotoSearch = () => {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setSearchInput(e.target.value);
             setIsSearching(false);
-          }
-          }
+            setSearchResults([]);
+            setFoodInfo([]);
+          }}
         />
         <ButtonCommon
           size='small'
@@ -59,7 +83,16 @@ const AddPhotoSearch = () => {
       </div>
       <div className={styles.resultbox}>
         {isSearching && (
-          <AddTag props={searchInput} tags={tags} setTags={setTags} setIsSearching={setIsSearching} />
+          <AddTag
+            searchInput={searchInput}
+            tags={tags}
+            setTags={setTags}
+            setIsSearching={setIsSearching}
+            searchResults={searchResults}
+            foodInfo={foodInfo}
+            setSearchResults={setSearchResults}
+            setFoodInfo={setFoodInfo}
+          />
         )}
       </div>
       <div className={styles.tagbox}>
@@ -67,7 +100,11 @@ const AddPhotoSearch = () => {
       </div>
       <div className={styles.btnbox}>
         {tags.length ? (
-          <ButtonCommon size='big' variant='default-active' onClickBtn={addMeal}>
+          <ButtonCommon
+            size='big'
+            variant='default-active'
+            onClickBtn={addMeal}
+          >
             식단 추가하기
           </ButtonCommon>
         ) : (
