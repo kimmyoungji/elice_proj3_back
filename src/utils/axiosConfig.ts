@@ -16,7 +16,15 @@ const config: originRequestType = {
   },
 };
 
+const config2: originRequestType = {
+  baseURL: '/image',
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+};
+
 export const api: AxiosInstance = axios.create(config); // 인스턴스
+export const api2: AxiosInstance = axios.create(config2);
 
 // //refresh token api
 export async function postRefreshToken(): Promise<AxiosResponse<any, any>> {
@@ -37,6 +45,24 @@ api.interceptors.request.use(
     //요청 data가 Object일 때
     else if (req.data && req.data instanceof Object) {
       req.headers['Content-Type'] = 'application/json';
+    }
+
+    return req;
+  },
+  (err) => {
+    console.log('인터셉터에서 요청에러', err);
+  }
+);
+
+api2.interceptors.request.use(
+  (req) => {
+    //요청 data가 formData일때
+    if (req.data && req.data instanceof FormData) {
+      req.headers['Content-Type'] = 'multipart/form-data';
+    }
+    //요청 data가 Object일 때
+    else if (req.data && req.data instanceof Object) {
+      // req.headers['Content-Type'] = 'application/json';
     }
 
     return req;

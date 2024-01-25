@@ -1,8 +1,9 @@
 import CarlendarHeader from './CalendarHeader';
 import CalendarBody from './CalendarBody';
-import { createContext } from 'react';
+import { createContext, useEffect } from 'react';
 import { Dispatch, ReactElement, useContext, useState } from 'react';
 import getDates from '../../../utils/getDates';
+import useCachingApi from '@hooks/useCachingApi';
 
 const CalendarContext = createContext<
   | {

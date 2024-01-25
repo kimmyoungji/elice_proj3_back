@@ -1,19 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import style from './mypage.module.css';
 import { PencilIcon } from '@assets/PencilIcon';
 import { mapGoaltoMsg, mapActivitytoMsg, findKeyByValue } from './mapMsg';
-import { userData, UserData } from './DummyUserData';
+// import { userData } from './DummyUserData';
+import { useSelector } from 'react-redux';
+import { RootState } from '@components/store';
+import { storeUserInfo } from '@components/store/userLoginRouter';
 
 const MyPage = () => {
   // 스토어에서 값 받아오기
+  const userData = useSelector((state: RootState) => state.user.userInfo);
   const [data, setData] = useState(userData);
-  const goalMsg = mapGoaltoMsg[data.goal];
-  const activityMsg = mapActivitytoMsg[data.activity];
-
+  const [healthData, setHealthData] = useState(userData.healthInfo);
+  const goalMsg = mapGoaltoMsg[healthData.goal];
+  const activityMsg = mapActivitytoMsg[healthData.activityAmount];
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setData(userData);
+    setHealthData(userData.healthInfo);
+  }, [userData]);
+
   const handleIconClick = () => {
-    navigate(`/my-page/edit`);
+    navigate(`/my-page/edit`, {
+      state: { userData: data, healthData, goalMsg, activityMsg },
+    });
   };
 
   const mypageInfo = [
@@ -21,8 +33,8 @@ const MyPage = () => {
       title: '신체 데이터',
       content: (
         <>
-          {data.height} cm <span style={{ color: 'black' }}>/</span>{' '}
-          {data.weight} kg
+          {healthData.height} cm <span style={{ color: 'black' }}>/</span>{' '}
+          {healthData.weight} kg
         </>
       ),
       titleClass: style.infoTitle,
@@ -40,10 +52,10 @@ const MyPage = () => {
     <>
       <div className={style.userProfileArea}>
         <div className={style.userProfileContainer}>
-          {data.img ? (
+          {data.profileImage ? (
             <img
               className={style.userProfile}
-              src={data.img}
+              src={data.profileImage}
               alt='사용자 프로필'
             />
           ) : (
@@ -65,7 +77,9 @@ const MyPage = () => {
         </div>
         <div className={style.goaltInfo}>
           <div className={style.goalTitle}>목표 칼로리</div>
-          <div className={style.goalDetail}>{data.targetCalories}kcal</div>
+          <div className={style.goalDetail}>
+            {healthData.targetCalories}kcal
+          </div>
         </div>
       </div>
 
