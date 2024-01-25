@@ -44,8 +44,8 @@ export class CumulativeDateMealTypeDto {
 
   @Expose()
   @ApiProperty({ description: "식사 종류" })
-  @IsNotEmpty()
-  mealType: string;
+  @IsInt()
+  mealType: number;
 
   @Expose()
   @ApiProperty({ description: "하루 섭취한 총 칼로리" })

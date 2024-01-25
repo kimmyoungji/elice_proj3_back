@@ -38,7 +38,6 @@ export class CumulativeRecordService {
         queryRunner.manager
       );
       totalResult = plainToInstance(CumulativeRecordDateDto, totalResult);
-      console.log("totalResult Service", totalResult);
 
       // [HealthInfo Table] - 3) targetCalories, 4) recommendNutrient
       const HealthInfoResult = this.healthInfoRepository.findHealthInfoByUserId(

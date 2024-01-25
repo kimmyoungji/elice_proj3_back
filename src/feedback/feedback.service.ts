@@ -1,9 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { FeedbackRepository } from "./feedback.repository";
-import { DataSource, Timestamp } from "typeorm";
+import { DataSource, Or, Timestamp } from "typeorm";
 import { Feedback } from "./feedback.entity";
 import { GetFeedbackDataDto, ResponseDataDto } from "./dto/feedback.dto";
 import { plainToInstance } from "class-transformer";
+import { CumulativeRecordRepository } from "src/cumulative-record/cumulative.repository";
+import { UserRepository } from "src/user/user.repository";
 
 const dotenv = require("dotenv");
 const { OpenAI } = require("openai");
@@ -16,20 +18,22 @@ const openai = new OpenAI();
 export class FeedbackService {
   constructor(
     private feedBackRepository: FeedbackRepository,
+    private cumulativeRepository: CumulativeRecordRepository,
+    private userRepository: UserRepository,
     private readonly dataSource: DataSource
   ) {}
 
-  async getFeedbacktoAI(userId: string, responseDataDto: ResponseDataDto) {
+  async getFeedbacktoAI(
+    userId: string,
+    date: Date,
+    responseDataDto: ResponseDataDto
+  ) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      // const question =
-      //   "내가 오늘 하루 동안 먹은 식단의 영양성분은 탄수화물 500g, 단백질 50g, 지방 400g이야. 내 식단의 영양성분 구성을 평가해줘.";
-      // const questionType = "식단평가";
-      const { question, questionType, date } = responseDataDto;
+      const { question, questionType } = responseDataDto;
 
-      // 만약 동일 유저의 질문이 있다면, api 호출 x
       const checkdata = {
         userId,
         question,
@@ -41,12 +45,37 @@ export class FeedbackService {
         feedbackData,
         queryRunner.manager
       );
-      console.log("checkResult", checkResult);
-
+      // 만약 동일 유저의 질문이 있다면, api 호출 x
       if (checkResult) {
         await queryRunner.commitTransaction();
         return checkResult.feedback;
       } else {
+        // 만약 동일 유저의 질문이 없다면, api 호출
+        const totalResult = await this.cumulativeRepository.getDateRecord(
+          date,
+          userId,
+          queryRunner.manager
+        );
+        const userInfo = await this.userRepository.findUserInfosByUserId(
+          userId,
+          queryRunner.manager
+        );
+        // 추후 인터셉터로 빼기
+        let questionDetail = "";
+        switch (questionType) {
+          case "식단평가":
+            questionDetail = `내가 오늘 하루 동안 먹은 식단의 영양성분은 탄수화물 ${totalResult.carbohydrates}g, 단백질 ${totalResult.proteins}g, 지방 ${totalResult.fats}g, 식이섬유 ${totalResult.dietaryFiber}g이야. 내 식단의 영양성분 구성을 평가해줘.`;
+          case "식단추천":
+            questionDetail = `나의 현재 몸무게는 ${userInfo[0].weight}kg이고 나는 ${userInfo[0].targetWeight}kg까지 몸무게를 빼고싶어. 다이어트 하기에 좋은 식단을 추천해줘`;
+          case "목표추천":
+            questionDetail = `나의 현재 몸무게는 ${userInfo[0].weight}kg이고 나는 ${userInfo[0].targetWeight}kg까지 몸무게를 빼고싶어. 나의 식단 기록 목표를 추천해줘`;
+        }
+
+        const gender = (userInfo.gender = 1
+          ? "남자야"
+          : (userInfo.gender = 2 ? "여자야" : "사람이야"));
+        const userInfoDetail = `유저는 키가 ${userInfo.height}cm이고 몸무게가 ${userInfo.weight}kg인 ${gender}`;
+
         // ChatGPT API 호출
         // const chatCompletion = await openai.chat.completions.create({
         //   messages: [
@@ -57,11 +86,11 @@ export class FeedbackService {
         //     },
         //     {
         //       role: "assistant",
-        //       content: "유저는 키가 160cm이고 몸무게가 50kg인 여자야",
+        //       content: userInfoDetail,
         //     },
         //     {
         //       role: "user",
-        //       content: question,
+        //       content: questionDetail,
         //     },
         //   ],
         //   model: "gpt-3.5-turbo",
@@ -76,7 +105,6 @@ export class FeedbackService {
           feedback: outputText,
           feedbackDate: date,
         };
-        console.log("data", data);
         const feedbackData = new Feedback().makefeedbackDataDto(data);
         await this.feedBackRepository.saveFeedBack(
           feedbackData,
@@ -93,7 +121,10 @@ export class FeedbackService {
     }
   }
 
-  async getFeedbackData(userId: string, date: Timestamp) {
+  async getFeedbackData(
+    userId: string,
+    date: Date
+  ): Promise<GetFeedbackDataDto[]> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -118,18 +149,28 @@ export class FeedbackService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      // health-info 테이블과 연결
-      // const healthInfoResult = this.healthInfoRepository.getFeedbackDetailData(
-      //   feedbackId,
-      //   queryRunner.manager
-      // );
-      const feedbackResult =
-        await this.feedBackRepository.getFeedbackDetailData(
-          feedbackId,
-          queryRunner.manager
-        );
-      await queryRunner.commitTransaction();
-      return feedbackResult;
+      let feedbackResult = await this.feedBackRepository.getFeedbackDetailData(
+        feedbackId,
+        queryRunner.manager
+      );
+      feedbackResult = plainToInstance(GetFeedbackDataDto, feedbackResult);
+      if (
+        feedbackResult.questionType === "목표추천" ||
+        (feedbackResult.questionType === "식단추천" &&
+          feedbackResult.question === "내 목표에 맞게 추천받고 싶어")
+      ) {
+        // health-info 테이블과 연결
+        const healthInfoResult =
+          await this.userRepository.findUserInfosByUserId(
+            userId,
+            queryRunner.manager
+          );
+        await queryRunner.commitTransaction();
+        return { feedbackResult, healthInfoResult };
+      } else {
+        await queryRunner.commitTransaction();
+        return { feedbackResult, healthInfoResult: null };
+      }
     } catch (err) {
       await queryRunner.rollbackTransaction();
       throw err;

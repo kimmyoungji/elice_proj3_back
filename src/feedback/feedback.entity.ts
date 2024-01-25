@@ -41,7 +41,7 @@ export class Feedback {
 
   @Column({ type: "timestamp with time zone" })
   @CreateDateColumn()
-  feedbackDate: Timestamp;
+  feedbackDate: Date;
 
   public makefeedbackDataDto(
     makeFeedbackDataDto: MakeFeedbackDataDto

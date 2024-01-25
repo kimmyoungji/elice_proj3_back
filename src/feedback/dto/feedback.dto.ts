@@ -10,9 +10,6 @@ export class ResponseDataDto {
   @IsNotEmpty()
   @IsString()
   question: string;
-
-  @IsNotEmpty()
-  date: Timestamp;
 }
 
 @Exclude()
@@ -30,7 +27,7 @@ export class MakeFeedbackDataDto {
   @Expose()
   @IsNotEmpty()
   @IsDate()
-  feedbackDate: Timestamp;
+  feedbackDate: Date;
 
   @Expose()
   @IsNotEmpty()
@@ -58,7 +55,7 @@ export class GetFeedbackDataDto {
   @Expose()
   @IsNotEmpty()
   @IsDate()
-  feedbackDate: Timestamp;
+  feedbackDate: Date;
 
   @Expose()
   @IsNotEmpty()
@@ -81,7 +78,7 @@ export class CheckFeedbackDataDto {
   @Expose()
   @IsNotEmpty()
   @IsDate()
-  feedbackDate: Timestamp;
+  feedbackDate: Date;
 
   @Expose()
   @IsNotEmpty()

@@ -12,6 +12,14 @@ export class FoodInfoService {
     return result;
   }
 
+  async getFoodNextList(keyword: string, lastFood: string) {
+    const result = await this.foodInfoRepository.getFoodNextList(
+      keyword,
+      lastFood
+    );
+    return result;
+  }
+
   async getFoodInfo(foodName: string): Promise<FoodInfoDto> {
     const result = await this.foodInfoRepository.getFoodInfo(foodName);
     return plainToInstance(FoodInfoDto, result);

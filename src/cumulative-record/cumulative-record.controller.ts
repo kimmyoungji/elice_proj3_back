@@ -26,7 +26,7 @@ export class CumulativeRecordController {
       if (date) {
         const { totalResult, HealthInfoResult } =
           await this.cumulariveRecordService.getDateRecord(date, userId);
-        const { totalCalories, ...datas } = totalResult[0];
+        const { totalCalories, ...datas } = totalResult;
         const { targetCalories, recommendIntake } = await HealthInfoResult;
         const { mealTypeResult, mealTypeImage } =
           await this.cumulariveRecordService.getDateMealTypeRecord(
@@ -92,8 +92,14 @@ export class CumulativeRecordController {
         result.mealTotalCalories,
         mealTypeImage[index],
       ]);
-
-      response.status(200).json({ dateArr: dateArr });
+      const includeArr = mealTypeResult.map((item) => item.mealType);
+      for (let i = 1; i <= 4; i++) {
+        if (!includeArr.includes(i)) {
+          dateArr.push([i, 0, null]);
+        }
+      }
+      const sortedDateArr = dateArr.sort((a, b) => a[0] - b[0]);
+      response.status(200).json({ dateArr: sortedDateArr });
     } catch (error) {
       throw error;
     }
@@ -120,10 +126,10 @@ export class CumulativeRecordController {
           page,
           userId
         );
-      const groupedData = new Map<string, any[]>();
+      const groupedData = new Map<number, any[]>();
 
       mealData.forEach((item, index) => {
-        const dateKey = new Date(item.date).getDate().toString();
+        const dateKey = parseInt(new Date(item.date).getDate().toString());
         if (!groupedData.has(dateKey)) {
           groupedData.set(dateKey, []);
         }

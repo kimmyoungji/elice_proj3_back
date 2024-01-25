@@ -23,6 +23,23 @@ export class FoodInfoRepository extends Repository<FoodInfo> {
       .where("REPLACE(entity.food_name, ' ', '') like :keyword", {
         keyword: `%${keyword}%`,
       })
+      .orderBy("entity.food_name", "ASC")
+      .take(10)
+      .getMany();
+    return result;
+  }
+
+  async getFoodNextList(keyword: string, lastFood: string) {
+    const result = await this.createQueryBuilder("entity")
+      .select(["entity.foodInfoId", "entity.foodName"])
+      .where("REPLACE(entity.food_name, ' ', '') like :keyword", {
+        keyword: `%${keyword}%`,
+      })
+      .andWhere("REPLACE(entity.food_name, ' ', '') > :lastFood", {
+        lastFood: lastFood.replace(" ", ""),
+      })
+      .orderBy("entity.food_name", "ASC")
+      .take(10)
       .getMany();
     return result;
   }

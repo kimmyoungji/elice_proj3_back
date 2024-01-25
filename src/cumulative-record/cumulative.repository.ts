@@ -14,7 +14,7 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
     date: Date,
     userId: string,
     manager: EntityManager
-  ): Promise<CumulativeRecordDateDto[]> {
+  ): Promise<CumulativeRecordDateDto> {
     const cumulativeResult = await manager
       .createQueryBuilder(CumulativeRecord, "entity")
       .select("entity.userId", "userId")
@@ -27,10 +27,12 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
       .addSelect("CAST(SUM(entity.proteins) AS INTEGER)", "proteins")
       .addSelect("CAST(SUM(entity.fats) AS INTEGER)", "fats")
       .addSelect("CAST(SUM(entity.dietaryFiber) AS INTEGER)", "dietaryFiber")
-      .where("DATE_TRUNC('day', entity.date) = :date", { date })
+      .where("DATE_TRUNC('day', entity.date) = :date", {
+        date,
+      })
       .andWhere("entity.user_id = :userId", { userId })
       .groupBy("entity.user_id, entity.date") // 순서에 따른 조회 속도 확인하기
-      .getRawMany();
+      .getRawOne();
     return cumulativeResult;
   }
 
@@ -45,6 +47,7 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
       .select(["entity.mealType", "entity.mealTotalCalories", "entity.imageId"])
       .where("DATE_TRUNC('day', entity.date) = :date", { date })
       .andWhere("entity.user_id = :userId", { userId })
+      .orderBy("entity.mealType", "ASC")
       .getMany();
     return result;
     // 날짜를 먼저 조회하는 것 vs 유저 id를 먼저 조회하는 것 -> 무엇이 더 빠를까?

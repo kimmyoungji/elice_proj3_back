@@ -43,18 +43,13 @@ export class FeedbackRepository {
     try {
       const { userId, question, questionType, feedbackDate } =
         checkfeedbackData;
-      // const date = new Date(feedbackDate)
-      console.log("feedbackDate", feedbackDate);
       const result = await manager
         .createQueryBuilder(Feedback, "feedback")
         .select("feedback.feedback")
         .where("feedback.user_id =:userId", { userId })
-        .where(
-          "DATE_TRUNC('day', feedback.feedback_date) = date_format(:feedbackDate, '%Y-%m-%d')",
-          {
-            feedbackDate,
-          }
-        )
+        .where("DATE_TRUNC('day', feedback.feedback_date) =:feedbackDate", {
+          feedbackDate,
+        })
         .andWhere("feedback.questionType = :questionType", { questionType })
         .andWhere("feedback.question =:question", { question })
         .getOne();
@@ -66,7 +61,7 @@ export class FeedbackRepository {
 
   async getFeedbackData(
     userId: string,
-    date: Timestamp,
+    date: Date,
     manager: EntityManager
   ): Promise<GetFeedbackDataDto[]> {
     try {

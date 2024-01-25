@@ -1,4 +1,5 @@
 // import { User } from "src/user/user.entity";
+import { MealType } from "src/record/record.enum";
 import {
   BaseEntity,
   Column,
@@ -25,8 +26,8 @@ export class CumulativeRecord extends BaseEntity {
   // @ManyToOne(() => User, (user) => user.userId, { cascade: true })
   userId: string;
 
-  @Column()
-  mealType: string;
+  @Column({ type: "enum", name: "meal_type", enum: MealType, nullable: true })
+  mealType: MealType;
 
   @Column({ type: "int", default: 0 })
   mealTotalCalories: number;

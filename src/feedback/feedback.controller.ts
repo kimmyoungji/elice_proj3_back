@@ -20,30 +20,50 @@ export class FeedbackController {
   @Post("/")
   async getFeedbacktoAI(
     @Req() request: any,
+    @Query("date") date: Date,
     @Body() responseDataDto: ResponseDataDto
   ) {
     const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
     // const userId = request.user.userId;
-    return await this.feedbackService.getFeedbacktoAI(userId, responseDataDto);
+    return await this.feedbackService.getFeedbacktoAI(
+      userId,
+      date,
+      responseDataDto
+    );
   }
 
   @Get("/")
   async getFeedbackData(
     @Req() request: any,
-    @Query("date") date: Timestamp,
-    @Query("feedbackId") feedbackId: string
+    @Query("date") date: Date,
+    @Query("feedbackId") feedbackId: string,
+    @Res() response: any
   ) {
     const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
     // const userId = request.user.userId;
     if (date) {
-      return await this.feedbackService.getFeedbackData(userId, date);
+      const data = await this.feedbackService.getFeedbackData(userId, date);
+      response.status(200).json({
+        data: data,
+      });
     }
 
     if (feedbackId) {
-      return await this.feedbackService.getFeedbackDetailData(
-        userId,
-        feedbackId
-      );
+      const { feedbackResult, healthInfoResult } =
+        await this.feedbackService.getFeedbackDetailData(userId, feedbackId);
+      if (healthInfoResult) {
+        response.status(200).json({
+          ...feedbackResult,
+          option: {
+            goal: healthInfoResult[0].diet_goal,
+            targetCalories: healthInfoResult[0].target_calories,
+          },
+        });
+      } else {
+        response.status(200).json({
+          ...feedbackResult,
+        });
+      }
     }
   }
 
