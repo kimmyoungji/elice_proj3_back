@@ -12,15 +12,15 @@ export class FoodInfoController {
   // @UseGuards(isLoggedInGuard)
   async getFoodInfo(
     @Query("keyword") keyword: string,
-    @Query("lastFood") lastFood: string,
+    @Query("lastFoodId") lastFoodId: string,
     @Query("foodName") foodName: string,
     @Query("foodInfoId") foodInfoId: string
   ) {
     if (keyword) {
-      if (!lastFood) {
+      if (!lastFoodId) {
         return await this.foodInfoService.getFoodList(keyword);
       } else {
-        return await this.foodInfoService.getFoodNextList(keyword, lastFood);
+        return await this.foodInfoService.getFoodNextList(keyword, lastFoodId);
       }
     }
     // 리스트에 없던 경우
