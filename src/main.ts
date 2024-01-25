@@ -38,7 +38,7 @@ async function bootstrap() {
   app.use(cookieParser(process.env.SESSION_SECRET));
 
   // api 프리픽스 설정
-  app.setGlobalPrefix("api");
+  app.setGlobalPrefix("/api");
 
   // dto 유효성 검사 설정
   app.useGlobalPipes(

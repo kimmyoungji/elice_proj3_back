@@ -40,14 +40,13 @@ export class CumulativeRecordService {
 
       // [HealthInfo Table] - 3) targetCalories, 4) recommendNutrient
       // findHealthInfoByUserId에 date 추가 필요
-      // const healthUserId = "e3794989-f37a-4edf-95d2-eb305c23b695";
-      // const HealthInfoResult = this.healthInfoRepository.findHealthInfoByUserId(
-      //   // date,
-      //   healthUserId,
-      //   queryRunner.manager
-      // );
-      // console.log("HealthInfoResult", (await HealthInfoResult).targetCalories);
-      // console.log("HealthInfoResult", (await HealthInfoResult).recommendIntake);
+      const HealthInfoResult =
+        this.healthInfoRepository.findRecentHealthInfoByUserId(
+          userId,
+          queryRunner.manager
+        );
+      console.log("HealthInfoResult", (await HealthInfoResult).targetCalories);
+      console.log("HealthInfoResult", (await HealthInfoResult).recommendIntake);
 
       await queryRunner.commitTransaction();
       const result = {
