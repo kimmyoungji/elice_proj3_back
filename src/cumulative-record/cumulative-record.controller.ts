@@ -107,21 +107,22 @@ export class CumulativeRecordController {
     try {
       const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1"; // 임의로
       // const userId = request.user.userId;
-      const mealData = await this.cumulariveRecordService.getMonthDetailRecord(
-        month,
-        page,
-        userId
-      );
-      console.log("mealData", mealData);
-
+      const { mealData, mealTypeImage } =
+        await this.cumulariveRecordService.getMonthDetailRecord(
+          month,
+          page,
+          userId
+        );
       const groupedData = new Map<string, any[]>();
 
-      mealData.forEach((item) => {
+      mealData.forEach((item, index) => {
         const dateKey = new Date(item.date).getDate().toString();
         if (!groupedData.has(dateKey)) {
           groupedData.set(dateKey, []);
         }
-        groupedData.get(dateKey).push([item.mealType, item.mealTotalCalories]);
+        groupedData
+          .get(dateKey)
+          .push([item.mealType, item.mealTotalCalories, mealTypeImage[index]]);
       });
       const transformedData = [];
       groupedData.forEach((dateArr, date) => {
