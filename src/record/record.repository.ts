@@ -35,11 +35,11 @@ async createRecord(recordDto: RecordDto): Promise<Record[]> {
   const { userId, mealType, foods, ...restOfRecordDto } = recordDto;
   // 'restOfRecordDto'에는 'RecordDto'의 'userId', 'mealType', 'foods'를 제외한 모든 속성들이 포함됩니다.
   const records: Record[] = [];
-  let cumulativeTotalCalories = 0;
   let cumulativeCarbohydrates = 0;
   let cumulativeProteins = 0;
   let cumulativeFats = 0;
-  let cumulativeDietaryFiber = 0;  
+  let cumulativeDietaryFiber = 0;
+  let cumulativeTotalCalories = 0;
 
     for (const food of foods) {
       const foodInfo = await this.foodInfoRepository.findOneBy({ food_name: food.foodName });
@@ -66,14 +66,13 @@ async createRecord(recordDto: RecordDto): Promise<Record[]> {
         record.totalCalories += foodInfo.calories * food.counts;
         record.updatedDate = new Date(); // 업데이트 날짜 갱신
 
-        records.push(record);
-
-        cumulativeTotalCalories += record.totalCalories;
         cumulativeCarbohydrates += record.carbohydrates;
         cumulativeProteins += record.proteins;
-        cumulativeFats += record.fats
-        cumulativeDietaryFiber += record.dietaryFiber
-
+        cumulativeFats += record.fats;
+        cumulativeDietaryFiber += record.dietaryFiber;
+        cumulativeTotalCalories += record.totalCalories;
+        
+        records.push(record);
         await this.createOrUpdateCumulativeRecord(
           record, 
           cumulativeTotalCalories,
@@ -81,39 +80,37 @@ async createRecord(recordDto: RecordDto): Promise<Record[]> {
           cumulativeProteins, 
           cumulativeFats, 
           cumulativeDietaryFiber
-        )
+        );
       } else{
         const newRecord = this.recordRepository.create({
           userId: userId,
           mealType: mealType,
           foodInfoId: foodInfo.food_info_id,
           foodCounts: food.counts,
-          // foodImage: undefined, //food.foodImage,
-          carbohydrates: foodInfo.carbohydrates * food.counts,
-          proteins: foodInfo.proteins * food.counts,
-          fats: foodInfo.fats * food.counts, 
-          dietaryFiber: foodInfo.dietary_fiber * food.counts, 
-          totalCalories: foodInfo.calories * food.counts,
+          // foodImage: undefined, //food.foodImage, // image_id는 이미지 엔티티와의 관계를 설정하여 저장해야 합니다.
+          carbohydrates: foodInfo.carbohydrates,
+          proteins: foodInfo.proteins,
+          fats: foodInfo.fats,
+          dietaryFiber: foodInfo.dietary_fiber,
+          totalCalories: foodInfo.calories,
           firstRecordDate: new Date(),
           updatedDate: new Date(),
         });
-  
-        // 영양소들과 칼로리를 계산하여 저장합니다.
-        newRecord.totalCalories *= food.counts; // 총 칼로리를 계산합니다.
-        newRecord.carbohydrates *= food.counts; // 탄수화물 계산
-        newRecord.proteins *= food.counts; // 단백질 계산
-        newRecord.fats *= food.counts; // 지방 계산
-        newRecord.dietaryFiber *= food.counts; // 식이섬유 계산
-  
+
+        cumulativeCarbohydrates += newRecord.carbohydrates;
+        cumulativeProteins += newRecord.proteins;
+        cumulativeFats += newRecord.fats;
+        cumulativeDietaryFiber += newRecord.dietaryFiber;
+        cumulativeTotalCalories += newRecord.totalCalories
         records.push(newRecord);
         await this.createOrUpdateCumulativeRecord(
           newRecord, 
-          newRecord.totalCalories,
-          newRecord.carbohydrates, 
-          newRecord.proteins, 
-          newRecord.fats, 
-          newRecord.dietaryFiber
-        )
+          cumulativeTotalCalories,
+          cumulativeCarbohydrates, 
+          cumulativeProteins, 
+          cumulativeFats, 
+          cumulativeDietaryFiber
+        );
       }
     }
     // 모든 레코드를 데이터베이스에 저장합니다.
@@ -122,7 +119,7 @@ async createRecord(recordDto: RecordDto): Promise<Record[]> {
     return records;
   }
 
-// 누적 레코드 생성 및 수정
+// 누적 레코드 생성
 async createOrUpdateCumulativeRecord(record: Record, totalCalories: number, carbohydrates: number, proteins: number, fats: number, dietaryFiber: number) {
   const existingCumulativeRecord = await this.cumulativeRecordRepository.findOne({
     where: {
@@ -130,19 +127,9 @@ async createOrUpdateCumulativeRecord(record: Record, totalCalories: number, carb
       mealType: record.mealType
     }
   });
-  console.log('existingCumulativeRecord : ', existingCumulativeRecord)
-  if (existingCumulativeRecord) {
-    // 기존 레코드 업데이트
-    existingCumulativeRecord.mealTotalCalories = totalCalories;
-    existingCumulativeRecord.carbohydrates = carbohydrates;
-    existingCumulativeRecord.proteins = proteins;
-    existingCumulativeRecord.fats = fats;
-    existingCumulativeRecord.dietaryFiber = dietaryFiber;
 
-    await this.cumulativeRecordRepository.save(existingCumulativeRecord);
-  } else {
+  if (!existingCumulativeRecord) {
     // 새로운 레코드 생성
-    console.log("새로생기는 토탈 칼로리 :", totalCalories)
     const newCumulativeRecord = new CumulativeRecord();
     newCumulativeRecord.userId = record.userId;
     newCumulativeRecord.mealType = record.mealType;
@@ -154,9 +141,17 @@ async createOrUpdateCumulativeRecord(record: Record, totalCalories: number, carb
     newCumulativeRecord.dietaryFiber = dietaryFiber;
     newCumulativeRecord.imageId = record.imageId;
     await this.cumulativeRecordRepository.save(newCumulativeRecord);
+  } else {
+    // 기존 레코드 업데이트
+    existingCumulativeRecord.mealTotalCalories = totalCalories;
+    existingCumulativeRecord.carbohydrates = carbohydrates;
+    existingCumulativeRecord.proteins = proteins;
+    existingCumulativeRecord.fats = fats;
+    existingCumulativeRecord.dietaryFiber = dietaryFiber;
+
+    await this.cumulativeRecordRepository.save(existingCumulativeRecord);
   }
 }
-
 
 
 // 식단 수정
