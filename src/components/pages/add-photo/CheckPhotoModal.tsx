@@ -58,7 +58,6 @@ const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
       imgUrl: canvasUrl,
       foods: res.data,
     };
-    console.log(data);
     navigate(`/record/${date}/${mealTime}/edit`,{state:data})
   };
 

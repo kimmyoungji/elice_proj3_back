@@ -4,6 +4,7 @@ import RecordEditDetail from './RecordEditDetail';
 import { useEffect, useRef, useState } from 'react';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import { MergingTags } from './MergingTags';
+import useApi from '@hooks/useApi';
 
 interface Food {
   foodName: string;
@@ -60,6 +61,19 @@ const RecordEdit = () => {
     setFocus(e.currentTarget.parentNode?.nextSibling?.textContent);
   };
 
+  // // focus 음식 정보 받아오는 api
+  // const { result, trigger } = useApi({
+  //   path: `/foods?foodName=${focus}`
+  // });
+
+  // useEffect(() => {
+  //   if (!focus) return;
+  //   trigger({});
+  // }, [focus]);
+
+  // console.log(focus)
+  // console.log(result)
+
   const addFood = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     foods[0].foodName === '음식명'
       ? alert('음식 상세 정보를 추가해주세요!')
@@ -115,11 +129,14 @@ const RecordEdit = () => {
     const image = new Image();
     image.src = imgUrl;
 
+    const cropX = food.XYCoordinate[0] * image.width - 45;
+    const cropY = food.XYCoordinate[1] * image.height - 45;
+
     image.onload = () => {
       context?.drawImage(
         image,
-        food.XYCoordinate[0],
-        food.XYCoordinate[1],
+        cropX,
+        cropY,
         90,
         90,
         0,
