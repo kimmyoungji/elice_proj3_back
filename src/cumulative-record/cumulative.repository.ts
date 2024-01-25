@@ -19,7 +19,7 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
     const cumulativeResult = await manager
       .createQueryBuilder(CumulativeRecord, "entity")
       .select("entity.userId", "userId")
-      .addSelect("entity.date", "data")
+      .addSelect("entity.date", "date")
       .addSelect("SUM(entity.mealTotalCalories)", "totalCalories")
       .addSelect("SUM(entity.carbohydrates)", "carbohydrates")
       .addSelect("SUM(entity.proteins)", "proteins")

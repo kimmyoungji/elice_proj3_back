@@ -8,19 +8,18 @@ import {
 import { plainToInstance } from "class-transformer";
 import { DataSource } from "typeorm";
 import { HealthInfoRepository } from "../user/health-info.repository";
+import { ImageRepository } from "src/image/repositories/image.repository";
 
 @Injectable()
 export class CumulativeRecordService {
   constructor(
     private cumulativeRepository: CumulativeRecordRepository,
     private healthInfoRepository: HealthInfoRepository,
+    private imageRepository: ImageRepository,
     private readonly dataSource: DataSource
   ) {}
 
-  async getDateRecord(
-    date: Date,
-    userId: string
-  ): Promise<CumulativeRecordDateDto[]> {
+  async getDateRecord(date: Date, userId: string) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -39,36 +38,23 @@ export class CumulativeRecordService {
         queryRunner.manager
       );
 
-      console.log("totalResult", totalResult);
-
       // [HealthInfo Table] - 3) targetCalories, 4) recommendNutrient
       // findHealthInfoByUserId에 date 추가 필요
-      const healthUserId = "e3794989-f37a-4edf-95d2-eb305c23b695";
-      const HealthInfoResult = this.healthInfoRepository.findHealthInfoByUserId(
-        // date,
-        healthUserId,
-        queryRunner.manager
-      );
+      // const healthUserId = "e3794989-f37a-4edf-95d2-eb305c23b695";
+      // const HealthInfoResult = this.healthInfoRepository.findHealthInfoByUserId(
+      //   // date,
+      //   healthUserId,
+      //   queryRunner.manager
+      // );
       // console.log("HealthInfoResult", (await HealthInfoResult).targetCalories);
       // console.log("HealthInfoResult", (await HealthInfoResult).recommendIntake);
 
-      // [Cumulative Table] - 5) dateArr
-      const mealTypeResult =
-        await this.cumulativeRepository.getDateMealTypeRecord(
-          date,
-          userId,
-          queryRunner.manager
-        );
-
-      // [Image Table] - 5) dateArr
-      // mealTypeResult에서 받아온 image_id로 이미지들 가져오기
-      // const mealTypeImage = this.cumulativeRepository.getDateMealTypeRecord(
-      //   date,
-      //   userId
-      // );
-
       await queryRunner.commitTransaction();
-      return plainToInstance(CumulativeRecordDateDto, totalResult);
+      const result = {
+        totalResult,
+        // HealthInfoResult,
+      };
+      return result;
       // return 값 dto는 다시 확인 필요
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -89,10 +75,24 @@ export class CumulativeRecordService {
           userId,
           queryRunner.manager
         );
-
-      // img url 추가
+      const mealTypeImage = [];
+      mealTypeResult.map(async (image) => {
+        const imageId = image.imageId;
+        const mealTypeImageResult =
+          await this.imageRepository.getImageByImageId(
+            imageId,
+            queryRunner.manager
+          );
+        mealTypeImage.push(mealTypeImageResult.foodImageUrl);
+      });
       await queryRunner.commitTransaction();
-      return plainToInstance(CumulativeDateMealTypeDto, mealTypeResult);
+      const result = {
+        mealTypeResult,
+        mealTypeImage,
+      };
+      console.log("Result", result);
+      // return plainToInstance(CumulativeDateMealTypeDto, result);
+      return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
     } finally {

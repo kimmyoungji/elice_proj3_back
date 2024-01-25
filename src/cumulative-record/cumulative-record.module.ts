@@ -5,6 +5,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { CumulativeRecord } from "./cumulative-record.entity";
 import { CumulativeRecordRepository } from "./cumulative.repository";
 import { HealthInfoRepository } from "src/user/health-info.repository";
+import { ImageRepository } from "src/image/repositories/image.repository";
 
 @Module({
   // imports: [TypeOrmModule.forFeature([CumulativeRecord])],
@@ -13,6 +14,7 @@ import { HealthInfoRepository } from "src/user/health-info.repository";
     CumulativeRecordService,
     CumulativeRecordRepository,
     HealthInfoRepository,
+    ImageRepository,
   ],
 })
 export class CumulativeRecordModule {}

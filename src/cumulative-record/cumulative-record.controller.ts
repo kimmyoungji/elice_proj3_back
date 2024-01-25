@@ -28,20 +28,22 @@ export class CumulativeRecordController {
           date,
           userId
         );
-        const { totalCalories, ...datas } = totalData[0];
-        const mealData =
+        const { totalCalories, ...datas } = totalData.totalResult[0];
+        const { mealTypeResult, mealTypeImage } =
           await this.cumulariveRecordService.getDateMealTypeRecord(
             date,
             userId
           );
-        const groupedData = [];
-        mealData.forEach((item) => {
-          groupedData.push([item.mealType, item.mealTotalCalories]);
-        });
+        const dateArr = mealTypeResult.map((result, index) => [
+          result.mealType,
+          result.mealTotalCalories,
+          mealTypeImage[index],
+        ]);
+
         response.status(200).json({
           totalCalories: totalCalories,
           totalNutrient: datas,
-          dateArr: groupedData,
+          dateArr: dateArr,
         });
       }
 
@@ -76,16 +78,15 @@ export class CumulativeRecordController {
     try {
       const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
       // const userId = request.user.userId;
-      const mealData = await this.cumulariveRecordService.getDateMealTypeRecord(
-        date,
-        userId
-      );
-      const groupedData = [];
-      mealData.forEach((item) => {
-        groupedData.push([item.mealType, item.mealTotalCalories]);
-      });
+      const { mealTypeResult, mealTypeImage } =
+        await this.cumulariveRecordService.getDateMealTypeRecord(date, userId);
+      const dateArr = mealTypeResult.map((result, index) => [
+        result.mealType,
+        result.mealTotalCalories,
+        mealTypeImage[index],
+      ]);
 
-      response.status(200).json({ dateArr: groupedData });
+      response.status(200).json({ dateArr: dateArr });
     } catch (error) {
       throw error;
     }
@@ -111,6 +112,7 @@ export class CumulativeRecordController {
         page,
         userId
       );
+      console.log("mealData", mealData);
 
       const groupedData = new Map<string, any[]>();
 
