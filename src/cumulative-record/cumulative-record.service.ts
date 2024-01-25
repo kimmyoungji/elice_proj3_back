@@ -32,29 +32,27 @@ export class CumulativeRecordService {
       // 5) [Cumulative Table & Image Table] meal type별 칼로리와 image -> dateArr
 
       // [Cumulative Table] - 1) totalCalories, 2) totalNutrient
-      const totalResult = await this.cumulativeRepository.getDateRecord(
+      let totalResult = await this.cumulativeRepository.getDateRecord(
+        date,
+        userId,
+        queryRunner.manager
+      );
+      totalResult = plainToInstance(CumulativeRecordDateDto, totalResult);
+      console.log("totalResult Service", totalResult);
+
+      // [HealthInfo Table] - 3) targetCalories, 4) recommendNutrient
+      const HealthInfoResult = this.healthInfoRepository.findHealthInfoByUserId(
         date,
         userId,
         queryRunner.manager
       );
 
-      // [HealthInfo Table] - 3) targetCalories, 4) recommendNutrient
-      // findHealthInfoByUserId에 date 추가 필요
-      const HealthInfoResult =
-        this.healthInfoRepository.findRecentHealthInfoByUserId(
-          userId,
-          queryRunner.manager
-        );
-      console.log("HealthInfoResult", (await HealthInfoResult).targetCalories);
-      console.log("HealthInfoResult", (await HealthInfoResult).recommendIntake);
-
       await queryRunner.commitTransaction();
       const result = {
         totalResult,
-        // HealthInfoResult,
+        HealthInfoResult,
       };
       return result;
-      // return 값 dto는 다시 확인 필요
     } catch (error) {
       await queryRunner.rollbackTransaction();
     } finally {
@@ -126,7 +124,7 @@ export class CumulativeRecordService {
     }
   }
 
-  async getMonthDetailRecord(month: Date, page: Number, userId: string) {
+  async getMonthDetailRecord(month: Date, page: number, userId: string) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();

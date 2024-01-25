@@ -24,16 +24,21 @@ export class CumulativeRecordController {
       const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
       // const userId = request.user.userId;
       if (date) {
-        const totalData = await this.cumulariveRecordService.getDateRecord(
-          date,
-          userId
-        );
-        const { totalCalories, ...datas } = totalData.totalResult[0];
+        const { totalResult, HealthInfoResult } =
+          await this.cumulariveRecordService.getDateRecord(date, userId);
+        const { totalCalories, ...datas } = totalResult[0];
+        const { targetCalories, recommendIntake } = await HealthInfoResult;
         const { mealTypeResult, mealTypeImage } =
           await this.cumulariveRecordService.getDateMealTypeRecord(
             date,
             userId
           );
+        const recommendNutrient = {
+          carbohydrates: recommendIntake[0],
+          proteins: recommendIntake[1],
+          fat: recommendIntake[2],
+          dietaryFiber: recommendIntake[3],
+        };
         const dateArr = mealTypeResult.map((result, index) => [
           result.mealType,
           result.mealTotalCalories,
@@ -41,9 +46,11 @@ export class CumulativeRecordController {
         ]);
 
         response.status(200).json({
-          totalCalories: totalCalories,
+          totalCalories,
+          targetCalories,
           totalNutrient: datas,
-          dateArr: dateArr,
+          recommendNutrient,
+          dateArr,
         });
       }
 
@@ -101,7 +108,7 @@ export class CumulativeRecordController {
   async getMonthDetailRecord(
     @Req() request: any,
     @Query("month") month: Date,
-    @Query("page") page: Number,
+    @Query("page") page: number,
     @Res() response: any
   ) {
     try {

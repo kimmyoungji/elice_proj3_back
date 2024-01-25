@@ -5,7 +5,6 @@ import { Injectable } from "@nestjs/common";
 import {
   CumulativeDateMealTypeDto,
   CumulativeRecordDateDto,
-  // CumulativeRecordMonthDto,
 } from "./dtos/cumulative-record.dto";
 
 @Injectable()
@@ -20,11 +19,14 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
       .createQueryBuilder(CumulativeRecord, "entity")
       .select("entity.userId", "userId")
       .addSelect("entity.date", "date")
-      .addSelect("SUM(entity.mealTotalCalories)", "totalCalories")
-      .addSelect("SUM(entity.carbohydrates)", "carbohydrates")
-      .addSelect("SUM(entity.proteins)", "proteins")
-      .addSelect("SUM(entity.fats)", "fats")
-      .addSelect("SUM(entity.dietaryFiber)", "dietaryFiber")
+      .addSelect(
+        "CAST(SUM(entity.mealTotalCalories) AS INTEGER)",
+        "totalCalories"
+      )
+      .addSelect("CAST(SUM(entity.carbohydrates) AS INTEGER)", "carbohydrates")
+      .addSelect("CAST(SUM(entity.proteins) AS INTEGER)", "proteins")
+      .addSelect("CAST(SUM(entity.fats) AS INTEGER)", "fats")
+      .addSelect("CAST(SUM(entity.dietaryFiber) AS INTEGER)", "dietaryFiber")
       .where("DATE_TRUNC('day', entity.date) = :date", { date })
       .andWhere("entity.user_id = :userId", { userId })
       .groupBy("entity.user_id, entity.date") // 순서에 따른 조회 속도 확인하기
@@ -59,23 +61,17 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
       .select("entity.userId", "userId")
       .addSelect("DATE_TRUNC('day', entity.date)", "date")
       .addSelect("SUM(entity.mealTotalCalories)", "mealTotalCalories")
-      // .select([
-      //   "entity.userId",
-      //   "DATE_TRUNC('day', entity.date)",
-      //   "SUM(entity.mealTotalCalories)",
-      // ])
       .where("entity.user_id = :userId", { userId })
       .andWhere("DATE_TRUNC('month', entity.date) = :month", { month })
       .groupBy("entity.user_id, DATE_TRUNC('day', entity.date)")
       .getRawMany();
-    // .getMany();
     return result;
   }
 
   // 월별 데이터 - date, mealType, calories, (imgURL)
   async getMonthDetailRecord(
     month: Date,
-    page: Number,
+    page: number,
     userId: string,
     manager: EntityManager
   ) {
@@ -84,7 +80,9 @@ export class CumulativeRecordRepository extends Repository<CumulativeRecord> {
       .createQueryBuilder(CumulativeRecord, "entity")
       .where("entity.user_id = :userId", { userId })
       .andWhere("DATE_TRUNC('month', entity.date) = :month", { month })
-      // .andWhere("entity.record_ids IN :recordIds", { recordIds })
+      .orderBy("date", "ASC")
+      .take(5)
+      .skip((page - 1) * 5)
       .getMany();
     return result;
   }

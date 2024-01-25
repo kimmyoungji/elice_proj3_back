@@ -28,21 +28,21 @@ export class CumulativeRecord extends BaseEntity {
   @Column()
   mealType: string;
 
-  @Column({ default: 0 })
+  @Column({ type: "int", default: 0 })
   mealTotalCalories: number;
 
   @Column()
   date: Date;
 
-  @Column({ default: 0 })
+  @Column({ type: "int", default: 0 })
   carbohydrates: number;
 
-  @Column({ default: 0 })
+  @Column({ type: "int", default: 0 })
   proteins: number;
 
-  @Column({ default: 0 })
+  @Column({ type: "int", default: 0 })
   fats: number;
 
-  @Column({ default: 0 })
+  @Column({ type: "int", default: 0 })
   dietaryFiber: number;
 }
