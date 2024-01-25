@@ -8,4 +8,12 @@ module.exports = function (app) {
       changeOrigin: true,
     })
   );
+
+  app.use(
+    '/image',
+    createProxyMiddleware({
+      target: 'http://9gram.ddns.net:5002',
+      changeOrigin: true,
+    })
+  );
 };
