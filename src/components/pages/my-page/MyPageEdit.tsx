@@ -7,12 +7,7 @@ import getImgPreview from '@utils/getImgPreview';
 import getNutritionStandard from '@utils/getNutritionStandard';
 import { mapGoaltoMsg, mapActivitytoMsg, findKeyByValue } from './mapMsg';
 import ButtonCommon from '@components/UI/ButtonCommon';
-import {
-  // calAge,
-  calBMR,
-  calBMRCalories,
-  adjustCaloriesByGoal,
-} from './calUserData';
+import { calBMR, calBMRCalories, adjustCaloriesByGoal } from './calUserData';
 import { storeUserInfo } from '@components/store/userLoginRouter';
 // import { userData } from './DummyUserData';
 import { UserData, HealthInfoProps, MyPageEditProps } from './MypageTypes';

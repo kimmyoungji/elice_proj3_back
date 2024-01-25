@@ -81,11 +81,12 @@ const MealPage = () => {
                 <ButtonCommon
                   variant='default-active'
                   size='tiny'
-                  onClick={() =>
+                  onClick={() => {
+                    console.log(imgData);
                     navigate(`/record/${date}/${selectedMealTime}/edit`, {
-                      state: { coordinate, imgData },
-                    })
-                  }
+                      state: { foods: coordinate, imgUrl: imgData },
+                    });
+                  }}
                 >
                   <> 수정 </>
                 </ButtonCommon>
