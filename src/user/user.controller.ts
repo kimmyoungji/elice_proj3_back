@@ -8,8 +8,8 @@ import { UpdateUserDto } from './dto/UpdateUser.dto';
 import { SaveHealthInfoDto } from './dto/SaveHealthInfo.dto';
 import { handleUpdateUserInfosDto } from './dto/handleUpdateUserInfos.dto';
 
-@ApiTags('api/user')
-@Controller('api/user')
+@ApiTags('user')
+@Controller('user')
 export class UserController {
     constructor(private userService: UserService){}
 
