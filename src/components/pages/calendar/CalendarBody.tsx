@@ -5,6 +5,7 @@ import ButtonCommon from '@components/UI/ButtonCommon';
 import CalendarCells from './CalendarCells';
 import { useEffect } from 'react';
 import useCachingApi from '@hooks/useCachingApi';
+import useApi, { TriggerType } from '@hooks/useApi';
 
 const Cumulative_cal_DateArr = {
   existedDate: [1, 5, 9, 30, 29],
@@ -22,16 +23,30 @@ const dayOfWeekArray = dayOfWeek.map((day, idx) => (
   </div>
 ));
 
+interface CalendarBodyResult {
+  existedDate: number[];
+  totalCalData: number[];
+}
+
 const CalendarBody = () => {
   const { thisYear, thisMonth, selectedIndex, setSelectedIndex, isAlbum } =
     useCalendarContext();
+  const {
+    trigger,
+    result: data,
+  }: {
+    trigger: TriggerType;
+    result: { data: CalendarBodyResult[] };
+  } = useApi({
+    path: `/cumulative-record?month=${thisYear}-${returnWithZero(thisMonth)}-01`,
+  });
   // const { trigger, data } = useCachingApi({
   //   path: `/cumulative-record?month=${thisYear}-${returnWithZero(thisMonth)}-01`,
   // });
 
-  // useEffect(() => {
-  //   trigger();
-  // }, []);
+  useEffect(() => {
+    trigger({});
+  }, []);
 
   const getThisMonthArray = () => {
     const thisMonthTotal = new Date(thisYear, thisMonth, 0).getDate();
@@ -41,18 +56,14 @@ const CalendarBody = () => {
     return new Array(totalCalNum).fill(0).map((_, idx) => {
       return (
         <CalendarCells
+          key={`calcell-${idx}`}
           idx={idx}
           thisMonthFirstDay={thisMonthFirstDay}
           thisMonthTotal={thisMonthTotal}
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
           targetCalories={DUMMYtargetCalories}
-          Cumulative_cal_DateArr={
-            data || {
-              existedDate: [],
-              totalCalData: [],
-            }
-          }
+          Cumulative_cal_DateArr={data.data}
         />
       );
     });

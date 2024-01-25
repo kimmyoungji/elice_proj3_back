@@ -9,7 +9,7 @@ interface UseApiParams {
   path?: string;
   data?: any;
   shouldInitFetch?: boolean;
-  initialResult?: string;
+  initialResult?: any;
 }
 interface TriggerPropsType
   extends Omit<UseApiParams, 'shouldInitFetch' | 'initialResult'> {
@@ -17,7 +17,7 @@ interface TriggerPropsType
   isShowBoundary?: boolean;
 }
 
-type TriggerType = ({
+export type TriggerType = ({
   ...props
 }: TriggerPropsType) => Promise<AxiosResponse<any, any>>;
 
