@@ -76,21 +76,25 @@ export class CumulativeRecordService {
           queryRunner.manager
         );
       const mealTypeImage = [];
-      mealTypeResult.map(async (image) => {
+      mealTypeResult.map(async (image, index) => {
         const imageId = image.imageId;
-        const mealTypeImageResult =
-          await this.imageRepository.getImageByImageId(
-            imageId,
-            queryRunner.manager
-          );
-        mealTypeImage.push(mealTypeImageResult.foodImageUrl);
+        if (imageId) {
+          const mealTypeImageResult =
+            await this.imageRepository.getImageByImageId(
+              imageId,
+              queryRunner.manager
+            );
+          mealTypeImage[index] = mealTypeImageResult.foodImageUrl;
+        } else {
+          mealTypeImage[index] = null;
+        }
       });
+
       await queryRunner.commitTransaction();
       const result = {
         mealTypeResult,
         mealTypeImage,
       };
-      console.log("Result", result);
       // return plainToInstance(CumulativeDateMealTypeDto, result);
       return result;
     } catch (error) {
@@ -129,14 +133,29 @@ export class CumulativeRecordService {
     await queryRunner.startTransaction();
 
     try {
-      const result = await this.cumulativeRepository.getMonthDetailRecord(
+      const mealData = await this.cumulativeRepository.getMonthDetailRecord(
         month,
         page,
         userId,
         queryRunner.manager
       );
+      const mealTypeImage = [];
+      mealData.map(async (image, index) => {
+        const imageId = image.imageId;
+        if (imageId) {
+          const mealTypeImageResult =
+            await this.imageRepository.getImageByImageId(
+              imageId,
+              queryRunner.manager
+            );
+          mealTypeImage[index] = mealTypeImageResult.foodImageUrl;
+        } else {
+          mealTypeImage[index] = null;
+        }
+      });
       await queryRunner.commitTransaction();
-      return plainToInstance(CumulativeDateMealTypeDto, result);
+      // return plainToInstance(CumulativeDateMealTypeDto, result);
+      return { mealData, mealTypeImage };
     } catch (error) {
       await queryRunner.rollbackTransaction();
     } finally {
