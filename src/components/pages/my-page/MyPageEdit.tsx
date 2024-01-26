@@ -184,7 +184,7 @@ const MyPageEdit = () => {
     }
   };
 
-  const saveAndNavigate = () => {
+  const saveAndNavigate = async () => {
     const updatedNutrients = getNutritionStandard(data);
     console.log(updatedNutrients);
     const updatedData = {
@@ -197,14 +197,17 @@ const MyPageEdit = () => {
       targetCalories: goalCalories,
     };
 
+    const { username, ...dataToSend } = updatedData;
+    console.log(dataToSend);
+
     updateDataAndCalories(updatedData);
     // store에 업데이트된 userInfo 저장하는 로직
     dispatch(storeUserInfo(updatedData));
     // console.log(updatedData);
-    trigger({
+    await trigger({
       applyResult: true,
       isShowBoundary: false,
-      data: updatedData,
+      data: dataToSend,
       path: 'user',
     });
     setUpdated(true);

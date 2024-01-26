@@ -4,6 +4,7 @@ export interface MealDetailData {
       foodName: string;
       XYCoordinate: number[];
       counts?: number;
+      foodInfoId?: string;
     }[];
     totalCalories: number;
     totalNutrient: {
