@@ -12,19 +12,19 @@ const MyPage = () => {
   // 스토어에서 값 받아오기
   const userData = useSelector((state: RootState) => state.user.userInfo);
   const [data, setData] = useState(userData);
-  const [healthData, setHealthData] = useState(userData.healthInfo);
-  const goalMsg = mapGoaltoMsg[healthData.goal];
-  const activityMsg = mapActivitytoMsg[healthData.activityAmount];
+  // const [healthData, setHealthData] = useState(userData.healthInfo);
+  const goalMsg = mapGoaltoMsg[data.diet_goal];
+  console.log(goalMsg);
+  const activityMsg = mapActivitytoMsg[data.activityAmount];
   const navigate = useNavigate();
 
   useEffect(() => {
     setData(userData);
-    setHealthData(userData.healthInfo);
   }, [userData]);
 
   const handleIconClick = () => {
     navigate(`/my-page/edit`, {
-      state: { userData: data, healthData, goalMsg, activityMsg },
+      state: { userData: data, goalMsg, activityMsg },
     });
   };
 
@@ -33,8 +33,8 @@ const MyPage = () => {
       title: '신체 데이터',
       content: (
         <>
-          {healthData.height} cm <span style={{ color: 'black' }}>/</span>{' '}
-          {healthData.weight} kg
+          {data.height} cm <span style={{ color: 'black' }}>/</span>{' '}
+          {data.weight} kg
         </>
       ),
       titleClass: style.infoTitle,
@@ -77,9 +77,7 @@ const MyPage = () => {
         </div>
         <div className={style.goaltInfo}>
           <div className={style.goalTitle}>목표 칼로리</div>
-          <div className={style.goalDetail}>
-            {healthData.targetCalories}kcal
-          </div>
+          <div className={style.goalDetail}>{data.targetCalories}kcal</div>
         </div>
       </div>
 

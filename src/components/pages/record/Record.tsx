@@ -36,8 +36,8 @@ const Record = () => {
 
   useEffect(() => {
     trigger({
-      applyResult: true,
-      isShowBoundary: true,
+      // applyResult: true,
+      // isShowBoundary: true,
     });
   }, []);
 
