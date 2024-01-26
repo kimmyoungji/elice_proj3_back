@@ -15,6 +15,7 @@ interface Props {
     foodName: string;
     XYCoordinate: number[];
     counts: number;
+    foodInfoId: string;
   }[];
   setFoods: React.Dispatch<
     React.SetStateAction<
@@ -22,6 +23,7 @@ interface Props {
         foodName: string;
         XYCoordinate: number[];
         counts: number;
+        foodInfoId: string;
       }[]
     >
   >;
@@ -32,20 +34,17 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
   const [searchInput, setSearchInput] = useState('');
   const [searching, setSearching] = useState(false);
 
+  // focus 음식 정보 받아오는 api
+  const { result, trigger } = useApi({
+    path: `/food-info/foods?foodName=${focus}`,
+  });
 
-    // focus 음식 정보 받아오는 api
-    const { result, trigger } = useApi({
-      path: `/food-info/foods?foodName=${focus}`
-    });
-  
-    useEffect(() => {
-      if (!focus) return;
-      trigger({});
-    }, [focus]);
-  
+  useEffect(() => {
+    if (!focus) return;
+    trigger({});
+  }, [focus]);
+
   console.log(result);
-  
-
 
   const handleSearch = () => {
     setSearching(true);
@@ -91,7 +90,7 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
   ];
   // const searchResults:any= undefined;
 
-  const [nutrients,setNutrients] = useState([
+  const [nutrients, setNutrients] = useState([
     { name: '탄수화물', gram: 0 },
     { name: '단백질', gram: 0 },
     { name: '지방', gram: 0 },
@@ -108,14 +107,15 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
       </div>
 
       <div className={styles.nutrientbox}>
-        {result && nutrients.map((nutrition: Nutrition, index) => (
-          <div key={index} className={styles.circle}>
-            <p className='s-regular'>{nutrition.name}</p>
-            <p className='b-small' style={{ color: 'var(--main-blue)' }}>
-              {nutrition.gram}g
-            </p>
-          </div>
-        ))}
+        {result &&
+          nutrients.map((nutrition: Nutrition, index) => (
+            <div key={index} className={styles.circle}>
+              <p className='s-regular'>{nutrition.name}</p>
+              <p className='b-small' style={{ color: 'var(--main-blue)' }}>
+                {nutrition.gram}g
+              </p>
+            </div>
+          ))}
       </div>
 
       <div className={styles.searchbox}>
@@ -137,9 +137,7 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setSearchInput(e.target.value);
               setSearching(false);
-            }
-              
-            }
+            }}
           />
           <ButtonCommon
             size='small'

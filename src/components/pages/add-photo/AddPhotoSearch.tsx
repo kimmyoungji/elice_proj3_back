@@ -46,12 +46,20 @@ const AddPhotoSearch = () => {
     setIsSearching(true);
   },[result])
 
+  const getFoodId = (tag:string) => {
+    for (let i = 0; i < foodInfo.length; i++){
+      console.log(foodInfo)
+      if (foodInfo[i].foodName.split('_')[1] === tag) return foodInfo[i].foodInfoId;
+    }
+  }
+
   const tagsArr: object[] = [];
   tags.map((tag) =>
     tagsArr.push({
       foodName: tag,
       XYCoordinate: [],
       counts: 1,
+      foodInfoId: getFoodId(tag),
     })
   );
   

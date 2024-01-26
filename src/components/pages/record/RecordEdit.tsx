@@ -9,6 +9,7 @@ interface Food {
   foodName: string;
   XYCoordinate: number[];
   counts: number;
+  foodInfoId: string;
 }
 
 interface MealTime {
@@ -35,6 +36,7 @@ const RecordEdit = () => {
       foodName: '',
       XYCoordinate: [0, 0, 0, 0],
       counts: 1,
+      foodInfoId: '',
     },
   ]);
   const [imgUrl, setImgUrl] = useState('');
@@ -62,6 +64,7 @@ const RecordEdit = () => {
             foodName: '음식명',
             XYCoordinate: [],
             counts: 1,
+            foodInfoId: '',
           },
           ...foods,
         ]);
@@ -169,51 +172,52 @@ const RecordEdit = () => {
           onMouseEnter={handleEnter}
           onMouseLeave={handleLeave}
         >
-          {foods && foods.map((food: Food, index: number) => (
-            <div key={index} className={styles.tagitem}>
-              <div className={styles.tagimgwrap}>
-                {food.XYCoordinate.length === 0 ? (
-                  <img
-                    className={`${styles.tagimg} ${
-                      focus === food.foodName && styles.focusimg
-                    }`}
-                    id={food.foodName}
-                    src='/images/9gram_logo.png'
-                    alt={food.foodName}
-                    onClick={(e) => handleFocus(e)}
-                  />
-                ) : (
-                  <canvas
-                    className={`${styles.tagimg} ${
-                      focus === food.foodName && styles.focusimg
-                    }`}
-                    id={food.foodName}
-                    ref={(element) => {
-                      canvasRef.current[index] = element;
-                    }}
-                    width={90}
-                    height={90}
-                    onClick={(e) => handleFocus(e)}
-                  />
-                )}
+          {foods &&
+            foods.map((food: Food, index: number) => (
+              <div key={index} className={styles.tagitem}>
+                <div className={styles.tagimgwrap}>
+                  {food.XYCoordinate.length === 0 ? (
+                    <img
+                      className={`${styles.tagimg} ${
+                        focus === food.foodName && styles.focusimg
+                      }`}
+                      id={food.foodName}
+                      src='/images/9gram_logo.png'
+                      alt={food.foodName}
+                      onClick={(e) => handleFocus(e)}
+                    />
+                  ) : (
+                    <canvas
+                      className={`${styles.tagimg} ${
+                        focus === food.foodName && styles.focusimg
+                      }`}
+                      id={food.foodName}
+                      ref={(element) => {
+                        canvasRef.current[index] = element;
+                      }}
+                      width={90}
+                      height={90}
+                      onClick={(e) => handleFocus(e)}
+                    />
+                  )}
 
-                <img
-                  className={styles.tagdeleteicon}
-                  id={food.foodName}
-                  src='/icons/deleteicon.png'
-                  alt='태그삭제'
-                  onClick={(e) => deletefood(e)}
-                />
+                  <img
+                    className={styles.tagdeleteicon}
+                    id={food.foodName}
+                    src='/icons/deleteicon.png'
+                    alt='태그삭제'
+                    onClick={(e) => deletefood(e)}
+                  />
+                </div>
+                <p
+                  className={`${
+                    focus === food.foodName ? styles.focustxt : styles.tagtxt
+                  }`}
+                >
+                  {food.foodName}
+                </p>
               </div>
-              <p
-                className={`${
-                  focus === food.foodName ? styles.focustxt : styles.tagtxt
-                }`}
-              >
-                {food.foodName}
-              </p>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
       {focus && (
