@@ -6,13 +6,15 @@ import { CumulativeRecordModule } from "./cumulative-record/cumulative-record.mo
 import { typeORMConfig } from "./config/database/typeorm.config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { RecordModule } from "./record/record.module";
+import { ImageModule } from "./image/image.module";
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeORMConfig),
     UserModule,
     CumulativeRecordModule,
-    RecordModule
+    RecordModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

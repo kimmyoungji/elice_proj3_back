@@ -1,16 +1,16 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, ValueTransformer } from "typeorm";
 
 export enum MealType {
-  breakfast = '1',
-  lunch = '2',
-  dinner = '3',
-  snack = '4'
+  아침 = 1,
+  점심 = 2,
+  저녁 = 3,
+  간식 = 4
 }
 
 export class Food {
   foodName: string
   counts: number
-  foodImage: string
+  XYCoordinate: number[]
 }
 
 @Entity()
@@ -34,8 +34,8 @@ export class Record extends BaseEntity {
   @Column({ type: "int", nullable: false })
   foodCounts: number;
 
-  // @Column({ type: "json", nullable: true })
-  // foods: Food[];
+  @Column({ type: "int", nullable: true })
+  imageId: number;
 
   @Column({ type: "int", nullable: true })
   carbohydrates: number;
@@ -51,9 +51,6 @@ export class Record extends BaseEntity {
 
   @Column({ type: "int", nullable: true })
   totalCalories: number;
-
-  @Column({ type: "int", nullable: true })
-  imageId: number;
 
   @Column({ type: "date", nullable: true })
   firstRecordDate: Date;

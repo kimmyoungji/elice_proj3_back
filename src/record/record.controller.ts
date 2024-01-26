@@ -2,8 +2,9 @@ import { Controller, Get, Param, Query, Post, Put, Delete, Body, Req, HttpStatus
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { RecordService } from "./record.service";
 import { Record } from "./record.entity";
-import { RecordDto } from "./dtos/record.dto";
+import { CreateRecordDto } from "./dtos/createRecord.dto";
 import { ValidateFoodPipe } from "./pipes/record.pipe";
+import { UpdateRecordDto } from "./dtos/updateRecord.dto";
 
 @Controller("records")
 @ApiTags("Record API")
@@ -25,9 +26,9 @@ export class RecordController {
   @UsePipes(new ValidateFoodPipe())
   @ApiOperation({ summary: "식단 기록" })
   async createRecord(
-    @Body() recordDto: RecordDto
+    @Body() createRecordDto: CreateRecordDto
   ): Promise<string> {
-    await this.recordService.createRecord(recordDto);
+    await this.recordService.createRecord(createRecordDto);
     return "식단 기록 성공";
   }
 
@@ -37,10 +38,11 @@ export class RecordController {
   @ApiOperation({ summary: "특정 날짜와 식단 구분 수정" })
   async updateDailyRecord(
     @Query('date') date: string,
-    @Query('mealType') mealType: string,
-    @Body() updateData: Partial<Record>,
+    @Query('mealType') queryMealType: number,
+    @Body() recordId: string,
+    @Body() updateRecordDto: UpdateRecordDto,
   ): Promise<string> {
-    await this.recordService.updateDailyRecord(date, mealType, updateData);
+    await this.recordService.updateDailyRecord(date, queryMealType, updateRecordDto);
     return "식단 수정 성공";
   }
 
@@ -49,8 +51,8 @@ export class RecordController {
   @ApiOperation({ summary: "특정 날짜와 식단 구분 삭제" })
   async deleteDailyRecord(
     @Query('date') date: string,
-    @Query('mealType') mealType: string,
-  ): Promise<String> {
+    @Query('mealType') mealType: number,
+  ): Promise<string> {
     await this.recordService.deleteDailyRecord(date, mealType);
     return "식단 삭제 성공"
   }
