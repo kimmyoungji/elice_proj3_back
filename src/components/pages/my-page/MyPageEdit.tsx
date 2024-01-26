@@ -135,7 +135,7 @@ const MyPageEdit = () => {
       if ([1, 2, 3, 4].includes(newGoal)) {
         const updatedData = {
           ...data,
-          goal: newGoal as 1 | 2 | 3 | 4,
+          diet_goal: newGoal as 1 | 2 | 3 | 4,
         };
         updateDataAndCalories(updatedData);
         setSelectedGoal(value);
@@ -186,6 +186,7 @@ const MyPageEdit = () => {
 
   const saveAndNavigate = () => {
     const updatedNutrients = getNutritionStandard(data);
+    console.log(updatedNutrients);
     const updatedData = {
       ...data,
       diet_goal: Number(findKeyByValue(mapGoaltoMsg, selectedGoal)),
