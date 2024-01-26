@@ -10,7 +10,6 @@ import {
 } from "@nestjs/common";
 import { FeedbackService } from "./feedback.service";
 import { request } from "http";
-import { Timestamp } from "typeorm";
 import { ResponseDataDto } from "./dto/feedback.dto";
 
 @Controller("feedback")
@@ -71,7 +70,7 @@ export class FeedbackController {
   async deleteFeedbackData(
     @Query("feedbackId") feedbackId: string,
     @Res() response: any
-  ) {
+  ): Promise<void> {
     try {
       await this.feedbackService.deleteFeedbackData(feedbackId);
       response.status(200).json({ message: "피드백 삭제 성공" });

@@ -1,5 +1,5 @@
 import { Feedback } from "./feedback.entity";
-import { EntityManager, Timestamp } from "typeorm";
+import { EntityManager } from "typeorm";
 import {
   CheckFeedbackDataDto,
   GetFeedbackDataDto,
@@ -7,19 +7,6 @@ import {
 } from "./dto/feedback.dto";
 
 export class FeedbackRepository {
-  //extends Repository<Feedback>
-  //   constructor(
-  //     @InjectRepository(Feedback)
-  //     private feedbackRepository: Repository<Feedback>
-  //   ) {
-  //     super(
-  //       //extends Repository<Feedback> 이거 안쓰면 super 빨간줄
-  //       feedbackRepository.target,
-  //       feedbackRepository.manager,
-  //       feedbackRepository.queryRunner
-  //     );
-  //   }
-
   async saveFeedBack(
     feedbackData: MakeFeedbackDataDto,
     manager: EntityManager
@@ -91,15 +78,17 @@ export class FeedbackRepository {
     }
   }
 
-  async deleteFeedbackData(feedbackId: string, manager: EntityManager) {
+  async deleteFeedbackData(
+    feedbackId: string,
+    manager: EntityManager
+  ): Promise<void> {
     try {
-      const result = await manager
+      await manager
         .createQueryBuilder(Feedback, "feedback")
         .delete()
         .from(Feedback)
         .where("feedback_id =:feedbackId", { feedbackId })
         .execute();
-      return result;
     } catch (error) {
       throw error;
     }

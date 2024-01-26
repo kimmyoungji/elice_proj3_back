@@ -23,6 +23,12 @@ export class CumulativeRecordController {
     try {
       const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
       // const userId = request.user.userId;
+
+      // 1) [Cumulative Table] 유저의 일별 모든 meal type의 칼로리 합산 -> totalCalories
+      // 2) [Cumulative Table] 유저의 일별 모든 meal type의 탄단지 합산 -> totalNutrient
+      // 3) [HealthInfo Table] 유저의 목표 칼로리 조회 -> targetCalories
+      // 4) [HealthInfo Table] 유저의 목표 영양성분 조회 -> recommendNutrient
+      // 5) [Cumulative Table & Image Table] meal type별 칼로리와 image -> dateArr
       if (date) {
         const { totalResult, HealthInfoResult } =
           await this.cumulariveRecordService.getDateRecord(date, userId);
@@ -41,7 +47,7 @@ export class CumulativeRecordController {
         };
         const dateArr = mealTypeResult.map((result, index) => [
           result.mealType,
-          result.mealTotalCalories,
+          result.mealTotalCalories / 100,
           mealTypeImage[index],
         ]);
 
@@ -89,7 +95,7 @@ export class CumulativeRecordController {
         await this.cumulariveRecordService.getDateMealTypeRecord(date, userId);
       const dateArr = mealTypeResult.map((result, index) => [
         result.mealType,
-        result.mealTotalCalories,
+        result.mealTotalCalories / 100,
         mealTypeImage[index],
       ]);
       const includeArr = mealTypeResult.map((item) => item.mealType);
@@ -135,7 +141,11 @@ export class CumulativeRecordController {
         }
         groupedData
           .get(dateKey)
-          .push([item.mealType, item.mealTotalCalories, mealTypeImage[index]]);
+          .push([
+            item.mealType,
+            item.mealTotalCalories / 100,
+            mealTypeImage[index],
+          ]);
       });
       const transformedData = [];
       groupedData.forEach((dateArr, date) => {

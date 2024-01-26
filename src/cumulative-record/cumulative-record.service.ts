@@ -8,6 +8,7 @@ import { plainToInstance } from "class-transformer";
 import { DataSource } from "typeorm";
 import { HealthInfoRepository } from "../user/health-info.repository";
 import { ImageRepository } from "src/image/repositories/image.repository";
+import { CumulativeRecord } from "./cumulative-record.entity";
 
 @Injectable()
 export class CumulativeRecordService {
@@ -24,12 +25,6 @@ export class CumulativeRecordService {
     await queryRunner.startTransaction();
 
     try {
-      // 1) [Cumulative Table] 유저의 일별 모든 meal type의 칼로리 합산 -> totalCalories
-      // 2) [Cumulative Table] 유저의 일별 모든 meal type의 탄단지 합산 -> totalNutrient
-      // 3) [HealthInfo Table] 유저의 목표 칼로리 조회 -> targetCalories
-      // 4) [HealthInfo Table] 유저의 목표 영양성분 조회 -> recommendNutrient
-      // 5) [Cumulative Table & Image Table] meal type별 칼로리와 image -> dateArr
-
       // [Cumulative Table] - 1) totalCalories, 2) totalNutrient
       let totalResult = await this.cumulativeRepository.getDateRecord(
         date,
@@ -90,7 +85,6 @@ export class CumulativeRecordService {
         mealTypeResult,
         mealTypeImage,
       };
-      // return plainToInstance(CumulativeDateMealTypeDto, result);
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -128,12 +122,13 @@ export class CumulativeRecordService {
     await queryRunner.startTransaction();
 
     try {
-      const mealData = await this.cumulativeRepository.getMonthDetailRecord(
+      let mealData = await this.cumulativeRepository.getMonthDetailRecord(
         month,
         page,
         userId,
         queryRunner.manager
       );
+      mealData = plainToInstance(CumulativeRecord, mealData);
       const mealTypeImage = [];
       mealData.map(async (image, index) => {
         const imageId = image.imageId;
@@ -149,7 +144,6 @@ export class CumulativeRecordService {
         }
       });
       await queryRunner.commitTransaction();
-      // return plainToInstance(CumulativeDateMealTypeDto, result);
       return { mealData, mealTypeImage };
     } catch (error) {
       await queryRunner.rollbackTransaction();
