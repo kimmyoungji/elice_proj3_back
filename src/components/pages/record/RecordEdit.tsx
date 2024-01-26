@@ -8,6 +8,7 @@ import { MergingTags } from './MergingTags';
 interface Food {
   foodName: string;
   XYCoordinate: number[];
+  counts: number;
 }
 
 interface MealTime {
@@ -31,19 +32,12 @@ const RecordEdit = () => {
 
   const [foods, setFoods] = useState([
     {
-      foodName: '적채',
-      XYCoordinate: [45, 200],
-    },
-    {
-      foodName: '버섯',
-      XYCoordinate: [250, 50],
-    },
-    {
-      foodName: '청포도',
-      XYCoordinate: [1000, 146.02],
+      foodName: '',
+      XYCoordinate: [0, 0, 0, 0],
+      counts: 1,
     },
   ]);
-  const [imgUrl, setImgUrl] = useState("");
+  const [imgUrl, setImgUrl] = useState('');
 
   useEffect(() => {
     if (state) {
@@ -67,6 +61,7 @@ const RecordEdit = () => {
           {
             foodName: '음식명',
             XYCoordinate: [],
+            counts: 1,
           },
           ...foods,
         ]);
@@ -115,18 +110,11 @@ const RecordEdit = () => {
     const image = new Image();
     image.src = imgUrl;
 
+    const cropX = food.XYCoordinate[0] * image.width - 45;
+    const cropY = food.XYCoordinate[1] * image.height - 45;
+
     image.onload = () => {
-      context?.drawImage(
-        image,
-        food.XYCoordinate[0],
-        food.XYCoordinate[1],
-        90,
-        90,
-        0,
-        0,
-        90,
-        90
-      );
+      context?.drawImage(image, cropX, cropY, 90, 90, 0, 0, 90, 90);
     };
   };
 
@@ -137,9 +125,9 @@ const RecordEdit = () => {
   }, [foods]);
 
   const editDone = () => {
-    //수정완료 된 foodDate api 
+    //수정완료 된 foodDate api
     navigate(`/record/${date}/${mealTime}`);
-  }
+  };
 
   return (
     <>
@@ -152,7 +140,7 @@ const RecordEdit = () => {
         )}
       </div>
 
-      <div className={styles.imgbox} style={{position: 'relative'}}>
+      <div className={styles.imgbox} style={{ position: 'relative' }}>
         <MergingTags tagData={foods} />
         <img
           className={styles.mealimg}
@@ -181,7 +169,7 @@ const RecordEdit = () => {
           onMouseEnter={handleEnter}
           onMouseLeave={handleLeave}
         >
-          {foods.map((food: Food, index: number) => (
+          {foods && foods.map((food: Food, index: number) => (
             <div key={index} className={styles.tagitem}>
               <div className={styles.tagimgwrap}>
                 {food.XYCoordinate.length === 0 ? (
@@ -236,30 +224,31 @@ const RecordEdit = () => {
           setFocus={setFocus}
         />
       )}
-      
+
       <div className={styles.btnbox}>
-      {focus === ''
-        ? (
+        {focus === '' ? (
           <ButtonCommon
+            size='medium'
+            variant='disabled'
+            onClick={() => navigate(-1)}
+          >
+            취소
+          </ButtonCommon>
+        ) : (
+          <ButtonCommon
+            size='medium'
+            variant='disabled'
+            onClick={() => setFocus('')}
+          >
+            취소
+          </ButtonCommon>
+        )}
+
+        <ButtonCommon
           size='medium'
-          variant='disabled'
-          onClick={() => navigate(-1)}
+          variant='default-active'
+          onClickBtn={editDone}
         >
-          취소
-        </ButtonCommon>
-        )
-          : (
-            <ButtonCommon
-          size='medium'
-          variant='disabled'
-          onClick={() => setFocus('')}
-        >
-          취소
-        </ButtonCommon>
-        )
-      }
-        
-        <ButtonCommon size='medium' variant='default-active' onClickBtn={editDone}>
           수정 완료
         </ButtonCommon>
       </div>

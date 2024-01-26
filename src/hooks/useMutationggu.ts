@@ -43,7 +43,7 @@ const useMutationggu = (
     onSuccess: async (data) => {
       if (applyResult) {
         queryClient.invalidateQueries({ queryKey: itemId });
-        queryClient.setQueriesData(itemId, data);
+        queryClient.setQueriesData({ queryKey: itemId }, data);
         return;
       }
       return;
