@@ -1,5 +1,6 @@
 import { DownArrowLight } from '@assets/DownArrowLight';
 import styles from '@components/pages/home/home.module.css';
+import useApi from '@hooks/useApi';
 import { useEffect, useState } from 'react';
 import Calorie from './Calorie';
 import MealCard from './MealCard';
@@ -7,23 +8,23 @@ import Nutrients from './Nutrients';
 
 const week = ['일', '월', '화', '수', '목', '금', '토'];
 
-const DUMMYdayData = {
-  totalCalories: 845,
-  recommendCalories: 1200,
-  totalNutrient: { carbohydrates: 240, proteins: 20, fat: 23, dietaryFiber: 2 },
+interface Props {
+  totalCalories: number;
+  targetCalories: number;
+  totalNutrient: {
+    carbohydrates: number;
+    proteins: number;
+    fats: number;
+    dietaryFiber: number;
+  };
   recommendNutrient: {
-    carbohydrates: 200,
-    proteins: 80,
-    fat: 50,
-    dietaryFiber: 4,
-  },
-  dateArr: [
-    ['아침', 400, '/images/home_ex1.png'],
-    ['점심', 350, '/images/home_ex2.png'],
-    ['저녁', 0, undefined],
-    ['간식', 0, undefined],
-  ],
-};
+    carbohydrates: number;
+    proteins: number;
+    fats: number;
+    dietaryFiber: number;
+  };
+  dateArr: [number, number, string][];
+}
 
 const now = new Date();
 const nowYear = now.getFullYear();
@@ -43,16 +44,44 @@ const Home = () => {
   const [selectedNow, setSelectedNow] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
 
+  const todayDate = `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${nowDate}`;
+  const [date, setDate] = useState(todayDate);
+  const [dayData, setDayData] = useState<Props>();
+
   const [currentWeekArr, setCurrentWeekArr] = useState<number[]>([]);
+
+  const { trigger, result, reqIdentifier, loading, error } = useApi({
+    method: 'get',
+    path: `/cumulative-record?date=${date}`,
+    shouldInitFetch: false,
+  });
+
+  useEffect(() => {
+    console.log(date);
+    trigger({
+      applyResult: true,
+      isShowBoundary: true,
+    });
+  }, [selectedDay]);
+  // 날짜 변경할 때마다(정확히는 date 의존성으로) api 콜해서 daydata 바꿔주기
+
+  useEffect(() => {
+    if (result.data) {
+      setDayData(result.data);
+    }
+  }, [result?.data]);
 
   const handleClick = (idx: number) => {
     setSelectedDay(idx);
+    setDate(
+      `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${currentWeekArr[idx]}`
+    );
+    // setDate로 api 콜할 날짜 변경해주기
     if (idx === nowDay) {
       setSelectedNow(true);
     } else {
       setSelectedNow(false);
     }
-    // 해당 일자 api 콜해서 daydata 바꿔주기
   };
 
   const onToggle = () => setIsOpen(!isOpen);
@@ -138,16 +167,27 @@ const Home = () => {
           식단
         </p>
         <Calorie
-          totalCalories={DUMMYdayData.totalCalories}
-          recommendCalories={DUMMYdayData.recommendCalories}
+          totalCalories={dayData ? dayData.totalCalories : 0}
+          recommendCalories={dayData ? dayData.targetCalories : 10}
         />
         <Nutrients
-          totalNutrient={DUMMYdayData.totalNutrient}
-          recommendNutrient={DUMMYdayData.recommendNutrient}
+          totalNutrient={
+            dayData
+              ? dayData.totalNutrient
+              : { carbohydrates: 0, proteins: 0, fats: 0, dietaryFiber: 0 }
+          }
+          recommendNutrient={
+            dayData
+              ? dayData.recommendNutrient
+              : { carbohydrates: 10, proteins: 10, fats: 10, dietaryFiber: 10 }
+          }
         />
         <MealCard
+          date={todayDate}
           dateArr={
-            DUMMYdayData.dateArr as [string, number, string | undefined][]
+            dayData
+              ? (dayData.dateArr as [number, number, string | undefined][])
+              : []
           }
         />
       </div>
