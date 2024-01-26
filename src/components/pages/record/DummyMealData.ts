@@ -11,6 +11,12 @@ export interface MealDetailData {
       fats: number;
       dietaryFiber: number;
     };
+    recommendNutrient: {
+      carbohydrates: number;
+      proteins: number;
+      fats: number;
+      dietaryFiber: number;
+    };
     imgurl: string | undefined;
   };
 }
@@ -43,6 +49,12 @@ const mealDetailData: MealDetailData = {
       fats: 25,
       dietaryFiber: 2,
     },
+    recommendNutrient: {
+      carbohydrates: 300,
+      proteins: 800,
+      fats: 300,
+      dietaryFiber: 200,
+    },
     imgurl: '/images/record_example.png',
   },
 
@@ -67,6 +79,12 @@ const mealDetailData: MealDetailData = {
     ],
     totalCalories: 600,
     totalNutrient: {
+      carbohydrates: 240,
+      proteins: 80,
+      fats: 25,
+      dietaryFiber: 2,
+    },
+    recommendNutrient: {
       carbohydrates: 240,
       proteins: 80,
       fats: 25,
@@ -123,6 +141,12 @@ const mealDetailData: MealDetailData = {
       fats: 3,
       dietaryFiber: 1,
     },
+    recommendNutrient: {
+      carbohydrates: 240,
+      proteins: 80,
+      fats: 25,
+      dietaryFiber: 2,
+    },
     imgurl: '/images/record_example.png',
   },
 
@@ -130,6 +154,12 @@ const mealDetailData: MealDetailData = {
     food: [],
     totalCalories: 0,
     totalNutrient: { carbohydrates: 0, proteins: 0, fats: 0, dietaryFiber: 0 },
+    recommendNutrient: {
+      carbohydrates: 240,
+      proteins: 80,
+      fats: 25,
+      dietaryFiber: 2,
+    },
     imgurl: undefined,
   },
 };

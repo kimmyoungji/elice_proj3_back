@@ -1,26 +1,27 @@
 import InputCommon from '@components/UI/InputCommon';
 import styles from './recordeditdetail.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import useApi from '@hooks/useApi';
 
 interface Nutrition {
   name: string;
-  gram: string;
+  gram: number;
 }
 
 interface Props {
   focus: string;
   foods: {
     foodName: string;
-    foodImage: string;
     XYCoordinate: number[];
+    counts: number;
   }[];
   setFoods: React.Dispatch<
     React.SetStateAction<
       {
         foodName: string;
-        foodImage: string;
         XYCoordinate: number[];
+        counts: number;
       }[]
     >
   >;
@@ -30,6 +31,21 @@ interface Props {
 const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
   const [searchInput, setSearchInput] = useState('');
   const [searching, setSearching] = useState(false);
+
+
+    // focus 음식 정보 받아오는 api
+    const { result, trigger } = useApi({
+      path: `/food-info/foods?foodName=${focus}`
+    });
+  
+    useEffect(() => {
+      if (!focus) return;
+      trigger({});
+    }, [focus]);
+  
+  console.log(result);
+  
+
 
   const handleSearch = () => {
     setSearching(true);
@@ -75,12 +91,12 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
   ];
   // const searchResults:any= undefined;
 
-  const nutrients = [
-    { name: '탄수화물', gram: '0g' },
-    { name: '단백질', gram: '0g' },
-    { name: '지방', gram: '0g' },
-    { name: '식이섬유', gram: '0g' },
-  ];
+  const [nutrients,setNutrients] = useState([
+    { name: '탄수화물', gram: 0 },
+    { name: '단백질', gram: 0 },
+    { name: '지방', gram: 0 },
+    { name: '식이섬유', gram: 0 },
+  ]);
 
   return (
     <div className={styles.container}>
@@ -92,11 +108,11 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
       </div>
 
       <div className={styles.nutrientbox}>
-        {nutrients.map((nutrition: Nutrition, index) => (
+        {result && nutrients.map((nutrition: Nutrition, index) => (
           <div key={index} className={styles.circle}>
             <p className='s-regular'>{nutrition.name}</p>
             <p className='b-small' style={{ color: 'var(--main-blue)' }}>
-              {nutrition.gram}
+              {nutrition.gram}g
             </p>
           </div>
         ))}
@@ -118,8 +134,11 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
             size='medium'
             variant='default'
             value={searchInput}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setSearchInput(e.target.value)
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setSearchInput(e.target.value);
+              setSearching(false);
+            }
+              
             }
           />
           <ButtonCommon

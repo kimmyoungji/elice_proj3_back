@@ -1,20 +1,69 @@
+import useApi from '@hooks/useApi';
 import styles from './addtag.module.css';
+import useIntersect from '@hooks/useIntersect';
+import { useEffect, useState } from 'react';
 
-interface Props {
-  props: string;
-  tags: string[];
-  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+interface FoodInfo {
+  foodInfoId: string;
+  foodName: string;
 }
 
-const AddTag = ({ props, tags, setTags }: Props) => {
-  // api 호출 결과 data 예시 (떡국 검색 시)
-  const searchResults = [
-    '떡국',
-    '두살 떡국',
-    '세살 떡국',
-    '네살 떡국',
-    '다섯살 떡국',
-  ];
+interface Props {
+  searchInput: string;
+  tags: string[];
+  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
+  searchResults: string[];
+  foodInfo: { foodName: string; foodInfoId: string }[];
+  setSearchResults: React.Dispatch<React.SetStateAction<string[]>>;
+  setFoodInfo: React.Dispatch<React.SetStateAction<FoodInfo[]>>;
+}
+
+const AddTag = ({
+  searchInput,
+  tags,
+  setTags,
+  setIsSearching,
+  searchResults,
+  foodInfo,
+  setSearchResults,
+  setFoodInfo,
+}: Props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const lastFoodId = foodInfo[foodInfo.length - 1].foodInfoId;
+
+  const { result, trigger } = useApi({
+    path: `/food-info/foods?keyword=${searchInput}&lastFoodId=${lastFoodId}`,
+  });
+
+  const onIntersect: IntersectionObserverCallback = async (
+    [entry],
+    observer
+  ) => {
+    if (entry.isIntersecting) {
+      setIsLoading(true);
+      observer.unobserve(entry.target);
+      await trigger({});
+      observer.observe(entry.target);
+      setIsLoading(false);
+    }
+  };
+
+  const { setTarget } = useIntersect({
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.5,
+    onIntersect,
+  });
+
+  useEffect(() => {
+    if (!result) return;
+    const newResults = result.data.map((food: FoodInfo) =>
+      food.foodName.includes('_') ? food.foodName.split('_')[1] : food.foodName
+    );
+    setSearchResults(searchResults.concat(newResults));
+    setFoodInfo(foodInfo.concat(result.data));
+  }, [result]);
 
   const addTag = (e: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
     if (!e.currentTarget.textContent) {
@@ -28,14 +77,48 @@ const AddTag = ({ props, tags, setTags }: Props) => {
   return (
     <>
       <div className={styles.result}>
-        {props &&
-          searchResults.map((result, index) => (
-            <p key={index} onClick={(e) => addTag(e)}>
-              {result.split(props)[0] !== '' && result.split(props)[0]}
-              <span className={styles.searchtext}>{props}</span>
-              {result.split(props)[1] !== '' && result.split(props)[1]}
+        <div style={{ overflow: 'auto' }}>
+          {searchInput && searchResults ? (
+            searchResults.map((result, index) => (
+              <>
+                <p
+                  key={index}
+                  onClick={(e) => addTag(e)}
+                  className='r-big'
+                  style={{ marginBottom: '5px' }}
+                >
+                  {result.split(searchInput)[0] !== '' &&
+                    result.split(searchInput)[0]}
+                  <span className={styles.searchtext}>{searchInput}</span>
+                  {result.split(searchInput)[1] !== '' &&
+                    result.split(searchInput)[1]}
+                </p>
+                {!isLoading && searchResults && searchResults.length >= 10 && (
+                  <div ref={setTarget} />
+                )}
+              </>
+            ))
+          ) : (
+            <p
+              className='r-medium'
+              style={{ textAlign: 'center', marginTop: '60px' }}
+            >
+              검색 결과가 없습니다.
             </p>
-          ))}
+          )}
+        </div>
+        <p
+          className='r-medium'
+          style={{
+            color: 'var(--main-skyblue)',
+            marginLeft: 'auto',
+            marginTop: 'auto',
+            paddingTop: '10px',
+          }}
+          onClick={() => setIsSearching(false)}
+        >
+          닫기
+        </p>
       </div>
     </>
   );

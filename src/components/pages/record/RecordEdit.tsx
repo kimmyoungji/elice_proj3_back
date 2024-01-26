@@ -3,11 +3,12 @@ import styles from './recordedit.module.css';
 import RecordEditDetail from './RecordEditDetail';
 import { useEffect, useRef, useState } from 'react';
 import ButtonCommon from '@components/UI/ButtonCommon';
+import { MergingTags } from './MergingTags';
 
 interface Food {
   foodName: string;
-  foodImage: string;
   XYCoordinate: number[];
+  counts: number;
 }
 
 interface MealTime {
@@ -17,7 +18,6 @@ interface MealTime {
 const RecordEdit = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  console.log(state)
 
   const params = useParams();
   const date = params.date;
@@ -32,25 +32,17 @@ const RecordEdit = () => {
 
   const [foods, setFoods] = useState([
     {
-      foodName: '적채',
-      foodImage: '/images/salad-2756467_1280.jpg',
-      XYCoordinate: [45, 200],
-    },
-    {
-      foodName: '버섯',
-      foodImage: '/images/salad-2756467_1280.jpg',
-      XYCoordinate: [250, 50],
-    },
-    {
-      foodName: '청포도',
-      foodImage: '/images/salad-2756467_1280.jpg',
-      XYCoordinate: [1000, 146.02],
+      foodName: '',
+      XYCoordinate: [0, 0, 0, 0],
+      counts: 1,
     },
   ]);
+  const [imgUrl, setImgUrl] = useState('');
 
   useEffect(() => {
     if (state) {
-      setFoods(state);
+      setFoods(state.foods);
+      setImgUrl(state.imgUrl);
     }
   }, []);
 
@@ -68,8 +60,8 @@ const RecordEdit = () => {
       : setFoods([
           {
             foodName: '음식명',
-            foodImage: '/images/9gram_logo.png',
             XYCoordinate: [],
+            counts: 1,
           },
           ...foods,
         ]);
@@ -116,20 +108,13 @@ const RecordEdit = () => {
     const context = canvas?.getContext('2d');
 
     const image = new Image();
-    image.src = food.foodImage;
+    image.src = imgUrl;
+
+    const cropX = food.XYCoordinate[0] * image.width - 45;
+    const cropY = food.XYCoordinate[1] * image.height - 45;
 
     image.onload = () => {
-      context?.drawImage(
-        image,
-        food.XYCoordinate[0],
-        food.XYCoordinate[1],
-        90,
-        90,
-        0,
-        0,
-        90,
-        90
-      );
+      context?.drawImage(image, cropX, cropY, 90, 90, 0, 0, 90, 90);
     };
   };
 
@@ -140,25 +125,26 @@ const RecordEdit = () => {
   }, [foods]);
 
   const editDone = () => {
-    //수정완료 된 foodDate api 
+    //수정완료 된 foodDate api
     navigate(`/record/${date}/${mealTime}`);
-  }
+  };
 
   return (
     <>
       <div className={styles.datebox}>
         {dateSplit && mealTime && (
           <p className='b-small'>
-            {dateSplit[0]}년 {dateSplit[1]}월 {dateSplit[2]}일{' '}
+            {dateSplit[0]}. {dateSplit[1]}. {dateSplit[2]}{' '}
             {mealTimetoStr[mealTime]}
           </p>
         )}
       </div>
 
-      <div className={styles.imgbox}>
+      <div className={styles.imgbox} style={{ position: 'relative' }}>
+        <MergingTags tagData={foods} />
         <img
           className={styles.mealimg}
-          src='https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_1280.jpg'
+          src={imgUrl || '/images/9gram_logo.png'}
           alt='식단이미지'
         />
       </div>
@@ -183,7 +169,7 @@ const RecordEdit = () => {
           onMouseEnter={handleEnter}
           onMouseLeave={handleLeave}
         >
-          {foods.map((food: Food, index: number) => (
+          {foods && foods.map((food: Food, index: number) => (
             <div key={index} className={styles.tagitem}>
               <div className={styles.tagimgwrap}>
                 {food.XYCoordinate.length === 0 ? (
@@ -192,7 +178,7 @@ const RecordEdit = () => {
                       focus === food.foodName && styles.focusimg
                     }`}
                     id={food.foodName}
-                    src={food.foodImage}
+                    src='/images/9gram_logo.png'
                     alt={food.foodName}
                     onClick={(e) => handleFocus(e)}
                   />
@@ -238,30 +224,31 @@ const RecordEdit = () => {
           setFocus={setFocus}
         />
       )}
-      
+
       <div className={styles.btnbox}>
-      {focus === ''
-        ? (
+        {focus === '' ? (
           <ButtonCommon
+            size='medium'
+            variant='disabled'
+            onClick={() => navigate(-1)}
+          >
+            취소
+          </ButtonCommon>
+        ) : (
+          <ButtonCommon
+            size='medium'
+            variant='disabled'
+            onClick={() => setFocus('')}
+          >
+            취소
+          </ButtonCommon>
+        )}
+
+        <ButtonCommon
           size='medium'
-          variant='disabled'
-          onClick={() => navigate(-1)}
+          variant='default-active'
+          onClickBtn={editDone}
         >
-          취소
-        </ButtonCommon>
-        )
-          : (
-            <ButtonCommon
-          size='medium'
-          variant='disabled'
-          onClick={() => setFocus('')}
-        >
-          취소
-        </ButtonCommon>
-        )
-      }
-        
-        <ButtonCommon size='medium' variant='default-active' onClickBtn={editDone}>
           수정 완료
         </ButtonCommon>
       </div>

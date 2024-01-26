@@ -1,21 +1,8 @@
-interface UserData {
-  email: string;
-  username: string;
-  password: string;
-  birthday: string;
-  gender: 1 | 2 | 3;
-  weight: number;
-  height: number;
-  goal: 1 | 2 | 3 | 4;
-  targetWeight: number;
-  targetCalories: number;
-  activity: number;
-  img: string | undefined;
-}
+import { UserData } from '@components/pages/my-page/MypageTypes';
 
 const getNutritionStandard = (data: UserData) => {
-  const userGoal = data.goal;
-  const userGoalCalories = data.targetCalories;
+  const userGoal = data.healthInfo.goal;
+  const userGoalCalories = data.healthInfo.targetCalories;
   const userGender = data.gender;
   const goalRatio = { 1: [3, 5, 2], 2: [4, 4, 2], 3: [5, 2, 3], 4: [4, 2, 4] };
   const ratioX = goalRatio[userGoal][0];
