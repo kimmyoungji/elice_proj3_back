@@ -38,9 +38,6 @@ export class UserService {
             delete user[0].health_info_id;
             delete user[0].user_id;
 
-
-            console.log(typeof user[0]);
-
             // 나이정보 추가하기
             user[0].age = calculateAge(user[0].birth_day);
 
@@ -105,6 +102,14 @@ export class UserService {
                 // console.log(result);
             }
 
+            // 닉네임 중복검사
+            if(userToUpdate.username){
+                const user = await this.userRepository.findUserByUserName(userToUpdate.username, queryRunner.manager);
+                if(user){
+                    throw new HttpException('이미 존재하는 닉네임입니다.', 409);
+                }
+            }
+            
             const result = await this.userRepository.updateUserByUserId(userId, userToUpdate, queryRunner.manager);
             // console.log(result)
 

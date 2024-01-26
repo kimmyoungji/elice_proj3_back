@@ -40,6 +40,14 @@ export class UserRepository{
         }
     }
 
+    public async findUserByUserName(username: string, manager: EntityManager): Promise<User>{
+        try{
+            return await manager.createQueryBuilder(User, "user").select().where("username = :username",{username}).getOne();
+        }catch(err){
+            throw err;
+        }
+    }
+
     // Update
     public async updateUserByUserId(userId: string, user: User, manager: EntityManager){
         try{
