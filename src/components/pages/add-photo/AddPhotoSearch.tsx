@@ -64,7 +64,7 @@ const AddPhotoSearch = () => {
   );
   
   const data = {
-    imgUrl: "",
+    imgUrl: undefined,
     foods: tagsArr,
   }
 
