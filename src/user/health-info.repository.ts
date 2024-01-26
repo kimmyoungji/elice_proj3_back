@@ -1,9 +1,5 @@
 import { HealthInfo } from "src/user/entities/health-info.entity";
-import {
-  DeleteResult,
-  EntityManager,
-  InsertResult
-} from "typeorm";
+import { DeleteResult, EntityManager, InsertResult } from "typeorm";
 
 export class HealthInfoRepository {
   // Create
@@ -62,7 +58,7 @@ export class HealthInfoRepository {
       return await manager
         .createQueryBuilder(HealthInfo, "health_info")
         .where("user_id = :userId", { userId })
-        .andWhere("updated_date <= :date", { date })
+        .andWhere("DATE_TRUNC('day', updated_date) <= :date", { date })
         .orderBy("updated_date", "DESC")
         .getOne();
     } catch (err) {
