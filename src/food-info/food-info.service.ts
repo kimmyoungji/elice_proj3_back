@@ -11,7 +11,7 @@ export class FoodInfoService {
     private readonly dataSource: DataSource
   ) {}
 
-  async getFoodList(keyword: string) {
+  async getFoodList(keyword: string): Promise<FoodInfoDto[]> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
@@ -30,7 +30,10 @@ export class FoodInfoService {
     }
   }
 
-  async getFoodNextList(keyword: string, lastFoodId: string) {
+  async getFoodNextList(
+    keyword: string,
+    lastFoodId: string
+  ): Promise<FoodInfoDto[]> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();

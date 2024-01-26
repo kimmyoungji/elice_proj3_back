@@ -1,6 +1,7 @@
 import { IsInt, IsNotEmpty } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Exclude, Expose, Transform } from "class-transformer";
+import { MealType } from "src/record/record.enum";
 
 @Exclude()
 export class CumulativeRecordDateDto {
@@ -50,7 +51,7 @@ export class CumulativeDateMealTypeDto {
   @Expose()
   @ApiProperty({ description: "식사 종류" })
   @IsInt()
-  mealType: number;
+  mealType: MealType;
 
   @Expose()
   @ApiProperty({ description: "하루 섭취한 총 칼로리" })

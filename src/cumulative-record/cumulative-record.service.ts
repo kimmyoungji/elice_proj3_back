@@ -8,6 +8,7 @@ import { plainToInstance } from "class-transformer";
 import { DataSource } from "typeorm";
 import { HealthInfoRepository } from "../user/health-info.repository";
 import { ImageRepository } from "src/image/repositories/image.repository";
+import { CumulativeRecord } from "./cumulative-record.entity";
 
 @Injectable()
 export class CumulativeRecordService {
@@ -84,7 +85,6 @@ export class CumulativeRecordService {
         mealTypeResult,
         mealTypeImage,
       };
-      // return plainToInstance(CumulativeDateMealTypeDto, result);
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -122,12 +122,13 @@ export class CumulativeRecordService {
     await queryRunner.startTransaction();
 
     try {
-      const mealData = await this.cumulativeRepository.getMonthDetailRecord(
+      let mealData = await this.cumulativeRepository.getMonthDetailRecord(
         month,
         page,
         userId,
         queryRunner.manager
       );
+      mealData = plainToInstance(CumulativeRecord, mealData);
       const mealTypeImage = [];
       mealData.map(async (image, index) => {
         const imageId = image.imageId;
@@ -143,7 +144,6 @@ export class CumulativeRecordService {
         }
       });
       await queryRunner.commitTransaction();
-      // return plainToInstance(CumulativeDateMealTypeDto, result);
       return { mealData, mealTypeImage };
     } catch (error) {
       await queryRunner.rollbackTransaction();
