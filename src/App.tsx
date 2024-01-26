@@ -13,6 +13,7 @@ import { TopNavKeyType } from 'typings/propTypes';
 import Loading from '@components/UI/Loading';
 import { ErrorBoundary } from 'react-error-boundary';
 import Error from '@components/error/Error';
+import NotFound from '@components/error/NotFound';
 import {
   QueryErrorResetBoundary,
   useQueryErrorResetBoundary,
@@ -78,6 +79,7 @@ const Record = lazy(() => import('@components/pages/record/Record'));
 const RecordEdit = lazy(() => import('@components/pages/record/RecordEdit'));
 const MealPage = lazy(() => import('@components/pages/record/MealPage'));
 const Calender = lazy(() => import('@components/pages/calendar/Calendar'));
+
 const preventNavArr = ['login', 'join', 'auth', 'onboardingstep'];
 const preventTopNavArr = ['auth', 'sharestep'];
 
@@ -101,7 +103,7 @@ function App() {
             <main className='main'>
               <Suspense fallback={<Loading />}>
                 <Routes>
-                  <Route path='*' element={<Navigate to='/' />} />
+                  <Route path='*' element={<NotFound />} />
                   <Route path='/' element={<Navigate to='/home' />} />
                   <Route path='/login' element={<Login />} />
                   <Route path='/auth' element={<Auth />} />

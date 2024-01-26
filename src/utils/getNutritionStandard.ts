@@ -1,8 +1,8 @@
 import { UserData } from '@components/pages/my-page/MypageTypes';
 
 const getNutritionStandard = (data: UserData) => {
-  const userGoal = data.healthInfo.goal;
-  const userGoalCalories = data.healthInfo.targetCalories;
+  const userGoal = data.diet_goal;
+  const userGoalCalories = data.targetCalories;
   const userGender = data.gender;
   const goalRatio = { 1: [3, 5, 2], 2: [4, 4, 2], 3: [5, 2, 3], 4: [4, 2, 4] };
   const ratioX = goalRatio[userGoal][0];
