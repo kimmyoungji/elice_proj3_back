@@ -11,7 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const { loading, trigger } = useApi({
     method: 'post',
-    path: '/auth/local/login',
+    path: 'auth/local/login',
   });
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {

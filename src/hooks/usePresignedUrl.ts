@@ -1,18 +1,18 @@
 import useApi from './useApi';
 
 type presignedUrlProps = {
-  fileName: string;
+  fileName?: string;
   path: any;
 };
 
 const usePresignedUrl = ({ fileName, path }: presignedUrlProps) => {
   const { trigger, result, error, loading } = useApi({
-    method: 'put',
+    method: 'post',
     shouldInitFetch: false,
   });
 
   const getPresignedUrl = async ({ fileName, path }: presignedUrlProps) => {
-    await trigger({ path: path });
+    await trigger({ path: path, data: { fileName } });
     return { presignedUrl: result, error, loading };
   };
 

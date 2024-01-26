@@ -3,6 +3,7 @@ export interface MealDetailData {
     food: {
       foodName: string;
       XYCoordinate: number[];
+      counts?: number;
     }[];
     totalCalories: number;
     totalNutrient: {
@@ -27,6 +28,7 @@ const mealDetailData: MealDetailData = {
       {
         foodName: '떡만둣국',
         XYCoordinate: [10, 9],
+        counts: 1,
       },
       {
         foodName: '김치찌개',
@@ -62,7 +64,8 @@ const mealDetailData: MealDetailData = {
     food: [
       {
         foodName: '감자떡',
-        XYCoordinate: [],
+        XYCoordinate: [14, 56, 140, 1],
+        counts: 10,
       },
       {
         foodName: '고구마빵',

@@ -94,7 +94,7 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
                 {tag.foodNames.join(', ')}
               </p>
               {tag.foodNames.length > 1 && (
-                <div
+                <p
                   className={style.tagCount}
                   style={{
                     left: `${tag.XYCoordinate[0] + MaxTagWidth - 12}px`,
@@ -102,14 +102,14 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
                   }}
                 >
                   {tag.foodNames.length}
-                </div>
+                </p>
               )}
             </div>
           );
         })}
 
         {selectedFoods.length > 0 && (
-          <p
+          <div
             style={{
               position: 'absolute',
               left: `${selectedTagPosition[0]}px`,
@@ -118,16 +118,16 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
           >
             <div className={style.selectedTagBox}>
               {selectedFoods.map((name: string, index: number) => (
-                <div
+                <p
                   key={index}
                   style={{ maxWidth: `${name.length * 10 + tagPadding + 5}px` }}
                   className={`${style.selectedTag} b-tiny`}
                 >
                   {name}
-                </div>
+                </p>
               ))}
             </div>
-          </p>
+          </div>
         )}
       </div>
     </>
