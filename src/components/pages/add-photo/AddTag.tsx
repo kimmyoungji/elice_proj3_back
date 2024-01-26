@@ -80,9 +80,8 @@ const AddTag = ({
         <div style={{ overflow: 'auto' }}>
           {searchInput && searchResults ? (
             searchResults.map((result, index) => (
-              <>
+              <div key={index}>
                 <p
-                  key={index}
                   onClick={(e) => addTag(e)}
                   className='r-big'
                   style={{ marginBottom: '5px' }}
@@ -96,7 +95,7 @@ const AddTag = ({
                 {!isLoading && searchResults && searchResults.length >= 10 && (
                   <div ref={setTarget} />
                 )}
-              </>
+              </div>
             ))
           ) : (
             <p
