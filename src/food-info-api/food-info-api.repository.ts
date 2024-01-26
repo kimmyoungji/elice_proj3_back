@@ -1,76 +1,76 @@
 import { DataSource, Repository } from "typeorm";
-import { FoodInfoApi } from "./food-info-api.entity";
+import { FoodInfo } from "./food-info-api.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 
-export class FoodInfoAPIRepository extends Repository<FoodInfoApi> {
-  constructor(@InjectRepository(FoodInfoApi) private dataSource: DataSource) {
-    super(FoodInfoApi, dataSource.manager);
+export class FoodInfoAPIRepository extends Repository<FoodInfo> {
+  constructor(@InjectRepository(FoodInfo) private dataSource: DataSource) {
+    super(FoodInfo, dataSource.manager);
   }
 
   async saveDataPortal(data) {
     const count = data.length;
     let message = false;
     for (let i = 0; i < count; i++) {
-      const food_info = data[i];
-      const food_info_id = food_info["foodCd"];
-      const food_name = food_info["foodNm"];
-      const category = food_info["foodLv3Nm"];
-      const main_code = food_info["foodLv4Cd"];
-      const main_food_name = food_info["foodLv4Nm"];
+      const foodInfo = data[i];
+      const foodInfoId = foodInfo["foodCd"];
+      const foodName = foodInfo["foodNm"];
+      const category = foodInfo["foodLv3Nm"];
+      const mainCode = foodInfo["foodLv4Cd"];
+      const mainFoodName = foodInfo["foodLv4Nm"];
       const brand =
-        food_info["restNm"] !== "해당없음" ? food_info["restNm"] : null;
-      const standard_capacity =
-        food_info["nutConSrtrQua"] !== ""
+        foodInfo["restNm"] !== "해당없음" ? foodInfo["restNm"] : null;
+      const standardCapacity =
+        foodInfo["nutConSrtrQua"] !== ""
           ? Math.round(
-              parseFloat(food_info["nutConSrtrQua"].replace(/[^0-9]/g, "")) *
+              parseFloat(foodInfo["nutConSrtrQua"].replace(/[^0-9]/g, "")) *
                 100
             )
           : null;
-      const total_capacity =
-        food_info["foodSize"] !== ""
+      const totalCapacity =
+        foodInfo["foodSize"] !== ""
           ? Math.round(
-              parseFloat(food_info["foodSize"].replace(/[^0-9]/g, "")) * 100
+              parseFloat(foodInfo["foodSize"].replace(/[^0-9]/g, "")) * 100
             )
           : null;
       const calories =
-        food_info["enerc"] !== ""
-          ? Math.round(parseFloat(food_info["enerc"]) * 100)
+        foodInfo["enerc"] !== ""
+          ? Math.round(parseFloat(foodInfo["enerc"]) * 100)
           : null;
       const carbohydrates =
-        food_info["chocdf"] !== ""
-          ? Math.round(parseFloat(food_info["chocdf"]) * 100)
+        foodInfo["chocdf"] !== ""
+          ? Math.round(parseFloat(foodInfo["chocdf"]) * 100)
           : null;
       const proteins =
-        food_info["prot"] !== ""
-          ? Math.round(parseFloat(food_info["prot"]) * 100)
+        foodInfo["prot"] !== ""
+          ? Math.round(parseFloat(foodInfo["prot"]) * 100)
           : null;
       const fats =
-        food_info["fatce"] !== ""
-          ? Math.round(parseFloat(food_info["fatce"]) * 100)
+        foodInfo["fatce"] !== ""
+          ? Math.round(parseFloat(foodInfo["fatce"]) * 100)
           : null;
-      const dietary_fiber =
-        food_info["fibtg"] !== ""
-          ? Math.round(parseFloat(food_info["fibtg"]) * 100)
+      const dietaryFiber =
+        foodInfo["fibtg"] !== ""
+          ? Math.round(parseFloat(foodInfo["fibtg"]) * 100)
           : null;
-      const created_date = food_info["crtYmd"];
-      const updated_date = food_info["crtrYmd"];
+      const createdDate = foodInfo["crtYmd"];
+      const updatedDate = foodInfo["crtrYmd"];
 
       const result = this.create({
-        food_info_id,
-        food_name,
+        foodInfoId,
+        foodName,
         category,
-        main_code,
-        main_food_name,
+        mainCode,
+        mainFoodName,
         brand,
-        standard_capacity,
-        total_capacity,
+        standardCapacity,
+        totalCapacity,
         calories,
         carbohydrates,
         proteins,
         fats,
-        dietary_fiber,
-        created_date,
-        updated_date,
+        dietaryFiber,
+        createdDate,
+        updatedDate,
       });
 
       await this.save(result);
@@ -84,66 +84,66 @@ export class FoodInfoAPIRepository extends Repository<FoodInfoApi> {
     const count = data.length;
     let message = false;
     for (let i = 0; i < count; i++) {
-      const food_info = data[i];
-      const food_info_id = food_info["foodCd"];
-      const food_name = food_info["foodNm"];
-      const category = food_info["foodLv3Nm"];
-      const main_code = food_info["foodLv4Cd"];
-      const main_food_name = food_info["foodLv4Nm"];
+      const foodInfo = data[i];
+      const foodInfoId = foodInfo["foodCd"];
+      const foodName = foodInfo["foodNm"];
+      const category = foodInfo["foodLv3Nm"];
+      const mainCode = foodInfo["foodLv4Cd"];
+      const mainFoodName = foodInfo["foodLv4Nm"];
       const brand =
-        food_info["mfrNm"] !== "해당없음" ? food_info["mfrNm"] : null;
-      const standard_capacity =
-        food_info["nutConSrtrQua"] !== ""
+      foodInfo["mfrNm"] !== "해당없음" ? foodInfo["mfrNm"] : null;
+      const standardCapacity =
+      foodInfo["nutConSrtrQua"] !== ""
           ? Math.round(
-              parseFloat(food_info["nutConSrtrQua"].replace(/[^0-9]/g, "")) *
+              parseFloat(foodInfo["nutConSrtrQua"].replace(/[^0-9]/g, "")) *
                 100
             )
           : null;
-      const total_capacity =
-        food_info["foodSize"] !== ""
+      const totalCapacity =
+        foodInfo["foodSize"] !== ""
           ? Math.round(
-              parseFloat(food_info["foodSize"].replace(/[^0-9]/g, "")) * 100
+              parseFloat(foodInfo["foodSize"].replace(/[^0-9]/g, "")) * 100
             )
           : null;
       const calories =
-        food_info["enerc"] !== ""
-          ? Math.round(parseFloat(food_info["enerc"]) * 100)
+        foodInfo["enerc"] !== ""
+          ? Math.round(parseFloat(foodInfo["enerc"]) * 100)
           : null;
       const carbohydrates =
-        food_info["chocdf"] !== ""
-          ? Math.round(parseFloat(food_info["chocdf"]) * 100)
+        foodInfo["chocdf"] !== ""
+          ? Math.round(parseFloat(foodInfo["chocdf"]) * 100)
           : null;
       const proteins =
-        food_info["prot"] !== ""
-          ? Math.round(parseFloat(food_info["prot"]) * 100)
+        foodInfo["prot"] !== ""
+          ? Math.round(parseFloat(foodInfo["prot"]) * 100)
           : null;
       const fats =
-        food_info["fatce"] !== ""
-          ? Math.round(parseFloat(food_info["fatce"]) * 100)
+        foodInfo["fatce"] !== ""
+          ? Math.round(parseFloat(foodInfo["fatce"]) * 100)
           : null;
-      const dietary_fiber =
-        food_info["fibtg"] !== ""
-          ? Math.round(parseFloat(food_info["fibtg"]) * 100)
+      const dietaryFiber =
+        foodInfo["fibtg"] !== ""
+          ? Math.round(parseFloat(foodInfo["fibtg"]) * 100)
           : null;
-      const created_date = food_info["crtYmd"];
-      const updated_date = food_info["crtrYmd"];
+      const createdDate = foodInfo["crtYmd"];
+      const updatedDate = foodInfo["crtrYmd"];
 
       const result = await this.create({
-        food_info_id,
-        food_name,
+        foodInfoId,
+        foodName,
         category,
-        main_code,
-        main_food_name,
+        mainCode,
+        mainFoodName,
         brand,
-        standard_capacity,
-        total_capacity,
+        standardCapacity,
+        totalCapacity,
         calories,
         carbohydrates,
         proteins,
         fats,
-        dietary_fiber,
-        created_date,
-        updated_date,
+        dietaryFiber,
+        createdDate,
+        updatedDate,
       });
 
       await this.save(result);

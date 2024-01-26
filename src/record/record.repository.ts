@@ -23,8 +23,8 @@ export class RecordRepository extends Repository<Record> {
     super(recordRepository.target, recordRepository.manager, recordRepository.queryRunner);
   }
 
-// 날짜에 해당하는 식사 기록을 조회하는 함수
-async findByDate(date: string): Promise<any> { // 반환 타입을 any로 변경하거나 적절한 타입을 생성해야 합니다.
+// 날짜에 해당하는 식사 기록을 조회
+async findByDate(date: string): Promise<any> {
   const dateObj = new Date(date);
 
   const records = await this.recordRepository.find({
@@ -37,17 +37,17 @@ async findByDate(date: string): Promise<any> { // 반환 타입을 any로 변경
     throw new NotFoundException(`해당 날짜에 대한 기록을 찾을 수 없습니다: ${date}`);
   }
 
-  let foods = await this.foodInfoRepository.find({
-    where: {
-      foodInfoId: records[0].foodInfoId
-    }
-  })
+  // let foods = await this.foodInfoRepository.findOneBy({
+  //     food_info_id: records[0].foodInfoId
+  // })
 
   // 클라이언트 형식에 맞게 레코드를 변환합니다.
   const meals = records.reduce((acc, record) => {
     const mealType = record.mealType;
     const food = {
-      foodName: record.foodInfoId, // foodInfoId 대신 food_name을 사용해야 합니다.
+      foodInfoId: record.foodInfoId,
+      recordId: record.recordId,
+      foodName: "foodName",
       counts: record.foodCounts,
       XYCoordinate: [] 
     };
@@ -59,7 +59,7 @@ async findByDate(date: string): Promise<any> { // 반환 타입을 any로 변경
     acc[mealType].foods.push(food);
     acc[mealType].totalCalories += record.totalCalories;
     // 총 영양소 계산 로직 추가
-    // ...여기에 로직 추가...
+
 
     return acc;
   }, {});
@@ -77,7 +77,7 @@ async findByDate(date: string): Promise<any> { // 반환 타입을 any로 변경
     imgurl: undefined
   };
 
-  return response; // 'Record[]' 대신 클라이언트 형식의 객체를 반환합니다.
+  return response;
 }
 
 // 식사 기록 생성 [POST 요청이 한 번만 일어난다는 가정]
@@ -148,7 +148,7 @@ async createRecord(createRecordDto: CreateRecordDto): Promise<Record[]> {
   }
 
     
-  // 모든 레코드를 데이터베이스에 저장합니다.
+  // 모든 레코드를 데이터베이스에 저장
   await this.recordRepository.save(records);
   
   return records;
@@ -174,7 +174,7 @@ async createOrUpdateCumulativeRecord(record: Record, totalCalories: number, carb
     newCumulativeRecord.proteins = proteins;
     newCumulativeRecord.fats = fats;
     newCumulativeRecord.dietaryFiber = dietaryFiber;
-    newCumulativeRecord.imageId = record.imageId;
+    // newCumulativeRecord.imageId = record.imageId; //형식 바꿔주셔야 함
     await this.cumulativeRecordRepository.save(newCumulativeRecord);
   } else {
     // 기존 레코드 업데이트

@@ -1,10 +1,10 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, ValueTransformer } from "typeorm";
 
 export enum MealType {
-  아침 = 1,
-  점심 = 2,
-  저녁 = 3,
-  간식 = 4
+  "아침" = 1,
+  "점심" = 2,
+  "저녁" = 3,
+  "간식" = 4
 }
 
 export class Food {

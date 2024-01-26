@@ -3,19 +3,19 @@ import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 @Entity()
 export class FoodInfoNara extends BaseEntity {
   @PrimaryColumn()
-  food_info_id: string;
+  foodInfoId: string;
 
   @Column()
-  food_name: string;
+  foodName: string;
 
   @Column({ nullable: true })
   brand: string;
 
   @Column({ nullable: true })
-  total_capacity: number;
+  totalCapacity: number;
 
   @Column({ nullable: true })
-  total_capacity_unit: string;
+  totalCapacityUnit: string;
 
   @Column({ nullable: true })
   calories: number;
@@ -30,5 +30,5 @@ export class FoodInfoNara extends BaseEntity {
   fats: number;
 
   @Column({ nullable: true })
-  research_year: string;
+  researchYear: string;
 }

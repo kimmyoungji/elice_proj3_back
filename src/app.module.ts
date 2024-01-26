@@ -12,6 +12,7 @@ import * as dotenv from "dotenv";
 import { UserModule } from "./user/user.module";
 // import { FeedbackModule } from "./feedback/feedback.module";
 import { ImageModule } from "./image/image.module";
+import { RecordModule } from "./record/record.module";
 dotenv.config();
 console.log(typeORMConfig);
 
@@ -22,6 +23,7 @@ console.log(typeORMConfig);
     PassportModule.register({ session: true }),
     AuthModule,
     UserModule,
+    RecordModule,
     CumulativeRecordModule,
     FoodInfoApiModule,
     ScheduleModule.forRoot(),

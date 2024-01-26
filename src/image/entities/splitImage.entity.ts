@@ -8,7 +8,7 @@ export class SplitImage {
   splitImageId: number;
 
   @Column()
-  imageId: string;
+  imageId: number;
 
   @Column()
   xCoordinate: number;

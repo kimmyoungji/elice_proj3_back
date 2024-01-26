@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsUUID, IsString, IsEnum, IsOptional, IsDate, ValidateNested } from "class-validator";
+import { IsInt, IsNotEmpty, IsUUID, IsString, IsEnum, IsOptional, IsDate, ValidateNested, IsArray } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Exclude, Expose, Type } from "class-transformer";
 import { MealType } from '../record.entity'
@@ -14,18 +14,13 @@ class Food {
     @ApiProperty({ description: "음식 수량" })
     counts: number;
 
-    @IsString()
+    @IsArray()
     @ApiProperty({ description: "음식 사진" })
     XYCoordinate: number[];
 }  
 
 @Exclude()
 export class CreateRecordDto {
-    @Expose()
-    @IsUUID()
-    @ApiProperty({ description: "기록 id" })
-    recordId: string;
-
     @Expose()
     @IsString()
     @IsNotEmpty()

@@ -1,30 +1,30 @@
 import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
-export class FoodInfoApi extends BaseEntity {
+export class FoodInfo extends BaseEntity {
   @PrimaryColumn()
-  food_info_id: string;
+  foodInfoId: string;
 
   @Column()
-  food_name: string;
+  foodName: string;
 
   @Column({ nullable: true })
   category: string;
 
   @Column({ nullable: true })
-  main_code: string;
+  mainCode: string;
 
   @Column({ nullable: true })
-  main_food_name: string;
+  mainFoodName: string;
 
   @Column({ nullable: true })
   brand: string;
 
   @Column({ nullable: true })
-  standard_capacity: number;
+  standardCapacity: number;
 
   @Column({ nullable: true })
-  total_capacity: number;
+  totalCapacity: number;
 
   @Column({ nullable: true })
   calories: number;
@@ -39,11 +39,11 @@ export class FoodInfoApi extends BaseEntity {
   fats: number;
 
   @Column({ nullable: true })
-  dietary_fiber: number;
+  dietaryFiber: number;
 
   @Column({ nullable: true })
-  created_date: Date;
+  createdDate: Date;
 
   @Column({ nullable: true })
-  updated_date: Date;
+  updatedDate: Date;
 }

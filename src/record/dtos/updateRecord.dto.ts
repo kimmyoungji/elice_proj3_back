@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose, Type } from 'class-transformer';
-import { IsDate, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from 'class-validator';
+import { IsArray, IsDate, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, ValidateNested } from 'class-validator';
 import { MealType } from '../record.entity';
 
 export class FoodUpdateDto {
@@ -14,19 +14,13 @@ export class FoodUpdateDto {
    @ApiProperty({ description: "음식 수량" })
    counts: number;
 
-   @IsInt()
+   @IsArray()
    @ApiProperty({ description: "음식 사진" })
    XYCoordinate: number[];
 }
 
 @Exclude()
 export class UpdateRecordDto {
-   @Expose()
-   @IsUUID()
-   @IsNotEmpty()
-   @ApiProperty({ description: "사용자 id" })
-   userId: string;
-
    @Expose()
    @IsString()
    @ApiProperty({ description: "식단 구분", enum: MealType })
