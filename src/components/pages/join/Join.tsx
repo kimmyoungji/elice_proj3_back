@@ -21,17 +21,43 @@ const Join = () => {
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
-  const { result, loading, trigger } = useApi({
+  // const { result, loading, trigger } = useApi({
+  //   method: 'post',
+  //   path: '/auth/local/signup',
+  //   data: { username, email, password },
+  // });
+
+  const { result: signUpResult, loading: signUpLoading, trigger: signUpTrigger } = useApi({
     method: 'post',
     path: 'auth/local/signup',
     data: { username, email, password },
   });
 
+  const { result: loginResult, trigger: loginTrigger } = useApi({
+    method: 'post',
+    path: '/auth/local/login',
+    shouldInitFetch: false,
+  });
+
   useEffect(() => {
-    if (result) {
+    if (signUpResult) {
+      loginTrigger({
+        data: { identifier: email, password },
+      });
+    }
+  }, [signUpResult, loginTrigger, email, password]);
+
+  useEffect(() => {
+    if (loginResult) {
       navigate('/onboarding/1');
     }
-  }, [result]);
+  }, [loginResult, navigate]);
+
+  // useEffect(() => {
+  //   if (result) {
+  //     navigate('/onboarding/1');
+  //   }
+  // }, [result, navigate]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -73,8 +99,13 @@ const Join = () => {
     setVerifiedpassword(confirmPassword);
   };
 
+  // const handleSignUp = () => {
+  //   trigger({
+  //     data: { username, email, password },
+  //   });
+  // };
   const handleSignUp = () => {
-    trigger({
+    signUpTrigger({
       data: { username, email, password },
     });
   };
@@ -173,9 +204,9 @@ const Join = () => {
           variant='default-active'
           size='big'
           onClickBtn={handleSignUp}
-          disabled={loading}
+          disabled={signUpLoading}
         >
-          {loading ? '가입 하는중' : '가입하기'}
+          {signUpLoading ? '가입 하는중' : '가입하기'}
         </ButtonCommon>
       </div>
     </div>
