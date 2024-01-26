@@ -43,13 +43,20 @@ export class FoodInfoRepository {
     foodName: string,
     manager: EntityManager
   ): Promise<FoodInfoDto> {
-    const result = await manager
+    let result = await manager
       .createQueryBuilder(FoodInfo, "entity")
-      .where("REPLACE(entity.food_name, ' ', '') like :foodName", {
-        foodName: `%${foodName}%`,
-      })
-      .getOneOrFail();
-    //getOneOrFail: 결과값 없을 경우 EntityNotFoundError 던짐
+      .where("REPLACE(entity.food_name, ' ', '') = :foodName", { foodName })
+      .orderBy("entity.created_date", "DESC")
+      .getOne();
+    if (!result) {
+      result = await manager
+        .createQueryBuilder(FoodInfo, "entity")
+        .where("REPLACE(entity.food_name, ' ', '') like :foodName", {
+          foodName: `%${foodName}%`,
+        })
+        .orderBy("entity.created_date", "DESC")
+        .getOne();
+    }
     return result;
   }
 

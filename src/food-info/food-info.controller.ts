@@ -2,6 +2,7 @@ import { Controller, Get, Query, UseGuards } from "@nestjs/common";
 import { FoodInfoService } from "./food-info.service";
 import { ApiOperation } from "@nestjs/swagger";
 import { isLoggedInGuard } from "src/auth/utils/isLoggedin.guard";
+import { FoodNamePipe } from "./pipe/food-name.pipe";
 
 @Controller("food-info")
 export class FoodInfoController {
@@ -13,9 +14,10 @@ export class FoodInfoController {
   async getFoodInfo(
     @Query("keyword") keyword: string,
     @Query("lastFoodId") lastFoodId: string,
-    @Query("foodName") foodName: string,
+    @Query("foodName", FoodNamePipe) foodName: string,
     @Query("foodInfoId") foodInfoId: string
   ) {
+    console.log("foodName", foodName);
     if (keyword) {
       if (!lastFoodId) {
         return await this.foodInfoService.getFoodList(keyword);
