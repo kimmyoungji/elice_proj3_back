@@ -42,7 +42,7 @@ export class CumulativeRecordController {
         const recommendNutrient = {
           carbohydrates: recommendIntake[0],
           proteins: recommendIntake[1],
-          fat: recommendIntake[2],
+          fats: recommendIntake[2],
           dietaryFiber: recommendIntake[3],
         };
         const dateArr = mealTypeResult.map((result, index) => [
