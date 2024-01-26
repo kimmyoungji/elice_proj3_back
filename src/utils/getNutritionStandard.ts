@@ -24,9 +24,9 @@ const getNutritionStandard = (data: UserData) => {
 
   return totalCalories - userGoalCalories < 50
     ? {
-        carbohydrates: x,
-        proteins: y,
-        fats: z,
+        carbohydrates: Math.round(x),
+        proteins: Math.round(y),
+        fats: Math.round(z),
         dietaryFiber: k,
       }
     : { carbohydrates: 200, proteins: 100, fats: 40, dietaryFiber: 30 };
