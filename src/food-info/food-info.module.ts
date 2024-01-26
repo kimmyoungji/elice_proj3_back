@@ -6,7 +6,7 @@ import { FoodInfo } from "./food-info.entity";
 import { FoodInfoRepository } from "./food-info.repository";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([FoodInfo])],
+  // imports: [TypeOrmModule.forFeature([FoodInfo])],
   controllers: [FoodInfoController],
   providers: [FoodInfoService, FoodInfoRepository],
 })
