@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { API_FETCHER, ApiMethods } from '@utils/axiosConfig';
 import useMutationggu from './useMutationggu';
+import { MutationFunction } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 interface UseApiParams {
   method?: ApiMethods;
@@ -13,7 +15,19 @@ interface UseApiParams {
   isShowBoundary?: boolean;
 }
 
-const useCachingApi = ({
+interface UseCachingApiResult<T> {
+  data: T[];
+}
+
+interface UseCachingApiReturnType<T> {
+  result: T;
+  loading: boolean;
+  reqIdentifier: string;
+  trigger: MutationFunction<any, {}>;
+  error: AxiosError;
+}
+
+const useCachingApi = <T>({
   method: triggerMethod = 'get',
   path: triggerPath = '',
   data: triggerData = {},
@@ -34,7 +48,7 @@ const useCachingApi = ({
     data,
     isPending: loading,
     error,
-  } = useMutationggu(
+  } = useMutationggu<T>(
     keyArr,
     async (data = triggerData) =>
       await API_FETCHER[triggerMethod as ApiMethods](triggerPath, data),
@@ -52,7 +66,13 @@ const useCachingApi = ({
 
   const reqIdentifier = triggerMethod + 'data';
 
-  return { result: data, loading, reqIdentifier, trigger: mutate, error };
+  return {
+    result: data,
+    loading,
+    reqIdentifier,
+    trigger: mutate,
+    error,
+  };
 };
 
 export default useCachingApi;

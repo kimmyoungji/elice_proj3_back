@@ -3,9 +3,12 @@ import { useCalendarContext } from './Calendar';
 import classes from './album.module.css';
 import Albumbody from './Albumbody';
 import { getMealsNumber } from '@utils/getMealNum';
+import { useState } from 'react';
+import useCachingApi from '@hooks/useCachingApi';
+import useIntersect from '@hooks/useIntersect';
 export type MealType = '아침' | '점심' | '저녁' | '간식';
 
-export interface DummyAlbumArrType {
+export interface AlbumArrType {
   date: string;
   dateArr: [MealType, number, string][];
 }
@@ -14,38 +17,19 @@ export const returnWithZero = (num: string | number) => {
   return Number(num) < 10 ? `0${num}` : num;
 };
 
-const DUMMYAlbumArr: DummyAlbumArrType[] = [
-  {
-    date: '01',
-    dateArr: [
-      ['아침', 400, 'https://source.unsplash.com/random/110x110'],
-      ['점심', 350, 'https://source.unsplash.com/random/110x110'],
-    ],
-  },
-  {
-    date: '06',
-    dateArr: [
-      ['아침', 400, 'https://source.unsplash.com/random/110x110'],
-      ['점심', 350, 'https://source.unsplash.com/random/110x110'],
-      ['저녁', 250, 'https://source.unsplash.com/random/110x110'],
-    ],
-  },
-  {
-    date: '07',
-    dateArr: [
-      ['아침', 400, 'https://source.unsplash.com/random/110x110'],
-      ['점심', 350, 'https://source.unsplash.com/random/110x110'],
-      ['저녁', 250, 'https://source.unsplash.com/random/110x110'],
-      ['간식', 250, 'https://source.unsplash.com/random/110x110'],
-    ],
-  },
-];
-
 //현재 연도와 월 가져오기
-
+type AlbumApiReponse = {
+  data: AlbumArrType[];
+};
 const Album = () => {
   const { thisYear, thisMonth } = useCalendarContext();
+  const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const { trigger, result } = useCachingApi<AlbumApiReponse>({
+    path: `/cumulative-record/month?month=${thisYear}-${returnWithZero(thisMonth)}-01?page=1`,
+  });
   const navigate = useNavigate();
+  // const safeResult = result as { data: AlbumArrType[] };
 
   const onClickCards = (val: string) => {
     console.log(val);
@@ -54,9 +38,30 @@ const Album = () => {
     );
   };
 
+  const onIntersect: IntersectionObserverCallback = async (
+    [entry],
+    observer
+  ) => {
+    if (entry.isIntersecting) {
+      setIsLoading(true);
+      observer.unobserve(entry.target);
+      await trigger('');
+      observer.observe(entry.target);
+      setIsLoading(false);
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const { setTarget } = useIntersect({
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.5,
+    onIntersect,
+  });
+
   return (
     <div className={classes.wrapper}>
-      {DUMMYAlbumArr.map((day, idx) => (
+      {result?.data.map((day, idx) => (
         <div key={`album-${idx}`} className={classes.date}>
           <div
             className={`b-regular`}
@@ -74,6 +79,7 @@ const Album = () => {
           </div>
         </div>
       ))}
+      {!isLoading && <div ref={setTarget} />}
     </div>
   );
 };
