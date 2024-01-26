@@ -22,7 +22,9 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
-  const handleLogin = async () => {
+  const handleLogin: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void = async () => {
     const result = await trigger({
       data: { email, password },
     });
