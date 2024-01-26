@@ -6,6 +6,7 @@ import CalendarCells from './CalendarCells';
 import { useEffect } from 'react';
 import useCachingApi from '@hooks/useCachingApi';
 import useApi, { TriggerType } from '@hooks/useApi';
+import { MutationFunction, UseMutateFunction } from '@tanstack/react-query';
 
 const cumulative_cal_DateArr = {
   existedDate: [1, 5, 9, 30, 29],
@@ -28,6 +29,11 @@ export interface CalendarBodyResult {
   totalCalData: number[] | any[];
 }
 
+interface CachingApiReturnType {
+  trigger: MutationFunction<any, {}>;
+  result: { data: any };
+}
+
 export type CumulativeCalDateArr = {
   data: { existedDate: number[] | any[]; totalCalData: number[] | any[] };
 };
@@ -35,22 +41,26 @@ export type CumulativeCalDateArr = {
 const CalendarBody = () => {
   const { thisYear, thisMonth, selectedIndex, setSelectedIndex, isAlbum } =
     useCalendarContext();
-  const {
-    trigger,
-    result: data,
-  }: {
-    trigger: TriggerType;
-    result: CumulativeCalDateArr;
-  } = useApi({
-    path: `/cumulative-record?month=${thisYear}-${returnWithZero(thisMonth)}-01`,
-  });
-  // const { trigger, data } = useCachingApi({
+  // const {
+  //   trigger,
+  //   result: data,
+  // }: {
+  // trigger: TriggerType;
+  //   result: CumulativeCalDateArr;
+  // } = useApi({
   //   path: `/cumulative-record?month=${thisYear}-${returnWithZero(thisMonth)}-01`,
   // });
+  const { trigger, result }: { trigger: any; result: any } = useCachingApi({
+    path: `/cumulative-record?month=${thisYear}-${returnWithZero(thisMonth)}-01`,
+  });
+
+  const triggerData = async () => {
+    await trigger({});
+  };
 
   useEffect(() => {
-    trigger({});
-  }, []);
+    triggerData();
+  }, [thisMonth]);
 
   const getThisMonthArray = () => {
     const thisMonthTotal = new Date(thisYear, thisMonth, 0).getDate();
@@ -67,7 +77,7 @@ const CalendarBody = () => {
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
           targetCalories={DUMMYtargetCalories}
-          cumulative_cal_DateArr={data.data}
+          cumulative_cal_DateArr={result?.data}
         />
       );
     });

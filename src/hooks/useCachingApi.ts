@@ -13,7 +13,7 @@ interface UseApiParams {
   isShowBoundary?: boolean;
 }
 
-const useCachingApi = async ({
+const useCachingApi = ({
   method: triggerMethod = 'get',
   path: triggerPath = '',
   data: triggerData = {},
@@ -30,8 +30,8 @@ const useCachingApi = async ({
   keyArr.push(key);
 
   const {
-    mutate: trigger,
-    data: result,
+    mutate,
+    data,
     isPending: loading,
     error,
   } = useMutationggu(
@@ -46,13 +46,13 @@ const useCachingApi = async ({
 
   useEffect(() => {
     shouldInitFetch && console.log('초기 요청합니다!!');
-    shouldInitFetch && trigger(triggerPath, triggerData);
+    shouldInitFetch && mutate(triggerPath, triggerData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const reqIdentifier = triggerMethod + 'data';
 
-  return { result, loading, reqIdentifier, trigger, error };
+  return { result: data, loading, reqIdentifier, trigger: mutate, error };
 };
 
 export default useCachingApi;
