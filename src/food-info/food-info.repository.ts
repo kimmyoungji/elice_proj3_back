@@ -25,7 +25,7 @@ export class FoodInfoRepository {
     keyword: string,
     lastFoodId: string,
     manager: EntityManager
-  ) {
+  ): Promise<FoodInfo[]> {
     const result = await manager
       .createQueryBuilder(FoodInfo, "entity")
       .select(["entity.foodInfoId", "entity.foodName"])

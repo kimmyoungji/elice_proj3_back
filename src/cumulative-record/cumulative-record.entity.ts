@@ -1,26 +1,26 @@
 // import { User } from "src/user/user.entity";
+import { Image } from "src/image/entities/image.entity";
 import { MealType } from "src/record/record.enum";
+import { User } from "src/user/entities/user.entity";
 import {
-  BaseEntity,
   Column,
   Entity,
   JoinColumn,
-  OneToMany,
+  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 
 @Entity()
-export class CumulativeRecord extends BaseEntity {
+export class CumulativeRecord {
   @PrimaryGeneratedColumn()
   cumulativeRecordId: string;
 
-  // Record module과 합칠 때
   @Column({ type: "text", array: true })
   // @JoinColumn()
-  // @OneToOne(() => Image, (image) => image.imageIds, { cascade: true })
+  // @OneToOne(() => Image, (image) => image.imageId, { cascade: true })
   imageId: string;
 
-  // Record moduler과 합칠 때
   @Column()
   // @JoinColumn()
   // @ManyToOne(() => User, (user) => user.userId, { cascade: true })

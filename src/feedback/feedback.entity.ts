@@ -1,15 +1,15 @@
 import {
-  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
-  Timestamp,
 } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 import { IsNotEmpty, IsUUID } from "class-validator";
 import { CheckFeedbackDataDto, MakeFeedbackDataDto } from "./dto/feedback.dto";
+import { User } from "src/user/entities/user.entity";
 
 @Entity()
 export class Feedback {
@@ -24,16 +24,14 @@ export class Feedback {
 
   @Column()
   @IsUUID()
-  // @JoinColumn()
-  // @ManyToOne(() => User, (user) => user.userId, { cascade: true })
+  @JoinColumn()
+  @ManyToOne(() => User, (user) => user.userId, { cascade: true })
   userId: string;
 
   @Column()
   question: string;
 
   @Column()
-  // @JoinColumn()
-  // @ManyToOne(() => HealthInfo, (health) => health.goal, { cascade: true })
   questionType: string;
 
   @Column()
