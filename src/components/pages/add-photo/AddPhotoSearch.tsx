@@ -54,9 +54,14 @@ const AddPhotoSearch = () => {
       counts: 1,
     })
   );
+  
+  const data = {
+    imgUrl: "",
+    foods: tagsArr,
+  }
 
   const addMeal = () => {
-    navigate(`/record/${date}/${mealTime}/edit`, { state: tagsArr });
+    navigate(`/record/${date}/${mealTime}/edit`, {state: data });
   };
 
   return (
