@@ -177,7 +177,6 @@ export class RecordRepository extends Repository<Record> {
         cumulativeFats,
         cumulativeDietaryFiber
       );
-
       const splitImageEntry = this.splitImageRepository.create({
         imageId: foodImage.imageId,
         xCoordinate: food.XYCoordinate[0],

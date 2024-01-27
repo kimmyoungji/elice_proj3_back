@@ -32,18 +32,47 @@ export class FeedbackController {
     );
   }
 
+  @Get("/save")
+  async saveFeedbackData(
+    @Query("feedbackId") feedbackId: string,
+    @Res() response: any
+  ) {
+    try {
+      await this.feedbackService.saveFeedbackData(feedbackId);
+      response.status(200).json("식단 저장 성공");
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @Get("/")
   async getFeedbackData(
     @Req() request: any,
+    @Query("startDate") startDate: Date,
     @Query("date") date: Date,
+    @Query("page") page: number,
     @Query("feedbackId") feedbackId: string,
     @Res() response: any
   ) {
     try {
       const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
       // const userId = request.user.userId;
-      if (date) {
-        const data = await this.feedbackService.getFeedbackData(userId, date);
+      if (startDate || date) {
+        const data = await this.feedbackService.getFeedbackChatData(
+          userId,
+          startDate,
+          date
+        );
+        if (data.length === 0) {
+          throw new NotFoundException("데이터가 존재하지 않습니다");
+        }
+        response.status(200).json({
+          data: data,
+        });
+      }
+
+      if (page) {
+        const data = await this.feedbackService.getFeedbackData(userId, page);
         if (data.length === 0) {
           throw new NotFoundException("데이터가 존재하지 않습니다");
         }

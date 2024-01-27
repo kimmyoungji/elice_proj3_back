@@ -40,15 +40,42 @@ export class FeedbackRepository {
       .getOne();
   }
 
+  async saveFeedBackYes(feedbackId: string, manager: EntityManager) {
+    return await manager
+      .createQueryBuilder(Feedback, "feedback")
+      .update(Feedback)
+      .set({ saveYn: true })
+      .where("feedback.feedback_id = :feedbackId", { feedbackId })
+      .execute();
+  }
+
   async getFeedbackData(
     userId: string,
+    page: number,
+    manager: EntityManager
+  ): Promise<GetFeedbackDataDto[]> {
+    return await manager
+      .createQueryBuilder(Feedback, "feedback")
+      .where("feedback.user_id =:userId", { userId })
+      .where("feedback.save_yn =:yn", { yn: true })
+      .orderBy("feedback.feedback_date", "DESC")
+      .take(5)
+      .skip((page - 1) * 5)
+      .getMany();
+  }
+
+  async getFeedbackChatData(
+    userId: string,
+    startDate: Date,
     date: Date,
     manager: EntityManager
   ): Promise<GetFeedbackDataDto[]> {
     return await manager
       .createQueryBuilder(Feedback, "feedback")
       .where("feedback.user_id =:userId", { userId })
-      .andWhere("feedback.feedback_date =:date", { date })
+      .andWhere("feedback.feedback_date >= :startDate", { startDate })
+      .andWhere("feedback.feedback_date <= :date", { date })
+      .orderBy("feedback.feedback_date", "ASC")
       .getMany();
   }
 

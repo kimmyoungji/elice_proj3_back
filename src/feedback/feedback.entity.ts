@@ -1,11 +1,4 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-} from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 import { IsNotEmpty, IsUUID } from "class-validator";
 import { CheckFeedbackDataDto, MakeFeedbackDataDto } from "./dto/feedback.dto";
@@ -38,8 +31,10 @@ export class Feedback {
   feedback: string;
 
   @Column()
-  @CreateDateColumn()
   feedbackDate: Date;
+
+  @Column({ default: false })
+  saveYn: boolean;
 
   public makefeedbackDataDto(
     makeFeedbackDataDto: MakeFeedbackDataDto
