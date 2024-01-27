@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { userData } from '@components/pages/my-page/DummyUserData';
 
-const initialState = { username: '', userInfo: userData };
+const initialState = { username: null, userInfo: userData };
 
 const userLoginSlice = createSlice({
   name: 'userLogin',

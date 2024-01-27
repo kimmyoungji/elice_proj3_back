@@ -82,7 +82,6 @@ const MealPage = () => {
                   variant='default-active'
                   size='tiny'
                   onClick={() => {
-                    console.log(imgData);
                     navigate(`/record/${date}/${selectedMealTime}/edit`, {
                       state: { foods: coordinate, imgUrl: imgData },
                     });

@@ -1,8 +1,5 @@
 export const userData = {
-  email: 'elice@gmail.com',
-  username: 'elice',
-  password: 'Elice1234@!',
-  birthday: '2011-04-26',
+  username: 'jin',
   gender: 2 as 1 | 2 | 3,
   age: 40,
   profileImage:

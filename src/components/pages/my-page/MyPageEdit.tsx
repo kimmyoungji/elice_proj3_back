@@ -34,10 +34,11 @@ const MyPageEdit = () => {
   const [data, setData] = useState(userData);
   const age = data.age;
 
-  const [profileImage, setProfileImage] = useState<string | undefined>(
+  const [previewImage, setPreviewImage] = useState<string | undefined>(
     data.profileImage
   );
   const [file, setFile] = useState<File | null>(null);
+  const [fileChanged, setFileChanged] = useState(false);
   const [bmr, setBmr] = useState(calBMR({ data, age }));
   const [bmrCalories, setBmrCalories] = useState(calBMRCalories({ bmr, data }));
   const [goalCalories, setGoalCalories] = useState(
@@ -55,10 +56,19 @@ const MyPageEdit = () => {
 
   const navigate = useNavigate();
 
-  const { getPresignedUrl } = usePresignedUrl({
+  const { getPresignedUrl, presignedUrl, error, loading } = usePresignedUrl({
     fileName: file?.name,
     path: `image/presigned-url/profile/${file?.name}`,
   });
+
+  useEffect(() => {
+    if (file) {
+      getPresignedUrl({
+        fileName: file.name,
+        path: `image/presigned-url/profile/${file.name}`,
+      });
+    }
+  }, [getPresignedUrl]);
 
   const { uploadToS3 } = useS3ImgUpload();
 
@@ -70,32 +80,10 @@ const MyPageEdit = () => {
   const handleImageSelect = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const imgFile = event.target.files?.[0];
-    if (imgFile) {
-      getImgPreview(imgFile, setFile, setProfileImage);
-    }
-    try {
-      const { presignedUrl, error, loading } = await getPresignedUrl({
-        fileName: imgFile?.name,
-        path: `image/presigned-url/profile/${imgFile?.name}`,
-      });
-      console.log(presignedUrl.data);
-
-      if (presignedUrl.data && file) {
-        console.log('이미지업로드 시도');
-        const uploadUrl = await uploadToS3({
-          presignedUrl: presignedUrl.data,
-          file,
-          // headers: { 'Content-Type': file.type },
-        });
-        if (uploadUrl) {
-          const uploadedImageUrl = presignedUrl.data.split('?')[0];
-          console.log('업로드된 이미지 URL:', uploadedImageUrl);
-        }
-        console.log('이미지업로드 성공');
-      }
-    } catch (error) {
-      console.log('presigned url 가져오기 실패', error);
+    const previewImgFile = event.target.files?.[0] || null;
+    if (previewImgFile) {
+      getImgPreview(previewImgFile, setPreviewImage, (file) => setFile(file));
+      setFileChanged(true);
     }
   };
 
@@ -135,7 +123,7 @@ const MyPageEdit = () => {
       if ([1, 2, 3, 4].includes(newGoal)) {
         const updatedData = {
           ...data,
-          goal: newGoal as 1 | 2 | 3 | 4,
+          diet_goal: newGoal as 1 | 2 | 3 | 4,
         };
         updateDataAndCalories(updatedData);
         setSelectedGoal(value);
@@ -174,9 +162,8 @@ const MyPageEdit = () => {
         ),
         height: Number(prevHeight),
         weight: Number(prevWeight),
-        profileImage: profileImage,
+        profileImage: file,
       };
-      // 데이터 업데이트
       setData(updatedData);
       updateDataAndCalories(updatedData);
     } catch (error) {
@@ -184,8 +171,30 @@ const MyPageEdit = () => {
     }
   };
 
-  const saveAndNavigate = () => {
+  const uploadProfileImage = async () => {
+    try {
+      if (presignedUrl.data && file) {
+        const uploadUrl = await uploadToS3({
+          presignedUrl: presignedUrl.data,
+          file,
+        });
+        if (uploadUrl) {
+          const uploadedImageUrl = presignedUrl.data.split('?')[0];
+          return uploadedImageUrl;
+        }
+      }
+    } catch (error) {
+      console.error('이미지 업로드 실패', error);
+    }
+  };
+
+  const saveAndNavigate = async () => {
+    let uploadedImageUrl = null;
     const updatedNutrients = getNutritionStandard(data);
+    if (fileChanged) {
+      uploadedImageUrl = await uploadProfileImage();
+    }
+
     const updatedData = {
       ...data,
       diet_goal: Number(findKeyByValue(mapGoaltoMsg, selectedGoal)),
@@ -194,18 +203,20 @@ const MyPageEdit = () => {
       weight: Number(prevWeight),
       recommendIntake: updatedNutrients,
       targetCalories: goalCalories,
+      profileImage: uploadedImageUrl || file,
     };
+    const { username, ...dataToSend } = updatedData;
 
     updateDataAndCalories(updatedData);
-    // store에 업데이트된 userInfo 저장하는 로직
     dispatch(storeUserInfo(updatedData));
-    // console.log(updatedData);
-    trigger({
+
+    await trigger({
       applyResult: true,
       isShowBoundary: false,
-      data: updatedData,
+      data: dataToSend,
       path: 'user',
     });
+
     setUpdated(true);
   };
 
@@ -226,11 +237,11 @@ const MyPageEdit = () => {
             ref={imgInputRef}
             onChange={handleImageSelect}
           />
-          {profileImage ? (
+          {previewImage ? (
             <>
               <img
                 className={style.userProfile}
-                src={profileImage}
+                src={previewImage}
                 alt='사용자 프로필'
                 onClick={handleImageClick}
               />

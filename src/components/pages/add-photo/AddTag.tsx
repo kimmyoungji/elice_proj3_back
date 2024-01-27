@@ -30,7 +30,7 @@ const AddTag = ({
   setFoodInfo,
 }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
-  const lastFoodId = foodInfo[foodInfo.length - 1].foodInfoId;
+  const lastFoodId = foodInfo.length > 0 && foodInfo[foodInfo.length - 1].foodInfoId;
 
   const { result, trigger } = useApi({
     path: `/food-info/foods?keyword=${searchInput}&lastFoodId=${lastFoodId}`,
@@ -78,11 +78,10 @@ const AddTag = ({
     <>
       <div className={styles.result}>
         <div style={{ overflow: 'auto' }}>
-          {searchInput && searchResults ? (
+          {searchInput && searchResults.length > 0 ? (
             searchResults.map((result, index) => (
-              <>
+              <div key={index}>
                 <p
-                  key={index}
                   onClick={(e) => addTag(e)}
                   className='r-big'
                   style={{ marginBottom: '5px' }}
@@ -96,12 +95,12 @@ const AddTag = ({
                 {!isLoading && searchResults && searchResults.length >= 10 && (
                   <div ref={setTarget} />
                 )}
-              </>
+              </div>
             ))
           ) : (
             <p
               className='r-medium'
-              style={{ textAlign: 'center', marginTop: '60px' }}
+              style={{ textAlign: 'center', marginTop: '75px' }}
             >
               검색 결과가 없습니다.
             </p>

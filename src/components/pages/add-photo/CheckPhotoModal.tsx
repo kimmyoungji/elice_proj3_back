@@ -55,7 +55,7 @@ const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
       },
     });
 
-    const foodsArr = res.data.map((food: any) => ({ ...food, counts: 1 }))
+    const foodsArr = res.data.map((food: any) => ({ ...food, counts: 1, foodInfoId:'' }))
 
     const data = {
       imgUrl: canvasUrl,

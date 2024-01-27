@@ -104,7 +104,7 @@ function App() {
               <Suspense fallback={<Loading />}>
                 <Routes>
                   <Route path='*' element={<NotFound />} />
-                  <Route path='/' element={<Navigate to='/home' />} />
+                  <Route path='/' element={<Navigate to='/auth' />} />
                   <Route path='/login' element={<Login />} />
                   <Route path='/auth' element={<Auth />} />
                   <Route path='/onboarding/:step' element={<Onboarding />} />
