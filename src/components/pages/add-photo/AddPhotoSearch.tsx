@@ -46,17 +46,29 @@ const AddPhotoSearch = () => {
     setIsSearching(true);
   },[result])
 
+  const getFoodId = (tag:string) => {
+    for (let i = 0; i < foodInfo.length; i++){
+      if (foodInfo[i].foodName.split('_')[1] === tag) return foodInfo[i].foodInfoId;
+    }
+  }
+
   const tagsArr: object[] = [];
   tags.map((tag) =>
     tagsArr.push({
       foodName: tag,
       XYCoordinate: [],
       counts: 1,
+      foodInfoId: getFoodId(tag),
     })
   );
+  
+  const data = {
+    imgUrl: undefined,
+    foods: tagsArr,
+  }
 
   const addMeal = () => {
-    navigate(`/record/${date}/${mealTime}/edit`, { state: tagsArr });
+    navigate(`/record/${date}/${mealTime}/edit`, {state: data });
   };
 
   return (
