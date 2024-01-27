@@ -146,7 +146,7 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
           {focusing.foodName}
         </p>
         <p className='r-super' style={{ marginLeft: 'auto' }}>
-          0Kcal
+          {focusing.calories ? counter*focusing.calories : 0}Kcal
         </p>
       </div>
 
