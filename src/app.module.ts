@@ -10,13 +10,9 @@ import { ConfigModule } from "@nestjs/config";
 import { FoodInfoModule } from "./food-info/food-info.module";
 import * as dotenv from "dotenv";
 import { UserModule } from "./user/user.module";
-// import { FeedbackModule } from "./feedback/feedback.module";
 import { ImageModule } from "./image/image.module";
-<<<<<<< HEAD
 import { FeedbackModule } from "./feedback/feedback.module";
-=======
 import { RecordModule } from "./record/record.module";
->>>>>>> 996b92fad7c42d6d2552373e3719aef85662753d
 dotenv.config();
 console.log(typeORMConfig);
 
