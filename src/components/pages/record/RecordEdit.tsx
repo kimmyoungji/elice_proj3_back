@@ -9,6 +9,13 @@ interface Food {
   foodName: string;
   XYCoordinate: number[];
   counts: number;
+  foodInfoId: string;
+  calories?: number;
+  carbohydrates?: number;
+  dietaryFiber?: number;
+  fats?: number;
+  proteins?: number;
+  totalCapacity?: number;
 }
 
 interface MealTime {
@@ -35,6 +42,7 @@ const RecordEdit = () => {
       foodName: '',
       XYCoordinate: [0, 0, 0, 0],
       counts: 1,
+      foodInfoId: '',
     },
   ]);
   const [imgUrl, setImgUrl] = useState('');
@@ -46,22 +54,23 @@ const RecordEdit = () => {
     }
   }, []);
 
-  const [focus, setFocus] = useState<string | undefined | null>('');
+  const [focus, setFocus] = useState<number|undefined>();
 
   const handleFocus = (
     e: React.MouseEvent<HTMLCanvasElement | HTMLDivElement, MouseEvent>
   ) => {
-    setFocus(e.currentTarget.parentNode?.nextSibling?.textContent);
+    setFocus(foods.findIndex((food)=>food.foodName===e.currentTarget.id));
   };
 
   const addFood = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    foods[0].foodName === '음식명'
+    foods[0] && foods[0].foodName === '음식명'
       ? alert('음식 상세 정보를 추가해주세요!')
       : setFoods([
           {
             foodName: '음식명',
             XYCoordinate: [],
             counts: 1,
+            foodInfoId: '',
           },
           ...foods,
         ]);
@@ -169,54 +178,55 @@ const RecordEdit = () => {
           onMouseEnter={handleEnter}
           onMouseLeave={handleLeave}
         >
-          {foods && foods.map((food: Food, index: number) => (
-            <div key={index} className={styles.tagitem}>
-              <div className={styles.tagimgwrap}>
-                {food.XYCoordinate.length === 0 ? (
-                  <img
-                    className={`${styles.tagimg} ${
-                      focus === food.foodName && styles.focusimg
-                    }`}
-                    id={food.foodName}
-                    src='/images/9gram_logo.png'
-                    alt={food.foodName}
-                    onClick={(e) => handleFocus(e)}
-                  />
-                ) : (
-                  <canvas
-                    className={`${styles.tagimg} ${
-                      focus === food.foodName && styles.focusimg
-                    }`}
-                    id={food.foodName}
-                    ref={(element) => {
-                      canvasRef.current[index] = element;
-                    }}
-                    width={90}
-                    height={90}
-                    onClick={(e) => handleFocus(e)}
-                  />
-                )}
+          {foods &&
+            foods.map((food: Food, index: number) => (
+              <div key={index} className={styles.tagitem}>
+                <div className={styles.tagimgwrap}>
+                  {food.XYCoordinate.length === 0 ? (
+                    <img
+                      className={`${styles.tagimg} ${
+                        (focus === index) && styles.focusimg
+                      }`}
+                      id={food.foodName}
+                      src='/images/9gram_logo.png'
+                      alt={food.foodName}
+                      onClick={(e) => handleFocus(e)}
+                    />
+                  ) : (
+                    <canvas
+                      className={`${styles.tagimg} ${
+                        (focus === index) && styles.focusimg
+                      }`}
+                      id={food.foodName}
+                      ref={(element) => {
+                        canvasRef.current[index] = element;
+                      }}
+                      width={90}
+                      height={90}
+                      onClick={(e) => handleFocus(e)}
+                    />
+                  )}
 
-                <img
-                  className={styles.tagdeleteicon}
-                  id={food.foodName}
-                  src='/icons/deleteicon.png'
-                  alt='태그삭제'
-                  onClick={(e) => deletefood(e)}
-                />
+                  <img
+                    className={styles.tagdeleteicon}
+                    id={food.foodName}
+                    src='/icons/deleteicon.png'
+                    alt='태그삭제'
+                    onClick={(e) => deletefood(e)}
+                  />
+                </div>
+                <p
+                  className={`${
+                    focus === index ? styles.focustxt : styles.tagtxt
+                  }`}
+                >
+                  {food.foodName}
+                </p>
               </div>
-              <p
-                className={`${
-                  focus === food.foodName ? styles.focustxt : styles.tagtxt
-                }`}
-              >
-                {food.foodName}
-              </p>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
-      {focus && (
+      {focus !== undefined && (
         <RecordEditDetail
           focus={focus}
           foods={foods}
@@ -226,7 +236,7 @@ const RecordEdit = () => {
       )}
 
       <div className={styles.btnbox}>
-        {focus === '' ? (
+        {focus === undefined ? (
           <ButtonCommon
             size='medium'
             variant='disabled'
@@ -238,7 +248,7 @@ const RecordEdit = () => {
           <ButtonCommon
             size='medium'
             variant='disabled'
-            onClick={() => setFocus('')}
+            onClick={() => setFocus(undefined)}
           >
             취소
           </ButtonCommon>

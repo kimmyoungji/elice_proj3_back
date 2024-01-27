@@ -16,10 +16,7 @@ interface TargetNutrients {
 }
 
 export type UserData = {
-  email?: string;
   username?: string;
-  password?: string;
-  birthday?: string;
   gender?: 1 | 2 | 3;
   age: number;
   profileImage?: string | undefined;

@@ -9,7 +9,7 @@ const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
   const AuthComponent: React.FC = (props: any) => {
     const dispatch = useDispatch();
     const isLoggedIn = useSelector(
-      (state: RootState) => state.user.username !== ''
+      (state: RootState) => state.user.username !== null
     );
     const {
       trigger,

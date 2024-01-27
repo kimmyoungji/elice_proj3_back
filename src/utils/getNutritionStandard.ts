@@ -13,15 +13,22 @@ const getNutritionStandard = (data: UserData) => {
   let z = 1;
   let x = (ratioX / ratioZ) * z;
   let y = (ratioY / ratioZ) * z;
+  let totalCalories = 4 * x + 4 * y + 9 * z;
 
-  while (4 * x + 4 * y + 9 * z < userGoalCalories) {
+  while (totalCalories < userGoalCalories) {
     z++;
     x = (ratioX / ratioZ) * z;
     y = (ratioY / ratioZ) * z;
+    totalCalories = 4 * x + 4 * y + 9 * z;
   }
 
-  return 4 * x + 4 * y + 9 * z === userGoalCalories
-    ? { carbohydrates: x, proteins: y, fats: z, dietaryFiber: k }
+  return totalCalories - userGoalCalories < 50
+    ? {
+        carbohydrates: Math.round(x),
+        proteins: Math.round(y),
+        fats: Math.round(z),
+        dietaryFiber: k,
+      }
     : { carbohydrates: 200, proteins: 100, fats: 40, dietaryFiber: 30 };
 };
 
