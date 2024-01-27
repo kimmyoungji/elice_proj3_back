@@ -53,8 +53,6 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
   const byFoodInfoId = `/food-info/foods?foodInfoId=${focusing.foodInfoId}`;
   const path = focusing.foodInfoId ? byFoodInfoId : byFoodName;
 
-  
-
   const { result, trigger } = useApi({
     path: path,
   });
@@ -74,8 +72,7 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
     let copyFoods = [...foods];
     copyFoods[focus] = newFocusFood;
     setFoods(copyFoods);
-  }, [result])
-  
+  }, [result]);
 
   const handleSearch = () => {
     setSearching(true);
@@ -124,29 +121,24 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
     '해맑은 떡국',
   ];
 
-
-  
-
-  const calCH = Math.round(focusing.carbohydrates as number * counter);
-  const calPT = Math.round(focusing.proteins as number * counter);
-  const calFT = Math.round(focusing.fats as number * counter);
-  const calDF = Math.round(focusing.dietaryFiber as number * counter);
+  const calCH = Math.round((focusing.carbohydrates as number) * counter);
+  const calPT = Math.round((focusing.proteins as number) * counter);
+  const calFT = Math.round((focusing.fats as number) * counter);
+  const calDF = Math.round((focusing.dietaryFiber as number) * counter);
 
   const nutrients = [
-    { name: '탄수화물', gram: calCH ? calCH : 0},
-    { name: '단백질', gram: calPT ? calPT : 0},
-    { name: '지방', gram: calFT ? calFT : 0},
-    { name: '식이섬유', gram: calDF ? calDF : 0},
+    { name: '탄수화물', gram: calCH ? calCH : 0 },
+    { name: '단백질', gram: calPT ? calPT : 0 },
+    { name: '지방', gram: calFT ? calFT : 0 },
+    { name: '식이섬유', gram: calDF ? calDF : 0 },
   ];
 
   return (
     <div className={styles.container}>
       <div className={styles.titlebox}>
-        <p className='s-large'>
-          {focusing.foodName}
-        </p>
+        <p className='s-large'>{focusing.foodName}</p>
         <p className='r-super' style={{ marginLeft: 'auto' }}>
-          {focusing.calories ? counter*focusing.calories : 0}Kcal
+          {focusing.calories ? Math.round(counter * focusing.calories) : 0}Kcal
         </p>
       </div>
 
@@ -244,7 +236,7 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
         <div className={styles.caltext}>
           <p className='r-large'>얼마나 먹었나요?</p>
           <p className='r-super'>
-            {focusing.totalCapacity ? counter*focusing.totalCapacity : 0}g
+            {focusing.totalCapacity ? counter * focusing.totalCapacity : 0}g
           </p>
         </div>
         <div className={styles.calinput}>
