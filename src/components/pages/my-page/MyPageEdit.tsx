@@ -164,7 +164,6 @@ const MyPageEdit = () => {
         weight: Number(prevWeight),
         profileImage: file,
       };
-      // 데이터 업데이트
       setData(updatedData);
       updateDataAndCalories(updatedData);
     } catch (error) {
@@ -174,21 +173,15 @@ const MyPageEdit = () => {
 
   const uploadProfileImage = async () => {
     try {
-      // console.log('이미지 파일이 잘들어가나 보자', file?.name);
-      console.log(presignedUrl.data);
       if (presignedUrl.data && file) {
-        console.log('이미지업로드 시도');
         const uploadUrl = await uploadToS3({
           presignedUrl: presignedUrl.data,
           file,
         });
         if (uploadUrl) {
           const uploadedImageUrl = presignedUrl.data.split('?')[0];
-          console.log('업로드된 이미지 URL:', uploadedImageUrl);
           return uploadedImageUrl;
         }
-
-        // return presignedUrl.data.split('?')[0];
       }
     } catch (error) {
       console.error('이미지 업로드 실패', error);
@@ -201,7 +194,6 @@ const MyPageEdit = () => {
     if (fileChanged) {
       uploadedImageUrl = await uploadProfileImage();
     }
-    console.log(uploadedImageUrl);
 
     const updatedData = {
       ...data,
@@ -214,11 +206,9 @@ const MyPageEdit = () => {
       profileImage: uploadedImageUrl || file,
     };
     const { username, ...dataToSend } = updatedData;
-    console.log(dataToSend);
 
     updateDataAndCalories(updatedData);
     dispatch(storeUserInfo(updatedData));
-    console.log(updatedData);
 
     await trigger({
       applyResult: true,
