@@ -43,7 +43,7 @@ const useMutationggu = <T, E = ApiResponseError>(
     },
 
     onSuccess: async (data) => {
-      if (applyResult) {
+      if (applyResult && gc !== 0) {
         queryClient.invalidateQueries({ queryKey: itemId });
         queryClient.setQueriesData({ queryKey: itemId }, data);
         return;

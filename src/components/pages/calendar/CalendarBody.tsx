@@ -52,6 +52,7 @@ const CalendarBody = () => {
   // });
   const { trigger, result }: { trigger: any; result: any } = useCachingApi({
     path: `/cumulative-record?month=${thisYear}-${returnWithZero(thisMonth)}-01`,
+    gcTime: 20000,
   });
 
   const triggerData = async () => {
