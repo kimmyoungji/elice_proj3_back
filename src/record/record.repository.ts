@@ -57,35 +57,75 @@ export class RecordRepository extends Repository<Record> {
       );
     }
 
+
     // let foods = await this.foodInfoRepository.findOneBy({
     //     food_info_id: records[0].foodInfoId
     // })
 
-    // 클라이언트 형식에 맞게 레코드를 변환합니다.
-    const meals = records.reduce((acc, record) => {
-      const mealType = record.mealType;
-      const food = {
+  // 비동기적으로 각 레코드에 대한 foodInfo를 조회합니다.
+  const foodsWithInfo = await Promise.all(records.map(async (record) => {
+    const foodInfo = await this.foodInfoRepository.findOneBy(
+      { foodInfoId: record.foodInfoId }
+    );
+
+    return {
+      mealType: record.mealType,
+      food: {
         foodInfoId: record.foodInfoId,
         recordId: record.recordId,
-        foodName: "foodName",
+        foodName: foodInfo ? foodInfo.foodName : null,
         counts: record.foodCounts,
         XYCoordinate: [],
-      };
-
-      if (!acc[mealType]) {
-        acc[mealType] = { foods: [], totalCalories: 0, totalNutrient: {} };
       }
+    };
+  }));
 
-      acc[mealType].foods.push(food);
-      acc[mealType].totalCalories += record.totalCalories;
-      // 총 영양소 계산 로직 추가
+  // 클라이언트 형식에 맞게 데이터를 재구성합니다.
+  const mealAccumulator = {};
 
-      return acc;
-    }, {});
+  for (const record of records) {
+    const foodInfo = await this.foodInfoRepository.findOneBy({
+      foodInfoId: record.foodInfoId
+    });
+
+    if (!foodInfo) {
+      throw new NotFoundException(`FoodInfo not found for id: ${record.foodInfoId}`);
+    }
+
+    // splitImage 테이블에서 XY 좌표를 가져옵니다.
+    const splitImageRecord = await this.splitImageRepository.findOneBy({
+      imageId: record.imageId
+    });
+
+    const mealType = record.mealType;
+    const calculatedCalories = foodInfo.calories * record.foodCounts;
+
+    if (!mealAccumulator[mealType]) {
+      mealAccumulator[mealType] = { foods: [], totalCalories: 0, totalNutrient: {} };
+    }
+
+    mealAccumulator[mealType].foods.push({
+      foodInfoId: record.foodInfoId,
+      recordId: record.recordId,
+      foodName: foodInfo.foodName,
+      counts: record.foodCounts,
+      XYCoordinate: splitImageRecord
+      ? [
+          splitImageRecord.xCoordinate,
+          splitImageRecord.yCoordinate,
+          splitImageRecord.height,
+          splitImageRecord.width
+        ]
+      : [],
+  });
+
+    mealAccumulator[mealType].totalCalories += calculatedCalories;
+    // 여기에 총 영양소 계산 로직을 추가합니다.
+  }
 
     // 최종 데이터를 클라이언트에 전달할 형식으로 구성
     const response = {
-      ...meals,
+      ...mealAccumulator,
       targetCalories: 2400,
       recommendNutrient: {
         carbohydrates: 240,
@@ -189,6 +229,7 @@ export class RecordRepository extends Repository<Record> {
         where: {
           userId: record.userId,
           mealType: record.mealType,
+          date: record.firstRecordDate
         },
       });
 
@@ -203,7 +244,7 @@ export class RecordRepository extends Repository<Record> {
       newCumulativeRecord.proteins = proteins;
       newCumulativeRecord.fats = fats;
       newCumulativeRecord.dietaryFiber = dietaryFiber;
-      // newCumulativeRecord.imageId = record.imageId; //형식 바꿔주셔야 함
+      newCumulativeRecord.imageId = record.imageId; //형식 바꿔주셔야 함
       await this.cumulativeRecordRepository.save(newCumulativeRecord);
     } else {
       // 기존 레코드 업데이트
