@@ -10,7 +10,7 @@ interface Nutrition {
 }
 
 interface Props {
-  focus: string;
+  focus: number | undefined;
   foods: {
     foodName: string;
     XYCoordinate: number[];
@@ -27,24 +27,30 @@ interface Props {
       }[]
     >
   >;
-  setFocus: React.Dispatch<React.SetStateAction<string | null | undefined>>;
+  setFocus: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
   const [searchInput, setSearchInput] = useState('');
   const [searching, setSearching] = useState(false);
 
+  const byFoodName = `/food-info/foods?foodName=${focus !== undefined && foods[focus].foodName}`;
+  const byFoodInfoId = `/food-info/foods?foodInfoId=${focus !== undefined && foods[focus].foodInfoId}`;
+  const path =
+    focus !== undefined && foods[focus].foodInfoId ? byFoodInfoId : byFoodName;
+
   // focus 음식 정보 받아오는 api
   const { result, trigger } = useApi({
-    path: `/food-info/foods?foodName=${focus}`,
+    path: path,
   });
 
   useEffect(() => {
-    if (!focus) return;
+    if (focus === undefined) return;
     trigger({});
   }, [focus]);
 
   console.log(result);
+  console.log(focus !== undefined && foods[focus]);
 
   const handleSearch = () => {
     setSearching(true);
@@ -57,23 +63,27 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
       alert('이미 등록된 음식입니다!');
     } else {
       const newArr = [...foods];
-      const find = foods.findIndex((i) => i.foodName === focus);
-      newArr[find].foodName = `${e.currentTarget.textContent}`;
+      if (focus === undefined) return;
+      newArr[focus].foodName = `${e.currentTarget.textContent}`;
       setFoods(newArr);
       setSearching(false);
-      setFocus(e.currentTarget.textContent);
     }
   };
 
-  const [amount, setAmount] = useState(1);
   const increment = () => {
-    setAmount(amount + 0.25);
+    if (focus === undefined) return;
+    let copyArr = [...foods];
+    copyArr[focus].counts += 0.25;
+    setFoods(copyArr);
   };
   const decrement = () => {
-    if (amount === 0.25) {
+    if (focus === undefined) return;
+    if (foods[focus].counts === 0.25) {
       alert('더 이상 양을 줄일 수 없습니다!');
     } else {
-      setAmount(amount - 0.25);
+      let copyArr = [...foods];
+      copyArr[focus].counts -= 0.25;
+      setFoods(copyArr);
     }
   };
 
@@ -100,7 +110,9 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
   return (
     <div className={styles.container}>
       <div className={styles.titlebox}>
-        <p className='s-large'>{focus}</p>
+        <p className='s-large'>
+          {focus !== undefined && foods[focus].foodName}
+        </p>
         <p className='r-super' style={{ marginLeft: 'auto' }}>
           0Kcal
         </p>
@@ -199,7 +211,9 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
       <div>
         <div className={styles.caltext}>
           <p className='r-large'>얼마나 먹었나요?</p>
-          <p className='r-super'>{amount}g</p>
+          <p className='r-super'>
+            {focus !== undefined && foods[focus].counts}g
+          </p>
         </div>
         <div className={styles.calinput}>
           <img
@@ -208,7 +222,7 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
             alt='-'
             onClick={decrement}
           />
-          <p className='s-big'>{amount}</p>
+          <p className='s-big'>{focus !== undefined && foods[focus].counts}</p>
           <img
             className={styles.calbtn}
             src='/icons/plusicon.png'

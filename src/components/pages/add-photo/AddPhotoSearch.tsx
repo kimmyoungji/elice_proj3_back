@@ -48,7 +48,6 @@ const AddPhotoSearch = () => {
 
   const getFoodId = (tag:string) => {
     for (let i = 0; i < foodInfo.length; i++){
-      console.log(foodInfo)
       if (foodInfo[i].foodName.split('_')[1] === tag) return foodInfo[i].foodInfoId;
     }
   }

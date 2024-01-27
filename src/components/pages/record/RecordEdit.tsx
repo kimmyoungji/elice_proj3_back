@@ -48,12 +48,12 @@ const RecordEdit = () => {
     }
   }, []);
 
-  const [focus, setFocus] = useState<string | undefined | null>('');
+  const [focus, setFocus] = useState<number|undefined>();
 
   const handleFocus = (
     e: React.MouseEvent<HTMLCanvasElement | HTMLDivElement, MouseEvent>
   ) => {
-    setFocus(e.currentTarget.parentNode?.nextSibling?.textContent);
+    setFocus(foods.findIndex((food)=>food.foodName===e.currentTarget.id));
   };
 
   const addFood = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -179,7 +179,7 @@ const RecordEdit = () => {
                   {food.XYCoordinate.length === 0 ? (
                     <img
                       className={`${styles.tagimg} ${
-                        focus === food.foodName && styles.focusimg
+                        (focus === index) && styles.focusimg
                       }`}
                       id={food.foodName}
                       src='/images/9gram_logo.png'
@@ -189,7 +189,7 @@ const RecordEdit = () => {
                   ) : (
                     <canvas
                       className={`${styles.tagimg} ${
-                        focus === food.foodName && styles.focusimg
+                        (focus === index) && styles.focusimg
                       }`}
                       id={food.foodName}
                       ref={(element) => {
@@ -211,7 +211,7 @@ const RecordEdit = () => {
                 </div>
                 <p
                   className={`${
-                    focus === food.foodName ? styles.focustxt : styles.tagtxt
+                    focus === index ? styles.focustxt : styles.tagtxt
                   }`}
                 >
                   {food.foodName}
@@ -220,7 +220,7 @@ const RecordEdit = () => {
             ))}
         </div>
       </div>
-      {focus && (
+      {focus !== undefined && (
         <RecordEditDetail
           focus={focus}
           foods={foods}
@@ -230,7 +230,7 @@ const RecordEdit = () => {
       )}
 
       <div className={styles.btnbox}>
-        {focus === '' ? (
+        {focus === undefined ? (
           <ButtonCommon
             size='medium'
             variant='disabled'
@@ -242,7 +242,7 @@ const RecordEdit = () => {
           <ButtonCommon
             size='medium'
             variant='disabled'
-            onClick={() => setFocus('')}
+            onClick={() => setFocus(undefined)}
           >
             취소
           </ButtonCommon>
