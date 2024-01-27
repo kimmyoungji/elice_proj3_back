@@ -1,6 +1,7 @@
 import { DownArrowLight } from '@assets/DownArrowLight';
 import styles from '@components/pages/home/home.module.css';
 import useApi from '@hooks/useApi';
+import useCachingApi from '@hooks/useCachingApi';
 import { useEffect, useState } from 'react';
 import Calorie from './Calorie';
 import MealCard from './MealCard';
@@ -45,7 +46,7 @@ const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const todayDate = `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${nowDate}`;
-  const [date, setDate] = useState(todayDate);
+  const [date, setDate] = useState('2024-01-26');
   const [dayData, setDayData] = useState<Props>();
 
   const [currentWeekArr, setCurrentWeekArr] = useState<number[]>([]);
@@ -70,6 +71,26 @@ const Home = () => {
       setDayData(result.data);
     }
   }, [result?.data]);
+
+  // const { trigger, result }: { trigger: any; result: any } = useCachingApi({
+  //   path: `/cumulative-record?date=${date}`,
+  // });
+
+  // const triggerData = async () => {
+  //   await trigger({});
+  // };
+
+  // useEffect(() => {
+  //   triggerData();
+  // }, [selectedDay]);
+
+  // console.log(result);
+
+  // useEffect(() => {
+  //   if (result.data) {
+  //     setDayData(result.data);
+  //   }
+  // }, [result?.data]);
 
   const handleClick = (idx: number) => {
     setSelectedDay(idx);

@@ -43,7 +43,7 @@ const MealCard = ({ date, dateArr }: Props) => {
           {dateArr.length > 0 &&
             dateArr.map((date, idx2) =>
               mealtime[date[0]] === meal ? (
-                <div>
+                <div key={`isMealcard-${idx2}`}>
                   <img
                     className={styles.img}
                     src={date[2] ? date[2] : '로봇 이미지 넣기'}
