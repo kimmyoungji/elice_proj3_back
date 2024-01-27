@@ -2,7 +2,6 @@ import { Module } from "@nestjs/common";
 import { FoodInfoApiController } from "./food-info-api.controller";
 import { FoodInfoApiService } from "./food-info-api.service";
 import { FoodInfoAPIRepository } from "./food-info-api.repository";
-import { FoodInfoApi } from "./food-info-api.entity";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({

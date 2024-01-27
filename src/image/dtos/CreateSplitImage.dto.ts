@@ -1,5 +1,5 @@
 export class CreateSplitImageDto{
-    imageId: string;
+    imageId: number;
     xCoordinate: number;
     yCoordinate: number;
     width: number;
