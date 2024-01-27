@@ -6,6 +6,11 @@ import { MealType } from '../record.entity';
 export class FoodUpdateDto {
    @IsString()
    @IsNotEmpty()
+   @ApiProperty({ description: "음식Id" })
+   foodInfoId: string;
+   
+   @IsString()
+   @IsNotEmpty()
    @ApiProperty({ description: "음식 이름" })
    foodName: string;
 

@@ -1,15 +1,9 @@
 import {
-  Any,
-  DataSource,
   Equal,
-  FindOperator,
-  LessThanOrEqual,
-  MoreThanOrEqual,
   Repository,
 } from "typeorm";
 import { MealType, Record } from "./record.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-// import { User } from "src/user/user.entity";
 import {
   BadRequestException,
   Injectable,
@@ -21,18 +15,17 @@ import { FoodInfo } from "src/food-info/food-info.entity";
 import { Image } from "src/image/entities/image.entity";
 import { SplitImage } from "src/image/entities/splitImage.entity";
 import { UpdateRecordDto } from "./dtos/updateRecord.dto";
+import { HealthInfo } from "src/user/entities/health-info.entity";
 
 @Injectable()
 export class RecordRepository extends Repository<Record> {
   constructor(
     @InjectRepository(Record) private recordRepository: Repository<Record>,
-    @InjectRepository(FoodInfo)
-    private foodInfoRepository: Repository<FoodInfo>,
-    @InjectRepository(CumulativeRecord)
-    private cumulativeRecordRepository: Repository<CumulativeRecord>,
+    @InjectRepository(FoodInfo) private foodInfoRepository: Repository<FoodInfo>,
+    @InjectRepository(CumulativeRecord) private cumulativeRecordRepository: Repository<CumulativeRecord>,
     @InjectRepository(Image) private imageRecordRepository: Repository<Image>,
-    @InjectRepository(SplitImage)
-    private splitImageRepository: Repository<SplitImage>
+    @InjectRepository(SplitImage) private splitImageRepository: Repository<SplitImage>,
+    @InjectRepository(HealthInfo) private healthInfoRepository: Repository<HealthInfo>
   ) {
     super(
       recordRepository.target,
@@ -41,101 +34,89 @@ export class RecordRepository extends Repository<Record> {
     );
   }
 
-  // 날짜에 해당하는 식사 기록을 조회
-  async findByDate(date: string): Promise<any> {
+  async findByDate(userId: string, date: string): Promise<any> {
     const dateObj = new Date(date);
-
     const records = await this.recordRepository.find({
       where: {
         firstRecordDate: Equal(dateObj),
       },
     });
-
+  
     if (!records.length) {
-      throw new NotFoundException(
-        `해당 날짜에 대한 기록을 찾을 수 없습니다: ${date}`
-      );
+      throw new NotFoundException(`해당 날짜에 대한 기록을 찾을 수 없습니다: ${date}`);
     }
 
-
-    // let foods = await this.foodInfoRepository.findOneBy({
-    //     food_info_id: records[0].foodInfoId
-    // })
-
-  // 비동기적으로 각 레코드에 대한 foodInfo를 조회합니다.
-  const foodsWithInfo = await Promise.all(records.map(async (record) => {
-    const foodInfo = await this.foodInfoRepository.findOneBy(
-      { foodInfoId: record.foodInfoId }
-    );
-
-    return {
-      mealType: record.mealType,
-      food: {
+    // 사용자의 건강 정보를 조회
+    const healthInfo = await this.healthInfoRepository.findOneBy({ userId: userId });
+    if (!healthInfo) {
+      throw new NotFoundException(`건강 정보를 찾을 수 없습니다: 사용자 ID ${userId}`);
+    }
+  
+    // 식사 기록 비동기적으로 조회
+    const mealAccumulator = {};
+  
+    for (const record of records) {
+      const foodInfo = await this.foodInfoRepository.findOneBy({
+        foodInfoId: record.foodInfoId,
+      });
+  
+      if (!foodInfo) {
+        throw new NotFoundException(`음식 정보를 찾을 수 없습니다: ID ${record.foodInfoId}`);
+      }
+  
+      // splitImageRepository에서 XY 좌표 정보를 조회
+      const splitImageRecord = await this.splitImageRepository.findOneBy({
+        imageId: record.imageId,
+      });
+  
+      const mealType = record.mealType;
+      if (!mealAccumulator[mealType]) {
+        mealAccumulator[mealType] = { foods: [], totalCalories: 0, totalNutrient: {
+          carbohydrates: 0,
+          proteins: 0,
+          fats: 0,
+          dietaryFiber: 0,
+        }};
+      }
+  
+      const food = {
         foodInfoId: record.foodInfoId,
         recordId: record.recordId,
-        foodName: foodInfo ? foodInfo.foodName : null,
+        foodName: foodInfo.foodName,
         counts: record.foodCounts,
-        XYCoordinate: [],
-      }
-    };
-  }));
-
-  // 클라이언트 형식에 맞게 데이터를 재구성합니다.
-  const mealAccumulator = {};
-
-  for (const record of records) {
-    const foodInfo = await this.foodInfoRepository.findOneBy({
-      foodInfoId: record.foodInfoId
-    });
-
-    if (!foodInfo) {
-      throw new NotFoundException(`FoodInfo not found for id: ${record.foodInfoId}`);
+        XYCoordinate: splitImageRecord
+          ? [
+              splitImageRecord.xCoordinate,
+              splitImageRecord.yCoordinate,
+              splitImageRecord.height,
+              splitImageRecord.width,
+            ]
+          : [],
+      };
+  
+      // 영양소 계산 로직을 추가
+      mealAccumulator[mealType].totalCalories += record.totalCalories;
+      mealAccumulator[mealType].totalNutrient.carbohydrates += record.carbohydrates;
+      mealAccumulator[mealType].totalNutrient.proteins += record.proteins;
+      mealAccumulator[mealType].totalNutrient.fats += record.fats;
+      mealAccumulator[mealType].totalNutrient.dietaryFiber += record.dietaryFiber;
+  
+      mealAccumulator[mealType].foods.push(food);
     }
-
-    // splitImage 테이블에서 XY 좌표를 가져옵니다.
-    const splitImageRecord = await this.splitImageRepository.findOneBy({
-      imageId: record.imageId
-    });
-
-    const mealType = record.mealType;
-    const calculatedCalories = foodInfo.calories * record.foodCounts;
-
-    if (!mealAccumulator[mealType]) {
-      mealAccumulator[mealType] = { foods: [], totalCalories: 0, totalNutrient: {} };
-    }
-
-    mealAccumulator[mealType].foods.push({
-      foodInfoId: record.foodInfoId,
-      recordId: record.recordId,
-      foodName: foodInfo.foodName,
-      counts: record.foodCounts,
-      XYCoordinate: splitImageRecord
-      ? [
-          splitImageRecord.xCoordinate,
-          splitImageRecord.yCoordinate,
-          splitImageRecord.height,
-          splitImageRecord.width
-        ]
-      : [],
-  });
-
-    mealAccumulator[mealType].totalCalories += calculatedCalories;
-    // 여기에 총 영양소 계산 로직을 추가합니다.
-  }
-
-    // 최종 데이터를 클라이언트에 전달할 형식으로 구성
+  
+    // 최종 응답 데이터를 전달
     const response = {
       ...mealAccumulator,
-      targetCalories: 2400,
+      targetCalories: healthInfo.targetCalories,
       recommendNutrient: {
-        carbohydrates: 240,
-        proteins: 80,
-        fats: 25,
-        dietaryFiber: 2,
+        carbohydrates: healthInfo.recommendIntake[0],
+        proteins: healthInfo.recommendIntake[1],
+        fats: healthInfo.recommendIntake[2],
+        dietaryFiber: healthInfo.recommendIntake[3],
       },
-      imgurl: undefined,
+      imgurl: undefined, // 필요한 경우 여기에 실제 이미지 URL을 할당합니다.
     };
-
+  
     return response;
   }
 
@@ -160,7 +141,6 @@ export class RecordRepository extends Repository<Record> {
       const foodInfo = await this.foodInfoRepository.findOneBy({
         foodName: food.foodName,
       });
-      console.log("foodInfo : " + foodInfo.foodName);
 
       if (!foodInfo) {
         throw new NotFoundException(
@@ -171,7 +151,7 @@ export class RecordRepository extends Repository<Record> {
       const newRecord = this.recordRepository.create({
         userId: userId,
         mealType: mealType,
-        foodInfoId: foodInfo.foodInfoId,
+        foodInfoId: food.foodInfoId,
         foodCounts: food.counts,
         imageId: foodImage.imageId,
         carbohydrates: foodInfo.carbohydrates,

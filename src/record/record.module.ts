@@ -18,6 +18,7 @@ import { SplitImage } from "src/image/entities/splitImage.entity";
       CumulativeRecord,
       Image,
       SplitImage,
+      HealthInfo
     ]),
   ],
   providers: [RecordService, RecordRepository],

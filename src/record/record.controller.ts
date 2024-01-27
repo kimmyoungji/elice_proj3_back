@@ -15,9 +15,10 @@ export class RecordController {
   @Get()
   @ApiOperation({ summary: "특정 날짜의 식단 조회" })
   async getDailyRecords(
+    @Query("userId") userId: string,
     @Query("date") date: string
   ): Promise<Record[]> {
-    const records = await this.recordService.getDailyRecord(date);
+    const records = await this.recordService.getDailyRecord(userId, date);
     return records;
   }
 
