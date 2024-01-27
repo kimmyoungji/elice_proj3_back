@@ -34,11 +34,12 @@ export class CumulativeRecordService {
       totalResult = plainToInstance(CumulativeRecordDateDto, totalResult);
 
       // [HealthInfo Table] - 3) targetCalories, 4) recommendNutrient
-      const HealthInfoResult = this.healthInfoRepository.findHealthInfoByUserId(
-        date,
-        userId,
-        queryRunner.manager
-      );
+      const HealthInfoResult =
+        await this.healthInfoRepository.findHealthInfoByUserId(
+          date,
+          userId,
+          queryRunner.manager
+        );
 
       await queryRunner.commitTransaction();
       const result = {

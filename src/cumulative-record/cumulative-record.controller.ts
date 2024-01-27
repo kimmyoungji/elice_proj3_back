@@ -1,4 +1,12 @@
-import { Controller, Get, Query, Req, Res, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Query,
+  Req,
+  Res,
+  UseGuards,
+} from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CumulativeRecordService } from "./cumulative-record.service";
 import { isLoggedInGuard } from "src/auth/utils/isLoggedin.guard";
@@ -32,6 +40,9 @@ export class CumulativeRecordController {
       if (date) {
         const { totalResult, HealthInfoResult } =
           await this.cumulariveRecordService.getDateRecord(date, userId);
+        if (!totalResult || !HealthInfoResult) {
+          throw new NotFoundException("데이터가 존재하지 않습니다");
+        }
         const { totalCalories, ...datas } = totalResult;
         const { targetCalories, recommendIntake } = await HealthInfoResult;
         const { mealTypeResult, mealTypeImage } =
@@ -39,6 +50,9 @@ export class CumulativeRecordController {
             date,
             userId
           );
+        if (!mealTypeResult || !mealTypeImage) {
+          throw new NotFoundException("데이터가 존재하지 않습니다");
+        }
         const recommendNutrient = {
           carbohydrates: recommendIntake[0],
           proteins: recommendIntake[1],
@@ -65,6 +79,9 @@ export class CumulativeRecordController {
           month,
           userId
         );
+        if (data.length === 0) {
+          throw new NotFoundException("데이터가 존재하지 않습니다");
+        }
         const dateArr = data.map((item) => item.date.getDate());
         const caloriesArr = data.map((item) => item.mealTotalCalories);
         response.status(200).json({
@@ -93,6 +110,9 @@ export class CumulativeRecordController {
       // const userId = request.user.userId;
       const { mealTypeResult, mealTypeImage } =
         await this.cumulariveRecordService.getDateMealTypeRecord(date, userId);
+      if (mealTypeResult.length === 0) {
+        throw new NotFoundException("데이터가 존재하지 않습니다");
+      }
       const dateArr = mealTypeResult.map((result, index) => [
         result.mealType,
         result.mealTotalCalories / 100,
@@ -132,6 +152,9 @@ export class CumulativeRecordController {
           page,
           userId
         );
+      if (mealData.length === 0) {
+        throw new NotFoundException("데이터가 존재하지 않습니다");
+      }
       const groupedData = new Map<number, any[]>();
 
       mealData.forEach((item, index) => {

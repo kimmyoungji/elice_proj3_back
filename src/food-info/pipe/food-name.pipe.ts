@@ -3,7 +3,7 @@ import { ArgumentMetadata, Injectable, PipeTransform } from "@nestjs/common";
 @Injectable()
 export class FoodNamePipe implements PipeTransform {
   transform(foodName: any, metadata: ArgumentMetadata) {
-    // let checkFoodName = "";
+    // 다른 방안 고민해보기
     switch (foodName) {
       case "기타잡곡밥":
         foodName = "잡곡밥";

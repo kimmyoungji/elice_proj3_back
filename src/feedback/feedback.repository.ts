@@ -27,23 +27,17 @@ export class FeedbackRepository {
     checkfeedbackData: CheckFeedbackDataDto,
     manager: EntityManager
   ) {
-    try {
-      const { userId, question, questionType, feedbackDate } =
-        checkfeedbackData;
-      const result = await manager
-        .createQueryBuilder(Feedback, "feedback")
-        .select("feedback.feedback")
-        .where("feedback.user_id =:userId", { userId })
-        .where("DATE_TRUNC('day', feedback.feedback_date) =:feedbackDate", {
-          feedbackDate,
-        })
-        .andWhere("feedback.questionType = :questionType", { questionType })
-        .andWhere("feedback.question =:question", { question })
-        .getOne();
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    const { userId, question, questionType, feedbackDate } = checkfeedbackData;
+    return await manager
+      .createQueryBuilder(Feedback, "feedback")
+      .select("feedback.feedback")
+      .where("feedback.user_id =:userId", { userId })
+      .where("feedback.feedback_date =:feedbackDate", {
+        feedbackDate,
+      })
+      .andWhere("feedback.questionType = :questionType", { questionType })
+      .andWhere("feedback.question =:question", { question })
+      .getOne();
   }
 
   async getFeedbackData(
@@ -51,31 +45,21 @@ export class FeedbackRepository {
     date: Date,
     manager: EntityManager
   ): Promise<GetFeedbackDataDto[]> {
-    try {
-      const result = await manager
-        .createQueryBuilder(Feedback, "feedback")
-        .where("feedback.user_id =:userId", { userId })
-        .andWhere("feedback.feedback_date =:date", { date })
-        .getMany();
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    return await manager
+      .createQueryBuilder(Feedback, "feedback")
+      .where("feedback.user_id =:userId", { userId })
+      .andWhere("feedback.feedback_date =:date", { date })
+      .getMany();
   }
 
   async getFeedbackDetailData(
     feedbackId: string,
     manager: EntityManager
   ): Promise<GetFeedbackDataDto> {
-    try {
-      const result = await manager
-        .createQueryBuilder(Feedback, "feedback")
-        .where("feedback_id =:feedbackId", { feedbackId })
-        .getOne();
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    return await manager
+      .createQueryBuilder(Feedback, "feedback")
+      .where("feedback_id =:feedbackId", { feedbackId })
+      .getOne();
   }
 
   async deleteFeedbackData(
