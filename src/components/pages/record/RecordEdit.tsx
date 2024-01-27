@@ -63,7 +63,7 @@ const RecordEdit = () => {
   };
 
   const addFood = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    foods[0].foodName === '음식명'
+    foods[0] && foods[0].foodName === '음식명'
       ? alert('음식 상세 정보를 추가해주세요!')
       : setFoods([
           {
