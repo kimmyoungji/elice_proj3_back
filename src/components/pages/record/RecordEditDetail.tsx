@@ -16,6 +16,12 @@ interface Props {
     XYCoordinate: number[];
     counts: number;
     foodInfoId: string;
+    calories?: number;
+    carbohydrates?: number;
+    dietaryFiber?: number;
+    fats?: number;
+    proteins?: number;
+    totalCapacity?: number;
   }[];
   setFoods: React.Dispatch<
     React.SetStateAction<
@@ -24,6 +30,12 @@ interface Props {
         XYCoordinate: number[];
         counts: number;
         foodInfoId: string;
+        calories?: number;
+        carbohydrates?: number;
+        dietaryFiber?: number;
+        fats?: number;
+        proteins?: number;
+        totalCapacity?: number;
       }[]
     >
   >;
@@ -34,23 +46,36 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
   const [searchInput, setSearchInput] = useState('');
   const [searching, setSearching] = useState(false);
 
-  const byFoodName = `/food-info/foods?foodName=${focus !== undefined && foods[focus].foodName}`;
-  const byFoodInfoId = `/food-info/foods?foodInfoId=${focus !== undefined && foods[focus].foodInfoId}`;
-  const path =
-    focus !== undefined && foods[focus].foodInfoId ? byFoodInfoId : byFoodName;
+  const focusing = foods[focus as number];
+  const counter = focusing.counts;
 
-  // focus 음식 정보 받아오는 api
+  const byFoodName = `/food-info/foods?foodName=${focusing.foodName}`;
+  const byFoodInfoId = `/food-info/foods?foodInfoId=${focusing.foodInfoId}`;
+  const path = focusing.foodInfoId ? byFoodInfoId : byFoodName;
+
+  
+
   const { result, trigger } = useApi({
     path: path,
   });
 
   useEffect(() => {
     if (focus === undefined) return;
+    if (focusing.calories) return;
     trigger({});
   }, [focus]);
 
-  console.log(result);
-  console.log(focus !== undefined && foods[focus]);
+  useEffect(() => {
+    if (!result) return;
+    if (focus === undefined) return;
+    let res = result.data;
+    delete res.foodName;
+    const newFocusFood = { ...focusing, ...res };
+    let copyFoods = [...foods];
+    copyFoods[focus] = newFocusFood;
+    setFoods(copyFoods);
+  }, [result])
+  
 
   const handleSearch = () => {
     setSearching(true);
@@ -78,7 +103,7 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
   };
   const decrement = () => {
     if (focus === undefined) return;
-    if (foods[focus].counts === 0.25) {
+    if (counter === 0.25) {
       alert('더 이상 양을 줄일 수 없습니다!');
     } else {
       let copyArr = [...foods];
@@ -98,20 +123,27 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
     '나쁜 떡국',
     '해맑은 떡국',
   ];
-  // const searchResults:any= undefined;
 
-  const [nutrients, setNutrients] = useState([
-    { name: '탄수화물', gram: 0 },
-    { name: '단백질', gram: 0 },
-    { name: '지방', gram: 0 },
-    { name: '식이섬유', gram: 0 },
-  ]);
+
+  
+
+  const calCH = Math.round(focusing.carbohydrates as number * counter);
+  const calPT = Math.round(focusing.proteins as number * counter);
+  const calFT = Math.round(focusing.fats as number * counter);
+  const calDF = Math.round(focusing.dietaryFiber as number * counter);
+
+  const nutrients = [
+    { name: '탄수화물', gram: calCH ? calCH : 0},
+    { name: '단백질', gram: calPT ? calPT : 0},
+    { name: '지방', gram: calFT ? calFT : 0},
+    { name: '식이섬유', gram: calDF ? calDF : 0},
+  ];
 
   return (
     <div className={styles.container}>
       <div className={styles.titlebox}>
         <p className='s-large'>
-          {focus !== undefined && foods[focus].foodName}
+          {focusing.foodName}
         </p>
         <p className='r-super' style={{ marginLeft: 'auto' }}>
           0Kcal
@@ -212,7 +244,7 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
         <div className={styles.caltext}>
           <p className='r-large'>얼마나 먹었나요?</p>
           <p className='r-super'>
-            {focus !== undefined && foods[focus].counts}g
+            {focusing.totalCapacity ? counter*focusing.totalCapacity : 0}g
           </p>
         </div>
         <div className={styles.calinput}>
@@ -222,7 +254,7 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
             alt='-'
             onClick={decrement}
           />
-          <p className='s-big'>{focus !== undefined && foods[focus].counts}</p>
+          <p className='s-big'>{counter}</p>
           <img
             className={styles.calbtn}
             src='/icons/plusicon.png'

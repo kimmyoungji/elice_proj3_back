@@ -10,6 +10,12 @@ interface Food {
   XYCoordinate: number[];
   counts: number;
   foodInfoId: string;
+  calories?: number;
+  carbohydrates?: number;
+  dietaryFiber?: number;
+  fats?: number;
+  proteins?: number;
+  totalCapacity?: number;
 }
 
 interface MealTime {
