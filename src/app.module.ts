@@ -12,6 +12,7 @@ import * as dotenv from "dotenv";
 import { UserModule } from "./user/user.module";
 // import { FeedbackModule } from "./feedback/feedback.module";
 import { ImageModule } from "./image/image.module";
+import { FeedbackModule } from "./feedback/feedback.module";
 dotenv.config();
 console.log(typeORMConfig);
 
@@ -26,7 +27,7 @@ console.log(typeORMConfig);
     FoodInfoApiModule,
     ScheduleModule.forRoot(),
     FoodInfoModule,
-    // FeedbackModule,
+    FeedbackModule,
     ImageModule,
   ],
 })

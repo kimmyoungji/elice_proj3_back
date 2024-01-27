@@ -75,9 +75,8 @@ export class FeedbackService {
         await queryRunner.commitTransaction();
         return outputText;
       }
-    } catch (err) {
+    } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw err;
     } finally {
       await queryRunner.release();
     }
@@ -98,9 +97,8 @@ export class FeedbackService {
       );
       await queryRunner.commitTransaction();
       return plainToInstance(GetFeedbackDataDto, result);
-    } catch (err) {
+    } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw err;
     } finally {
       await queryRunner.release();
     }
@@ -132,9 +130,8 @@ export class FeedbackService {
         await queryRunner.commitTransaction();
         return { feedbackResult, healthInfoResult: null };
       }
-    } catch (err) {
+    } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw err;
     } finally {
       await queryRunner.release();
     }
@@ -150,9 +147,8 @@ export class FeedbackService {
         queryRunner.manager
       );
       await queryRunner.commitTransaction();
-    } catch (err) {
+    } catch (error) {
       await queryRunner.rollbackTransaction();
-      throw err;
     } finally {
       await queryRunner.release();
     }

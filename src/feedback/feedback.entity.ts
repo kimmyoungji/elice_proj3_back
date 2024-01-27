@@ -24,8 +24,8 @@ export class Feedback {
 
   @Column()
   @IsUUID()
-  @JoinColumn()
-  @ManyToOne(() => User, (user) => user.userId, { cascade: true })
+  // @JoinColumn()
+  // @ManyToOne(() => User, (user) => user.userId, { cascade: true })
   userId: string;
 
   @Column()
@@ -37,7 +37,7 @@ export class Feedback {
   @Column()
   feedback: string;
 
-  @Column({ type: "timestamp with time zone" })
+  @Column()
   @CreateDateColumn()
   feedbackDate: Date;
 
