@@ -1,14 +1,13 @@
 const getImgPreview = (
   imgFile: File,
-  setFile: React.Dispatch<React.SetStateAction<File | null>>,
-  setProfileImage: React.Dispatch<React.SetStateAction<string | undefined>>
+  setProfileImage: React.Dispatch<React.SetStateAction<string | undefined>>,
+  callback: (file: File) => void
 ) => {
-  setFile(imgFile);
-
   const reader = new FileReader();
 
   reader.onload = (event) => {
     setProfileImage(event.target?.result as string);
+    callback(imgFile);
   };
   reader.readAsDataURL(imgFile);
 };

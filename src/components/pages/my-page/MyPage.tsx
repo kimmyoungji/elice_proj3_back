@@ -14,7 +14,6 @@ const MyPage = () => {
   const [data, setData] = useState(userData);
   // const [healthData, setHealthData] = useState(userData.healthInfo);
   const goalMsg = mapGoaltoMsg[data.diet_goal];
-  console.log(goalMsg);
   const activityMsg = mapActivitytoMsg[data.activityAmount];
   const navigate = useNavigate();
 
