@@ -9,6 +9,10 @@ export class FoodInfoDto {
 
   @Expose()
   @IsNotEmpty()
+  foodInfoId: string;
+
+  @Expose()
+  @IsNotEmpty()
   @IsInt()
   @Transform(({ value }) => value / 100)
   totalCapacity: number;

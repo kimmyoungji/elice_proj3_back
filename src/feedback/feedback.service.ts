@@ -82,9 +82,26 @@ export class FeedbackService {
     }
   }
 
+  async saveFeedbackData(feedbackId: string) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await this.feedBackRepository.saveFeedBackYes(
+        feedbackId,
+        queryRunner.manager
+      );
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
   async getFeedbackData(
     userId: string,
-    date: Date
+    page: number
   ): Promise<GetFeedbackDataDto[]> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -92,6 +109,30 @@ export class FeedbackService {
     try {
       const result = await this.feedBackRepository.getFeedbackData(
         userId,
+        page,
+        queryRunner.manager
+      );
+      await queryRunner.commitTransaction();
+      return plainToInstance(GetFeedbackDataDto, result);
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async getFeedbackChatData(
+    userId: string,
+    startDate: Date,
+    date: Date
+  ): Promise<GetFeedbackDataDto[]> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const result = await this.feedBackRepository.getFeedbackChatData(
+        userId,
+        startDate,
         date,
         queryRunner.manager
       );
