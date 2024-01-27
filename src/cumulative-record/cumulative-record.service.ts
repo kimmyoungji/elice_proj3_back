@@ -34,12 +34,11 @@ export class CumulativeRecordService {
       totalResult = plainToInstance(CumulativeRecordDateDto, totalResult);
 
       // [HealthInfo Table] - 3) targetCalories, 4) recommendNutrient
-      const HealthInfoResult =
-        await this.healthInfoRepository.findHealthInfoByUserId(
-          date,
-          userId,
-          queryRunner.manager
-        );
+      const HealthInfoResult = this.healthInfoRepository.findHealthInfoByUserId(
+        date,
+        userId,
+        queryRunner.manager
+      );
 
       await queryRunner.commitTransaction();
       const result = {
@@ -72,7 +71,7 @@ export class CumulativeRecordService {
         if (imageId) {
           const mealTypeImageResult =
             await this.imageRepository.getImageByImageId(
-              imageId,
+              String(imageId),
               queryRunner.manager
             );
           mealTypeImage[index] = mealTypeImageResult.foodImageUrl;
@@ -136,7 +135,7 @@ export class CumulativeRecordService {
         if (imageId) {
           const mealTypeImageResult =
             await this.imageRepository.getImageByImageId(
-              imageId,
+              String(imageId),
               queryRunner.manager
             );
           mealTypeImage[index] = mealTypeImageResult.foodImageUrl;

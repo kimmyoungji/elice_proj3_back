@@ -16,10 +16,10 @@ export class CumulativeRecord {
   @PrimaryGeneratedColumn()
   cumulativeRecordId: string;
 
-  @Column({ type: "text", array: true })
+  @Column({ type: "int", array: true })
   // @JoinColumn()
   // @OneToOne(() => Image, (image) => image.imageId, { cascade: true })
-  imageId: string;
+  imageId: number;
 
   @Column()
   // @JoinColumn()
