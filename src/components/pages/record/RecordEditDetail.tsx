@@ -44,10 +44,9 @@ interface Props {
       }[]
     >
   >;
-  setFocus: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
-const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
+const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
   const [searchInput, setSearchInput] = useState('');
   const [searching, setSearching] = useState(false);
 
@@ -164,8 +163,6 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
       }
       newArr[focus] = newObj;
       setFoods(newArr);
-      console.log(newArr)
-      console.log(foods);
       setSearching(false);
     }
   };

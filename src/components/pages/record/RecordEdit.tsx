@@ -231,7 +231,6 @@ const RecordEdit = () => {
           focus={focus}
           foods={foods}
           setFoods={setFoods}
-          setFocus={setFocus}
         />
       )}
 
