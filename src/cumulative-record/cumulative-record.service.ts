@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CumulativeRecordRepository } from "./cumulative.repository";
 import {
   CumulativeDateMealTypeDto,
@@ -26,12 +26,15 @@ export class CumulativeRecordService {
 
     try {
       // [Cumulative Table] - 1) totalCalories, 2) totalNutrient
-      let totalResult = await this.cumulativeRepository.getDateRecord(
+      const totalResult = await this.cumulativeRepository.getDateRecord(
         date,
         userId,
         queryRunner.manager
       );
-      totalResult = plainToInstance(CumulativeRecordDateDto, totalResult);
+      const totalResultDto = plainToInstance(
+        CumulativeRecordDateDto,
+        totalResult
+      );
 
       // [HealthInfo Table] - 3) targetCalories, 4) recommendNutrient
       const HealthInfoResult = this.healthInfoRepository.findHealthInfoByUserId(
@@ -42,7 +45,7 @@ export class CumulativeRecordService {
 
       await queryRunner.commitTransaction();
       const result = {
-        totalResult,
+        totalResultDto,
         HealthInfoResult,
       };
       return result;
@@ -65,6 +68,9 @@ export class CumulativeRecordService {
           userId,
           queryRunner.manager
         );
+      if (mealTypeResult.length === 0) {
+        throw new NotFoundException("데이터가 존재하지 않습니다");
+      }
       const mealTypeImage = [];
       mealTypeResult.map(async (image, index) => {
         const imageId = image.imageId;
@@ -79,17 +85,38 @@ export class CumulativeRecordService {
           mealTypeImage[index] = null;
         }
       });
-
-      await queryRunner.commitTransaction();
       const result = {
         mealTypeResult,
         mealTypeImage,
       };
+      await queryRunner.commitTransaction();
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
     } finally {
       await queryRunner.release();
+    }
+  }
+
+  async transformMealTypeRecord(date: Date, userId: string) {
+    try {
+      const { mealTypeResult, mealTypeImage } =
+        await this.getDateMealTypeRecord(date, userId);
+      const dateArr = mealTypeResult.map((result, index) => [
+        result.mealType,
+        result.mealTotalCalories / 100,
+        mealTypeImage[index],
+      ]);
+      const includeArr = mealTypeResult.map((item) => item.mealType);
+      for (let i = 1; i <= 4; i++) {
+        if (!includeArr.includes(i)) {
+          dateArr.push([i, 0, null]);
+        }
+      }
+      const sortedDateArr = dateArr.sort((a, b) => a[0] - b[0]);
+      return sortedDateArr;
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -122,15 +149,16 @@ export class CumulativeRecordService {
     await queryRunner.startTransaction();
 
     try {
-      let mealData = await this.cumulativeRepository.getMonthDetailRecord(
+      const mealData = await this.cumulativeRepository.getMonthDetailRecord(
         month,
         page,
         userId,
         queryRunner.manager
       );
-      mealData = plainToInstance(CumulativeRecord, mealData);
+
+      const mealDataDto = plainToInstance(CumulativeRecord, mealData);
       const mealTypeImage = [];
-      mealData.map(async (image, index) => {
+      mealDataDto.map(async (image, index) => {
         const imageId = image.imageId;
         if (imageId) {
           const mealTypeImageResult =
@@ -144,7 +172,31 @@ export class CumulativeRecordService {
         }
       });
       await queryRunner.commitTransaction();
-      return { mealData, mealTypeImage };
+
+      const groupedData = new Map<number, any[]>();
+
+      mealDataDto.forEach((item, index) => {
+        const dateKey = parseInt(new Date(item.date).getDate().toString());
+        if (!groupedData.has(dateKey)) {
+          groupedData.set(dateKey, []);
+        }
+        groupedData
+          .get(dateKey)
+          .push([
+            item.mealType,
+            item.mealTotalCalories / 100,
+            mealTypeImage[index],
+          ]);
+      });
+      const transformedData = [];
+      groupedData.forEach((dateArr, date) => {
+        transformedData.push({
+          date,
+          dateArr,
+        });
+      });
+
+      return transformedData;
     } catch (error) {
       await queryRunner.rollbackTransaction();
     } finally {

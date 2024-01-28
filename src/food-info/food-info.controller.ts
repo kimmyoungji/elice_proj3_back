@@ -17,7 +17,6 @@ export class FoodInfoController {
     @Query("foodName", FoodNamePipe) foodName: string,
     @Query("foodInfoId") foodInfoId: string
   ) {
-    console.log("foodName", foodName);
     if (keyword) {
       if (!lastFoodId) {
         return await this.foodInfoService.getFoodList(keyword);
