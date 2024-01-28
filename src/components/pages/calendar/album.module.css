@@ -38,6 +38,13 @@
 
 .meal-img {
   border-radius: 7px;
+  width: 110px;
+  height: 110px;
   position: relative;
   overflow: hidden;
+}
+
+.meal-img > img {
+  width: 110px;
+  height: 110px;
 }

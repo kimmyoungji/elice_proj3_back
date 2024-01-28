@@ -74,7 +74,7 @@ const Album = () => {
         <div key={`album-${idx}`} className={classes.date}>
           <div
             className={`b-regular`}
-          >{`${thisYear}.${returnWithZero(thisMonth)}.${day.date}`}</div>
+          >{`${thisYear}.${returnWithZero(thisMonth)}.${returnWithZero(day.date)}`}</div>
           <div className={classes.cards}>
             {day.dateArr.map((arr, idx) => (
               <div
