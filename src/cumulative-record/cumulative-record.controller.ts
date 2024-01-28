@@ -50,7 +50,7 @@ export class CumulativeRecordController {
             date,
             userId
           );
-        if (!mealTypeResult || !mealTypeImage) {
+        if (mealTypeResult.length === 0 || mealTypeImage.length === 0) {
           throw new NotFoundException("데이터가 존재하지 않습니다");
         }
         const recommendNutrient = {

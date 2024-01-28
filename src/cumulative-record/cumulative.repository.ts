@@ -13,22 +13,19 @@ export class CumulativeRecordRepository {
     manager: EntityManager
   ): Promise<CumulativeRecordDateDto> {
     return await manager
-      .createQueryBuilder(CumulativeRecord, "entity")
-      .select("entity.userId", "userId")
-      .addSelect("entity.date", "date")
-      .addSelect(
-        "CAST(SUM(entity.mealTotalCalories) AS INTEGER)",
-        "totalCalories"
-      )
-      .addSelect("CAST(SUM(entity.carbohydrates) AS INTEGER)", "carbohydrates")
-      .addSelect("CAST(SUM(entity.proteins) AS INTEGER)", "proteins")
-      .addSelect("CAST(SUM(entity.fats) AS INTEGER)", "fats")
-      .addSelect("CAST(SUM(entity.dietaryFiber) AS INTEGER)", "dietaryFiber")
-      .where("entity.date = :date", {
+      .createQueryBuilder(CumulativeRecord, "cumulativeRecord")
+      .select("user_id", "userId")
+      .addSelect("date")
+      .addSelect("CAST(SUM(meal_total_calories) AS INTEGER)", "totalCalories")
+      .addSelect("CAST(SUM(carbohydrates) AS INTEGER)", "carbohydrates")
+      .addSelect("CAST(SUM(proteins) AS INTEGER)", "proteins")
+      .addSelect("CAST(SUM(fats) AS INTEGER)", "fats")
+      .addSelect("CAST(SUM(dietary_fiber) AS INTEGER)", "dietaryFiber")
+      .where("date = :date", {
         date,
       })
-      .andWhere("entity.user_id = :userId", { userId })
-      .groupBy("entity.user_id, entity.date") // 순서에 따른 조회 속도 확인하기
+      .andWhere("user_id = :userId", { userId })
+      .groupBy("user_id, date") // 순서에 따른 조회 속도 확인하기
       .getRawOne();
   }
 
@@ -39,13 +36,17 @@ export class CumulativeRecordRepository {
     manager: EntityManager
   ): Promise<CumulativeDateMealTypeDto[]> {
     return await manager
-      .createQueryBuilder(CumulativeRecord, "entity")
-      .select(["entity.mealType", "entity.mealTotalCalories", "entity.imageId"])
-      .where("entity.date = :date", {
+      .createQueryBuilder(CumulativeRecord, "cumulativeRecord")
+      .select([
+        "cumulativeRecord.mealType",
+        "cumulativeRecord.mealTotalCalories",
+        "cumulativeRecord.imageId",
+      ])
+      .where("date = :date", {
         date,
       })
-      .andWhere("entity.user_id = :userId", { userId })
-      .orderBy("entity.mealType", "ASC")
+      .andWhere("user_id = :userId", { userId })
+      .orderBy("meal_type", "ASC")
       .getMany();
     // 날짜를 먼저 조회하는 것 vs 유저 id를 먼저 조회하는 것 -> 무엇이 더 빠를까?
   }
@@ -57,13 +58,13 @@ export class CumulativeRecordRepository {
     manager: EntityManager
   ): Promise<CumulativeDateMealTypeDto[]> {
     return await manager
-      .createQueryBuilder(CumulativeRecord, "entity")
-      .select("entity.userId", "userId")
-      .addSelect("entity.date", "date")
-      .addSelect("SUM(entity.mealTotalCalories)", "mealTotalCalories")
-      .where("entity.user_id = :userId", { userId })
-      .andWhere("DATE_TRUNC('month', entity.date) = :month", { month })
-      .groupBy("entity.user_id, entity.date")
+      .createQueryBuilder(CumulativeRecord, "cumulativeRecord")
+      .select("user_id", "userId")
+      .addSelect("date")
+      .addSelect("SUM(meal_total_calories)", "mealTotalCalories")
+      .where("user_id = :userId", { userId })
+      .andWhere("DATE_TRUNC('month', date) = :month", { month })
+      .groupBy("user_id, date")
       .getRawMany();
   }
 
@@ -75,10 +76,10 @@ export class CumulativeRecordRepository {
     manager: EntityManager
   ): Promise<CumulativeRecord[]> {
     return await manager
-      .createQueryBuilder(CumulativeRecord, "entity")
-      .where("entity.user_id = :userId", { userId })
-      .andWhere("DATE_TRUNC('month', entity.date) = :month", { month })
-      .orderBy("date", "ASC")
+      .createQueryBuilder(CumulativeRecord, "cumulativeRecord")
+      .where("user_id = :userId", { userId })
+      .andWhere("DATE_TRUNC('month', date) = :month", { month })
+      .orderBy({ date: "ASC", meal_type: "ASC" })
       .take(5)
       .skip((page - 1) * 5)
       .getMany();
