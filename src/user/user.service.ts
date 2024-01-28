@@ -76,7 +76,11 @@ export class UserService {
             const saveHealthInfoDto = updateUserInfos as SaveHealthInfoDto;
 
             // recommnedIntake를 배열로 변환하기
-            saveHealthInfoDto.recommendIntake = Object.values(saveHealthInfoDto.recommendIntake);
+            if(saveHealthInfoDto.recommendIntake){
+                saveHealthInfoDto.recommendIntake = Object.values(saveHealthInfoDto.recommendIntake);
+            }
+            // console.log(saveHealthInfoDto.recommendIntake)
+            // saveHealthInfoDto.recommendIntake = Object.values(saveHealthInfoDto.recommendIntake);
 
             const userToUpdate = new User().mapUpdateUserDto(updateUserDto);
             let newHealthInfos = new HealthInfo().mapHealthInfoDto(saveHealthInfoDto);
