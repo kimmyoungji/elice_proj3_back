@@ -34,6 +34,7 @@ export class RecordRepository extends Repository<Record> {
     );
   }
 
+  // 식사 기록 조회
   async findByDate(userId: string, date: string): Promise<any> {
     const dateObj = new Date(date);
     const records = await this.recordRepository.find({
@@ -68,6 +69,11 @@ export class RecordRepository extends Repository<Record> {
       const splitImageRecord = await this.splitImageRepository.findOneBy({
         imageId: record.imageId,
       });
+
+      // imageRecordRepository에서 이미지 URL을 조회
+      const imageRecord = await this.imageRecordRepository.findOneBy({
+        imageId: record.imageId,
+      });
   
       const mealType = record.mealType;
       if (!mealAccumulator[mealType]) {
@@ -76,7 +82,8 @@ export class RecordRepository extends Repository<Record> {
           proteins: 0,
           fats: 0,
           dietaryFiber: 0,
-        }};
+        }, 
+        imgUrl: imageRecord ? imageRecord.foodImageUrl : undefined };
       }
   
       const food = {
@@ -114,7 +121,6 @@ export class RecordRepository extends Repository<Record> {
         fats: healthInfo.recommendIntake[2],
         dietaryFiber: healthInfo.recommendIntake[3],
       },
-      imgurl: undefined, // 필요한 경우 여기에 실제 이미지 URL을 할당합니다.
     };
   
     return response;
