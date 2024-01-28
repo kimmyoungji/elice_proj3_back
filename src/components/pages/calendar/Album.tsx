@@ -3,9 +3,10 @@ import { useCalendarContext } from './Calendar';
 import classes from './album.module.css';
 import Albumbody from './Albumbody';
 import { getMealsNumber } from '@utils/getMealNum';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useCachingApi from '@hooks/useCachingApi';
 import useIntersect from '@hooks/useIntersect';
+import useApi from '@hooks/useApi';
 export type MealType = '아침' | '점심' | '저녁' | '간식';
 
 export interface AlbumArrType {
@@ -18,16 +19,20 @@ export const returnWithZero = (num: string | number) => {
 };
 
 //현재 연도와 월 가져오기
-type AlbumApiReponse = {
+type AlbumApiResponse = {
   data: AlbumArrType[];
 };
 const Album = () => {
   const { thisYear, thisMonth } = useCalendarContext();
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const { trigger, result } = useCachingApi<AlbumApiReponse>({
-    path: `/cumulative-record/month?month=${thisYear}-${returnWithZero(thisMonth)}-01?page=1`,
+  const { trigger, result } = useCachingApi<AlbumApiResponse>({
+    path: `/cumulative-record/month?month=${thisYear}-${returnWithZero(thisMonth)}-01&page=1`,
   });
+
+  // const { trigger, result } = useApi<AlbumApiResponse>({
+  //   path: `/cumulative-record/month?month=${thisYear}-${returnWithZero(thisMonth)}-01&page=${page}`,
+  // });
   const navigate = useNavigate();
   // const safeResult = result as { data: AlbumArrType[] };
 
@@ -38,6 +43,9 @@ const Album = () => {
     );
   };
 
+  useEffect(() => {
+    trigger('');
+  }, []);
   const onIntersect: IntersectionObserverCallback = async (
     [entry],
     observer
@@ -46,6 +54,7 @@ const Album = () => {
       setIsLoading(true);
       observer.unobserve(entry.target);
       await trigger('');
+      // await trigger({});
       observer.observe(entry.target);
       setIsLoading(false);
       setPage((prev) => prev + 1);
@@ -61,14 +70,15 @@ const Album = () => {
 
   return (
     <div className={classes.wrapper}>
-      {result?.data.map((day, idx) => (
+      {result?.data?.map((day, idx) => (
         <div key={`album-${idx}`} className={classes.date}>
           <div
             className={`b-regular`}
-          >{`${thisYear}.${returnWithZero(thisMonth)}.${day.date}`}</div>
+          >{`${thisYear}.${returnWithZero(thisMonth)}.${returnWithZero(day.date)}`}</div>
           <div className={classes.cards}>
             {day.dateArr.map((arr, idx) => (
               <div
+                key={`album-${idx}`}
                 onClick={() =>
                   onClickCards(`${day.date}/${getMealsNumber[arr[0]]}`)
                 }
@@ -79,7 +89,7 @@ const Album = () => {
           </div>
         </div>
       ))}
-      {!isLoading && <div ref={setTarget} />}
+      {/* {!isLoading && <div ref={setTarget} />} */}
     </div>
   );
 };

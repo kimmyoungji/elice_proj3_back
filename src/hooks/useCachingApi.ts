@@ -15,18 +15,6 @@ interface UseApiParams {
   isShowBoundary?: boolean;
 }
 
-interface UseCachingApiResult<T> {
-  data: T[];
-}
-
-interface UseCachingApiReturnType<T> {
-  result: T;
-  loading: boolean;
-  reqIdentifier: string;
-  trigger: MutationFunction<any, {}>;
-  error: AxiosError;
-}
-
 const useCachingApi = <T>({
   method: triggerMethod = 'get',
   path: triggerPath = '',

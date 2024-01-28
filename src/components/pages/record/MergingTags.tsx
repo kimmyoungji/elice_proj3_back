@@ -33,9 +33,9 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
 
       for (let mergedTag of mergedTags) {
         if (
-          Math.abs(mergedTag.XYCoordinate[0] - tag.XYCoordinate[0]) <
+          Math.abs((mergedTag.XYCoordinate[0] - tag.XYCoordinate[0]) * 350) <
             MaxTagWidth &&
-          Math.abs(mergedTag.XYCoordinate[1] - tag.XYCoordinate[1]) <
+          Math.abs((mergedTag.XYCoordinate[1] - tag.XYCoordinate[1]) * 200) <
             assumedTagHeight
         ) {
           // 겹치면 태그를 합침
@@ -82,8 +82,8 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
             <div className={style.mergeTagContainer} key={index}>
               <p
                 style={{
-                  left: `${tag.XYCoordinate[0]}px`,
-                  top: `${tag.XYCoordinate[1]}px`,
+                  left: `${tag.XYCoordinate[0] * 350}px`,
+                  top: `${tag.XYCoordinate[1] * 200}px`,
                   maxWidth: `${MaxTagWidth}px`,
                 }}
                 className={`${style.tag} b-tiny`}
@@ -97,8 +97,8 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
                 <p
                   className={style.tagCount}
                   style={{
-                    left: `${tag.XYCoordinate[0] + MaxTagWidth - 12}px`,
-                    top: `${tag.XYCoordinate[1] - 5}px`,
+                    left: `${tag.XYCoordinate[0] * 350 + MaxTagWidth - 12}px`,
+                    top: `${tag.XYCoordinate[1] * 200 - 5}px`,
                   }}
                 >
                   {tag.foodNames.length}
@@ -112,8 +112,8 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
           <div
             style={{
               position: 'absolute',
-              left: `${selectedTagPosition[0]}px`,
-              top: `${selectedTagPosition[1] + 23}px`,
+              left: `${selectedTagPosition[0] * 350}px`,
+              top: `${selectedTagPosition[1] * 200 + 23}px`,
             }}
           >
             <div className={style.selectedTagBox}>

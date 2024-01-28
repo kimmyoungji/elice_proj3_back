@@ -9,7 +9,6 @@ import { mapGoaltoMsg, mapActivitytoMsg, findKeyByValue } from './mapMsg';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import { calBMR, calBMRCalories, adjustCaloriesByGoal } from './calUserData';
 import { storeUserInfo } from '@components/store/userLoginRouter';
-// import { userData } from './DummyUserData';
 import { UserData, MyPageEditProps } from './MypageTypes';
 import useApi, { TriggerType } from '@hooks/useApi';
 import usePresignedUrl from '@hooks/usePresignedUrl';
@@ -68,7 +67,7 @@ const MyPageEdit = () => {
         path: `image/presigned-url/profile/${file.name}`,
       });
     }
-  }, [getPresignedUrl]);
+  }, [getPresignedUrl, file]);
 
   const { uploadToS3 } = useS3ImgUpload();
 
@@ -81,9 +80,16 @@ const MyPageEdit = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const previewImgFile = event.target.files?.[0] || null;
+
     if (previewImgFile) {
-      getImgPreview(previewImgFile, setPreviewImage, (file) => setFile(file));
-      setFileChanged(true);
+      getImgPreview(previewImgFile, setPreviewImage, (file) => {
+        if (file instanceof File) {
+          setFile(file);
+          setFileChanged(true);
+        }
+      });
+    } else {
+      setPreviewImage(previewImage);
     }
   };
 
