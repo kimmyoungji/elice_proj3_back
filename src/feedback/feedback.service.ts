@@ -59,13 +59,14 @@ export class FeedbackService {
         // ChatGPT API 호출
         // const outputText = await ChatgptApi(totalResult, userInfo, questionType);
 
-        const outputText = "test111slnvlwevowl";
+        const outputText = "네 식단를 추천해드릴게요 어쩌구 저쩌구 ~";
         const data = {
           userId,
           question,
           questionType,
           feedback: outputText,
           feedbackDate: date,
+          saveYn: false,
         };
         const feedbackData = new Feedback().makefeedbackDataDto(data);
         await this.feedBackRepository.saveFeedBack(

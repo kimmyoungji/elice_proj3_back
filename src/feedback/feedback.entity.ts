@@ -39,7 +39,7 @@ export class Feedback {
   public makefeedbackDataDto(
     makeFeedbackDataDto: MakeFeedbackDataDto
   ): Feedback {
-    const { userId, feedback, feedbackDate, question, questionType } =
+    const { userId, feedback, feedbackDate, question, questionType, saveYn } =
       makeFeedbackDataDto;
     const feedbackData = new Feedback();
     feedbackData.feedbackId = uuidv4();
@@ -48,6 +48,7 @@ export class Feedback {
     feedbackData.feedbackDate = feedbackDate;
     feedbackData.question = question;
     feedbackData.questionType = questionType;
+    feedbackData.saveYn = saveYn;
     return feedbackData;
   }
 
