@@ -4,7 +4,6 @@ import classes from './album.module.css';
 import { useEffect, useState } from 'react';
 import useCachingApi from '@hooks/useCachingApi';
 import useIntersect from '@hooks/useIntersect';
-import useApi from '@hooks/useApi';
 import AlbumBody from './AlbumBody';
 export type MealType = '아침' | '점심' | '저녁' | '간식';
 
@@ -40,7 +39,6 @@ const Album = () => {
   };
 
   useEffect(() => {
-    console.log({ isFirst });
     if (!isFirst) return; //처음이 아닐때 리턴
     trigger('', {
       onSuccess: (data) => {
@@ -49,10 +47,6 @@ const Album = () => {
     }); //처음만 trigger
     setIsFirst(false);
   }, []);
-
-  useEffect(() => {
-    console.log({ isFirst });
-  }, [isFirst]);
 
   const onIntersect: IntersectionObserverCallback = async (
     [entry],
@@ -68,7 +62,6 @@ const Album = () => {
           setIsLoading(false);
         },
       });
-      // await trigger({});
       observer.observe(entry.target);
       setPage((prev) => prev + 1);
     }
