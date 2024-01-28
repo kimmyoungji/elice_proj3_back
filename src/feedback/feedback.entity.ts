@@ -1,8 +1,16 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  Timestamp,
+} from "typeorm";
 import { v4 as uuidv4 } from "uuid";
 import { IsNotEmpty, IsUUID } from "class-validator";
 import { CheckFeedbackDataDto, MakeFeedbackDataDto } from "./dto/feedback.dto";
 import { User } from "src/user/entities/user.entity";
+import { timeStamp } from "console";
 
 @Entity()
 export class Feedback {
@@ -30,7 +38,7 @@ export class Feedback {
   @Column()
   feedback: string;
 
-  @Column()
+  @Column({ type: "date" })
   feedbackDate: Date;
 
   @Column({ default: false })
