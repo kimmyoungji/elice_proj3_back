@@ -49,9 +49,9 @@ const RecordEditDetail = ({ focus, foods, setFoods, setFocus }: Props) => {
   const focusing = foods[focus as number];
   const counter = focusing.counts;
 
-  const byFoodName = `/food-info/foods?foodName=${focusing.foodName}`;
-  const byFoodInfoId = `/food-info/foods?foodInfoId=${focusing.foodInfoId}`;
-  const path = focusing.foodInfoId ? byFoodInfoId : byFoodName;
+  const byFoodName = `foodName=${focusing.foodName}`;
+  const byFoodInfoId = `foodInfoId=${focusing.foodInfoId}`;
+  const path = focusing.foodInfoId ? `/food-info/foods?${byFoodInfoId}` : `/food-info/foods?${byFoodName}`;
 
   const { result, trigger } = useApi({
     path: path,
