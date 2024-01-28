@@ -67,7 +67,7 @@ const MyPageEdit = () => {
         path: `image/presigned-url/profile/${file.name}`,
       });
     }
-  }, [getPresignedUrl]);
+  }, [getPresignedUrl, file]);
 
   const { uploadToS3 } = useS3ImgUpload();
 
