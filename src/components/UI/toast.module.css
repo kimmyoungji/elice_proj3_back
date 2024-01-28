@@ -1,7 +1,6 @@
 .wrapper {
   padding: 9px 12px;
   background-color: var(--main-skyblue);
-  position: absolute;
   z-index: 99999;
   animation: 0.5s fadeIn;
   font-size: 13px;
@@ -9,27 +8,27 @@
   font-weight: 600;
   color: white;
   border-radius: 10px;
-  min-width: 219px;
+  max-width: 219px;
   text-align: center;
-  /* transition: opacity 0.5s ease-in-out; */
-  /* top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); */
+  margin: 0 auto;
+}
+
+.toast-wrapper {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
 }
 
 .top {
-  top: 20%;
-  left: 50%;
+  top: 8%;
 }
 
 .middle {
-  top: 50%;
-  left: 50%;
+  top: 40%;
 }
 
 .bottom {
   top: 80%;
-  left: 50%;
 }
 
 .fadeOut {
