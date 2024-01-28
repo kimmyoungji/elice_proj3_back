@@ -54,12 +54,12 @@ const RecordEdit = () => {
     }
   }, []);
 
-  const [focus, setFocus] = useState<number|undefined>();
+  const [focus, setFocus] = useState<number | undefined>();
 
   const handleFocus = (
     e: React.MouseEvent<HTMLCanvasElement | HTMLDivElement, MouseEvent>
   ) => {
-    setFocus(foods.findIndex((food)=>food.foodName===e.currentTarget.id));
+    setFocus(foods.findIndex((food) => food.foodName === e.currentTarget.id));
   };
 
   const addFood = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -185,7 +185,7 @@ const RecordEdit = () => {
                   {food.XYCoordinate.length === 0 ? (
                     <img
                       className={`${styles.tagimg} ${
-                        (focus === index) && styles.focusimg
+                        focus === index && styles.focusimg
                       }`}
                       id={food.foodName}
                       src='/images/9gram_logo.png'
@@ -195,7 +195,7 @@ const RecordEdit = () => {
                   ) : (
                     <canvas
                       className={`${styles.tagimg} ${
-                        (focus === index) && styles.focusimg
+                        focus === index && styles.focusimg
                       }`}
                       id={food.foodName}
                       ref={(element) => {
