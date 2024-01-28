@@ -49,7 +49,7 @@ export class FoodInfoAPIRepository {
       const createdDate = foodInfo["crtYmd"];
       const updatedDate = foodInfo["crtrYmd"];
 
-      const result = await manager.create(FoodInfoApi, {
+      await manager.save(FoodInfoApi, {
         foodInfoId,
         foodName,
         category,
@@ -66,8 +66,6 @@ export class FoodInfoAPIRepository {
         createdDate,
         updatedDate,
       });
-
-      await manager.save(result);
       message = true;
     }
     return message;

@@ -85,11 +85,12 @@ export class CumulativeRecordService {
           mealTypeImage[index] = null;
         }
       });
+
+      await queryRunner.commitTransaction();
       const result = {
         mealTypeResult,
         mealTypeImage,
       };
-      await queryRunner.commitTransaction();
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -102,6 +103,9 @@ export class CumulativeRecordService {
     try {
       const { mealTypeResult, mealTypeImage } =
         await this.getDateMealTypeRecord(date, userId);
+      if (mealTypeResult.length === 0) {
+        throw new NotFoundException("데이터가 존재하지 않습니다");
+      }
       const dateArr = mealTypeResult.map((result, index) => [
         result.mealType,
         result.mealTotalCalories / 100,

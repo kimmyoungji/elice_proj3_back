@@ -109,8 +109,6 @@ export class CumulativeRecordController {
           date,
           userId
         );
-      // 에러처리하기
-      console.log("sortedDateArr", sortedDateArr);
       if (sortedDateArr.length === 0) {
         throw new NotFoundException("데이터가 존재하지 않습니다");
       }
@@ -140,7 +138,6 @@ export class CumulativeRecordController {
           page,
           userId
         );
-      console.log("transformedData", transformedData);
       if (transformedData.length === 0) {
         throw new NotFoundException("데이터가 존재하지 않습니다");
       }
