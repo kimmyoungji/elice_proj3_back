@@ -21,13 +21,19 @@ export type TriggerType = ({
   ...props
 }: TriggerPropsType) => Promise<AxiosResponse<any, any>>;
 
-const useApi = ({
+const useApi = <T>({
   method = 'get',
   path = '',
   data = {},
   shouldInitFetch = false,
   initialResult = '',
-}: UseApiParams) => {
+}: UseApiParams): {
+  result: T | undefined;
+  loading: boolean;
+  reqIdentifier: string;
+  trigger: TriggerType;
+  error: any;
+} => {
   const [result, setResult] = useState(initialResult);
   const [loading, setLoading] = useState(false);
   const [reqIdentifier, setReqIdentifier] = useState('');
