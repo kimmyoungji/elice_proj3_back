@@ -1,4 +1,6 @@
-const Back = () => {
+import { FC, SVGProps } from 'react';
+
+const Back: FC<SVGProps<SVGSVGElement>> = (props) => {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -8,6 +10,7 @@ const Back = () => {
       stroke='currentColor'
       className='w-6 h-6'
       width='19'
+      {...props}
     >
       <path
         strokeLinecap='round'
