@@ -1,9 +1,12 @@
 import { Exclude, Expose, Transform } from "class-transformer";
-import { IsDate, IsNotEmpty, IsString, IsUUID } from "class-validator";
+import { IsDate, IsIn, IsNotEmpty, IsString, IsUUID } from "class-validator";
+
+const QUESTION_TYPES = ["목표추천", "식단추천", "식단평가"];
 
 export class ResponseDataDto {
   @IsNotEmpty()
   @IsString()
+  @IsIn(QUESTION_TYPES)
   questionType: string;
 
   @IsNotEmpty()
@@ -37,6 +40,10 @@ export class MakeFeedbackDataDto {
   @IsNotEmpty()
   @IsString()
   questionType: string;
+
+  @Expose()
+  @IsNotEmpty()
+  saveYn: boolean;
 }
 
 @Exclude()
