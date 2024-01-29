@@ -182,7 +182,7 @@ const RecordEdit = () => {
             foods.map((food: Food, index: number) => (
               <div key={index} className={styles.tagitem}>
                 <div className={styles.tagimgwrap}>
-                  {food.XYCoordinate && food.XYCoordinate.length === 0 ? (
+                  {food.XYCoordinate.length === 0 ? (
                     <img
                       className={`${styles.tagimg} ${
                         focus === index && styles.focusimg

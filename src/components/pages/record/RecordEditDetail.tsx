@@ -1,7 +1,7 @@
 import InputCommon from '@components/UI/InputCommon';
 import styles from './recordeditdetail.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import useApi from '@hooks/useApi';
 import useIntersect from '@hooks/useIntersect';
 import getFoodId from '@utils/getFoodId';
@@ -70,6 +70,8 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
     if (focus === undefined) return;
     let res = result.data;
     res.foodName = focusing.foodName;
+    res.counts = focusing.counts;
+    res.XYCoordinate = focusing.XYCoordinate;
     const newFocusFood = { ...res };
     let copyFoods = [...foods];
     copyFoods[focus] = newFocusFood;
