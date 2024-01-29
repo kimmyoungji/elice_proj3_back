@@ -29,16 +29,13 @@ const Record = () => {
     result: data,
   }: {
     trigger: TriggerType;
-    result: { data: RecordProps };
+    result: { data: RecordProps } | undefined;
   } = useApi({
     path: `/cumulative-record/meal?date=${dateSplit[0]}-${dateSplit[1]}-${dateSplit[2]}`,
   });
 
   useEffect(() => {
-    trigger({
-      // applyResult: true,
-      // isShowBoundary: true,
-    });
+    trigger({});
   }, []);
 
   useEffect(() => {

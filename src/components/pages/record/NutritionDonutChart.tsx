@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import styles from '@components/pages/record/nutritiondonutchart.module.css';
-import { NutritionDonutChartProps } from './RecordTypes';
-import { userData } from '../my-page/DummyUserData';
+import {
+  MealDetailData,
+  NutritionDonutChartProps,
+  totalNutrientsType,
+} from './RecordTypes';
 import { nutrientNames, NutrientKey } from './recordMappingConstant';
 
 const radius = 22;
@@ -9,37 +12,49 @@ const radius = 22;
 const NutritionDonutChart = ({
   totalNutrient,
   isShowingTotal,
-  totalCalories,
   data,
   selectedMealNumber,
 }: NutritionDonutChartProps) => {
-  const [userNutritionData, setUserNutritionData] = useState(
-    userData.healthInfo
-  );
-  const [mealData, setMealData] = useState(data);
+  const [mealData, setMealData] = useState<MealDetailData | undefined>(data);
   const [animationTrigger, setAnimationTrigger] = useState(false);
 
+  useEffect(() => {
+    setMealData(data);
+  }, [data]);
+  console.log(mealData);
   useEffect(() => {
     setAnimationTrigger(false);
     setTimeout(() => {
       setAnimationTrigger(true);
     }, 100);
-  }, [selectedMealNumber, isShowingTotal]);
+  }, [isShowingTotal, selectedMealNumber]);
 
-  const result = data[selectedMealNumber].recommendNutrient;
+  const result = mealData?.recommendNutrient;
   const circumference = 2 * Math.PI * radius;
-  const standard = result
-    ? [result.carbohydrates, result.proteins, result.fats, result.dietaryFiber]
-    : [0, 0, 0, 0];
+  const standard = [
+    result?.carbohydrates,
+    result?.proteins,
+    result?.fats,
+    result?.dietaryFiber,
+  ];
 
-  const nutrientsData = isShowingTotal
-    ? mealData[selectedMealNumber].totalNutrient
+  const initialSet = {
+    carbohydrates: 0,
+    proteins: 0,
+    fats: 0,
+    dietaryFiber: 0,
+  };
+
+  console.log(standard);
+  console.log(totalNutrient);
+  const nutrientsData: totalNutrientsType = isShowingTotal
+    ? mealData?.[selectedMealNumber]?.totalNutrient || initialSet
     : totalNutrient;
 
   const nutrients = Object.entries(nutrientsData).map(([key, value], idx) => {
     let nutrientKey = nutrientNames[key as NutrientKey] || key;
 
-    const nutrientRatio = value / standard[idx];
+    const nutrientRatio = value !== 0 ? value / standard[idx] : 0;
     const strokeDashoffset =
       nutrientRatio < 1 ? circumference * (1 - nutrientRatio) : 0;
 
@@ -59,7 +74,6 @@ const NutritionDonutChart = ({
       customStyle,
     };
   });
-
   return (
     <div className={styles.nutrients}>
       {nutrients.map((nutrient, idx) => (

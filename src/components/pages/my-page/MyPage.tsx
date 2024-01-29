@@ -47,6 +47,12 @@ const MyPage = () => {
     },
   ];
 
+  const handleSettingNavigate = () => {
+    navigate('/my-page/settings', {
+      state: { nickname: data.username, gender: data.gender },
+    });
+  };
+
   return (
     <>
       <div className={style.userProfileArea}>
@@ -93,6 +99,7 @@ const MyPage = () => {
           className={style.rightButton}
           src='/icons/right-arrow-icon.png'
           alt='계정 설정 화살표'
+          onClick={handleSettingNavigate}
         />
       </div>
     </>

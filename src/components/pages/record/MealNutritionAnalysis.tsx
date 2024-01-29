@@ -26,22 +26,31 @@ const MealNutritionAnalysis = ({
   const [totalNutrient, setTotalNutrient] = useState(initialNutrients);
 
   const toggleShowingTitle = mapSelectMealToMsg[selectedMealNumber];
-  const totalMealCalories = data[selectedMealNumber]?.totalCalories;
-  const totalCalories = Object.values(data).reduce(
-    (acc, meal) => acc + meal.totalCalories,
-    0
-  );
+  const totalMealCalories = data?.[selectedMealNumber]?.totalCalories || 0;
+  const totalCalories = data
+    ? Object.values(data).reduce(
+        (acc, meal) => acc + (meal?.totalCalories || 0),
+        0
+      )
+    : 0;
 
-  useEffect(() => {
-    const newTotalNutrient = Object.values(data).reduce((acc, meal) => {
-      acc.carbohydrates += meal.totalNutrient.carbohydrates;
-      acc.proteins += meal.totalNutrient.proteins;
-      acc.fats += meal.totalNutrient.fats;
-      acc.dietaryFiber += meal.totalNutrient.dietaryFiber;
+  const calculateTotalNutrients = () => {
+    if (!data) return initialNutrients;
+    return Object.values(data).reduce((acc, meal) => {
+      if (meal?.totalNutrient) {
+        acc.carbohydrates += meal?.totalNutrient.carbohydrates ?? 0;
+        acc.proteins += meal.totalNutrient.proteins ?? 0;
+        acc.fats += meal.totalNutrient.fats ?? 0;
+        acc.dietaryFiber += meal.totalNutrient.dietaryFiber ?? 0;
+      }
       return acc;
     }, initialNutrients);
+  };
 
-    setTotalNutrient(newTotalNutrient);
+  useEffect(() => {
+    if (data) {
+      setTotalNutrient(calculateTotalNutrients());
+    }
   }, [data]);
 
   const calculatePercentage = (calories: number) =>
@@ -59,7 +68,7 @@ const MealNutritionAnalysis = ({
       setAnimationTrigger(true);
     }, 100);
     return () => clearTimeout(animationTimer);
-  }, [selectedMealNumber, isShowingTotal]);
+  }, [isShowingTotal]);
 
   const handleSwitchGraph = () => {
     setIsShowingTotal(!isShowingTotal);
@@ -107,7 +116,6 @@ const MealNutritionAnalysis = ({
         <NutritionDonutChart
           totalNutrient={totalNutrient}
           isShowingTotal={isShowingTotal}
-          totalCalories={totalCalories}
           data={data}
           selectedMealNumber={selectedMealNumber}
         />

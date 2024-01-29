@@ -64,6 +64,9 @@ const Home = lazy(() => import('@components/pages/home/Home'));
 
 const MyPage = lazy(() => import('@components/pages/my-page/MyPage'));
 const MyPageEdit = lazy(() => import('@components/pages/my-page/MyPageEdit'));
+const MyPageSettings = lazy(
+  () => import('@components/pages/my-page/MyPageSettings')
+);
 
 const AddPhoto = lazy(() => import('@components/pages/add-photo/AddPhoto'));
 const AddPhotoSearch = lazy(
@@ -112,6 +115,10 @@ function App() {
                   <Route path='/home' element={<Home />} />
                   <Route path='/my-page' element={<MyPage />} />
                   <Route path='/my-page/edit' element={<MyPageEdit />} />
+                  <Route
+                    path='/my-page/settings'
+                    element={<MyPageSettings />}
+                  />
                   <Route
                     path='/add-photo/:date/:mealTime'
                     element={<AddPhoto />}
