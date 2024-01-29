@@ -1,34 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import './Onboarding.css';
+import { userDataType } from './Onboarding';
 
-interface OnboardingGenderProps {
-  data: {
-    gender: number | null;
-    birthDay: string | null;
-    height: number | null;
-    weight: number | null;
-    diet_goal: number | null;
-    activityAmount: number | null;
-  };
-  onClickGender: (gender: number) => void
+export interface OnboardingProps {
+  userData: userDataType;
+  onClickOnboarding: (onboardingInfo: object) => void;
 }
 
-const OnboardingGender: React.FC<OnboardingGenderProps> = ({ data, onClickGender }) => {
-  const [userData, setUserData] = useState(data);
-
-  useEffect(() => {
-    setUserData(data);
-  }, [data]);
-
-
+const OnboardingGender: React.FC<OnboardingProps> = ({
+  userData,
+  onClickOnboarding,
+}) => {
   const onClick = (gender: number) => {
-    setUserData((prevUserData) => ({
-      ...prevUserData,
-      gender: prevUserData.gender === gender ? null : gender,
-    }));
-    console.log(gender)
-    onClickGender(gender)
+    onClickOnboarding({ ['gender']: gender });
   };
 
   return (

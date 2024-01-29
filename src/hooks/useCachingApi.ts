@@ -47,7 +47,6 @@ const useCachingApi = <T>({
   );
 
   useEffect(() => {
-    shouldInitFetch && console.log('초기 요청합니다!!');
     shouldInitFetch && mutate(triggerPath, triggerData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

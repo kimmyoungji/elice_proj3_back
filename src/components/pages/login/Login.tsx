@@ -26,23 +26,24 @@ const Login = () => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
+
+  const handleLogin: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void = async () => {
+    trigger({ data: { email, password } });
+  };
+
   useEffect(() => {
     dispatch(loginUser(result));
   }, [result]);
 
   useEffect(() => {
+    //유저 healthinfo가 없으면 onboarding,
+    //있으면 home
     if (result && result.status === 200) {
       navigate('/home');
     }
   }, [userInfo]);
-
-  const handleLogin: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => void = async () => {
-    const result = await trigger({
-      data: { email, password },
-    });
-  };
 
   return (
     <div className='login-container'>

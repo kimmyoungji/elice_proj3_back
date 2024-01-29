@@ -1,43 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import InputCommon from '@components/UI/InputCommon';
 import './Onboarding.css';
+import { OnboardingProps } from './OnboardingGender';
 
-interface OnboardingBirthProps {
-  data: {
-    gender: number | null;
-    birthDay: string | null;
-    height: number | null;
-    weight: number | null;
-    diet_goal: number | null;
-    activityAmount: number | null;
+const OnboardingBirth: React.FC<OnboardingProps> = ({
+  userData,
+  onClickOnboarding,
+}) => {
+  const [year, setYear] = useState('');
+  const [month, setMonth] = useState('');
+  const [date, setDate] = useState('');
+
+  const onBlurSetBirth = () => {
+    onClickOnboarding({ ['birthDay']: `${year}-${month}-${date}` });
   };
-}
-
-const OnboardingBirth: React.FC<OnboardingBirthProps> = ({ data }) => {
-  const [userData, setUserData] = useState(data);
-
-  const [year, setYear] = useState<string>(
-    userData.birthDay?.split('-')[0] || ''
-  );
-  const [month, setMonth] = useState<string>(
-    userData.birthDay?.split('-')[1] || ''
-  );
-  const [date, setDate] = useState<string>(
-    userData.birthDay?.split('-')[2] || ''
-  );
-
-  useEffect(() => {
-    setUserData((prevUserData) => ({
-      ...prevUserData,
-      birthDay: `${year}-${month}-${date}` || null,
-    }));
-  }, [year, month, date, setUserData]);
-
-  useEffect(() => {
-    const isYearValid = year !== '';
-    const isMonthValid = month !== '';
-    const isDateValid = date !== '';
-  }, [year, month, date]);
 
   const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setYear(e.target.value);
@@ -60,6 +36,7 @@ const OnboardingBirth: React.FC<OnboardingBirthProps> = ({ data }) => {
           value={year}
           placeholder='년'
           onChange={handleYearChange}
+          onBlur={onBlurSetBirth}
         />
       </div>
       <div
@@ -76,6 +53,7 @@ const OnboardingBirth: React.FC<OnboardingBirthProps> = ({ data }) => {
           value={month}
           placeholder='월'
           onChange={handleMonthChange}
+          onBlur={onBlurSetBirth}
         />
         <InputCommon
           style={{ width: '170px' }}
@@ -83,6 +61,7 @@ const OnboardingBirth: React.FC<OnboardingBirthProps> = ({ data }) => {
           value={date}
           placeholder='일'
           onChange={handleDateChange}
+          onBlur={onBlurSetBirth}
         />
       </div>
     </div>
