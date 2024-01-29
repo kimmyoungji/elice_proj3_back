@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 import { API_FETCHER, ApiMethods } from '@utils/axiosConfig';
 import useMutationggu from './useMutationggu';
-import { MutationFunction } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 
 interface UseApiParams {
   method?: ApiMethods;

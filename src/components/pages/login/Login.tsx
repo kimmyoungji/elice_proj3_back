@@ -2,23 +2,26 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import InputCommon from '@components/UI/InputCommon';
-import useApi from '@hooks/useApi';
 import './Login.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '@components/store/userLoginRouter';
-import { RootState } from '@components/store';
+import { UserInfo, loginUser } from '@components/store/userLoginRouter';
+import useCachingApi from '@hooks/useCachingApi';
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { loading, trigger, result } = useApi<any>({
+  const { loading, trigger, result } = useCachingApi<any>({
     method: 'post',
     path: 'auth/local/login',
   });
 
-  const userInfo = useSelector<any>((state) => state.user.username);
+  const userInfo = useSelector<{
+    user: {
+      userInfo: UserInfo;
+    };
+  }>((state) => state.user.userInfo.username);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -31,18 +34,25 @@ const Login = () => {
   const handleLogin: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void = async () => {
-    trigger({ data: { email, password } });
+    trigger(
+      { email, password },
+      {
+        onSuccess: (data) => {
+          dispatch(loginUser(data.data));
+        },
+      }
+    );
   };
-
-  useEffect(() => {
-    dispatch(loginUser(result.data));
-  }, [result]);
 
   useEffect(() => {
     //유저 healthinfo가 없으면 onboarding,
     //있으면 home
     if (result && result.status === 200) {
-      navigate('/home');
+      if (userInfo) {
+        navigate('/home');
+      } else {
+        navigate('/onboarding/1');
+      }
     }
   }, [userInfo]);
 

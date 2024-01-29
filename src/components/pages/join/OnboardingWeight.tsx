@@ -22,6 +22,7 @@ const OnboardingWeight: React.FC<OnboardingProps> = ({ onClickOnboarding }) => {
             border: 'none',
           }}
           value={inputValue}
+          onChange={() => {}}
         />
         <span
           style={{ marginLeft: '5px', verticalAlign: 'top' }}

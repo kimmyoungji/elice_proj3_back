@@ -44,6 +44,10 @@ const Onboarding = () => {
   });
 
   const onNextClick = async () => {
+    //onBoarding에 정보가 비어있는 경우 해당 화면으로 navigate....
+    //api요청 보내지 않음
+    //home으로 직접입력했을때? (auth)
+    //
     if (currentStep === 6) {
       if (!loading) {
         trigger(
@@ -92,13 +96,10 @@ const Onboarding = () => {
     }
   };
 
-  console.log(isNextButtonDisabled());
-
   useEffect(() => {
     if (currentStep === 0) {
       navigate('/auth');
     }
-    console.log(currentStep);
   }, [currentStep, navigate]);
 
   const renderProgressBar = () => {
