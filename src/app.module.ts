@@ -15,6 +15,10 @@ import { FeedbackModule } from "./feedback/feedback.module";
 import { RecordModule } from "./record/record.module";
 dotenv.config();
 console.log(typeORMConfig);
+import { MailerModule } from "@nestjs-modules/mailer";
+import * as session from "express-session";
+
+console.log('session',session.MemoryStore);
 
 @Module({
   imports: [
@@ -30,6 +34,20 @@ console.log(typeORMConfig);
     FoodInfoModule,
     FeedbackModule,
     ImageModule,
+    MailerModule.forRoot({
+      transport: {  // 메일 전송 설정의 정의하는 객체이다.
+        host: "smtp.gmail.com", // 메일을 전송할 서버를 Gmail의 SMTP 서버로 설정한다.
+        port: 587, // Gmail의 SMTP 서버의 포트는 587이다. 보안 SMTP 서버의 표준포트는 587이다.
+        secure: false, //TLS를 사용하지 않음을 의미한다.
+        auth: {
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASSWORD,
+        },
+        // 만약 auth를 설정에 실패한다면 아래와 같이 설정한다.
+        defaults: {from: '"nest-modules" <modules@nestjs.com>'} // 기본적으로 보내는 사람의 메일 주소를 설정한다.
+      },
+    }),
   ],
 })
-export class AppModule {}
+export class AppModule {
+}

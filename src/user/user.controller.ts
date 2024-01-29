@@ -36,6 +36,6 @@ export class UserController {
         @Res() response: any){
                 console.log('사용자 정보 업데이트 시작...')
                 const result = await this.userService.updateUserInfos(request.user.userId, updateUserInfosDto);
-                response.status(204).send(result);      
+                response.status(200).send(result);      
     }
 }
