@@ -44,10 +44,10 @@ export class UserService {
             // 권장영양정보 객체로 변환하기
             if (user && user[0] && user[0].recommend_intake) {
                 user[0].recommend_intake = {
-                    carbohydrate: user[0].recommend_intake[0],
-                    protein: user[0].recommend_intake[1],
-                    fat: user[0].recommend_intake[2],
-                    dietary_fiber: user[0].recommend_intake[3],
+                    carbohydrates: user[0].recommend_intake[0],
+                    proteins: user[0].recommend_intake[1],
+                    fats: user[0].recommend_intake[2],
+                    dietaryFiber: user[0].recommend_intake[3],
                 }
             }
 
