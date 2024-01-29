@@ -37,7 +37,7 @@ const MyPageEdit = () => {
   );
   const [file, setFile] = useState<File | null>(null);
   const [fileChanged, setFileChanged] = useState(false);
-  const [bmr, setBmr] = useState(calBMR({ data, age }));
+  const [bmr, setBmr] = useState(calBMR({ data }));
   const [bmrCalories, setBmrCalories] = useState(calBMRCalories({ bmr, data }));
   const [goalCalories, setGoalCalories] = useState(
     Math.round(adjustCaloriesByGoal({ data, bmrCalories }))
@@ -103,7 +103,7 @@ const MyPageEdit = () => {
   };
 
   const updateDataAndCalories = (updatedData: UserData) => {
-    const updatedBmr = calBMR({ data: updatedData, age });
+    const updatedBmr = calBMR({ data: updatedData });
     const updatedBmrCalories = calBMRCalories({
       bmr: updatedBmr,
       data: updatedData,
