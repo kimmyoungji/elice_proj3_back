@@ -22,6 +22,11 @@ const Login = () => {
       userInfo: UserInfo;
     };
   }>((state) => state.user.userInfo.username);
+  const healthInfo = useSelector<{
+    user: {
+      userInfo: UserInfo;
+    };
+  }>((state) => state.user.userInfo.height);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -48,7 +53,7 @@ const Login = () => {
     //유저 healthinfo가 없으면 onboarding,
     //있으면 home
     if (result && result.status === 200) {
-      if (userInfo) {
+      if (healthInfo) {
         navigate('/home');
       } else {
         navigate('/onboarding/1');
