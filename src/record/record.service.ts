@@ -24,8 +24,8 @@ export class RecordService {
   }
 
   // 특정 날짜의 식단을 수정하는 메서드
-  async updateDailyRecord(date: string, queryMealType: number, updateRecordDto: UpdateRecordDto): Promise<Record[]> {
-    return await this.recordRepository.updateRecord(date, queryMealType, updateRecordDto);
+  async updateDailyRecord(date: string, mealType: number, updateRecordDto: UpdateRecordDto): Promise<Record[]> {
+    return await this.recordRepository.updateRecord(date, mealType, updateRecordDto);
   }
 
   // 특정 날짜의 식단을 삭제하는 메서드
