@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-interface UserInfo {
+export interface UserInfo {
   dietGoal: string;
   activityAmount: string;
   height?: number;
@@ -13,7 +13,7 @@ interface UserInfo {
 
 const initialState: { userInfo: UserInfo } = {
   userInfo: {
-    username: '데이터 없음',
+    username: '',
     dietGoal: '1',
     activityAmount: ' 1',
     height: 0,

@@ -6,6 +6,7 @@ import useApi from '@hooks/useApi';
 import './Login.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '@components/store/userLoginRouter';
+import { RootState } from '@components/store';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    dispatch(loginUser(result));
+    dispatch(loginUser(result.data));
   }, [result]);
 
   useEffect(() => {
