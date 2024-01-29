@@ -35,7 +35,7 @@ const MyPageEdit = () => {
   const [previewImage, setPreviewImage] = useState<string | undefined>(
     data.profileImage
   );
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(userData.profileImage);
   const [fileChanged, setFileChanged] = useState(false);
   const [bmr, setBmr] = useState(calBMR({ data }));
   const [bmrCalories, setBmrCalories] = useState(calBMRCalories({ bmr, data }));
@@ -196,21 +196,25 @@ const MyPageEdit = () => {
   const saveAndNavigate = async () => {
     let uploadedImageUrl;
     let updatedNutrients;
+    console.log(data);
     if (data.dietGoal && data.goalCalories && data.gender) {
       const updatedNutrients = getNutritionStandard(data);
+      console.log(updatedNutrients);
     } else {
       const updatedNutrients = {
-        carbohydrate: 0,
-        dietary_fiber: 0,
+        carbohydrates: 0,
+        dietaryFiber: 0,
         proteins: 0,
         fats: 0,
       };
+      console.log(updatedNutrients);
     }
 
     if (fileChanged) {
       uploadedImageUrl = await uploadProfileImage();
     }
 
+    console.log(file);
     const updatedData = {
       ...data,
       dietGoal: findKeyByValue(mapGoaltoMsg, selectedGoal),
