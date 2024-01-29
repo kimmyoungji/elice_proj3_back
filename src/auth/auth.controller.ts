@@ -54,7 +54,7 @@ export class AuthController {
     async handleLocalSignup(@Body() localSignupDto: LocalSignupDto, @Res() response: any) {
         console.log('회원가입진행중...', localSignupDto);
         await this.authService.localSignup(localSignupDto);
-        response.status(200).redirect('http://localhost:3000/onboarding/1');
+        response.status(200).send('회원가입 성공');
     }
 
     @ApiOperation({ summary: '로컬 로그인 요청 API' })
@@ -67,13 +67,8 @@ export class AuthController {
         @Req() request: any, @Res() response: any){
         console.log('로그인 진행중...', request.user);
         const user = await this.userService.getUserInfos(request.user.userId);
-        if(user.recentHealthInfoId === null){
-            response.status(200).redirect('http://localhost:3000/onboarding/1');
-        }else{
-            response.status(200).redirect('http://localhost:3000/home');
-        }   
+        response.status(200).send(user);
     }
-
 
 
     /* 구글 로그아웃, 로컬 로그아웃 공용 API */
