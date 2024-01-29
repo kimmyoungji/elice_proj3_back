@@ -4,7 +4,9 @@ import style from './mealpage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates from '@utils/getDates';
 import MealDetail from './MealDetail';
-import { mealDetailData } from './DummyMealData';
+import { MealDetailData } from './RecordTypes';
+import useApi from '@hooks/useApi';
+
 import { mapSelectMealToMsg } from './recordMappingConstant';
 import { mealTypes, findMealNumber } from './recordMappingConstant';
 
@@ -18,36 +20,55 @@ const MealPage = () => {
   const { thisYear, thisMonth, thisDay } = getDates();
   const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
   const date = params.date || todayDate;
-  const selectedMealTime = Number(params.mealTime || 1); // 받아온 아점저간
+  // console.log(params.mealTime);
+  const selectedMealTime = params.mealTime || '1'; // 받아온 아점저간
   const dateSplit = date.split('-');
   const formatDate = `${dateSplit[0]}.${dateSplit[1]}.${dateSplit[2]}`;
 
   const mealMsg = mapSelectMealToMsg[selectedMealTime];
   const [selectedMeal, setSelectedMeal] = useState(mealMsg);
   const [selectedMealNumber, setSelectedMealNumber] = useState(
-    findMealNumber(selectedMeal)
+    findMealNumber(selectedMeal).toString()
   );
-  const [data, setData] = useState(mealDetailData);
-  const [imgData, setImgData] = useState(data[selectedMealNumber].imgurl);
-  const [coordinate, setCoordinate] = useState(data[selectedMealNumber].food);
+  const [data, setData] = useState<MealDetailData>({});
+  const [imgData, setImgData] = useState('');
+  const [coordinate, setCoordinate] = useState({});
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
+  const { trigger, result, error, loading } = useApi<MealDetailData>({
+    path: `/records?date=${date}&userId=5c97c044-ea91-4e3e-bf76-eae150c317d1`,
+  });
+
   useEffect(() => {
-    const mealData = data[selectedMealNumber];
-    if (mealData && mealData.food) {
-      setCoordinate(mealData.food);
+    trigger({});
+  }, []);
+
+  useEffect(() => {
+    if (!result?.data) return;
+    const mealData = result.data[selectedMealNumber as keyof MealDetailData];
+    console.log(mealData);
+    if (selectedMealNumber && mealData) {
+      if (mealData.foods && mealData.imgUrl) {
+        setData(result.data);
+        setCoordinate(mealData.foods);
+        setImgData(mealData.imgUrl || '');
+      }
+    } else {
+      setData({});
+      setCoordinate([]);
+      setImgData('');
     }
-  }, [selectedMealNumber, data]);
+  }, [result, selectedMealNumber]);
 
   useEffect(() => {
     if (selectedMealNumber) {
       navigate(`/record/${date}/${selectedMealNumber}`);
     }
-  }, [selectedMealNumber, date, navigate]);
+  }, [selectedMealNumber, date]);
 
   const handleMealSelect = (mealType: string) => {
     setSelectedMeal(mealType);
-    const newMealNumber = findMealNumber(mealType);
+    const newMealNumber = findMealNumber(mealType).toString();
     setSelectedMealNumber(newMealNumber);
     setDropdownVisible(false);
   };
@@ -76,24 +97,25 @@ const MealPage = () => {
             )}
           </div>
           <div className={style.headerButton}>
-            {data[selectedMealNumber].food.length > 0 && (
-              <>
-                <ButtonCommon
-                  variant='default-active'
-                  size='tiny'
-                  onClick={() => {
-                    navigate(`/record/${date}/${selectedMealTime}/edit`, {
-                      state: { foods: coordinate, imgUrl: imgData },
-                    });
-                  }}
-                >
-                  <> 수정 </>
-                </ButtonCommon>
-                <ButtonCommon variant='default-active' size='tiny'>
-                  <> 삭제 </>
-                </ButtonCommon>
-              </>
-            )}
+            {data[selectedMealNumber] &&
+              data[selectedMealNumber].foods.length > 0 && (
+                <>
+                  <ButtonCommon
+                    variant='default-active'
+                    size='tiny'
+                    onClick={() => {
+                      navigate(`/record/${date}/${selectedMealTime}/edit`, {
+                        state: { foods: coordinate, imgUrl: imgData },
+                      });
+                    }}
+                  >
+                    <> 수정 </>
+                  </ButtonCommon>
+                  <ButtonCommon variant='default-active' size='tiny'>
+                    <> 삭제 </>
+                  </ButtonCommon>
+                </>
+              )}
           </div>
         </div>
         <MealDetail

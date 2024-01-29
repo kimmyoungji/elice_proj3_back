@@ -28,7 +28,7 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
   const mergeOverlappingTags = (tags: TagData[]): MergedTagData[] => {
     let mergedTags: MergedTagData[] = [];
 
-    tags.forEach((tag) => {
+    tags?.forEach((tag) => {
       let isMerged = false;
 
       for (let mergedTag of mergedTags) {
@@ -56,7 +56,7 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
     return mergedTags;
   };
 
-  const validTags = tagData.filter((tag) => tag.XYCoordinate.length > 0);
+  const validTags = tagData?.filter((tag) => tag.XYCoordinate.length > 0);
   const mergedTagData = mergeOverlappingTags(validTags);
 
   const handleTagClick = (

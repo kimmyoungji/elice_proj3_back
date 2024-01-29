@@ -25,7 +25,6 @@ const MyPageEdit = () => {
   }: {
     trigger: TriggerType;
   } = useApi({
-    // path: `/user`,
     method: 'put',
   });
 
