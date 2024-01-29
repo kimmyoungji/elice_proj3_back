@@ -1,7 +1,7 @@
 import useApi from '@hooks/useApi';
 import styles from './addtag.module.css';
 import useIntersect from '@hooks/useIntersect';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface FoodInfo {
   foodInfoId: string;
@@ -30,7 +30,12 @@ const AddTag = ({
   setFoodInfo,
 }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
-  const lastFoodId = foodInfo.length > 0 && foodInfo[foodInfo.length - 1].foodInfoId;
+  const lastFoodId =
+    foodInfo.length > 0 && foodInfo[foodInfo.length - 1].foodInfoId;
+
+  const isVisibleObserverTarget = useMemo(() => {
+    return !isLoading && searchResults?.length >= 10;
+  }, [isLoading, searchResults]);
 
   const { result, trigger } = useApi({
     path: `/food-info/foods?keyword=${searchInput}&lastFoodId=${lastFoodId}`,
@@ -92,7 +97,7 @@ const AddTag = ({
                   {result.split(searchInput)[1] !== '' &&
                     result.split(searchInput)[1]}
                 </p>
-                {!isLoading && searchResults && searchResults.length >= 10 && (
+                {isVisibleObserverTarget && (
                   <div ref={setTarget} />
                 )}
               </div>

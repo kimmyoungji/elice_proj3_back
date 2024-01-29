@@ -10,11 +10,11 @@ interface Props {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+const fileName = new Date().getTime() + Math.random().toString().split(".")[0];
+const formData = new FormData();
+
 const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
   const cropRef = useRef<HTMLCanvasElement | null>(null);
-  const dates = new Date();
-  const fileName = dates.getTime() + Math.random().toString().split(".")[0];
-  const formData = new FormData();
   const params = useParams();
   const date = params.date;
   const mealTime = params.mealTime;

@@ -1,9 +1,10 @@
 import InputCommon from '@components/UI/InputCommon';
 import styles from './recordeditdetail.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useApi from '@hooks/useApi';
 import useIntersect from '@hooks/useIntersect';
+import getFoodId from '@utils/getFoodId';
 
 interface Nutrition {
   name: string;
@@ -79,6 +80,8 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
     setFoods(copyFoods);
   }, [result]);
 
+  
+
   const [searchResults, setSearchResults] = useState(['']);
   const [foodInfo, setFoodInfo] = useState<FoodInfo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -149,17 +152,12 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
     } else {
       let newArr = [...foods];
       if (focus === undefined) return;
-      const getFoodId = (tag:string) => {
-        for (let i = 0; i < foodInfo.length; i++){
-          if (foodInfo[i].foodName.split('_')[1] === tag || foodInfo[i].foodName.split('_')[1] ===(tag.split(searchInput)[0])) return foodInfo[i].foodInfoId;
-          if (foodInfo[i].foodName===tag) return foodInfo[foodInfo.findIndex((info)=>info.foodName===tag)].foodInfoId;
-        }
-      }
+      
       const newObj = {
         foodName: e.currentTarget.textContent as string,
         XYCoordinate: newArr[focus].XYCoordinate,
         counts: newArr[focus].counts,
-        foodInfoId: getFoodId(e.currentTarget.textContent as string) as string,
+        foodInfoId: getFoodId(e.currentTarget.textContent as string,foodInfo,searchInput) as string,
       }
       newArr[focus] = newObj;
       setFoods(newArr);
@@ -185,10 +183,8 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
     }
   };
 
-  const calCH = Math.round((focusing.carbohydrates as number) * focusing.counts);
-  const calPT = Math.round((focusing.proteins as number) * focusing.counts);
-  const calFT = Math.round((focusing.fats as number) * focusing.counts);
-  const calDF = Math.round((focusing.dietaryFiber as number) * focusing.counts);
+  const [calCH, calPT, calFT, calDF] = useMemo(() => 
+     [focusing.carbohydrates, focusing.proteins, focusing.fats, focusing.dietaryFiber].map(data => data && Math.round(data * focusing.counts)), [focusing]);
 
   const nutrients = [
     { name: '탄수화물', gram: calCH ? calCH : 0 },

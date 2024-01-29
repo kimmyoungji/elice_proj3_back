@@ -227,11 +227,7 @@ const RecordEdit = () => {
         </div>
       </div>
       {focus !== undefined && (
-        <RecordEditDetail
-          focus={focus}
-          foods={foods}
-          setFoods={setFoods}
-        />
+        <RecordEditDetail focus={focus} foods={foods} setFoods={setFoods} />
       )}
 
       <div className={styles.btnbox}>

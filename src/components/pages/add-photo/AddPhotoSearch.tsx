@@ -1,11 +1,12 @@
 import ButtonCommon from '@components/UI/ButtonCommon';
 import InputCommon from '../../UI/InputCommon';
 import styles from './addphotosearch.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import AddTag from './AddTag';
 import DeleteTag from './DeleteTag';
 import { useNavigate, useParams } from 'react-router-dom';
 import useApi from '@hooks/useApi';
+import getFoodId from '@utils/getFoodId';
 
 interface FoodInfo {
   foodInfoId: string;
@@ -46,22 +47,14 @@ const AddPhotoSearch = () => {
     setIsSearching(true);
   }, [result])
 
-  const getFoodId = (tag:string) => {
-    for (let i = 0; i < foodInfo.length; i++){
-      if (foodInfo[i].foodName.split('_')[1] === tag || foodInfo[i].foodName.split('_')[1] ===(tag.split(searchInput)[0])) return foodInfo[i].foodInfoId;
-      if (foodInfo[i].foodName===tag) return foodInfo[foodInfo.findIndex((info)=>info.foodName===tag)].foodInfoId;
-    }
-  }
+  
 
-  const tagsArr: object[] = [];
-  tags.map((tag) =>
-    tagsArr.push({
+  const tagsArr = useMemo(() =>
+    tags.map((tag) => ({
       foodName: tag,
       XYCoordinate: [],
       counts: 1,
-      foodInfoId: getFoodId(tag),
-    })
-  );
+      foodInfoId: getFoodId(tag,foodInfo,searchInput)})) || [], [tags])
   
   const data = {
     imgUrl: undefined,
