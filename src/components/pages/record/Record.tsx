@@ -16,7 +16,11 @@ const Record = () => {
     ? selectedDate.split('-')
     : todayDate.split('-');
 
-  const [foodData, setFoodData] = useState<RecordProps | null>(null);
+  const [foodData, setFoodData] = useState<RecordProps>({
+    dateArr: [[], [], [], []] as unknown as Array<
+      [number, number, string | null]
+    >,
+  });
 
   const {
     trigger,

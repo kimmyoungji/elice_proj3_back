@@ -185,6 +185,8 @@ const MyPageEdit = () => {
         });
         if (uploadUrl) {
           const uploadedImageUrl = presignedUrl.data.split('?')[0];
+          console.log(uploadedImageUrl);
+
           return uploadedImageUrl;
         }
       }
@@ -211,6 +213,7 @@ const MyPageEdit = () => {
 
     if (fileChanged) {
       uploadedImageUrl = await uploadProfileImage();
+      console.log(uploadedImageUrl);
     }
 
     console.log(file);
