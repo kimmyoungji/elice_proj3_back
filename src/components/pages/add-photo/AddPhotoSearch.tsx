@@ -13,6 +13,10 @@ interface FoodInfo {
   foodName: string;
 }
 
+interface Result {
+  data: FoodInfo[];
+}
+
 const AddPhotoSearch = () => {
   const navigate = useNavigate();
   const params = useParams();
@@ -25,7 +29,7 @@ const AddPhotoSearch = () => {
   const [searchResults, setSearchResults] = useState(['']);
   const [foodInfo, setFoodInfo] = useState<FoodInfo[]>([]);
 
-  const { result, trigger } = useApi({
+  const { result, trigger } = useApi<Result>({
     path: `/food-info/foods?keyword=${searchInput}`,
   });
 

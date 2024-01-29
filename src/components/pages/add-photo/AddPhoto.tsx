@@ -38,7 +38,7 @@ const AddPhoto = () => {
       const constraints = {
         video: {
           width: 390,
-          height: 580,
+          height: 550,
         },
         audio: false,
       };

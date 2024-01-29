@@ -8,6 +8,10 @@ interface FoodInfo {
   foodName: string;
 }
 
+interface Result {
+  data: FoodInfo[];
+}
+
 interface Props {
   searchInput: string;
   tags: string[];
@@ -37,7 +41,7 @@ const AddTag = ({
     return !isLoading && searchResults?.length >= 10;
   }, [isLoading, searchResults]);
 
-  const { result, trigger } = useApi({
+  const { result, trigger } = useApi<Result>({
     path: `/food-info/foods?keyword=${searchInput}&lastFoodId=${lastFoodId}`,
   });
 
