@@ -8,6 +8,14 @@ import {
 import { nutrientNames, NutrientKey } from './recordMappingConstant';
 
 const radius = 22;
+const circumference = 2 * Math.PI * radius;
+
+const initialSet = {
+  carbohydrates: 0,
+  proteins: 0,
+  fats: 0,
+  dietaryFiber: 0,
+};
 
 const NutritionDonutChart = ({
   totalNutrient,
@@ -15,13 +23,12 @@ const NutritionDonutChart = ({
   data,
   selectedMealNumber,
 }: NutritionDonutChartProps) => {
-  const [mealData, setMealData] = useState<MealDetailData | undefined>(data);
+  const [mealData, setMealData] = useState<MealDetailData>(data || {});
   const [animationTrigger, setAnimationTrigger] = useState(false);
 
   useEffect(() => {
-    setMealData(data);
+    setMealData(data || {});
   }, [data]);
-  console.log(mealData);
   useEffect(() => {
     setAnimationTrigger(false);
     setTimeout(() => {
@@ -29,27 +36,40 @@ const NutritionDonutChart = ({
     }, 100);
   }, [isShowingTotal, selectedMealNumber]);
 
-  const result = mealData?.recommendNutrient;
-  const circumference = 2 * Math.PI * radius;
+  // const getNutrientsData = (selectedMealNumber) => {
+  //   if (mealData && mealData[selectedMealNumber]) {
+  //     return isShowingTotal
+  //       ? mealData[selectedMealNumber].totalNutrient
+  //       : totalNutrient;
+  //   }
+  //   return initialSet; // 데이터가 없는 경우 초기값 사용
+  // };
+
+  // const allNutrientsData = [1, 2, 3, 4].map((selectedMealNumber) => ({
+  //   selectedMealNumber,
+  //   data: getNutrientsData(selectedMealNumber),
+  // }));
+
+  const recommendNutrient =
+    mealData?.[selectedMealNumber]?.recommendNutrient || initialSet;
+
+  // const totalStandard = [
+  //   totalNutrient?.carbohydrates || 0,
+  //   totalNutrient?.proteins || 0,
+  //   totalNutrient?.fats || 0,
+  //   totalNutrient?.dietaryFiber || 0,
+  // ];
+
   const standard = [
-    result?.carbohydrates,
-    result?.proteins,
-    result?.fats,
-    result?.dietaryFiber,
+    recommendNutrient.carbohydrates || 0,
+    recommendNutrient.proteins || 0,
+    recommendNutrient.fats || 0,
+    recommendNutrient.dietaryFiber || 0,
   ];
 
-  const initialSet = {
-    carbohydrates: 0,
-    proteins: 0,
-    fats: 0,
-    dietaryFiber: 0,
-  };
-
-  console.log(standard);
-  console.log(totalNutrient);
   const nutrientsData: totalNutrientsType = isShowingTotal
-    ? mealData?.[selectedMealNumber]?.totalNutrient || initialSet
-    : totalNutrient;
+    ? mealData?.[selectedMealNumber]?.totalNutrient || recommendNutrient
+    : totalNutrient || recommendNutrient;
 
   const nutrients = Object.entries(nutrientsData).map(([key, value], idx) => {
     let nutrientKey = nutrientNames[key as NutrientKey] || key;
@@ -74,6 +94,8 @@ const NutritionDonutChart = ({
       customStyle,
     };
   });
+
+  console.log(nutrients);
   return (
     <div className={styles.nutrients}>
       {nutrients.map((nutrient, idx) => (

@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import style from './record.module.css';
 import getDates from '@utils/getDates';
 import { useState, useEffect } from 'react';
-import { mapSelectMealToMsg } from './recordMappingConstant';
+import { mapSelectMealToMsg, mealTypes } from './recordMappingConstant';
 import useApi, { TriggerType } from '@hooks/useApi';
 import { RecordProps } from './RecordTypes';
 const mealLogo = '/images/9gram_logo_box.png';
@@ -17,7 +17,7 @@ const Record = () => {
     : todayDate.split('-');
 
   const [foodData, setFoodData] = useState<RecordProps>({
-    dateArr: [[], [], [], []] as unknown as Array<
+    dateArr: [[1], [2], [3], [4]] as unknown as Array<
       [number, number, string | null]
     >,
   });
@@ -54,6 +54,15 @@ const Record = () => {
   const handleMealClick = (meal: number) => {
     navigate(`/record/${selectedDate || todayDate}/${meal}`);
   };
+  const handleMealDelete = (meal: number) => {
+    const updatedFoodData = { ...foodData };
+    updatedFoodData.dateArr[meal - 1] = [meal, 0, null];
+    trigger({
+      method: 'delete',
+      path: `/cumulative-record/meal?date=${dateSplit[0]}-${dateSplit[1]}-${dateSplit[2]}&meal=${meal}`,
+    });
+    setFoodData(updatedFoodData);
+  };
 
   return (
     <div>
@@ -74,6 +83,7 @@ const Record = () => {
                       src={mealData[2] || mealLogo}
                       alt='하루 식단 이미지'
                     />
+                    s
                     <div className={style.meal_time}>
                       {mapSelectMealToMsg[mealData[0]]}
                     </div>
@@ -98,6 +108,11 @@ const Record = () => {
                   !mealData[1] && !mealData[2]
                     ? '/icons/meal_plus_button.png'
                     : '/icons/meal_delete.png'
+                }
+                onClick={() =>
+                  !mealData[1] && !mealData[2]
+                    ? handleMealClick(mealData[0])
+                    : handleMealDelete(mealData[0])
                 }
                 alt={
                   !mealData[1] && !mealData[2]

@@ -4,15 +4,11 @@ import style from './mealpage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates from '@utils/getDates';
 import MealDetail from './MealDetail';
-import { MealDetailData } from './RecordTypes';
+import { MealDetailData, selecetedMealDataType } from './RecordTypes';
 import useApi from '@hooks/useApi';
 
 import { mapSelectMealToMsg } from './recordMappingConstant';
 import { mealTypes, findMealNumber } from './recordMappingConstant';
-
-// ✅ MealPage : 날짜, 특정 meal로 MealPage를 그려주기
-// ✅ 토글로 다른 meal을 선택하면 MealTime만 다시 받아와서 그려주기
-// ✅ meal data가 있으면 그려주고 없으면 default 그리기
 
 const MealPage = () => {
   const params = useParams();
@@ -20,7 +16,6 @@ const MealPage = () => {
   const { thisYear, thisMonth, thisDay } = getDates();
   const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
   const date = params.date || todayDate;
-  // console.log(params.mealTime);
   const selectedMealTime = params.mealTime || '1'; // 받아온 아점저간
   const dateSplit = date.split('-');
   const formatDate = `${dateSplit[0]}.${dateSplit[1]}.${dateSplit[2]}`;
@@ -28,24 +23,28 @@ const MealPage = () => {
   const mealMsg = mapSelectMealToMsg[selectedMealTime];
   const [selectedMeal, setSelectedMeal] = useState(mealMsg);
   const [selectedMealNumber, setSelectedMealNumber] = useState(
-    findMealNumber(selectedMeal).toString()
+    Number(findMealNumber(selectedMeal))
   );
   const [data, setData] = useState<MealDetailData>({});
   const [imgData, setImgData] = useState('');
   const [coordinate, setCoordinate] = useState({});
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-  const { trigger, result, error, loading } = useApi<MealDetailData>({
-    path: `/records?date=${date}&userId=5c97c044-ea91-4e3e-bf76-eae150c317d1`,
-  });
+  const { trigger, result, error, loading } = useApi<MealDetailData>({});
+
+  type mealDataType = {
+    data: MealDetailData;
+  };
 
   useEffect(() => {
-    trigger({});
+    trigger({
+      path: `/records?date=${date}&userId=5c97c044-ea91-4e3e-bf76-eae150c317d1`,
+    });
   }, []);
 
   useEffect(() => {
     if (!result?.data) return;
-    const mealData = result.data[selectedMealNumber as keyof MealDetailData];
+    const mealData = result.data[selectedMealNumber] as selecetedMealDataType;
     console.log(mealData);
     if (selectedMealNumber && mealData) {
       if (mealData.foods && mealData.imgUrl) {
@@ -68,9 +67,21 @@ const MealPage = () => {
 
   const handleMealSelect = (mealType: string) => {
     setSelectedMeal(mealType);
-    const newMealNumber = findMealNumber(mealType).toString();
+    const newMealNumber = Number(findMealNumber(mealType));
     setSelectedMealNumber(newMealNumber);
     setDropdownVisible(false);
+  };
+
+  const handleMealDelete = () => {
+    trigger({
+      method: 'delete',
+      path: `/records?date=${date}&mealType=${selectedMealNumber}`,
+    });
+    const deleteData = result.data;
+    const updatedData = { ...deleteData };
+    delete updatedData[selectedMealNumber];
+    setData(updatedData);
+    navigate(`/record/${date}`);
   };
 
   return (
@@ -80,7 +91,7 @@ const MealPage = () => {
           <div>{formatDate}</div>
           <div className={style.mealToggle}>
             <div onClick={() => setDropdownVisible(!isDropdownVisible)}>
-              {selectedMeal} ▼
+              {selectedMeal || '아침'} ▼
             </div>
             {isDropdownVisible && (
               <div className={style.dropdown}>
@@ -111,7 +122,11 @@ const MealPage = () => {
                   >
                     <> 수정 </>
                   </ButtonCommon>
-                  <ButtonCommon variant='default-active' size='tiny'>
+                  <ButtonCommon
+                    variant='default-active'
+                    size='tiny'
+                    onClick={handleMealDelete}
+                  >
                     <> 삭제 </>
                   </ButtonCommon>
                 </>

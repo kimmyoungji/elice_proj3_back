@@ -36,15 +36,18 @@ const MealNutritionAnalysis = ({
 
   const calculateTotalNutrients = () => {
     if (!data) return initialNutrients;
-    return Object.values(data).reduce((acc, meal) => {
-      if (meal?.totalNutrient) {
-        acc.carbohydrates += meal?.totalNutrient.carbohydrates ?? 0;
-        acc.proteins += meal.totalNutrient.proteins ?? 0;
-        acc.fats += meal.totalNutrient.fats ?? 0;
-        acc.dietaryFiber += meal.totalNutrient.dietaryFiber ?? 0;
-      }
-      return acc;
-    }, initialNutrients);
+    return Object.values(data).reduce(
+      (acc, meal) => {
+        if (meal?.totalNutrient) {
+          acc.carbohydrates += meal?.totalNutrient.carbohydrates ?? 0;
+          acc.proteins += meal.totalNutrient.proteins ?? 0;
+          acc.fats += meal.totalNutrient.fats ?? 0;
+          acc.dietaryFiber += meal.totalNutrient.dietaryFiber ?? 0;
+        }
+        return acc;
+      },
+      { ...initialNutrients }
+    );
   };
 
   useEffect(() => {
@@ -53,11 +56,19 @@ const MealNutritionAnalysis = ({
     }
   }, [data]);
 
+  const drawGraphByNutrients = data?.[selectedMealNumber]
+    ? data?.[selectedMealNumber].totalNutrient
+    : calculateTotalNutrients();
+
+  const drawGraphByCalories = data?.[selectedMealNumber]
+    ? data[selectedMealNumber].totalCalories
+    : totalCalories;
+
   const calculatePercentage = (calories: number) =>
     calories === 0 ? 0 : Math.min(100, (calories / goalCalories) * 100);
 
   const percentage = isShowingTotal
-    ? calculatePercentage(totalMealCalories)
+    ? calculatePercentage(drawGraphByCalories)
     : calculatePercentage(totalCalories);
 
   const barFill = percentage >= 100 ? '#ff6a6a' : '#007bff';
@@ -114,7 +125,7 @@ const MealNutritionAnalysis = ({
         </NutritionBarChart>
 
         <NutritionDonutChart
-          totalNutrient={totalNutrient}
+          totalNutrient={drawGraphByNutrients}
           isShowingTotal={isShowingTotal}
           data={data}
           selectedMealNumber={selectedMealNumber}
