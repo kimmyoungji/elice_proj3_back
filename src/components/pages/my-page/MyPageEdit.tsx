@@ -195,12 +195,11 @@ const MyPageEdit = () => {
 
   const saveAndNavigate = async () => {
     let uploadedImageUrl;
-    let updatedNutrients;
-    console.log(data);
-    if (data.dietGoal && data.goalCalories && data.gender) {
-      const updatedNutrients = getNutritionStandard(data);
-      console.log(updatedNutrients);
-    } else {
+    // const updatedNutrients
+    let updatedNutrients = getNutritionStandard(data);
+    console.log(updatedNutrients);
+
+    if (!(data.dietGoal && data.targetCalories && data.gender)) {
       const updatedNutrients = {
         carbohydrates: 0,
         dietaryFiber: 0,
@@ -226,6 +225,7 @@ const MyPageEdit = () => {
       profileImage: uploadedImageUrl || file,
     };
     const { username, ...dataToSend } = updatedData;
+    console.log(updatedData);
 
     updateDataAndCalories(updatedData);
     dispatch(loginUser(updatedData));
