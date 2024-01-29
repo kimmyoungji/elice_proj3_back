@@ -252,8 +252,9 @@ export class RecordRepository extends Repository<Record> {
   async updateRecord(date: string, mealType: number, updateRecordDto: UpdateRecordDto): Promise<any> {
     const recordDate = new Date(date);
     const { userId, foods } = updateRecordDto;
-    const records: Record[] = [];
-
+    
+    // 누적 정보를 업데이트할 레코드 목록
+    const updatedRecords = [];
     let cumulativeCarbohydrates = 0;
     let cumulativeProteins = 0;
     let cumulativeFats = 0;
@@ -278,29 +279,38 @@ export class RecordRepository extends Repository<Record> {
     // 기존 데이터 업데이트
     const updatedFoodIds = new Set();
     for (const food of foods) {
-      const existingRecord = existingRecords.find(record => record.foodInfoId == food.foodInfoId);
+      // 동일한 mealType과 foodInfoId를 가진 레코드를 찾습니다.
+      const existingRecord = await this.recordRepository.findOne({
+        where: {
+          userId: userId,
+          mealType: mealType,
+          foodInfoId: food.foodInfoId
+        }
+      });
       console.log("existingRecord :", existingRecord)
       const foodInfo = await this.foodInfoRepository.findOneBy({
         foodInfoId: food.foodInfoId,
       });
 
-    if (existingRecord) {
-      // 기존 레코드 업데이트
-      await this.recordRepository.update({ recordId: existingRecord.recordId }, {
-        foodInfoId: food.foodInfoId,
-        foodCounts: food.counts,
-        imageId: imageRecord.imageId,
-        carbohydrates: foodInfo.carbohydrates * food.counts,
-        proteins: foodInfo.proteins * food.counts,
-        fats: foodInfo.fats * food.counts,
-        dietaryFiber: foodInfo.dietaryFiber * food.counts,
-        totalCalories: foodInfo.calories * food.counts,
-        updatedDate: new Date()
-      });
+      if (existingRecord) {
+        // 기존 레코드의 영양소 값을 업데이트
+        const updatedRecord = {
+          ...existingRecord,
+          foodCounts: food.counts,
+          carbohydrates: foodInfo.carbohydrates * food.counts,
+          proteins: foodInfo.proteins * food.counts,
+          fats: foodInfo.fats * food.counts,
+          dietaryFiber: foodInfo.dietaryFiber * food.counts,
+          totalCalories: foodInfo.calories * food.counts,
+          updatedDate: new Date()
+        };
+    
+        // 레코드 업데이트
+        await this.recordRepository.save(updatedRecord);
       
       updatedFoodIds.add(food.foodInfoId);
       
-      cumulativeCarbohydrates += existingRecord.totalCalories;
+      cumulativeCarbohydrates += existingRecord.carbohydrates;
       cumulativeProteins += existingRecord.proteins;
       cumulativeFats += existingRecord.fats;
       cumulativeDietaryFiber += existingRecord.dietaryFiber;
@@ -328,20 +338,32 @@ export class RecordRepository extends Repository<Record> {
         splitImageRecord.width = food.XYCoordinate[2];
         splitImageRecord.height = food.XYCoordinate[3];
         await this.splitImageRepository.save(splitImageRecord);
-    }
-      } else if (!existingRecord.recordId){
-        // createRecord 메소드를 사용하여 새로운 레코드 생성
-        await this.createRecord({ userId, mealType, foods });
       }
+    } else {
+      // 존재하지 않으면 새로운 레코드를 생성합니다.
+      await this.recordRepository.insert({
+        userId: userId,
+        mealType: mealType,
+        foodInfoId: food.foodInfoId,
+        foodCounts: food.counts,
+        imageId: imageRecord.imageId,
+        carbohydrates: foodInfo.carbohydrates * food.counts,
+        proteins: foodInfo.proteins * food.counts,
+        fats: foodInfo.fats * food.counts,
+        dietaryFiber: foodInfo.dietaryFiber * food.counts,
+        totalCalories: foodInfo.calories * food.counts,
+        firstRecordDate: new Date(recordDate),
+        updatedDate: new Date(),
+      });
     }
-  
     // 있다가 없어진 데이터 삭제
     const recordsToDelete = existingRecords.filter(record => !updatedFoodIds.has(record.foodInfoId));
     for (const record of recordsToDelete) {
-      // deleteRecord 메소드를 사용하여 레코드 삭제
-      await this.deleteRecord(String(record.firstRecordDate), record.mealType);
+      // 레코드 삭제
+      await this.recordRepository.delete(record.recordId);  
     }
   }
+}
 
   // 식단 삭제
   async deleteRecord(date: string, mealType: number): Promise<void> {
