@@ -9,18 +9,20 @@
   box-sizing: border-box;
   z-index: 9999;
   align-items: center;
-  height: 70px;
+  height: 100px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   background: #ffffff;
 }
 
 .back {
   width: 40px;
+  margin-top: 30px;
 }
 .title_wrapper {
   display: flex;
   align-items: center;
   gap: 7px;
+  margin-top: 30px;
 }
 
 .title_center {
@@ -47,6 +49,7 @@
   width: 40px;
   justify-content: space-evenly;
   gap: 30px;
+  margin-top: 30px;
 }
 
 .navbar {

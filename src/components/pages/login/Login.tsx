@@ -1,18 +1,23 @@
-import { useEffect, useRef, useState, useImperativeHandle } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import InputCommon from '@components/UI/InputCommon';
 import useApi from '@hooks/useApi';
 import './Login.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '@components/store/userLoginRouter';
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { loading, trigger } = useApi({
+  const { loading, trigger, result } = useApi<any>({
     method: 'post',
     path: 'auth/local/login',
   });
+
+  const userInfo = useSelector<any>((state) => state.user.username);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -21,6 +26,15 @@ const Login = () => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
+  useEffect(() => {
+    dispatch(loginUser(result));
+  }, [result]);
+
+  useEffect(() => {
+    if (result && result.status === 200) {
+      navigate('/home');
+    }
+  }, [userInfo]);
 
   const handleLogin: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -28,10 +42,6 @@ const Login = () => {
     const result = await trigger({
       data: { email, password },
     });
-
-    if (result && result.status === 200) {
-      navigate('/home');
-    }
   };
 
   return (

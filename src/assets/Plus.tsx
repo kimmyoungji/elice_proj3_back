@@ -1,6 +1,9 @@
-import { FC, SVGProps } from 'react';
+import { SVGProps } from 'react';
 
-const Back: FC<SVGProps<SVGSVGElement>> = (props) => {
+export const Plus = ({
+  className,
+  ...svgStyleProps
+}: SVGProps<SVGSVGElement>) => {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -8,17 +11,14 @@ const Back: FC<SVGProps<SVGSVGElement>> = (props) => {
       viewBox='0 0 24 24'
       strokeWidth='2'
       stroke='currentColor'
-      className='w-6 h-6'
-      width='19'
-      {...props}
+      className={`w-6 h-6 ${className}`}
+      {...svgStyleProps}
     >
       <path
         strokeLinecap='round'
         strokeLinejoin='round'
-        d='M15.75 19.5 8.25 12l7.5-7.5'
+        d='M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z'
       />
     </svg>
   );
 };
-
-export default Back;

@@ -38,7 +38,7 @@ const Onboarding = () => {
     if (currentStep === 6) {
       if (!loading) {
         await trigger({});
-        navigate('/home');
+        // navigate('/home');
       }
     } else {
       const nextStep = Math.min(6, currentStep + 1);
