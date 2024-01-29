@@ -3,30 +3,19 @@ import InputCommon from '@components/UI/InputCommon';
 import './Onboarding.css';
 
 interface OnboardingBirthProps {
-  setUserData: React.Dispatch<
-    React.SetStateAction<{
-      gender: string | null;
-      birthDay: string | null;
-      height: number | null;
-      weight: number | null;
-      goal: string | null;
-      activity: string | null;
-    }>
-  >;
-  userData: {
-    gender: string | null;
+  data: {
+    gender: number | null;
     birthDay: string | null;
     height: number | null;
     weight: number | null;
-    goal: string | null;
-    activity: string | null;
+    diet_goal: number | null;
+    activityAmount: number | null;
   };
 }
 
-const OnboardingBirth: React.FC<OnboardingBirthProps> = ({
-  setUserData,
-  userData,
-}) => {
+const OnboardingBirth: React.FC<OnboardingBirthProps> = ({ data }) => {
+  const [userData, setUserData] = useState(data);
+
   const [year, setYear] = useState<string>(
     userData.birthDay?.split('-')[0] || ''
   );

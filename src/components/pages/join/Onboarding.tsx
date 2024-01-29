@@ -21,6 +21,13 @@ const Onboarding = () => {
     weight: null,
     diet_goal: null,
     activityAmount: null,
+  } as {
+    gender: number | null;
+    birthDay: string;
+    height: number | null;
+    weight: number | null;
+    diet_goal: number | null;
+    activityAmount: number | null;
   });
 
   const { loading, trigger } = useApi({
@@ -38,6 +45,7 @@ const Onboarding = () => {
     if (currentStep === 6) {
       if (!loading) {
         await trigger({});
+        setUserData(userData);
         navigate('/home');
       }
     } else {
@@ -45,6 +53,10 @@ const Onboarding = () => {
       navigate(`/onboarding/${nextStep}`);
     }
   };
+
+  const onClickGender = (gender: number) => {
+    setUserData(prev => ({ ...prev, gender }))
+  }
 
   const isNextButtonDisabled = () => {
     switch (currentStep) {
@@ -67,6 +79,8 @@ const Onboarding = () => {
         return true;
     }
   };
+
+  console.log(isNextButtonDisabled())
 
   useEffect(() => {
     if (currentStep === 0) {
@@ -102,15 +116,9 @@ const Onboarding = () => {
         <div className='progress-bar' style={{ marginBottom: '50px' }}>
           {renderProgressBar()}
         </div>
-        {/* {currentStep === 1 && <Onboarding_gender />}
-        {currentStep === 2 && <Onboarding_birth />}
-        {currentStep === 3 && <Onboarding_height />}
-        {currentStep === 4 && <Onboarding_weight />}
-        {currentStep === 5 && <Onboarding_goal />}
-        {currentStep === 6 && <Onboarding_activity />} */}
-        {currentStep === 1 && <OnboardingGender data={userData} />}
+        {currentStep === 1 && <OnboardingGender data={userData} onClickGender={onClickGender} />}
         {currentStep === 2 && <OnboardingBirth data={userData} />}
-        {currentStep === 3 && <OnboardingHeight data={userData} />}
+        {currentStep === 3 && <OnboardingHeight data={userData} setUserData={setUserData} />}
         {currentStep === 4 && <OnboardingWeight data={userData} />}
         {currentStep === 5 && <OnboardingGoal data={userData} />}
         {currentStep === 6 && <OnboardingActivity data={userData} />}

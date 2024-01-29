@@ -1,16 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import './Onboarding.css';
 
 interface OnboardingGenderProps {
-  // setUserData: React.Dispatch<React.SetStateAction<{
-  //   gender: number | null;
-  //   birthDay: string | null;
-  //   height: number | null;
-  //   weight: number | null;
-  //   diet_goal: number | null,
-  //   activityAmount: number | null,
-  // }>>;
   data: {
     gender: number | null;
     birthDay: string | null;
@@ -19,16 +11,24 @@ interface OnboardingGenderProps {
     diet_goal: number | null;
     activityAmount: number | null;
   };
+  onClickGender: (gender: number) => void
 }
 
-const OnboardingGender: React.FC<OnboardingGenderProps> = ({ data }) => {
+const OnboardingGender: React.FC<OnboardingGenderProps> = ({ data, onClickGender }) => {
   const [userData, setUserData] = useState(data);
 
+  useEffect(() => {
+    setUserData(data);
+  }, [data]);
+
+
   const onClick = (gender: number) => {
-    setUserData((prevUserData: typeof data) => ({
+    setUserData((prevUserData) => ({
       ...prevUserData,
       gender: prevUserData.gender === gender ? null : gender,
     }));
+    console.log(gender)
+    onClickGender(gender)
   };
 
   return (
