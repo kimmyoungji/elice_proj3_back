@@ -9,6 +9,7 @@ import { CumulativeRecord } from "src/cumulative-record/cumulative-record.entity
 import { HealthInfo } from "src/user/entities/health-info.entity";
 import { Image } from "src/image/entities/image.entity";
 import { SplitImage } from "src/image/entities/splitImage.entity";
+import { HealthInfoRepository } from "src/user/health-info.repository";
 
 @Module({
   imports: [
@@ -18,10 +19,11 @@ import { SplitImage } from "src/image/entities/splitImage.entity";
       CumulativeRecord,
       Image,
       SplitImage,
-      HealthInfo
+      HealthInfo,
+      HealthInfoRepository
     ]),
   ],
-  providers: [RecordService, RecordRepository],
+  providers: [RecordService, RecordRepository, HealthInfoRepository],
   controllers: [RecordController],
 })
 export class RecordModule {}

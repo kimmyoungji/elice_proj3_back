@@ -41,7 +41,7 @@ export class CreateRecordDto {
     @IsString()
     @IsOptional()
     @ApiProperty({ description: "이미지", required: false })
-    foodImageUrl?: string;
+    imgUrl?: string;
 
     @Expose()
     @ValidateNested({ each: true })

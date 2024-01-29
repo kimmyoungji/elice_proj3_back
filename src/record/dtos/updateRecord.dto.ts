@@ -28,6 +28,12 @@ export class FoodUpdateDto {
 export class UpdateRecordDto {
    @Expose()
    @IsString()
+   @IsNotEmpty()
+   @ApiProperty({ description: "사용자 id" })
+   userId: string;
+   
+   @Expose()
+   @IsInt()
    @ApiProperty({ description: "식단 구분", enum: MealType })
    mealType: number;
 
@@ -35,12 +41,7 @@ export class UpdateRecordDto {
    @IsString()
    @IsOptional()
    @ApiProperty({ description: "이미지", required: false })
-   foodImageUrl: string;
-
-   @Expose()
-   @IsDate()
-   @ApiProperty({ description: "첫 기록일", required: false })
-   firstRecordDate: Date;
+   imgUrl: string;
 
    @Expose()
    @ValidateNested({ each: true })
