@@ -26,6 +26,7 @@
   border-radius: 10px;
   border: 1px solid var(--main-skyblue);
   padding: 10px;
+  white-space: pre-line;
 }
 .text {
   text-align: left;
@@ -38,10 +39,10 @@
   gap: 5px;
   margin-top: 10px;
 }
-/* .disable_btn {
+.disable_btn {
   background-color: var(--main-blue);
   color: white;
-} */
+}
 
 .scrap_wrapper {
   display: flex;

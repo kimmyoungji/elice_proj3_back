@@ -106,11 +106,15 @@
   -webkit-box-orient: vertical;
   line-height: normal;
 }
-.detail_text {
+.detail_text,
+.share_text {
   width: 320px;
   margin-top: 3px;
   text-align: left;
   line-height: normal;
+}
+.share_text {
+  margin-bottom: 3px;
 }
 
 .button_wrapper {
