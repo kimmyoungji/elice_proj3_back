@@ -1,22 +1,30 @@
+import { useCallback } from 'react';
 import useApi from './useApi';
 
 type presignedUrlProps = {
-  fileName: string;
+  fileName?: string;
   path: any;
 };
 
 const usePresignedUrl = ({ fileName, path }: presignedUrlProps) => {
   const { trigger, result, error, loading } = useApi({
-    method: 'put',
+    method: 'post',
     shouldInitFetch: false,
   });
 
-  const getPresignedUrl = async ({ fileName, path }: presignedUrlProps) => {
-    await trigger({ path: path });
-    return { presignedUrl: result, error, loading };
-  };
+  const getPresignedUrl = useCallback(
+    async ({ fileName, path }: presignedUrlProps) => {
+      await trigger({ path: path, data: { fileName } });
+    },
+    [fileName]
+  );
 
-  return { getPresignedUrl };
+  return {
+    getPresignedUrl,
+    presignedUrl: result as { data: string },
+    error,
+    loading,
+  };
 };
 
 export default usePresignedUrl;

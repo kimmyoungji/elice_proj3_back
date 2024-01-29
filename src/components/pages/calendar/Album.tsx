@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { useCalendarContext } from './Calendar';
 import classes from './album.module.css';
-import Albumbody from './Albumbody';
-import { getMealsNumber } from '@utils/getMealNum';
+import { useEffect, useState } from 'react';
+import useCachingApi from '@hooks/useCachingApi';
+import useIntersect from '@hooks/useIntersect';
+import AlbumBody from './AlbumBody';
 export type MealType = '아침' | '점심' | '저녁' | '간식';
 
-export interface DummyAlbumArrType {
+export interface AlbumArrType {
   date: string;
   dateArr: [MealType, number, string][];
 }
@@ -14,37 +16,19 @@ export const returnWithZero = (num: string | number) => {
   return Number(num) < 10 ? `0${num}` : num;
 };
 
-const DUMMYAlbumArr: DummyAlbumArrType[] = [
-  {
-    date: '01',
-    dateArr: [
-      ['아침', 400, 'https://source.unsplash.com/random/110x110'],
-      ['점심', 350, 'https://source.unsplash.com/random/110x110'],
-    ],
-  },
-  {
-    date: '06',
-    dateArr: [
-      ['아침', 400, 'https://source.unsplash.com/random/110x110'],
-      ['점심', 350, 'https://source.unsplash.com/random/110x110'],
-      ['저녁', 250, 'https://source.unsplash.com/random/110x110'],
-    ],
-  },
-  {
-    date: '07',
-    dateArr: [
-      ['아침', 400, 'https://source.unsplash.com/random/110x110'],
-      ['점심', 350, 'https://source.unsplash.com/random/110x110'],
-      ['저녁', 250, 'https://source.unsplash.com/random/110x110'],
-      ['간식', 250, 'https://source.unsplash.com/random/110x110'],
-    ],
-  },
-];
-
 //현재 연도와 월 가져오기
-
+type AlbumApiResponse = {
+  data: AlbumArrType[];
+};
 const Album = () => {
   const { thisYear, thisMonth } = useCalendarContext();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFirst, setIsFirst] = useState(true);
+  const [albumArr, setAlbumArr] = useState<AlbumArrType[]>([]);
+  const [page, setPage] = useState(1);
+  const { trigger, result } = useCachingApi<AlbumApiResponse>({
+    path: `/cumulative-record/month?month=${thisYear}-${returnWithZero(thisMonth)}-01&page=1`,
+  });
   const navigate = useNavigate();
 
   const onClickCards = (val: string) => {
@@ -54,26 +38,55 @@ const Album = () => {
     );
   };
 
+  useEffect(() => {
+    if (!isFirst) return; //처음이 아닐때 리턴
+    trigger('', {
+      onSuccess: (data) => {
+        setAlbumArr((prev) => [...prev, ...data.data]);
+      },
+    }); //처음만 trigger
+    setIsFirst(false);
+  }, []);
+
+  const onIntersect: IntersectionObserverCallback = async (
+    [entry],
+    observer
+  ) => {
+    if (entry.isIntersecting) {
+      console.log('isIntersecting');
+      setIsLoading(true);
+      observer.unobserve(entry.target);
+      trigger('', {
+        onSuccess: (data) => {
+          setAlbumArr((prev) => [...prev, ...data.data]);
+          setIsLoading(false);
+        },
+      });
+      observer.observe(entry.target);
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const { setTarget } = useIntersect({
+    root: null,
+    rootMargin: '100px',
+    threshold: 1,
+    onIntersect,
+  });
+
   return (
     <div className={classes.wrapper}>
-      {DUMMYAlbumArr.map((day, idx) => (
-        <div key={`album-${idx}`} className={classes.date}>
-          <div
-            className={`b-regular`}
-          >{`${thisYear}.${returnWithZero(thisMonth)}.${day.date}`}</div>
-          <div className={classes.cards}>
-            {day.dateArr.map((arr, idx) => (
-              <div
-                onClick={() =>
-                  onClickCards(`${day.date}/${getMealsNumber[arr[0]]}`)
-                }
-              >
-                <Albumbody arr={arr} idx={idx} key={`album-${idx}`} />
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
+      {albumArr &&
+        albumArr?.map((albumDay, idx) => (
+          <AlbumBody
+            key={`body-${idx}`}
+            idx={idx}
+            setTarget={setTarget}
+            albumDay={albumDay}
+            onClickCards={onClickCards}
+            isLoading={isLoading}
+          />
+        ))}
     </div>
   );
 };

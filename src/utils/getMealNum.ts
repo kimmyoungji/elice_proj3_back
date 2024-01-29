@@ -1,7 +1,8 @@
 import { MealType } from '@components/pages/calendar/Album';
+type MealnumberType = 1 | 2 | 3 | 4 | any;
 
 export const getMealsNumber: {
-  [key in MealType]: number;
+  [key in MealType]: MealnumberType;
 } = {
   아침: 1,
   점심: 2,
@@ -9,9 +10,7 @@ export const getMealsNumber: {
   간식: 4,
 };
 
-type MealnumberType = 1 | 2 | 3 | 4;
-
-export const getNumberMeal: Record<MealnumberType, MealType> = {
+export const getNumberMeal: { [key in MealnumberType]: MealType } = {
   1: '아침',
   2: '점심',
   3: '저녁',

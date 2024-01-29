@@ -28,14 +28,14 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
   const mergeOverlappingTags = (tags: TagData[]): MergedTagData[] => {
     let mergedTags: MergedTagData[] = [];
 
-    tags.forEach((tag) => {
+    tags?.forEach((tag) => {
       let isMerged = false;
 
       for (let mergedTag of mergedTags) {
         if (
-          Math.abs(mergedTag.XYCoordinate[0] - tag.XYCoordinate[0]) <
+          Math.abs((mergedTag.XYCoordinate[0] - tag.XYCoordinate[0]) * 350) <
             MaxTagWidth &&
-          Math.abs(mergedTag.XYCoordinate[1] - tag.XYCoordinate[1]) <
+          Math.abs((mergedTag.XYCoordinate[1] - tag.XYCoordinate[1]) * 200) <
             assumedTagHeight
         ) {
           // 겹치면 태그를 합침
@@ -56,7 +56,7 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
     return mergedTags;
   };
 
-  const validTags = tagData.filter((tag) => tag.XYCoordinate.length > 0);
+  const validTags = tagData?.filter((tag) => tag.XYCoordinate.length > 0);
   const mergedTagData = mergeOverlappingTags(validTags);
 
   const handleTagClick = (
@@ -82,8 +82,8 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
             <div className={style.mergeTagContainer} key={index}>
               <p
                 style={{
-                  left: `${tag.XYCoordinate[0]}px`,
-                  top: `${tag.XYCoordinate[1]}px`,
+                  left: `${tag.XYCoordinate[0] * 350}px`,
+                  top: `${tag.XYCoordinate[1] * 200}px`,
                   maxWidth: `${MaxTagWidth}px`,
                 }}
                 className={`${style.tag} b-tiny`}
@@ -94,40 +94,40 @@ export const MergingTags: React.FC<{ tagData: TagData[] }> = ({ tagData }) => {
                 {tag.foodNames.join(', ')}
               </p>
               {tag.foodNames.length > 1 && (
-                <div
+                <p
                   className={style.tagCount}
                   style={{
-                    left: `${tag.XYCoordinate[0] + MaxTagWidth - 12}px`,
-                    top: `${tag.XYCoordinate[1] - 5}px`,
+                    left: `${tag.XYCoordinate[0] * 350 + MaxTagWidth - 12}px`,
+                    top: `${tag.XYCoordinate[1] * 200 - 5}px`,
                   }}
                 >
                   {tag.foodNames.length}
-                </div>
+                </p>
               )}
             </div>
           );
         })}
 
         {selectedFoods.length > 0 && (
-          <p
+          <div
             style={{
               position: 'absolute',
-              left: `${selectedTagPosition[0]}px`,
-              top: `${selectedTagPosition[1] + 23}px`,
+              left: `${selectedTagPosition[0] * 350}px`,
+              top: `${selectedTagPosition[1] * 200 + 23}px`,
             }}
           >
             <div className={style.selectedTagBox}>
               {selectedFoods.map((name: string, index: number) => (
-                <div
+                <p
                   key={index}
                   style={{ maxWidth: `${name.length * 10 + tagPadding + 5}px` }}
                   className={`${style.selectedTag} b-tiny`}
                 >
                   {name}
-                </div>
+                </p>
               ))}
             </div>
-          </p>
+          </div>
         )}
       </div>
     </>

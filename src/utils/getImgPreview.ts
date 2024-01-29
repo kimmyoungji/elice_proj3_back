@@ -1,16 +1,17 @@
 const getImgPreview = (
-  imgFile: File,
-  setFile: React.Dispatch<React.SetStateAction<File | null>>,
-  setProfileImage: React.Dispatch<React.SetStateAction<string | undefined>>
+  previewImgFile: Blob,
+  setProfileImage: React.Dispatch<React.SetStateAction<string | undefined>>,
+  callback: (file: File | string) => void
 ) => {
-  setFile(imgFile);
-
   const reader = new FileReader();
 
   reader.onload = (event) => {
     setProfileImage(event.target?.result as string);
+    if (previewImgFile instanceof File) {
+      callback(previewImgFile);
+    }
   };
-  reader.readAsDataURL(imgFile);
+  reader.readAsDataURL(previewImgFile);
 };
 
 export default getImgPreview;

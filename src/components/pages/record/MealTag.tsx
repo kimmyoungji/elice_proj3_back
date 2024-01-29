@@ -2,7 +2,7 @@ import style from './mealtag.module.css';
 import { MealTagProps } from './RecordTypes';
 
 const MealTag = ({ className, data, selectedMealNumber }: MealTagProps) => {
-  const tagName = data[selectedMealNumber].food;
+  const tagName = data?.[selectedMealNumber]?.foods || [];
 
   return (
     <div className={className}>

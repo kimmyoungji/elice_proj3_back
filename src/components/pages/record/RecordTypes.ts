@@ -1,40 +1,107 @@
-import { MealDetailData } from './DummyMealData';
+export interface RecordProps {
+  dateArr: Array<[number, number, string | null]>;
+}
+
+// export const MealDataToSelectedMealDataType = (
+//   data: MealDetailData[keyof MealDetailData]
+// ): selecetedMealDataType => {
+//   return {
+//     ...data,
+//   };
+// };
+
+export interface MealDetailData {
+  [key: string]: {
+    foods: {
+      foodName?: string;
+      XYCoordinate?: number[];
+      counts?: number;
+      foodInfoId?: string;
+      recordId?: string;
+    }[];
+    totalCalories: number;
+    totalNutrient: {
+      carbohydrates: number;
+      proteins: number;
+      fats: number;
+      dietaryFiber: number;
+    };
+    imgUrl: string | undefined;
+    recommendNutrient: {
+      carbohydrates: number;
+      proteins: number;
+      fats: number;
+      dietaryFiber: number;
+    };
+    targetCalories: number;
+  };
+}
+
+export interface selecetedMealDataType {
+  foods: {
+    foodName: string;
+    XYCoordinate: number[];
+    counts?: number;
+    foodInfoId?: string;
+  }[];
+  totalCalories: number;
+  totalNutrient: {
+    carbohydrates: number;
+    proteins: number;
+    fats: number;
+    dietaryFiber: number;
+  };
+  recommendNutrient: {
+    carbohydrates: number;
+    proteins: number;
+    fats: number;
+    dietaryFiber: number;
+  };
+  imgUrl: string | undefined;
+}
+
+export interface MealCoordinateType {
+  foodName: string;
+  XYCoordinate?: number[];
+  counts?: number;
+  foodInfoId?: string;
+}
 
 export interface MealPageProps {
-  selectedMealNumber: 1 | 2 | 3 | 4 | undefined;
+  selectedMealNumber?: string;
   date: string;
 }
 
 export interface MealDetailProps {
   date: string;
-  selectedMealNumber: 1 | 2 | 3 | 4;
-  data: MealDetailData;
+  selectedMealNumber: string;
+  data?: MealDetailData | undefined;
 }
 
 export interface MealImgProps {
   className: string;
   date: string;
-  data: MealDetailData;
-  selectedMealNumber: 1 | 2 | 3 | 4;
+  data?: MealDetailData | undefined;
+  selectedMealNumber: string;
 }
 
 export interface MealTagProps {
   className: string;
-  data: MealDetailData;
-  selectedMealNumber: 1 | 2 | 3 | 4;
+  data?: MealDetailData;
+  selectedMealNumber: string;
 }
 
 export interface MealNutritionAnalysisProps {
-  data: MealDetailData;
+  data?: MealDetailData;
   className: string;
-  selectedMealNumber: 1 | 2 | 3 | 4;
+  selectedMealNumber: string;
 }
 
 export interface ImgTagContentProps {
   imgUrl: string;
   className: string;
-  data: MealDetailData;
-  selectedMealNumber: 1 | 2 | 3 | 4;
+  data?: MealDetailData;
+  selectedMealNumber: string;
 }
 
 export interface CustomCSSProperties extends React.CSSProperties {
@@ -59,9 +126,8 @@ export type totalNutrientsType = {
 export interface NutritionDonutChartProps {
   totalNutrient: totalNutrientsType;
   isShowingTotal: boolean;
-  totalCalories: number;
-  data: MealDetailData;
-  selectedMealNumber: 1 | 2 | 3 | 4;
+  data?: MealDetailData;
+  selectedMealNumber: string;
 }
 
 export interface Nutrient {

@@ -1,24 +1,42 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { userData } from '@components/pages/my-page/DummyUserData';
 
-const initialState = { username: '', userInfo: userData };
+export interface UserInfo {
+  dietGoal: string;
+  activityAmount: string;
+  height?: number;
+  weight?: number;
+  username?: string;
+  gender?: string;
+  profileImage?: string;
+  targetCalories?: number;
+}
+
+const initialState: { userInfo: UserInfo } = {
+  userInfo: {
+    username: '',
+    dietGoal: '1',
+    activityAmount: ' 1',
+    height: 0,
+    weight: 0,
+    gender: '1',
+    profileImage: '',
+    targetCalories: 0,
+  },
+};
 
 const userLoginSlice = createSlice({
   name: 'userLogin',
   initialState: initialState,
   reducers: {
     loginUser(state, action) {
-      state.username = action.payload;
+      state.userInfo = action.payload;
     },
     logoutUser(state) {
       Object.assign(state, initialState);
     },
-    storeUserInfo(state, action) {
-      state.userInfo = action.payload;
-    },
   },
 });
 
-export const { loginUser, logoutUser, storeUserInfo } = userLoginSlice.actions;
+export const { loginUser, logoutUser } = userLoginSlice.actions;
 
 export default userLoginSlice.reducer;

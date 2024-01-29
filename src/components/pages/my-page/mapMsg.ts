@@ -1,3 +1,9 @@
+export const gendertoMsg: { [key: number]: string } = {
+  1: '남성',
+  2: '여성',
+  3: '기타',
+};
+
 export const mapGoaltoMsg: { [key: number]: string } = {
   1: '근육증량',
   2: '체중감량',

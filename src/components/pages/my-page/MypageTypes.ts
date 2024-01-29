@@ -15,29 +15,21 @@ interface TargetNutrients {
   [key: string]: number;
 }
 
-export type HealthInfoProps = {
-  weight: number;
-  height: number;
-  goal: 1 | 2 | 3 | 4;
-  targetCalories: number;
-  recommendIntake: TargetNutrients;
-  activityAmount: 1 | 2 | 3 | 4;
-};
-
 export type UserData = {
-  email?: string;
   username?: string;
-  password?: string;
-  birthday?: string;
-  gender?: 1 | 2 | 3;
+  gender?: string;
   age: number;
   profileImage?: string | undefined;
-  healthInfo: HealthInfoProps;
+  weight: number;
+  height: number;
+  dietGoal: string;
+  targetCalories: number;
+  recommendIntake: TargetNutrients;
+  activityAmount: string;
 };
 
 export interface MyPageEditProps {
   data: UserData;
-  healthData: HealthInfoProps;
   goalMsg: string;
   activityMsg: string;
 }

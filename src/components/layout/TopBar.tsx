@@ -31,6 +31,10 @@ const TopBar = ({ home, title, back, qIcon, icon }: TopBarPropsType) => {
     setPosition((prev) => ({ ...prev, x: e.clientX, y: e.clientY }));
   };
 
+  if (key === 'aidrawerdetail') {
+    title += `${new URLSearchParams(window.location.search).get('date')} 답변`;
+  }
+
   return (
     <div className={styles.top}>
       {!home && (
@@ -50,9 +54,10 @@ const TopBar = ({ home, title, back, qIcon, icon }: TopBarPropsType) => {
       </div>
       <Toast
         show={showToast}
-        position={position}
+        // position={position}
         setShow={setShowToast}
-        toastPosCls={key === 'addphotoymdmeal' ? 'middle' : undefined}
+        toastPosCls={key === 'recordymdmeal' ? 'top' : 'middle'}
+        time={50000}
       >
         <ToastText>
           {key === 'recordymdmeal' && '식단기록 사이트에 대해 안내 문구 '}

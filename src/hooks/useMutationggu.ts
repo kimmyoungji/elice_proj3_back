@@ -7,10 +7,12 @@ import {
 import { ApiMethods } from '@utils/axiosConfig';
 import { useErrorBoundary } from 'react-error-boundary';
 
+type ApiResponseError = any;
+
 const queryClient = new QueryClient({});
-const useMutationggu = (
+const useMutationggu = <T, E = ApiResponseError>(
   itemId: QueryKey,
-  trigger: MutationFunction<unknown, {}>,
+  trigger: MutationFunction<T>,
   gc: number,
   applyResult: boolean,
   isShowBoundary: boolean,
@@ -18,7 +20,7 @@ const useMutationggu = (
 ) => {
   const { showBoundary } = useErrorBoundary();
 
-  return useMutation({
+  return useMutation<T, E, any>({
     mutationFn: trigger,
     //method get이고 gcTime적용해야 할때는 기존 값을 반환해서 캐싱을 적용해야 함
     onMutate: async () => {
@@ -41,7 +43,7 @@ const useMutationggu = (
     },
 
     onSuccess: async (data) => {
-      if (applyResult) {
+      if (applyResult && gc !== 0) {
         queryClient.invalidateQueries({ queryKey: itemId });
         queryClient.setQueriesData({ queryKey: itemId }, data);
         return;

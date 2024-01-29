@@ -46,7 +46,7 @@ export interface ButtonPropsType extends ComponentPropsWithRef<'button'> {
   customClassName?: string;
   onClickBtn?: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => void | undefined;
+  ) => void | undefined | any;
   href?: string;
   variant?: ButtonVariant;
   size?: CommonSizeType;

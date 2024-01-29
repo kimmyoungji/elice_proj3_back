@@ -1,4 +1,6 @@
-const Drawer = () => {
+import { FC, SVGProps } from 'react';
+
+const Drawer: FC<SVGProps<SVGSVGElement>> = (props) => {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -8,6 +10,7 @@ const Drawer = () => {
       stroke='currentColor'
       className='w-6 h-6'
       width='22'
+      {...props}
     >
       <path
         strokeLinecap='round'

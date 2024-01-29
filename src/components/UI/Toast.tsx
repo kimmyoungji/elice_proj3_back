@@ -10,6 +10,7 @@ import {
 } from 'react';
 import BackDrop from './BackDrop';
 import ToastPortal from './ToastPortal';
+import classes from './toast.module.css';
 
 interface ToastContextType {
   show: boolean;
@@ -60,10 +61,9 @@ const Toast = ({
   };
 
   const positionStyle = {
-    position: 'absolute',
+    position: 'relative',
     left: position && `${position.x + 20}px`,
-    top: position && `${position.y + 20}px`,
-    transform: !position && 'translate(-50%, -50%)',
+    top: position && `${position.y + 50}px`,
   };
 
   const positionedElement = Children.map(children, (ch) => {
@@ -89,7 +89,7 @@ const Toast = ({
       {show && (
         <ToastPortal>
           <BackDrop onClick={onClickBackDrop} />
-          {positionedElement}
+          <div className={classes['toast-wrapper']}>{positionedElement}</div>
         </ToastPortal>
       )}
     </>

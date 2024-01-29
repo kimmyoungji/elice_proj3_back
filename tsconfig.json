@@ -16,12 +16,6 @@
     "skipLibCheck": true,
     "noStrictGenericChecks": false
   },
-  "include": [
-    "./src/",
-    "./typings",
-    "craco.config.cjs"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["./src/", "./typings", "craco.config.cjs"],
+  "exclude": ["node_modules"]
 }
