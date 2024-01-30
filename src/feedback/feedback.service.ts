@@ -1,4 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { FeedbackRepository } from "./feedback.repository";
 import { DataSource } from "typeorm";
 import { Feedback } from "./feedback.entity";
@@ -88,13 +93,15 @@ export class FeedbackService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      await this.feedBackRepository.saveFeedBackYes(
+      const saveReseult = await this.feedBackRepository.saveFeedBackYes(
         feedbackId,
         queryRunner.manager
       );
       await queryRunner.commitTransaction();
+      return saveReseult;
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      return error;
     } finally {
       await queryRunner.release();
     }
@@ -151,15 +158,22 @@ export class FeedbackService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      let feedbackResult = await this.feedBackRepository.getFeedbackDetailData(
-        feedbackId,
-        queryRunner.manager
+      const feedbackResult =
+        await this.feedBackRepository.getFeedbackDetailData(
+          feedbackId,
+          queryRunner.manager
+        );
+      const feedbackResultDto = plainToInstance(
+        GetFeedbackDataDto,
+        feedbackResult
       );
-      feedbackResult = plainToInstance(GetFeedbackDataDto, feedbackResult);
+      if (!feedbackResultDto) {
+        throw new NotFoundException("데이터가 존재하지 않습니다");
+      }
       if (
-        feedbackResult.questionType === "목표추천" ||
-        (feedbackResult.questionType === "식단추천" &&
-          feedbackResult.question === "내 목표에 맞게 추천받고 싶어")
+        feedbackResultDto.questionType === "목표추천" ||
+        (feedbackResultDto.questionType === "식단추천" &&
+          feedbackResultDto.question === "내 목표에 맞게 추천받고 싶어")
       ) {
         const healthInfoResult =
           await this.userRepository.findUserInfosByUserId(
@@ -167,28 +181,30 @@ export class FeedbackService {
             queryRunner.manager
           );
         await queryRunner.commitTransaction();
-        return { feedbackResult, healthInfoResult };
+        return { feedbackResultDto, healthInfoResult };
       } else {
         await queryRunner.commitTransaction();
-        return { feedbackResult, healthInfoResult: null };
+        return { feedbackResultDto, healthInfoResult: null };
       }
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      return error;
     } finally {
       await queryRunner.release();
     }
   }
 
-  async deleteFeedbackData(feedbackId: string): Promise<void> {
+  async deleteFeedbackData(feedbackId: string) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      await this.feedBackRepository.deleteFeedbackData(
+      const deleteResult = await this.feedBackRepository.deleteFeedbackData(
         feedbackId,
         queryRunner.manager
       );
       await queryRunner.commitTransaction();
+      return deleteResult;
     } catch (error) {
       await queryRunner.rollbackTransaction();
     } finally {

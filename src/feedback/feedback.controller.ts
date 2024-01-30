@@ -1,8 +1,11 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   NotFoundException,
   Post,
   Query,
@@ -33,13 +36,17 @@ export class FeedbackController {
   }
 
   @Get("/save")
-  async saveFeedbackData(
-    @Query("feedbackId") feedbackId: string,
-    @Res() response: any
-  ) {
+  async saveFeedbackData(@Query("feedbackId") feedbackId: string) {
     try {
-      await this.feedbackService.saveFeedbackData(feedbackId);
-      response.status(200).json("식단 저장 성공");
+      const saveResult =
+        await this.feedbackService.saveFeedbackData(feedbackId);
+      if (saveResult.affected === 0) {
+        const exceptionObj = {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: "데이터 저장에 실패했습니다",
+        };
+        throw new HttpException(exceptionObj, HttpStatus.FORBIDDEN);
+      }
     } catch (error) {
       throw error;
     }
@@ -51,13 +58,12 @@ export class FeedbackController {
     @Query("startDate") startDate: Date,
     @Query("date") date: Date,
     @Query("page") page: number,
-    @Query("feedbackId") feedbackId: string,
-    @Res() response: any
+    @Query("feedbackId") feedbackId: string
   ) {
     try {
       const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
       // const userId = request.user.userId;
-      if (startDate || date) {
+      if (startDate && date) {
         const data = await this.feedbackService.getFeedbackChatData(
           userId,
           startDate,
@@ -66,40 +72,34 @@ export class FeedbackController {
         if (data.length === 0) {
           throw new NotFoundException("데이터가 존재하지 않습니다");
         }
-        response.status(200).json({
-          data: data,
-        });
-      }
-
-      if (page) {
+        return { data: data };
+      } else if (page) {
         const data = await this.feedbackService.getFeedbackData(userId, page);
         if (data.length === 0) {
           throw new NotFoundException("데이터가 존재하지 않습니다");
         }
-        response.status(200).json({
-          data: data,
-        });
-      }
-
-      if (feedbackId) {
-        const { feedbackResult, healthInfoResult } =
+        return { data: data };
+      } else if (feedbackId) {
+        const { feedbackResultDto, healthInfoResult } =
           await this.feedbackService.getFeedbackDetailData(userId, feedbackId);
-        if (!feedbackResult) {
+        if (!feedbackResultDto) {
           throw new NotFoundException("데이터가 존재하지 않습니다");
         }
         if (healthInfoResult) {
-          response.status(200).json({
-            ...feedbackResult,
+          return {
+            ...feedbackResultDto,
             option: {
               goal: healthInfoResult[0].diet_goal,
               targetCalories: healthInfoResult[0].target_calories,
             },
-          });
+          };
         } else {
-          response.status(200).json({
-            ...feedbackResult,
-          });
+          return {
+            ...feedbackResultDto,
+          };
         }
+      } else {
+        throw new BadRequestException("잘못된 요청입니다");
       }
     } catch (error) {
       throw error;
@@ -110,10 +110,17 @@ export class FeedbackController {
   async deleteFeedbackData(
     @Query("feedbackId") feedbackId: string,
     @Res() response: any
-  ): Promise<void> {
+  ) {
     try {
-      await this.feedbackService.deleteFeedbackData(feedbackId);
-      response.status(200).json({ message: "피드백 삭제 성공" });
+      const deleteResult =
+        await this.feedbackService.deleteFeedbackData(feedbackId);
+      if (!deleteResult) {
+        const exceptionObj = {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: "데이터 삭제에 실패했습니다",
+        };
+        throw new HttpException(exceptionObj, HttpStatus.FORBIDDEN);
+      }
     } catch (error) {
       throw error;
     }
