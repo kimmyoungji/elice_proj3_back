@@ -69,15 +69,9 @@ export class FeedbackController {
           startDate,
           date
         );
-        if (data.length === 0) {
-          throw new NotFoundException("데이터가 존재하지 않습니다");
-        }
         return { data: data };
       } else if (page) {
         const data = await this.feedbackService.getFeedbackData(userId, page);
-        if (data.length === 0) {
-          throw new NotFoundException("데이터가 존재하지 않습니다");
-        }
         return { data: data };
       } else if (feedbackId) {
         const { feedbackResultDto, healthInfoResult } =
@@ -114,7 +108,8 @@ export class FeedbackController {
     try {
       const deleteResult =
         await this.feedbackService.deleteFeedbackData(feedbackId);
-      if (!deleteResult) {
+      console.log(deleteResult);
+      if (deleteResult.affected === 0) {
         const exceptionObj = {
           statusCode: HttpStatus.BAD_REQUEST,
           message: "데이터 삭제에 실패했습니다",

@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty } from "class-validator";
+import { IsInt, IsNotEmpty, IsUUID } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Exclude, Expose, Transform } from "class-transformer";
 import { MealType } from "src/record/record.enum";
@@ -52,6 +52,12 @@ export class CumulativeDateMealTypeDto {
   @ApiProperty({ description: "식사 종류" })
   @IsInt()
   mealType: MealType;
+
+  @Expose()
+  @ApiProperty()
+  @IsUUID()
+  @IsNotEmpty()
+  cumulativeRecordId: string;
 
   @Expose()
   @ApiProperty({ description: "하루 섭취한 총 칼로리" })

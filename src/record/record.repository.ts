@@ -189,6 +189,7 @@ export class RecordRepository extends Repository<Record> {
       );
       const splitImageEntry = this.splitImageRepository.create({
         imageId: foodImage.imageId,
+        foodName: food.foodName,
         xCoordinate: food.XYCoordinate[0],
         yCoordinate: food.XYCoordinate[1],
         width: food.XYCoordinate[2],
@@ -234,7 +235,7 @@ export class RecordRepository extends Repository<Record> {
       newCumulativeRecord.proteins = proteins;
       newCumulativeRecord.fats = fats;
       newCumulativeRecord.dietaryFiber = dietaryFiber;
-      newCumulativeRecord.imageId = record.imageId; //형식 바꿔주셔야 함
+      newCumulativeRecord.imageId = record.imageId;
       await this.cumulativeRecordRepository.save(newCumulativeRecord);
     } else {
       // 기존 레코드 업데이트
@@ -252,14 +253,6 @@ export class RecordRepository extends Repository<Record> {
   async updateRecord(date: string, mealType: number, updateRecordDto: UpdateRecordDto): Promise<any> {
     const recordDate = new Date(date);
     const { userId, foods } = updateRecordDto;
-    
-    // 누적 정보를 업데이트할 레코드 목록
-    const updatedRecords = [];
-    let cumulativeCarbohydrates = 0;
-    let cumulativeProteins = 0;
-    let cumulativeFats = 0;
-    let cumulativeDietaryFiber = 0;
-    let cumulativeTotalCalories = 0;
   
     // 기존 레코드 검색
     const existingRecords = await this.recordRepository.find({
@@ -279,7 +272,7 @@ export class RecordRepository extends Repository<Record> {
     // 기존 데이터 업데이트
     const updatedFoodIds = new Set();
     for (const food of foods) {
-      // 동일한 mealType과 foodInfoId를 가진 레코드를 찾습니다.
+      // 동일한 mealType과 foodInfoId를 가진 레코드를 찾기
       const existingRecord = await this.recordRepository.findOne({
         where: {
           userId: userId,
@@ -307,40 +300,31 @@ export class RecordRepository extends Repository<Record> {
     
         // 레코드 업데이트
         await this.recordRepository.save(updatedRecord);
-      
-      updatedFoodIds.add(food.foodInfoId);
-      
-      cumulativeCarbohydrates += existingRecord.carbohydrates;
-      cumulativeProteins += existingRecord.proteins;
-      cumulativeFats += existingRecord.fats;
-      cumulativeDietaryFiber += existingRecord.dietaryFiber;
-      cumulativeTotalCalories += existingRecord.totalCalories;
-      // records.push(existingRecord);
 
-      await this.createOrUpdateCumulativeRecord(
-        existingRecord,
-        cumulativeTotalCalories,
-        cumulativeCarbohydrates,
-        cumulativeProteins,
-        cumulativeFats,
-        cumulativeDietaryFiber
-      )
+      const foodForUpdate = await this.foodInfoRepository.findOne({
+        where: {
+          foodInfoId: existingRecord.foodInfoId
+        }
+      });
 
       // split_image 테이블에서 해당 imageId를 가진 레코드를 찾아 정보를 업데이트
       const splitImageRecord = await this.splitImageRepository.findOneBy({
         imageId: existingRecord.imageId,
+        foodName: foodForUpdate.foodName
       });
 
       if (splitImageRecord) {
         // 전달받은 XY 좌표 정보로 split_image 레코드를 업데이트
+        splitImageRecord.foodName = food.foodName;
         splitImageRecord.xCoordinate = food.XYCoordinate[0];
         splitImageRecord.yCoordinate = food.XYCoordinate[1];
         splitImageRecord.width = food.XYCoordinate[2];
         splitImageRecord.height = food.XYCoordinate[3];
         await this.splitImageRepository.save(splitImageRecord);
       }
+      updatedFoodIds.add(food.foodInfoId);
     } else {
-      // 존재하지 않으면 새로운 레코드를 생성합니다.
+      // 존재하지 않으면 새로운 레코드를 생성
       await this.recordRepository.insert({
         userId: userId,
         mealType: mealType,
@@ -354,40 +338,126 @@ export class RecordRepository extends Repository<Record> {
         totalCalories: foodInfo.calories * food.counts,
         firstRecordDate: new Date(recordDate),
         updatedDate: new Date(),
+      });      
+      updatedFoodIds.add(food.foodInfoId);
+
+      const splitImageEntry = this.splitImageRepository.create({
+        imageId: imageRecord.imageId,
+        foodName: food.foodName,
+        xCoordinate: food.XYCoordinate[0],
+        yCoordinate: food.XYCoordinate[1],
+        width: food.XYCoordinate[2],
+        height: food.XYCoordinate[3],
+        createdAt: new Date(),
       });
+
+      await this.splitImageRepository.save(splitImageEntry);
     }
+
     // 있다가 없어진 데이터 삭제
     const recordsToDelete = existingRecords.filter(record => !updatedFoodIds.has(record.foodInfoId));
     for (const record of recordsToDelete) {
+      const foodForDelete = await this.foodInfoRepository.findOne({
+        where: {
+          foodInfoId: record.foodInfoId
+        }
+      });
+
+      await this.splitImageRepository.delete({
+        imageId: record.imageId,
+        foodName: foodForDelete.foodName
+      });
+
       // 레코드 삭제
       await this.recordRepository.delete(record.recordId);  
+ 
     }
+    // 누적 영양 정보 업데이트
+    await this.updateCumulativeNutrients(userId, mealType, recordDate);    
   }
 }
+
+  // 누적 정보 업데이트 로직
+  async updateCumulativeNutrients(userId: string, mealType: number, date: Date) {
+    // 누적 영양소 정보를 계산할 객체 초기화
+    let cumulative = {
+      carbohydrates: 0,
+      proteins: 0,
+      fats: 0,
+      dietaryFiber: 0,
+      totalCalories: 0
+    };
+
+    // 해당 사용자의 모든 식사 기록을 검색
+    const records = await this.recordRepository.find({
+      where: { userId, mealType, firstRecordDate: date }
+    });
+
+    // 각 기록에 대해 누적 영양소 및 칼로리 계산
+    records.forEach(record => {
+      cumulative.carbohydrates += record.carbohydrates;
+      cumulative.proteins += record.proteins;
+      cumulative.fats += record.fats;
+      cumulative.dietaryFiber += record.dietaryFiber;
+      cumulative.totalCalories += record.totalCalories;
+    });
+
+    // 해당 날짜와 식사 유형에 대한 누적 레코드를 찾음
+    const cumulativeRecord = await this.cumulativeRecordRepository.findOne({
+      where: { userId, mealType, date }
+    });
+
+    if (cumulativeRecord) {
+      // 기존 누적 레코드 업데이트
+      cumulativeRecord.carbohydrates = cumulative.carbohydrates;
+      cumulativeRecord.proteins = cumulative.proteins;
+      cumulativeRecord.fats = cumulative.fats;
+      cumulativeRecord.dietaryFiber = cumulative.dietaryFiber;
+      cumulativeRecord.mealTotalCalories = cumulative.totalCalories;
+      await this.cumulativeRecordRepository.save(cumulativeRecord);
+    } else {
+      // 새로운 누적 레코드 생성
+      const newCumulativeRecord = this.cumulativeRecordRepository.create({
+        userId,
+        mealType,
+        date,
+        ...cumulative
+      });
+      await this.cumulativeRecordRepository.save(newCumulativeRecord);
+    }
+  }
 
   // 식단 삭제
   async deleteRecord(date: string, mealType: number): Promise<void> {
     const dateObj = new Date(date);
 
-    // Record 삭제
-    const recordResult = await this.recordRepository.delete({
-      firstRecordDate: Equal(dateObj),
-      mealType: mealType,
+    // 해당 날짜와 식사 유형에 맞는 레코드를 가져오기
+    const recordsToDelete = await this.recordRepository.find({
+      where: {
+        firstRecordDate: Equal(dateObj),
+        mealType: mealType,
+      },
     });
 
-    if (recordResult.affected === 0) {
-      throw new NotFoundException(
-        `해당 날짜나 식사 유형에 대한 기록이 없습니다.`
-      );
+    if (recordsToDelete.length === 0) {
+      throw new NotFoundException(`해당 날짜나 식사 유형에 대한 기록이 없습니다.`);
     }
 
-    // 연관된 CumulativeRecord 삭제
-    const cumulativeRecordResult = await this.cumulativeRecordRepository.delete(
-      {
-        date: Equal(dateObj),
-        mealType: mealType,
-      }
-    );
+    // splitImage 레코드를 삭제
+    for (const record of recordsToDelete) {
+      await this.splitImageRepository.delete({
+        imageId: record.imageId,
+      });
+    }
+
+    // Record 삭제 수행
+    await this.recordRepository.remove(recordsToDelete);
+
+    // 연관된 CumulativeRecord를 삭제
+    const cumulativeRecordResult = await this.cumulativeRecordRepository.delete({
+      date: Equal(dateObj),
+      mealType: mealType,
+    });
 
     if (cumulativeRecordResult.affected === 0) {
       console.log(`해당 날짜나 식사 유형에 대한 누적 기록이 없습니다.`);

@@ -31,6 +31,7 @@ export class CumulativeRecordService {
         userId,
         queryRunner.manager
       );
+
       const totalResultDto = plainToInstance(
         CumulativeRecordDateDto,
         totalResult
@@ -43,8 +44,8 @@ export class CumulativeRecordService {
           userId,
           queryRunner.manager
         );
-
       await queryRunner.commitTransaction();
+
       const result = {
         totalResultDto,
         HealthInfoResult,
@@ -69,6 +70,7 @@ export class CumulativeRecordService {
           userId,
           queryRunner.manager
         );
+      console.log("get mealTypeResult", mealTypeResult);
       if (mealTypeResult.length === 0) {
         throw new NotFoundException("데이터가 존재하지 않습니다");
       }
@@ -101,6 +103,23 @@ export class CumulativeRecordService {
     }
   }
 
+  async deleteMealRecord(cumulativeId: string) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const result = await this.cumulativeRepository.deleteMealRecord(
+        cumulativeId,
+        queryRunner.manager
+      );
+      return result;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      return error;
+    } finally {
+      await queryRunner.release();
+    }
+  }
   async transformMealTypeRecord(date: Date, userId: string) {
     try {
       const { mealTypeResult, mealTypeImage } =
@@ -110,13 +129,14 @@ export class CumulativeRecordService {
       }
       const dateArr = mealTypeResult.map((result, index) => [
         result.mealType,
+        result.cumulativeRecordId,
         result.mealTotalCalories / 100,
         mealTypeImage[index],
       ]);
       const includeArr = mealTypeResult.map((item) => item.mealType);
       for (let i = 1; i <= 4; i++) {
         if (!includeArr.includes(i)) {
-          dateArr.push([i, 0, null]);
+          dateArr.push([i, null, 0, null]);
         }
       }
       const sortedDateArr = dateArr.sort((a, b) => a[0] - b[0]);

@@ -120,6 +120,9 @@ export class FeedbackService {
         page,
         queryRunner.manager
       );
+      if (result.length === 0) {
+        return [];
+      }
       await queryRunner.commitTransaction();
       return plainToInstance(GetFeedbackDataDto, result);
     } catch (error) {
@@ -144,10 +147,14 @@ export class FeedbackService {
         date,
         queryRunner.manager
       );
+      if (result.length === 0) {
+        return [];
+      }
       await queryRunner.commitTransaction();
       return plainToInstance(GetFeedbackDataDto, result);
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      return error;
     } finally {
       await queryRunner.release();
     }
@@ -203,6 +210,7 @@ export class FeedbackService {
         feedbackId,
         queryRunner.manager
       );
+
       await queryRunner.commitTransaction();
       return deleteResult;
     } catch (error) {
