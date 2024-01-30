@@ -1,6 +1,5 @@
 import { DownArrowLight } from '@assets/DownArrowLight';
 import styles from '@components/pages/home/home.module.css';
-import useApi from '@hooks/useApi';
 import useCachingApi from '@hooks/useCachingApi';
 import { useEffect, useState } from 'react';
 import Calorie from './Calorie';
@@ -8,24 +7,6 @@ import MealCard from './MealCard';
 import Nutrients from './Nutrients';
 
 const week = ['일', '월', '화', '수', '목', '금', '토'];
-
-interface Props {
-  totalCalories: number;
-  targetCalories: number;
-  totalNutrient: {
-    carbohydrates: number;
-    proteins: number;
-    fats: number;
-    dietaryFiber: number;
-  };
-  recommendNutrient: {
-    carbohydrates: number;
-    proteins: number;
-    fats: number;
-    dietaryFiber: number;
-  };
-  dateArr: [number, number, string][];
-}
 
 const now = new Date();
 const nowYear = now.getFullYear();
@@ -47,50 +28,22 @@ const Home = () => {
 
   const todayDate = `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${nowDate}`;
   const [date, setDate] = useState('2024-01-26');
-  const [dayData, setDayData] = useState<Props>();
 
   const [currentWeekArr, setCurrentWeekArr] = useState<number[]>([]);
 
-  const { trigger, result, reqIdentifier, loading, error } = useApi({
-    method: 'get',
+  const { trigger, result }: { trigger: any; result: any } = useCachingApi({
     path: `/cumulative-record?date=${date}`,
-    shouldInitFetch: false,
+    gcTime: 10000,
+    // 얼만큼으로 해야하는가?
   });
 
+  const triggerData = async () => {
+    await trigger({});
+  };
+
   useEffect(() => {
-    console.log(date);
-    trigger({
-      applyResult: true,
-      isShowBoundary: true,
-    });
+    triggerData();
   }, [selectedDay]);
-  // 날짜 변경할 때마다(정확히는 date 의존성으로) api 콜해서 daydata 바꿔주기
-
-  useEffect(() => {
-    if (result.data) {
-      setDayData(result.data);
-    }
-  }, [result?.data]);
-
-  // const { trigger, result }: { trigger: any; result: any } = useCachingApi({
-  //   path: `/cumulative-record?date=${date}`,
-  // });
-
-  // const triggerData = async () => {
-  //   await trigger({});
-  // };
-
-  // useEffect(() => {
-  //   triggerData();
-  // }, [selectedDay]);
-
-  // console.log(result);
-
-  // useEffect(() => {
-  //   if (result.data) {
-  //     setDayData(result.data);
-  //   }
-  // }, [result?.data]);
 
   const handleClick = (idx: number) => {
     setSelectedDay(idx);
@@ -188,26 +141,26 @@ const Home = () => {
           식단
         </p>
         <Calorie
-          totalCalories={dayData ? dayData.totalCalories : 0}
-          recommendCalories={dayData ? dayData.targetCalories : 10}
+          totalCalories={result?.data ? result?.data.totalCalories : 0}
+          recommendCalories={result?.data ? result?.data.targetCalories : 10}
         />
         <Nutrients
           totalNutrient={
-            dayData
-              ? dayData.totalNutrient
+            result?.data
+              ? result?.data.totalNutrient
               : { carbohydrates: 0, proteins: 0, fats: 0, dietaryFiber: 0 }
           }
           recommendNutrient={
-            dayData
-              ? dayData.recommendNutrient
+            result?.data
+              ? result?.data.recommendNutrient
               : { carbohydrates: 10, proteins: 10, fats: 10, dietaryFiber: 10 }
           }
         />
         <MealCard
           date={todayDate}
           dateArr={
-            dayData
-              ? (dayData.dateArr as [number, number, string | undefined][])
+            result?.data
+              ? (result?.data.dateArr as [number, number, string | undefined][])
               : []
           }
         />

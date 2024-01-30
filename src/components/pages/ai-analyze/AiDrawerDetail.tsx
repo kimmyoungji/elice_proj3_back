@@ -1,10 +1,10 @@
-import { useLocation } from 'react-router-dom';
 import styles from '@components/pages/ai-analyze/drawer.module.css';
 import Option from './Option';
 import { Share } from '@assets/Share';
 import { DeleteBox } from '@assets/DeleteBox';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MiniToast from './MiniToast';
+import useApi from '@hooks/useApi';
 
 const typeType: Record<string, string> = {
   식단추천: styles.recommend,
@@ -37,17 +37,42 @@ const handleCopyClipBoard = async (text: string) => {
 const AiDrawerDetail = () => {
   const [shareToast, setShareToast] = useState(false);
   const [deleteToast, setDeleteToast] = useState(false);
+
+  const { trigger, result, reqIdentifier, loading, error } = useApi({
+    method: 'get',
+    path: `/feedback?feedbackId=416cbf52-a1ab-4c4e-81fd-de1d6e1a47b4`,
+    shouldInitFetch: false,
+  });
+
+  const triggerData = async () => {
+    await trigger({
+      applyResult: true,
+      isShowBoundary: true,
+    });
+  };
+  const triggerDeleteData = async () => {
+    await trigger({
+      method: 'delete',
+      path: `/feedback?feedbackId=416cbf52-a1ab-4c4e-81fd-de1d6e1a47b4`,
+      applyResult: true,
+      isShowBoundary: true,
+    });
+  };
+
+  useEffect(() => {
+    triggerData();
+  }, []);
+
   const handleShare = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     handleCopyClipBoard(
-      `http://localhost:3000/share/${DUMMYdetaildata.feedbackId}`
-    );
-    // 나중에 배포 url로 변경 필요!
+      `http://localhost:3000/share/${result.data.feedbackId}`
+    ); // 나중에 배포 url로 변경 필요!
     setShareToast(true);
   };
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    // 삭제 API 호출
+    triggerDeleteData();
     setDeleteToast(true);
   };
 
@@ -56,25 +81,25 @@ const AiDrawerDetail = () => {
       <div className={styles.drawer_wrapper}>
         <div className={styles.detail_wrapper}>
           <div className={`${styles.date} b-regular`}>
-            {DUMMYdetaildata.feedbackDate}
+            {result.data.feedbackDate}
           </div>
           <div
-            className={`${styles.type} ${typeType[DUMMYdetaildata.questionType]} s-regular`}
+            className={`${styles.type} ${typeType[result.data.questionType]} s-regular`}
           >
-            {DUMMYdetaildata.questionType}
+            {result.data.questionType}
           </div>
           <div
-            className={`${styles.tag} ${tagType[DUMMYdetaildata.questionType]} b-small`}
+            className={`${styles.tag} ${tagType[result.data.questionType]} b-small`}
           >
-            {DUMMYdetaildata.question}
+            {result.data.question}
           </div>
           <Option
-            type={DUMMYdetaildata.questionType}
-            tag={DUMMYdetaildata.question}
-            option={DUMMYdetaildata.option}
+            type={result.data.questionType}
+            tag={result.data.question}
+            option={result.data.option}
           />
           <div className={`${styles.detail_text} r-big`}>
-            {DUMMYdetaildata.text}
+            {result.data.text}
           </div>
           <div className={styles.button_wrapper}>
             <button className={`r-small`} onClick={handleShare}>

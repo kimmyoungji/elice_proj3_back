@@ -5,100 +5,105 @@ import UserBox from './UserBox';
 import { questionData } from './QuestionData';
 import { useNavigate } from 'react-router-dom';
 import getDates from '@utils/getDates';
+import useCachingApi from '@hooks/useCachingApi';
 
 const DUMMYrecordData = [
   {
-    date: '2024-01-01',
-    questionIdx: '1',
-    question: questionData['1'],
-    answer: '3',
+    feedbackId: 'sdnl23r',
+    feedbackDate: '2024-01-23',
+    questionType: '식단평가',
+    question: '일주일',
+    feedback: '어쩌구저쩌구',
   },
   {
-    date: '2024-01-01',
-    questionIdx: '1-3',
-    question: questionData['1-3'],
-    answer: '나에게 맞는 목표를 추천해줄래?',
+    feedbackId: 'fbe542d',
+    feedbackDate: '2024-01-23',
+    questionType: '식단추천',
+    question: '맛있는추천',
+    feedback: '어쩌구저쩌구',
   },
   {
-    date: '2024-01-05',
-    questionIdx: '1',
-    question: questionData['1'],
-    answer: '3',
+    feedbackId: 'sdnl23r',
+    feedbackDate: '2024-01-24',
+    questionType: '식단평가',
+    question: '하루',
+    feedback: '어쩌구저쩌구',
   },
   {
-    date: '2024-01-05',
-    questionIdx: '1-1',
-    question: questionData['1-1'],
-    answer: '오늘 식단 추천이 필요해!',
+    feedbackId: 'fbe542d',
+    feedbackDate: '2024-01-26',
+    questionType: '목표추천',
+    question: '목표추천',
+    feedback: '어쩌구저쩌구',
   },
   {
-    date: '2024-01-05',
-    questionIdx: '1-1-2',
-    question: questionData['1-1-2'],
-    answer: '내 목표에 맞게 추천 받고 싶어!',
+    feedbackId: 'sdnl23r',
+    feedbackDate: '2024-01-26',
+    questionType: '식단평가',
+    question: '하루',
+    feedback: '어쩌구저쩌구',
   },
   {
-    date: '2024-01-05',
-    questionIdx: '1',
-    question: questionData['1'],
-    answer: '다른 질문도 할래!',
+    feedbackId: 'fbe542d',
+    feedbackDate: '2024-01-30',
+    questionType: '식단추천',
+    question: '맛있는추천',
+    feedback: '어쩌구저쩌구',
   },
-  {
-    date: '2024-01-05',
-    questionIdx: '1-2',
-    question: questionData['1-2'],
-    answer: '잘 하고 있는지, 식단 평가가 필요해!',
-  },
-  {
-    date: '2024-01-12',
-    questionIdx: '1',
-    question: questionData['1'],
-    answer: '3',
-  },
-  {
-    date: '2024-01-12',
-    questionIdx: '1-2',
-    question: questionData['1-2'],
-    answer: '잘 하고 있는지, 식단 평가가 필요해!',
-  },
-  {
-    date: '2024-01-12',
-    questionIdx: '1-2-1',
-    question: questionData['1-2-1'],
-    answer: '오늘 하루 내 식단은 어땠어?',
-  },
-  // {
-  //   date: '2024-01-25',
-  //   questionIdx: '1',
-  //   question: questionData['1'],
-  //   answer: '3',
-  // },
-  // {
-  //   date: '2024-01-25',
-  //   questionIdx: '1-2',
-  //   question: questionData['1-2'],
-  //   answer: '잘 하고 있는지, 식단 평가가 필요해!',
-  // },
-  // {
-  //   date: '2024-01-25',
-  //   questionIdx: '1-2-1',
-  //   question: questionData['1-2-1'],
-  //   answer: '오늘 하루 내 식단은 어땠어?',
-  // },
 ];
 
-const AiAnalyze = () => {
-  const [recordText, setRecordText] = useState(true);
-  // 저장된 일주일치 기록이 있는지 확인하고 setRecordText(true) 혹은 chats 초기값 업데이트
+type RecordList = {
+  feedbackId: string;
+  feedbackDate: string;
+  questionType: string;
+  question: string | undefined;
+  feedback: string;
+}[];
 
+interface Context {
+  type: {
+    questionType: string;
+    question: string | undefined;
+  };
+  text: string;
+  button: [{ type: string; text: string }, { type: string; text: string }];
+}
+type QuestionList = {
+  date: string;
+  questionIdx: string;
+  context: Context;
+  answer: string;
+}[];
+
+const AiAnalyze = () => {
+  const [recordText, setRecordText] = useState(false);
   const { thisYear, thisMonth, thisDay } = getDates();
   const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
+  // 최근 7일을 찾아야 함..
+  const startDate = `${thisYear}-${thisMonth}-${thisDay}`;
+
+  const { trigger, result }: { trigger: any; result: any } = useCachingApi({
+    path: `/feedback?startDate=2024-01-19?date=2024-01-25`,
+    // path: `/feedback?startDate=${startDate}?date=${todayDate}`,
+    gcTime: 10000,
+  });
+
+  const triggerData = async () => {
+    await trigger({});
+  };
+
+  useEffect(() => {
+    triggerData();
+    if (result.data) {
+      setRecordText(true);
+    }
+  }, []);
 
   const [chats, setChats] = useState([
     {
       date: todayDate,
       questionIdx: '1',
-      question: questionData['1'],
+      context: questionData['1'],
       answer: '3',
     },
   ]);
@@ -107,22 +112,88 @@ const AiAnalyze = () => {
   const [questionIdx, setQuestionIdx] = useState('1');
   const [prevQuestionIdx, setPrevQuestionIdx] = useState('1');
 
+  const formatRecord = (recordList: RecordList) => {
+    const questionList: QuestionList = [];
+    recordList.forEach((record, idx) => {
+      const recordQuestionIdx = Object.keys(questionData).find(
+        (key) =>
+          questionData[key].type.questionType === record.questionType &&
+          questionData[key].type.question === record.question
+      );
+      const splitIdx = recordQuestionIdx?.split('-');
+      const questionIdxList = splitIdx?.map(
+        (num, idx) =>
+          (splitIdx[idx - 2] ? splitIdx[idx - 2] + '-' : '') +
+          (splitIdx[idx - 1] ? splitIdx[idx - 1] + '-' : '') +
+          num
+      );
+      const question = questionIdxList?.map((num, idx) => {
+        if (
+          questionList.length === 0 ||
+          record.feedbackDate === questionList[questionList.length - 1].date
+        ) {
+          if (questionData[num].type.questionType === '질문선택') {
+            return {
+              date: record.feedbackDate,
+              questionIdx: num,
+              context: questionData[num],
+              answer: '다른 질문도 할래!',
+            };
+          } else {
+            return {
+              date: record.feedbackDate,
+              questionIdx: num,
+              context: questionData[num],
+              answer: splitIdx
+                ? questionData[questionIdxList[idx - 1]]?.button[
+                    Number(splitIdx[idx]) - 1
+                  ].text
+                : '3',
+            };
+          }
+        } else if (questionData[num].type.questionType === '질문선택') {
+          return {
+            date: record.feedbackDate,
+            questionIdx: num,
+            context: questionData[num],
+            answer: '3',
+          };
+        } else {
+          return {
+            date: record.feedbackDate,
+            questionIdx: num,
+            context: questionData[num],
+            answer: splitIdx
+              ? questionData[questionIdxList[idx - 1]]?.button[
+                  Number(splitIdx[idx]) - 1
+                ].text
+              : '3',
+          };
+        }
+      });
+      questionList.push(...question);
+    });
+
+    return questionList;
+  };
+
   useEffect(() => {
+    const questionList = formatRecord(DUMMYrecordData);
     if (recordText) {
-      if (DUMMYrecordData[DUMMYrecordData.length - 1].date !== todayDate) {
+      if (questionList[questionList.length - 1].date !== todayDate) {
         setChats((prev) => [
           ...prev,
-          ...DUMMYrecordData,
+          ...questionList,
           {
             date: todayDate,
             questionIdx: '1',
-            question: questionData['1'],
+            context: questionData['1'],
             answer: '3',
           },
         ]);
       } else {
-        setChats((prev) => [...prev, ...DUMMYrecordData]);
-        setQuestionIdx(DUMMYrecordData[DUMMYrecordData.length - 1].questionIdx);
+        setChats((prev) => [...prev, ...questionList]);
+        setQuestionIdx(questionList[questionList.length - 1].questionIdx);
       }
     } else {
       setChats((prev) => [
@@ -130,7 +201,7 @@ const AiAnalyze = () => {
         {
           date: todayDate,
           questionIdx: '1',
-          question: questionData['1'],
+          context: questionData['1'],
           answer: '3',
         },
       ]);
@@ -152,7 +223,6 @@ const AiAnalyze = () => {
     });
     if (questionData[questionIdx].button[idx].type === 'follow-up') {
     } else if (questionData[questionIdx].button[idx].type === 'navigate') {
-      // chats 저장
       if (questionData[questionIdx].type.questionType === '식단추천') {
         navigate(`/record/${todayDate}`);
       } else if (questionData[questionIdx].type.questionType === '목표추천') {
@@ -176,7 +246,7 @@ const AiAnalyze = () => {
         {
           date: todayDate,
           questionIdx: questionIdx,
-          question: questionData[questionIdx],
+          context: questionData[questionIdx],
           answer: questionData[prevQuestionIdx].button[answerIdx].text,
         },
       ]);
@@ -202,9 +272,9 @@ const AiAnalyze = () => {
             )}
             {idx !== 0 && chat.answer !== '3' && <UserBox text={chat.answer} />}
             <BotBox
-              toSave={chat.question.type.question ? true : false}
-              text={chat.question.text}
-              button={chat.question.button}
+              toSave={chat.context.type.question ? true : false}
+              text={chat.context.text}
+              button={chat.context.button}
               handleOnClick={handleOnClick}
             />
           </div>

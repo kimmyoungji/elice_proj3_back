@@ -1,6 +1,7 @@
 import { DeleteBox } from '@assets/DeleteBox';
 import { Share } from '@assets/Share';
 import styles from '@components/pages/ai-analyze/drawer.module.css';
+import useApi from '@hooks/useApi';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MiniToast from './MiniToast';
@@ -10,7 +11,6 @@ interface Props {
   type: string;
   tag: string | undefined;
   text: string;
-  option: { goal: string; calorie: number } | undefined;
 }
 
 const typeType: Record<string, string> = {
@@ -27,9 +27,23 @@ const handleCopyClipBoard = async (text: string) => {
   }
 };
 
-const DrawerCard = ({ id, date, type, tag, text, option }: Props) => {
+const DrawerCard = ({ id, date, type, tag, text }: Props) => {
   const [shareToast, setShareToast] = useState(false);
   const [deleteToast, setDeleteToast] = useState(false);
+
+  const { trigger, result, reqIdentifier, loading, error } = useApi({
+    method: 'delete',
+    path: `/feedback?feedbackId=416cbf52-a1ab-4c4e-81fd-de1d6e1a47b4`,
+    shouldInitFetch: false,
+  });
+
+  const triggerData = async () => {
+    await trigger({
+      applyResult: true,
+      isShowBoundary: true,
+    });
+  };
+
   const handleShare = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     handleCopyClipBoard(`http://localhost:3000/share/${id}`);
@@ -38,7 +52,7 @@ const DrawerCard = ({ id, date, type, tag, text, option }: Props) => {
   };
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    // 삭제 API 호출
+    triggerData();
     setDeleteToast(true);
   };
 

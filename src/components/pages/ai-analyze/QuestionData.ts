@@ -36,7 +36,7 @@ const questionData: QuestionData = {
   '1-1-1': {
     type: {
       questionType: '식단추천',
-      question: '목표 추천',
+      question: '목표추천',
     },
     text: `\n추천받은 식단, 어떤가요?`,
     button: [
@@ -47,7 +47,7 @@ const questionData: QuestionData = {
   '1-1-2': {
     type: {
       questionType: '식단추천',
-      question: '맛있는 추천',
+      question: '맛있는추천',
     },
     text: `\n추천받은 식단, 어떤가요?`,
     button: [

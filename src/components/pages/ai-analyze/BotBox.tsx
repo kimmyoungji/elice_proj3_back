@@ -1,6 +1,7 @@
 import { Scrap } from '@assets/Scrap';
 import styles from '@components/pages/ai-analyze/box.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
+import useApi from '@hooks/useApi';
 import { useEffect, useState } from 'react';
 import MiniToast from './MiniToast';
 
@@ -16,14 +17,35 @@ const BotBox = ({ toSave, text, button, handleOnClick }: Props) => {
   const [clicked, setClicked] = useState(false);
   const [toast, setToast] = useState(false);
 
+  const { trigger, result, reqIdentifier, loading, error } = useApi({
+    method: 'get',
+    path: `/feedback/save?feedbackId=sdnl23r`,
+    shouldInitFetch: false,
+  });
+
+  const saveScrap = async () => {
+    await trigger({
+      applyResult: true,
+      isShowBoundary: true,
+    });
+  };
+  const deleteScrap = async () => {
+    await trigger({
+      method: 'delete',
+      path: `/feedback/save?feedbackId=sdnl23r`,
+      applyResult: true,
+      isShowBoundary: true,
+    });
+  };
+
   const handleScrap = (e: React.MouseEvent<HTMLDivElement>) => {
     setScrap(!scrap);
     if (!scrap) {
       setToast(true);
-      // 스크랩 추가 API 호출
+      saveScrap();
     } else {
       setToast(false);
-      // 스크랩 삭제 API 호출
+      deleteScrap();
     }
   };
 
