@@ -8,6 +8,7 @@ import { CreateSplitImageDto } from './dtos/CreateSplitImage.dto';
 import { UpdateSplitImageDto } from './dtos/UpdateSplitImage.dto';
 import { SplitImage } from './entities/splitImage.entity';
 import * as AWS from 'aws-sdk';
+import { S3 } from '@aws-sdk/client-s3';
 import { SplitImageRepository } from "./repositories/splitImage.repository";
 
 @Injectable()
@@ -18,12 +19,17 @@ export class ImageService {
         private imageRepository: ImageRepository,
         private splitImageRepository: SplitImageRepository,
         private dataSource: DataSource) {
-        AWS.config.update({
+        // JS SDK v3 does not support global configuration.
+        // Codemod has attempted to pass values to each service client in this file.
+        // You may need to update clients outside of this file, if they use global config.
+        this.s3 = new S3({
             region: "ap-northeast-2",
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+
+            credentials: {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+            },
         });
-        this.s3 = new AWS.S3();
     }
     
     /* 프리사인드 유알엘 받아오기 */
