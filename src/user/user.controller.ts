@@ -15,8 +15,8 @@ export class UserController {
 
 
     @ApiOperation({summary: '유저정보와 유저건강정보 가져오기'})
-    @Get()
     @UseGuards(isLoggedInGuard)
+    @Get()
     public async handleGetUserInfos(@Req() request: any, @Res() response: any){
         const result =  await this.userService.getUserInfos(request.user.userId);
         response.status(200).json(result);
@@ -24,8 +24,8 @@ export class UserController {
 
     @ApiOperation( {summary: '유저정보와 유저건강정보 수정하기'} )
     @ApiBody({ type: handleUpdateUserInfosDto })
-    @Put()
     @UseGuards(isLoggedInGuard)
+    @Put()
     public async handleUpdateUserInfos(
         @Req() request: any, 
         @Body() updateUserInfosDto: UpdateUserDto | SaveHealthInfoDto, 
