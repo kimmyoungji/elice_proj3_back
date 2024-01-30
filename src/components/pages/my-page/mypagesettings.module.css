@@ -3,11 +3,11 @@
 }
 
 .container {
-  width: 88%;
-  height: 60%;
+  width: 100%;
+  height: 70%;
   display: flex;
   flex-direction: column;
-  margin: 50px 25px 0px 25px;
+  margin: 80px 0px 0px 0px;
 }
 
 .detailContainer {
@@ -15,15 +15,17 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
-  /* border-bottom: 1px solid #e4e4e4; */
+  height: 70px;
+  border-bottom: 1px solid #e4e4e4;
+  padding: 0px 28px;
 }
 
-.accountWrapper {
-  border-bottom: 1px solid #e4e4e4;
-}
-.nickName {
+.accountSettings {
+  font-family: Inter;
   font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }
 
 .editContainer {
@@ -36,6 +38,12 @@
 .showNickName {
   margin-right: 15px;
   color: var(--main-blue);
+  text-align: right;
+  font-family: Inter;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }
 
 .editButton {
@@ -47,22 +55,20 @@
   font-weight: 600;
 }
 
-.gender {
-  font-size: 15px;
-}
-
 .selectGender {
   margin-right: 15px;
   font-size: 16px;
   color: var(--main-blue);
 }
 
-.rank {
-  color: black;
-}
-
-.showRank {
-  color: black;
+.accountFontStyle {
+  color: var(--main-blue, #346dff);
+  text-align: right;
+  font-family: Inter;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }
 
 .modal {
@@ -91,6 +97,10 @@
   margin-top: 15px;
 }
 
+.modalContent button:hover {
+  background-color: var(--main-skyblue);
+}
+
 .buttonYes {
   margin: 30px 18px 10px 18px;
   width: 80px;
@@ -115,6 +125,6 @@
   font-size: 14px;
 }
 
-.modalContent button:hover {
-  background-color: var(--main-skyblue);
+.rightButton {
+  cursor: pointer;
 }

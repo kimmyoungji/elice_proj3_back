@@ -17,7 +17,7 @@ const MyPage = () => {
 
   // const [data, setData] = useState(userData);
   // const [healthData, setHealthData] = useState(userData.healthInfo);
-  console.log(userData.dietGoal);
+  // console.log(userData.dietGoal);
   const goalMsg = mapGoaltoMsg[Number(userData?.dietGoal)];
   const activityMsg = mapActivitytoMsg[Number(userData?.activityAmount)];
   const navigate = useNavigate();
@@ -56,6 +56,7 @@ const MyPage = () => {
     navigate('/my-page/settings', {
       state: { nickname: userData.username, gender: userData.gender },
     });
+    console.log(userData.gender);
   };
 
   return (

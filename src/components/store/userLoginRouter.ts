@@ -14,12 +14,12 @@ export interface UserInfo {
 const initialState: { userInfo: UserInfo } = {
   userInfo: {
     username: '',
+    profileImage: '',
     dietGoal: '1',
     activityAmount: ' 1',
     height: 0,
     weight: 0,
     gender: '1',
-    profileImage: '',
     targetCalories: 0,
   },
 };
