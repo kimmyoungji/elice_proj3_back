@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ButtonCommon from '../../UI/ButtonCommon';
 import './Onboarding.css';
 import { OnboardingProps } from './OnboardingGender';
@@ -8,14 +8,23 @@ const OnboardingActivity: React.FC<OnboardingProps> = ({
   onClickOnboarding,
 }) => {
   const onClickActivity = (value: number) => {
-    onClickOnboarding({ ['activityAmount']: value });
+    if (userData.activityAmount === value.toString()) {
+      onClickOnboarding({ ['activityAmount']: '' });
+    } else {
+      onClickOnboarding({ ['activityAmount']: value.toString() });
+    }
   };
+  useEffect(() => {
+    console.log(userData.activityAmount);
+  }, [userData.activityAmount]);
   return (
     <div className='onboarding-container'>
       <h1 className='b-medium'>당신의 평소 활동량은 어떤가요?</h1>
       <div style={{ marginTop: '30px' }}>
         <ButtonCommon
-          variant={userData.activityAmount === 1 ? 'active' : 'default'}
+          variant={
+            Number(Number(userData.activityAmount)) === 1 ? 'active' : 'default'
+          }
           size='large'
           onClickBtn={() => onClickActivity(1)}
         >
@@ -24,7 +33,7 @@ const OnboardingActivity: React.FC<OnboardingProps> = ({
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          variant={userData.activityAmount === 2 ? 'active' : 'default'}
+          variant={Number(userData.activityAmount) === 2 ? 'active' : 'default'}
           size='large'
           onClickBtn={() => onClickActivity(2)}
         >
@@ -33,7 +42,7 @@ const OnboardingActivity: React.FC<OnboardingProps> = ({
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          variant={userData.activityAmount === 3 ? 'active' : 'default'}
+          variant={Number(userData.activityAmount) === 3 ? 'active' : 'default'}
           size='large'
           onClickBtn={() => onClickActivity(3)}
         >
@@ -42,7 +51,7 @@ const OnboardingActivity: React.FC<OnboardingProps> = ({
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          variant={userData.activityAmount === 4 ? 'active' : 'default'}
+          variant={Number(userData.activityAmount) === 4 ? 'active' : 'default'}
           size='large'
           onClickBtn={() => onClickActivity(4)}
         >

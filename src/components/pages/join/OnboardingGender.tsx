@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import './Onboarding.css';
-import { userDataType } from './Onboarding';
+import { UserInfo } from '@components/store/userLoginRouter';
 
 export interface OnboardingProps {
-  userData: userDataType;
+  userData: UserInfo;
   onClickOnboarding: (onboardingInfo: object) => void;
 }
 
@@ -13,15 +13,24 @@ const OnboardingGender: React.FC<OnboardingProps> = ({
   onClickOnboarding,
 }) => {
   const onClick = (gender: number) => {
-    onClickOnboarding({ ['gender']: gender });
+    if (userData.gender === gender.toString()) {
+      onClickOnboarding({ ['gender']: '' });
+    } else {
+      onClickOnboarding({ ['gender']: gender.toString() });
+    }
   };
+
+  useEffect(() => {
+    console.log(userData);
+    console.log(userData.gender);
+  }, [userData.gender]);
 
   return (
     <div className='onboarding-container'>
       <h1 className='b-medium'>당신의 성별은 무엇인가요?</h1>
       <div style={{ marginTop: '30px' }}>
         <ButtonCommon
-          variant={userData.gender === 1 ? 'active' : 'default'}
+          variant={Number(userData.gender) === 1 ? 'active' : 'default'}
           size='large'
           onClickBtn={() => onClick(1)}
         >
@@ -30,7 +39,7 @@ const OnboardingGender: React.FC<OnboardingProps> = ({
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          variant={userData.gender === 2 ? 'active' : 'default'}
+          variant={Number(userData.gender) === 2 ? 'active' : 'default'}
           size='large'
           onClickBtn={() => onClick(2)}
         >
@@ -39,7 +48,7 @@ const OnboardingGender: React.FC<OnboardingProps> = ({
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          variant={userData.gender === 3 ? 'active' : 'default'}
+          variant={Number(userData.gender) === 3 ? 'active' : 'default'}
           size='large'
           onClickBtn={() => onClick(3)}
         >

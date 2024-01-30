@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ButtonCommon from '../../UI/ButtonCommon';
 import OnboardingGender from './OnboardingGender';
@@ -7,16 +7,19 @@ import OnboardingHeight from './OnboardingHeight';
 import OnboardingWeight from './OnboardingWeight';
 import OnboardingGoal from './OnboardingGoal';
 import OnboardingActivity from './OnboardingActivity';
-import useApi from '@hooks/useApi';
 import useCachingApi from '@hooks/useCachingApi';
+import { checkValuesNullOrEmpty } from '@utils/checkValuesNullOrEmpty';
+import { useSelector } from 'react-redux';
+import { RootState } from '@components/store';
+import { UserInfo } from '@components/store/userLoginRouter';
 
-export interface userDataType {
-  gender: number | null;
-  birthDay: string;
-  height: number | null;
-  weight: number | null;
-  diet_goal: number | null;
-  activityAmount: number | null;
+export interface userPutDataType {
+  dietGoal?: string;
+  activityAmount?: string;
+  height?: number;
+  weight?: number;
+  gender?: string;
+  birthDay?: string;
 }
 
 interface OnBoardingResult {
@@ -24,32 +27,53 @@ interface OnBoardingResult {
   status: number;
 }
 
+const initialUserInfo = {
+  activityAmount: undefined,
+  dietGoal: '',
+  username: '',
+  height: undefined,
+  gender: undefined,
+  birthDay: '',
+  weight: undefined,
+};
+
 //onboarding에서 앞의 데이터가 없을 때
 
 const Onboarding = () => {
   const navigate = useNavigate();
   const { step } = useParams();
-  const currentStep = Number(step) || 1;
+  const [curStep, setCurStep] = useState(Number(step) || 1);
+  const [userData, setUserData] = useState<userPutDataType>(initialUserInfo);
 
-  const [userData, setUserData] = useState({
-    gender: null,
-    birthDay: '',
-    height: null,
-    weight: null,
-    diet_goal: null,
-    activityAmount: null,
-  });
-
+  const returnedUserData = useSelector(
+    (state: RootState) => state.user.userInfo
+  );
   const { loading, trigger } = useCachingApi<OnBoardingResult>({
     method: 'put',
     path: '/user',
   });
+  const changeTypedUserData: UserInfo = Object.assign({}, returnedUserData, {
+    activityAmount:
+      returnedUserData.activityAmount &&
+      returnedUserData.activityAmount.toString(),
+    dietGoal: returnedUserData.dietGoal,
+    username: returnedUserData.username,
+    height: returnedUserData.height,
+    gender: returnedUserData.gender,
+    birthDay: '',
+    weight: returnedUserData.weight,
+  });
+
+  useEffect(() => {
+    setUserData(changeTypedUserData);
+  }, [returnedUserData]);
 
   const onNextClick = async () => {
-    //onBoarding에 정보가 비어있는 경우 해당 화면으로 navigate....
-    //api요청 보내지 않음
-    if (currentStep === 6) {
-      if (!loading) {
+    if (curStep === 6) {
+      if (checkValuesNullOrEmpty(userData)) {
+        setCurStep(checkValuesNullOrEmpty(userData) as number);
+        return navigate(`/onboarding/${checkValuesNullOrEmpty(userData)}`);
+      } else if (!loading) {
         trigger(
           { ...userData },
           {
@@ -65,8 +89,8 @@ const Onboarding = () => {
         );
       }
     } else {
-      const nextStep = Math.min(6, currentStep + 1);
-      navigate(`/onboarding/${nextStep}`);
+      setCurStep((prev) => prev + 1);
+      navigate(`/onboarding/${curStep + 1}`);
     }
   };
 
@@ -75,39 +99,30 @@ const Onboarding = () => {
   };
 
   const isNextButtonDisabled = () => {
-    switch (currentStep) {
+    switch (curStep) {
       case 1:
-        return userData.gender === null;
+        return userData.gender === '';
       case 2:
-        return (
-          userData.birthDay === null ||
-          userData.birthDay.split('-').some((part) => part === '')
-        );
+        return userData.birthDay === '';
       case 3:
-        return userData.height === '';
+        return userData.height?.toString() === '';
       case 4:
-        return userData.weight === null;
+        return userData.weight?.toString() === '';
       case 5:
-        return userData.diet_goal === null;
+        return userData.dietGoal === '';
       case 6:
-        return userData.activityAmount === null;
+        return userData.activityAmount === '';
       default:
         return true;
     }
   };
-
-  useEffect(() => {
-    if (currentStep === 0) {
-      navigate('/auth');
-    }
-  }, [currentStep, navigate]);
 
   const renderProgressBar = () => {
     const steps = 6;
     const progressBarSteps = [];
 
     for (let i = 1; i <= steps; i++) {
-      const isActive = i <= currentStep;
+      const isActive = i <= curStep;
       progressBarSteps.push(
         <div key={i} className={`progress-step ${isActive ? 'active' : ''}`} />
       );
@@ -119,7 +134,7 @@ const Onboarding = () => {
   return (
     <div
       style={{
-        minHeight: '100vh',
+        minHeight: '100%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -129,37 +144,37 @@ const Onboarding = () => {
         <div className='progress-bar' style={{ marginBottom: '50px' }}>
           {renderProgressBar()}
         </div>
-        {currentStep === 1 && (
+        {curStep === 1 && (
           <OnboardingGender
             userData={userData}
             onClickOnboarding={onClickOnboarding}
           />
         )}
-        {currentStep === 2 && (
+        {curStep === 2 && (
           <OnboardingBirth
             userData={userData}
             onClickOnboarding={onClickOnboarding}
           />
         )}
-        {currentStep === 3 && (
+        {curStep === 3 && (
           <OnboardingHeight
             userData={userData}
             onClickOnboarding={onClickOnboarding}
           />
         )}
-        {currentStep === 4 && (
+        {curStep === 4 && (
           <OnboardingWeight
             userData={userData}
             onClickOnboarding={onClickOnboarding}
           />
         )}
-        {currentStep === 5 && (
+        {curStep === 5 && (
           <OnboardingGoal
             userData={userData}
             onClickOnboarding={onClickOnboarding}
           />
         )}
-        {currentStep === 6 && (
+        {curStep === 6 && (
           <OnboardingActivity
             userData={userData}
             onClickOnboarding={onClickOnboarding}

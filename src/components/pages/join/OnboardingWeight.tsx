@@ -3,8 +3,13 @@ import './Onboarding.css';
 import NumericPad from './NumericPad';
 import { OnboardingProps } from './OnboardingGender';
 
-const OnboardingWeight: React.FC<OnboardingProps> = ({ onClickOnboarding }) => {
-  const [inputValue, setInputValue] = useState('');
+const OnboardingWeight: React.FC<OnboardingProps> = ({
+  userData,
+  onClickOnboarding,
+}) => {
+  const [inputValue, setInputValue] = useState(
+    userData.weight?.toString() || ''
+  );
 
   useEffect(() => onClickOnboarding({ ['weight']: inputValue }), [inputValue]);
   return (
