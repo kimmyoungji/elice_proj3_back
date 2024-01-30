@@ -110,8 +110,8 @@ const Join = () => {
           style={{
             position: 'relative',
             right: '-75%',
-            top: '-30%',
-            transform: 'translateY(-50%)',
+            top: '-40%',
+            transform: 'translateY(-130%)',
           }}
         >
           이메일 인증
@@ -130,7 +130,7 @@ const Join = () => {
             position: 'relative',
             right: '-75%',
             top: '-30%',
-            transform: 'translateY(-50%)',
+            transform: 'translateY(-130%)',
           }}
         >
           인증하기
@@ -172,7 +172,7 @@ const Join = () => {
           )}
         </div>
       </div>
-      <div className='button-container'>
+      <div className='button-container' style={{ marginTop: '20px' }}>
         <ButtonCommon
           variant='default-active'
           size='big'
