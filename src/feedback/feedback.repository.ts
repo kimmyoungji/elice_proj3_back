@@ -89,12 +89,9 @@ export class FeedbackRepository {
       .getOne();
   }
 
-  async deleteFeedbackData(
-    feedbackId: string,
-    manager: EntityManager
-  ): Promise<void> {
+  async deleteFeedbackData(feedbackId: string, manager: EntityManager) {
     try {
-      await manager
+      return await manager
         .createQueryBuilder(Feedback, "feedback")
         .softDelete()
         .from(Feedback)
