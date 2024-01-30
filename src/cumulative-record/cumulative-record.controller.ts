@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Query,
@@ -117,7 +118,8 @@ export class CumulativeRecordController {
       throw error;
     }
   }
-
+  @Delete("/meal")
+  @ApiOperation({})
   @Get("/month")
   // @UseGuards(isLoggedInGuard)
   @ApiOperation({

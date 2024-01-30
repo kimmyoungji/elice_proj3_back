@@ -1,4 +1,10 @@
-import { Controller, Get, Query, UseGuards } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Query,
+  UseGuards,
+} from "@nestjs/common";
 import { FoodInfoService } from "./food-info.service";
 import { ApiOperation } from "@nestjs/swagger";
 import { isLoggedInGuard } from "src/auth/utils/isLoggedin.guard";
@@ -17,20 +23,45 @@ export class FoodInfoController {
     @Query("foodName", FoodNamePipe) foodName: string,
     @Query("foodInfoId") foodInfoId: string
   ) {
-    if (keyword) {
-      if (!lastFoodId) {
-        return await this.foodInfoService.getFoodList(keyword);
-      } else {
-        return await this.foodInfoService.getFoodNextList(keyword, lastFoodId);
+    try {
+      if (keyword) {
+        if (!lastFoodId) {
+          const foodListResult =
+            await this.foodInfoService.getFoodList(keyword);
+          if (foodListResult.length === 0) {
+            throw new NotFoundException("데이터가 존재하지 않습니다");
+          }
+          return foodListResult;
+        } else {
+          const foodNextListResult = await this.foodInfoService.getFoodNextList(
+            keyword,
+            lastFoodId
+          );
+          if (foodNextListResult.length === 0) {
+            throw new NotFoundException("데이터가 존재하지 않습니다");
+          }
+          return foodNextListResult;
+        }
       }
-    }
-    // 리스트에 없던 경우
-    if (foodName) {
-      return await this.foodInfoService.getFoodInfo(foodName);
-    }
-    // 리스트에 있는 경우
-    if (foodInfoId) {
-      return await this.foodInfoService.getFoodInfoById(foodInfoId);
+      // 리스트에 없던 경우
+      if (foodName) {
+        const foodInfoResult = await this.foodInfoService.getFoodInfo(foodName);
+        if (!foodInfoResult) {
+          throw new NotFoundException("데이터가 존재하지 않습니다");
+        }
+        return foodInfoResult;
+      }
+      // 리스트에 있는 경우
+      if (foodInfoId) {
+        const foodInfoResult =
+          await this.foodInfoService.getFoodInfoById(foodInfoId);
+        if (!foodInfoResult) {
+          throw new NotFoundException("데이터가 존재하지 않습니다");
+        }
+        return foodInfoResult;
+      }
+    } catch (error) {
+      throw error;
     }
   }
 }
