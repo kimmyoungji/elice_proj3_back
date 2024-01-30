@@ -51,7 +51,7 @@ const Onboarding = () => {
     if (currentStep === 6) {
       if (!loading) {
         trigger(
-          { data: userData },
+          { ...userData },
           {
             onSuccess: (data) => {
               if (
