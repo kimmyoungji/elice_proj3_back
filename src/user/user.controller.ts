@@ -1,7 +1,7 @@
 
 import { response, Request } from 'express';
 import { UserService } from './user.service';
-import { Body, Controller, Delete, Get, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiResponseProperty, ApiTags } from '@nestjs/swagger';
 import { isLoggedInGuard } from 'src/auth/utils/guards/isLoggedin.guard';
 import { UpdateUserDto } from './dto/UpdateUser.dto';
@@ -33,5 +33,16 @@ export class UserController {
                 console.log('사용자 정보 업데이트 시작...')
                 await this.userService.updateUserInfos(request.user.userId, updateUserInfosDto);
                 response.status(200).send('유저정보 및 유저건강정보 업데이트 성공');    
+    }
+
+
+    /* 유저네임 중복 확인하기 */
+    @ApiOperation({ summary: '유저네임 중복 확인하기' })
+    @Get('/username/:username')
+    async handleCheckUsername(@Param('username') username:string, @Res() response: any): Promise<void> {
+        try{
+            const result = await this.userService.checkUsername(username);
+            response.status(200).send({isAvailable: !result});
+        }catch(err){ throw err; }
     }
 }

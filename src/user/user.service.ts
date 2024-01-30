@@ -126,4 +126,23 @@ export class UserService {
         }   
     }
 
+
+    // 유저네임 중복 확인 메서드
+    async checkUsername(username: string): Promise<boolean> {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try{
+            const result = await this.userRepository.findUserByUserName(username, queryRunner.manager);
+            await queryRunner.commitTransaction();
+            if(result) return true;
+            else return false;
+        }catch(err){
+            await queryRunner.rollbackTransaction();
+            throw err;
+        }finally{
+            await queryRunner.release();
+        }
+    }
+
 }
