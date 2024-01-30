@@ -10,6 +10,8 @@ import { RedirectFilter } from './utils/redirectFilter';
 import { LocalLoginDto } from './dto/localLoginDto';
 import { HealthInfo } from 'src/user/entities/health-info.entity';
 import { User } from 'src/user/entities/user.entity';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @UseFilters(new RedirectFilter())
 @ApiTags('auth')
@@ -38,9 +40,9 @@ export class AuthController {
         console.log('구글로그인 진행중...')
         const user: User & HealthInfo = await this.userService.getUserInfos(request.user.userId);
         if(user.recentHealthInfoId === null){
-            response.status(200).redirect('http://localhost:3000/onboarding/1');
+            response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/onboarding/1`);
         }else{
-            response.status(200).redirect('http://localhost:3000/home');
+            response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/home`);
         }    
     }
 
@@ -54,7 +56,7 @@ export class AuthController {
     async handleLocalSignup(@Body() localSignupDto: LocalSignupDto, @Res() response: any) {
         console.log('회원가입진행중...', localSignupDto);
         await this.authService.localSignup(localSignupDto);
-        response.status(200).send('회원가입 성공');
+        response.status(200).send('회원가입 성공'); //분기처리 필요
     }
 
     @ApiOperation({ summary: '로컬 로그인 요청 API' })
@@ -111,7 +113,7 @@ export class AuthController {
             await request.sessionStore.destroy(sessionId, (err)=>err && {msg: 'logout fail', err: err});
             request.user = null;
             await response.clearCookie(process.env.SESSION_COOKIE_NAME, {signed: true});
-            await response.status(200).redirect('http://localhost:3000/');
+            await response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/`);
         }catch(err){ console.log(err); throw err; }
     }
 }

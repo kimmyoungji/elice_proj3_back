@@ -21,7 +21,7 @@ async function bootstrap() {
       saveUninitialized: false,
       resave: false,
       cookie: {
-        maxAge: 60 * 60 * 1000, // 1시간 동안 세션이 유효하도록 설정
+        maxAge: 60 * 60 * 1000 * 24, // 24시간
       },
       name: process.env.SESSION_COOKIE_NAME,
     })
@@ -55,7 +55,7 @@ async function bootstrap() {
   // cors 설정
   app.use(
     cors({
-      origin: "http://localhost:3000",
+      origin: `${process.env.CLIENT_BASE_URL}`,
       credentials: true,
     })
   );

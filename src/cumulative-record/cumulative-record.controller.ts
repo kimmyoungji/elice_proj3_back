@@ -10,6 +10,7 @@ import {
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CumulativeRecordService } from "./cumulative-record.service";
 import { isLoggedInGuard } from "src/auth/utils/isLoggedin.guard";
+import { Health } from "aws-sdk";
 
 @Controller("cumulative-record")
 @ApiTags("Cumulative Record API")
@@ -43,6 +44,7 @@ export class CumulativeRecordController {
           throw new NotFoundException("데이터가 존재하지 않습니다");
         }
         const { totalCalories, ...datas } = totalResultDto;
+        console.log("건강정보결과",HealthInfoResult);
         const { targetCalories, recommendIntake } = await HealthInfoResult;
         const { mealTypeResult, mealTypeImage } =
           await this.cumulativeRecordService.getDateMealTypeRecord(
