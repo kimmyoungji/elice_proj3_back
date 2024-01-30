@@ -3,7 +3,7 @@ import { response, Request } from 'express';
 import { UserService } from './user.service';
 import { Body, Controller, Delete, Get, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiResponseProperty, ApiTags } from '@nestjs/swagger';
-import { isLoggedInGuard } from 'src/auth/utils/isLoggedin.guard';
+import { isLoggedInGuard } from 'src/auth/utils/guards/isLoggedin.guard';
 import { UpdateUserDto } from './dto/UpdateUser.dto';
 import { SaveHealthInfoDto } from './dto/SaveHealthInfo.dto';
 import { handleUpdateUserInfosDto } from './dto/handleUpdateUserInfos.dto';

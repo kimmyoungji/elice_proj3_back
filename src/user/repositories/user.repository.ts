@@ -1,6 +1,6 @@
 import { EntityManager, InsertResult } from "typeorm";
-import { User } from "./entities/user.entity";
-import { HealthInfo } from "./entities/health-info.entity";
+import { User } from "../entities/user.entity";
+import { HealthInfo } from "../entities/health-info.entity";
 import { HttpException } from "@nestjs/common";
 
 export class UserRepository{

@@ -1,11 +1,11 @@
 import { HealthInfo } from 'src/user/entities/health-info.entity';
-import { HealthInfoRepository } from './../user/health-info.repository';
+import { HealthInfoRepository } from '../user/repositories/health-info.repository';
 import { LocalSignupDto } from './dto/localSignupDto';
 import { GoogleLoginDto } from './dto/googleLoginDto';
 import { User } from '../user/entities/user.entity';
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { DataSource, InsertResult } from 'typeorm';
-import { UserRepository } from '../user/user.repository';
+import { UserRepository } from '../user/repositories/user.repository';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

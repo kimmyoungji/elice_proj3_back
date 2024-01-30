@@ -10,7 +10,7 @@ import {
 } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CumulativeRecordService } from "./cumulative-record.service";
-import { isLoggedInGuard } from "src/auth/utils/isLoggedin.guard";
+import { isLoggedInGuard } from "src/auth/utils/guards/isLoggedin.guard";
 import { Health } from "aws-sdk";
 
 @Controller("cumulative-record")

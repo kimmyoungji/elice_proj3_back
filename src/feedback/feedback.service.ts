@@ -10,7 +10,7 @@ import { Feedback } from "./feedback.entity";
 import { GetFeedbackDataDto, ResponseDataDto } from "./dto/feedback.dto";
 import { plainToInstance } from "class-transformer";
 import { CumulativeRecordRepository } from "src/cumulative-record/cumulative.repository";
-import { UserRepository } from "src/user/user.repository";
+import { UserRepository } from "src/user/repositories/user.repository";
 import { ChatgptApi } from "./utils/chatgpt-api";
 
 @Injectable()

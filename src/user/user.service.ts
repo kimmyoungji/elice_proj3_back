@@ -1,8 +1,8 @@
 import { Update } from 'aws-sdk/clients/dynamodb';
 import { HealthInfo } from 'src/user/entities/health-info.entity';
-import { HealthInfoRepository } from './health-info.repository';
+import { HealthInfoRepository } from './repositories/health-info.repository';
 import { HttpException, Injectable } from '@nestjs/common';
-import { UserRepository } from './user.repository';
+import { UserRepository } from './repositories/user.repository';
 import { DataSource } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UpdateUserDto } from './dto/UpdateUser.dto';

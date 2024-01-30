@@ -9,7 +9,7 @@ import { CumulativeRecord } from "src/cumulative-record/cumulative-record.entity
 import { HealthInfo } from "src/user/entities/health-info.entity";
 import { Image } from "src/image/entities/image.entity";
 import { SplitImage } from "src/image/entities/splitImage.entity";
-import { HealthInfoRepository } from "src/user/health-info.repository";
+import { HealthInfoRepository } from "src/user/repositories/health-info.repository";
 
 @Module({
   imports: [
