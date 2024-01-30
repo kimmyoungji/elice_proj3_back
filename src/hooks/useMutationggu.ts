@@ -3,29 +3,33 @@ import {
   QueryClient,
   QueryKey,
   useMutation,
+  useQueryClient,
 } from '@tanstack/react-query';
 import { ApiMethods } from '@utils/axiosConfig';
+import { isAxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { useErrorBoundary } from 'react-error-boundary';
 
-type ApiResponseError = any;
+type ApiResponseError = AxiosError;
 
-const queryClient = new QueryClient({});
 const useMutationggu = <T, E = ApiResponseError>(
   itemId: QueryKey,
   trigger: MutationFunction<T>,
-  gc: number,
+  gcTime: number,
   applyResult: boolean,
   isShowBoundary: boolean,
   method: ApiMethods
 ) => {
+  const queryClient = useQueryClient();
   const { showBoundary } = useErrorBoundary();
 
   return useMutation<T, E, any>({
     mutationFn: trigger,
     //method get이고 gcTime적용해야 할때는 기존 값을 반환해서 캐싱을 적용해야 함
+    mutationKey: itemId,
     onMutate: async () => {
-      if (method === 'get' && gc > 0) {
-        await queryClient.cancelQueries({ queryKey: itemId });
+      if (method === 'get' && gcTime > 0) {
+        // await queryClient.cancelQueries({ queryKey: itemId });
 
         // 기존 Query를 가져오는 함수 ( 존재하지 않으면 undefind 반환 )
         const previousValue = queryClient.getQueryData(itemId);
@@ -43,7 +47,7 @@ const useMutationggu = <T, E = ApiResponseError>(
     },
 
     onSuccess: async (data) => {
-      if (applyResult && gc !== 0) {
+      if (applyResult && gcTime !== 0) {
         queryClient.invalidateQueries({ queryKey: itemId });
         queryClient.setQueriesData({ queryKey: itemId }, data);
         return;
@@ -51,11 +55,14 @@ const useMutationggu = <T, E = ApiResponseError>(
       return;
     },
     onError: async (error, variables, context) => {
-      isShowBoundary && showBoundary(error);
+      if (isAxiosError(error)) {
+        console.log(error.message);
+      }
+      // isShowBoundary && showBoundary(error);
     },
     onSettled: async () => {},
     throwOnError: true,
-    gcTime: gc,
+    gcTime,
     //gcTime만 해도 될지? staleTime은 refetch의 기능이므로 필요 없을지?
   });
 };

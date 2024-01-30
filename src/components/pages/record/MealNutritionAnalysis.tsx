@@ -3,12 +3,13 @@ import { NutritionBarChart } from './NutritionBarChart';
 import NutritionBar from './NutritionBar';
 import { useEffect, useState } from 'react';
 import { MealNutritionAnalysisProps } from './RecordTypes';
-import { userData } from '../my-page/DummyUserData';
+// import { userData } from '../my-page/DummyUserData';
 import NutritionDonutChart from './NutritionDonutChart';
 import MealGraphToggle from './MealGraphToggle';
 import { mapSelectMealToMsg } from './recordMappingConstant';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/index';
 
-const goalCalories = userData.targetCalories;
 const initialNutrients = {
   carbohydrates: 0,
   proteins: 0,
@@ -21,6 +22,9 @@ const MealNutritionAnalysis = ({
   data,
   selectedMealNumber,
 }: MealNutritionAnalysisProps) => {
+  const userData = useSelector((state: RootState) => state.user.userInfo);
+  const goalCalories = userData.targetCalories;
+
   const [isShowingTotal, setIsShowingTotal] = useState(true);
   const [animationTrigger, setAnimationTrigger] = useState(false);
   const [totalNutrient, setTotalNutrient] = useState(initialNutrients);
@@ -36,15 +40,18 @@ const MealNutritionAnalysis = ({
 
   const calculateTotalNutrients = () => {
     if (!data) return initialNutrients;
-    return Object.values(data).reduce((acc, meal) => {
-      if (meal?.totalNutrient) {
-        acc.carbohydrates += meal?.totalNutrient.carbohydrates ?? 0;
-        acc.proteins += meal.totalNutrient.proteins ?? 0;
-        acc.fats += meal.totalNutrient.fats ?? 0;
-        acc.dietaryFiber += meal.totalNutrient.dietaryFiber ?? 0;
-      }
-      return acc;
-    }, initialNutrients);
+    return Object.values(data).reduce(
+      (acc, meal) => {
+        if (meal?.totalNutrient) {
+          acc.carbohydrates += meal?.totalNutrient.carbohydrates ?? 0;
+          acc.proteins += meal.totalNutrient.proteins ?? 0;
+          acc.fats += meal.totalNutrient.fats ?? 0;
+          acc.dietaryFiber += meal.totalNutrient.dietaryFiber ?? 0;
+        }
+        return acc;
+      },
+      { ...initialNutrients }
+    );
   };
 
   useEffect(() => {
@@ -53,11 +60,19 @@ const MealNutritionAnalysis = ({
     }
   }, [data]);
 
+  const drawGraphByNutrients = data?.[selectedMealNumber]
+    ? data?.[selectedMealNumber].totalNutrient
+    : calculateTotalNutrients();
+
+  const drawGraphByCalories = data?.[selectedMealNumber]
+    ? data[selectedMealNumber].totalCalories
+    : totalCalories;
+
   const calculatePercentage = (calories: number) =>
     calories === 0 ? 0 : Math.min(100, (calories / goalCalories) * 100);
 
   const percentage = isShowingTotal
-    ? calculatePercentage(totalMealCalories)
+    ? calculatePercentage(drawGraphByCalories)
     : calculatePercentage(totalCalories);
 
   const barFill = percentage >= 100 ? '#ff6a6a' : '#007bff';
@@ -114,7 +129,7 @@ const MealNutritionAnalysis = ({
         </NutritionBarChart>
 
         <NutritionDonutChart
-          totalNutrient={totalNutrient}
+          totalNutrient={drawGraphByNutrients}
           isShowingTotal={isShowingTotal}
           data={data}
           selectedMealNumber={selectedMealNumber}

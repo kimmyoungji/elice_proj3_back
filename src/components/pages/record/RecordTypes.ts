@@ -11,7 +11,7 @@ export interface RecordProps {
 // };
 
 export interface MealDetailData {
-  [key: string]: {
+  [key: number]: {
     foods: {
       foodName?: string;
       XYCoordinate?: number[];
@@ -26,8 +26,8 @@ export interface MealDetailData {
       fats: number;
       dietaryFiber: number;
     };
-    imgUrl: string | undefined;
-    recommendNutrient: {
+    imgUrl?: string | undefined;
+    recommendNutrient?: {
       carbohydrates: number;
       proteins: number;
       fats: number;
@@ -45,6 +45,7 @@ export interface selecetedMealDataType {
     foodInfoId?: string;
   }[];
   totalCalories: number;
+  targetCalories: number;
   totalNutrient: {
     carbohydrates: number;
     proteins: number;
@@ -57,7 +58,7 @@ export interface selecetedMealDataType {
     fats: number;
     dietaryFiber: number;
   };
-  imgUrl: string | undefined;
+  imgUrl?: string | undefined;
 }
 
 export interface MealCoordinateType {
@@ -68,13 +69,13 @@ export interface MealCoordinateType {
 }
 
 export interface MealPageProps {
-  selectedMealNumber?: string;
+  selectedMealNumber: number;
   date: string;
 }
 
 export interface MealDetailProps {
   date: string;
-  selectedMealNumber: string;
+  selectedMealNumber: number;
   data?: MealDetailData | undefined;
 }
 
@@ -82,26 +83,26 @@ export interface MealImgProps {
   className: string;
   date: string;
   data?: MealDetailData | undefined;
-  selectedMealNumber: string;
+  selectedMealNumber: number;
 }
 
 export interface MealTagProps {
   className: string;
   data?: MealDetailData;
-  selectedMealNumber: string;
+  selectedMealNumber: number;
 }
 
 export interface MealNutritionAnalysisProps {
   data?: MealDetailData;
   className: string;
-  selectedMealNumber: string;
+  selectedMealNumber: number;
 }
 
 export interface ImgTagContentProps {
   imgUrl: string;
   className: string;
   data?: MealDetailData;
-  selectedMealNumber: string;
+  selectedMealNumber: number;
 }
 
 export interface CustomCSSProperties extends React.CSSProperties {
@@ -124,10 +125,10 @@ export type totalNutrientsType = {
 };
 
 export interface NutritionDonutChartProps {
-  totalNutrient: totalNutrientsType;
+  totalNutrient?: totalNutrientsType;
   isShowingTotal: boolean;
   data?: MealDetailData;
-  selectedMealNumber: string;
+  selectedMealNumber: number;
 }
 
 export interface Nutrient {
