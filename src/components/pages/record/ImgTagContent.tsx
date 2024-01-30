@@ -7,7 +7,7 @@ const ImgTagContent: React.FC<ImgTagContentProps> = ({
   data,
   selectedMealNumber,
 }) => {
-  const tagData = data[selectedMealNumber].food;
+  const tagData = data?.[selectedMealNumber].foods;
 
   return (
     <div style={{ position: 'relative' }}>

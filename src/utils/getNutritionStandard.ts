@@ -11,9 +11,7 @@ const getNutritionStandard = (data: UserData) => {
     '4': [4, 2, 4],
   };
   const [ratioX, ratioY, ratioZ] = goalRatio[userGoal];
-  // const ratioX = goalRatio[userGoal?.][0];
-  // const ratioY = goalRatio[userGoal][1];
-  // const ratioZ = goalRatio[userGoal][2];
+
   const k = userGender === '1' ? 38 : userGender === '2' ? 25 : 30;
 
   let z = 1;
