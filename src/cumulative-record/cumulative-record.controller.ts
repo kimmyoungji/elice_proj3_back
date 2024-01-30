@@ -120,8 +120,23 @@ export class CumulativeRecordController {
       throw error;
     }
   }
-  // @Delete("/meal")
+  @Delete("/meal")
+  // @UseGuards(isLoggedInGuard)
   // @ApiOperation({})
+  async deleteMealRecord(@Query("cumulativeId") cumulativeId: string) {
+    try {
+      const transformedData =
+        await this.cumulativeRecordService.deleteMealRecord(cumulativeId);
+      console.log("transformedData", transformedData);
+      if (transformedData.length === 0) {
+        return [];
+      }
+      return transformedData;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @Get("/month")
   // @UseGuards(isLoggedInGuard)
   @ApiOperation({

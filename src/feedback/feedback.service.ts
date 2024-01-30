@@ -210,6 +210,7 @@ export class FeedbackService {
         feedbackId,
         queryRunner.manager
       );
+
       await queryRunner.commitTransaction();
       return deleteResult;
     } catch (error) {

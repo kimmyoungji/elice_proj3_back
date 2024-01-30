@@ -98,6 +98,7 @@ export class FeedbackRepository {
         .where("feedback_id =:feedbackId", { feedbackId })
         .execute();
     } catch (error) {
+      console.log("error", error);
       throw error;
     }
   }
