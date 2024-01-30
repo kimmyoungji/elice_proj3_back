@@ -1,18 +1,22 @@
+import { MailVerificationService } from './mail-verification.service';
+import { DataSource } from 'typeorm';
+import { VerificationCode } from './entities/verification-code.entity';
+import { VerificationCodeRepository } from './repositories/verification-code.repository';
 import { UserService } from 'src/user/user.service';
 import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Req, Res, UseFilters, UseGuards } from '@nestjs/common';
-import { GoogleAuthGuard } from './utils/google.guard';
+import { GoogleAuthGuard } from './utils/guards/google.auth.guard';
 import { AuthService } from './auth.service';
 import { LocalSignupDto } from './dto/localSignupDto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { LocalAuthGuard } from './utils/local.guard';
-import { isLoggedInGuard } from './utils/isLoggedin.guard';
-import { RedirectFilter } from './utils/redirectFilter';
+import { LocalAuthGuard } from './utils/guards/local.auth.guard';
+import { isLoggedInGuard } from './utils/guards/isLoggedin.guard';
 import { LocalLoginDto } from './dto/localLoginDto';
 import { HealthInfo } from 'src/user/entities/health-info.entity';
 import { User } from 'src/user/entities/user.entity';
 import * as dotenv from 'dotenv';
-import { isNotLoggedInGuard } from './utils/isNotLoggedIn.guard';
+import { isNotLoggedInGuard } from './utils/guards/isNotLoggedIn.guard';
 dotenv.config();
+import { MailerService } from '@nestjs-modules/mailer';
 
 // @UseFilters(new RedirectFilter())
 @ApiTags('auth')
@@ -21,7 +25,8 @@ export class AuthController {
 
     constructor(
         private readonly authService: AuthService,
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private readonly MailVerificationService: MailVerificationService,
     ) {}
 
     
@@ -60,8 +65,8 @@ export class AuthController {
     /* 로컬 로그인 */
     @ApiOperation({ summary: '로컬 로그인 요청 API' })
     @ApiBody({ type: LocalLoginDto, description: '로그인 정보'})
-    @UseGuards(isNotLoggedInGuard)
     @UseGuards(LocalAuthGuard)
+    @UseGuards(isNotLoggedInGuard)
     @Post('local/login')
     async handleLocalLogin(
         @Req() request: any, @Res() response: any){
@@ -80,7 +85,7 @@ export class AuthController {
             const sessionId = request.signedCookies[process.env.SESSION_COOKIE_NAME];
             // console.log('로그아웃 후의 세션저장소 :', request.sessionStore,'\n로그아웃 힐 세션아이디: ', sessionId );
             await request.sessionStore.destroy(sessionId, (err)=>err && {msg: 'logout fail', err: err});
-            request.user = null;
+            delete request.user;
             await response.clearCookie(process.env.SESSION_COOKIE_NAME, {signed: true});
             response.status(200).send('로그아웃 성공, 백엔드에 요청시 로그인 페이지로 리다이렉팅해드립니다.');
             console.log(`${sessionId}가 로그아웃 되었습니다.`)
@@ -102,9 +107,30 @@ export class AuthController {
             // 세션, req.user, cookie 삭제
             const sessionId = request.signedCookies[process.env.SESSION_COOKIE_NAME];
             await request.sessionStore.destroy(sessionId, (err)=>err && {msg: 'logout fail', err: err});
-            request.user = null;
+            delete request.user;
             await response.clearCookie(process.env.SESSION_COOKIE_NAME, {signed: true});
             await response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/`);
         }catch(err){ console.log(err); throw err; }
+    }
+
+    /* 이메일 인증 코드 발송하기 */
+    @ApiOperation({ summary: '이메일 인증 코드 발송하기' })
+    @Get('/verify-email/:email')
+    async handleSendVerificationCode(@Param('email') email:string, @Req() request: any, @Res() response: any): Promise<void> {
+        try{
+            const result = await this.MailVerificationService.sendVerificationCode(email);
+            console.log(result);
+            response.status(200).send('이메일 인증 코드 발송 성공');
+        }catch(err){ throw err; }
+    }
+
+    /* 인증코드 검증하기 */
+    @ApiOperation({ summary: '인증코드 검증하기' })
+    @Get('/verify-email/:email/:code')
+    async handleVerifyCode(@Param('email') email:string, @Param('code') code: number, @Res() response: any): Promise<void> {
+        try{
+            let verified = await this.MailVerificationService.verifyCode(email, Number(code));
+            response.status(200).send({verified});
+        }catch(err){ throw err; }
     }
 }

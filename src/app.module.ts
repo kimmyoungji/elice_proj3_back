@@ -13,9 +13,9 @@ import { UserModule } from "./user/user.module";
 import { ImageModule } from "./image/image.module";
 import { FeedbackModule } from "./feedback/feedback.module";
 import { RecordModule } from "./record/record.module";
+import { MailerModule } from "@nestjs-modules/mailer";
 dotenv.config();
 console.log(typeORMConfig);
-import { MailerModule } from "@nestjs-modules/mailer";
 
 @Module({
   imports: [
@@ -38,7 +38,8 @@ import { MailerModule } from "@nestjs-modules/mailer";
         secure: false, //TLS를 사용하지 않음을 의미한다.
         auth: {
           user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASSWORD,
+          pass: process.env.MAIL_2STEP_VERIFICATION_KEY,
+          // 2step verification을 사용하는 경우에는 앱 비밀번호를 사용해야 한다.
         },
         // 만약 auth를 설정에 실패한다면 아래와 같이 설정한다.
         defaults: {from: '"nest-modules" <modules@nestjs.com>'} // 기본적으로 보내는 사람의 메일 주소를 설정한다.
