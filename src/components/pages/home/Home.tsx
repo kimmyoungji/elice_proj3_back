@@ -27,7 +27,7 @@ const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const todayDate = `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${nowDate}`;
-  const [date, setDate] = useState('2024-01-26');
+  const [date, setDate] = useState('2024-01-29');
 
   const [currentWeekArr, setCurrentWeekArr] = useState<number[]>([]);
 

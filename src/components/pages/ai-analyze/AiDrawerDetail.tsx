@@ -26,6 +26,18 @@ const DUMMYdetaildata = {
   option: { goal: '근육증량', calorie: 1200 },
 };
 
+interface Props {
+  feedbackId: string;
+  feedbackDate: string;
+  questionType: string;
+  question: string;
+  text: string;
+  option: { goal: string; calorie: number };
+}
+interface PropsReturnType {
+  data: Props;
+}
+
 const handleCopyClipBoard = async (text: string) => {
   try {
     await navigator.clipboard.writeText(text);
@@ -38,11 +50,12 @@ const AiDrawerDetail = () => {
   const [shareToast, setShareToast] = useState(false);
   const [deleteToast, setDeleteToast] = useState(false);
 
-  const { trigger, result, reqIdentifier, loading, error } = useApi({
-    method: 'get',
-    path: `/feedback?feedbackId=416cbf52-a1ab-4c4e-81fd-de1d6e1a47b4`,
-    shouldInitFetch: false,
-  });
+  const { trigger, result, reqIdentifier, loading, error } =
+    useApi<PropsReturnType>({
+      method: 'get',
+      path: `/feedback?feedbackId=416cbf52-a1ab-4c4e-81fd-de1d6e1a47b4`,
+      shouldInitFetch: false,
+    });
 
   const triggerData = async () => {
     await trigger({
@@ -59,15 +72,25 @@ const AiDrawerDetail = () => {
     });
   };
 
+  const [data, setData] = useState({
+    feedbackId: '',
+    feedbackDate: '',
+    questionType: '',
+    question: '',
+    text: '',
+    option: { goal: '', calorie: 0 },
+  });
+
   useEffect(() => {
     triggerData();
+    if (result?.data) {
+      setData(result?.data);
+    }
   }, []);
 
   const handleShare = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    handleCopyClipBoard(
-      `http://localhost:3000/share/${result.data.feedbackId}`
-    ); // 나중에 배포 url로 변경 필요!
+    handleCopyClipBoard(`http://localhost:3000/share/${data?.feedbackId}`); // 나중에 배포 url로 변경 필요!
     setShareToast(true);
   };
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -80,27 +103,23 @@ const AiDrawerDetail = () => {
     <>
       <div className={styles.drawer_wrapper}>
         <div className={styles.detail_wrapper}>
-          <div className={`${styles.date} b-regular`}>
-            {result.data.feedbackDate}
+          <div className={`${styles.date} b-regular`}>{data.feedbackDate}</div>
+          <div
+            className={`${styles.type} ${typeType[data.questionType]} s-regular`}
+          >
+            {data.questionType}
           </div>
           <div
-            className={`${styles.type} ${typeType[result.data.questionType]} s-regular`}
+            className={`${styles.tag} ${tagType[data.questionType]} b-small`}
           >
-            {result.data.questionType}
-          </div>
-          <div
-            className={`${styles.tag} ${tagType[result.data.questionType]} b-small`}
-          >
-            {result.data.question}
+            {data.question}
           </div>
           <Option
-            type={result.data.questionType}
-            tag={result.data.question}
-            option={result.data.option}
+            type={data.questionType}
+            tag={data.question}
+            option={data.option}
           />
-          <div className={`${styles.detail_text} r-big`}>
-            {result.data.text}
-          </div>
+          <div className={`${styles.detail_text} r-big`}>{data.text}</div>
           <div className={styles.button_wrapper}>
             <button className={`r-small`} onClick={handleShare}>
               <Share />

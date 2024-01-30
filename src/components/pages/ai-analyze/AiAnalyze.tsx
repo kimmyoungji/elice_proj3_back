@@ -66,7 +66,7 @@ interface Context {
     question: string | undefined;
   };
   text: string;
-  button: [{ type: string; text: string }, { type: string; text: string }];
+  button: { type: string; text: string }[];
 }
 type QuestionList = {
   date: string;
@@ -94,7 +94,7 @@ const AiAnalyze = () => {
 
   useEffect(() => {
     triggerData();
-    if (result.data) {
+    if (result?.data) {
       setRecordText(true);
     }
   }, []);

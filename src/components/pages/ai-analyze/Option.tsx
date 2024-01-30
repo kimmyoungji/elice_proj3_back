@@ -18,10 +18,8 @@ const Option = ({ type, tag, option }: Props) => {
     if (type === '식단추천' && tag === '오늘은 맛있는 걸로 추천받을래!') {
       setShowOption(false);
     } else if (type === '식단평가') {
-      // 식단 보러가기
       setIcon(true);
     } else {
-      // 목표추천 & 목표맞춤 식단추천 -> 목표 보여주기
       setDetail(true);
     }
   }, []);
