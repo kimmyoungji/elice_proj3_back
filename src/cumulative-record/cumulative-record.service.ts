@@ -37,7 +37,7 @@ export class CumulativeRecordService {
       );
 
       // [HealthInfo Table] - 3) targetCalories, 4) recommendNutrient
-      const HealthInfoResult = this.healthInfoRepository.findHealthInfoByUserId(
+      const HealthInfoResult = await this.healthInfoRepository.findHealthInfoByUserId(
         date,
         userId,
         queryRunner.manager

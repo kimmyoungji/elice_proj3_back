@@ -29,6 +29,8 @@ export class UserService {
             const user: User = await this.userRepository.findUserInfosByUserId(userId, queryRunner.manager);
             if (!user) throw new HttpException('해당 유저를 찾을 수 없습니다.', 404); 
 
+            // console.log(user)
+
             // 불필요한 정보 지워주기
             delete user[0].password;
             delete user[0].provider_id;
@@ -101,7 +103,7 @@ export class UserService {
                 delete newHealthInfos.deletedDate;
                 userToUpdate.recentHealthInfoId = newHealthInfos.healthInfoId;
                 newHealthInfos.userId = userId;
-                // console.log('저장하기 직전',newHealthInfos)
+                console.log('저장하기 직전',newHealthInfos)
                 const result = await this.healthInfoRepository.saveHealthInfo(newHealthInfos, queryRunner.manager);
                 // console.log(result);
             }

@@ -29,7 +29,7 @@ export class AuthService {
             // 이미 등록된 유저인지 확인
             const user = await this.userRepository.findUserByEmail(googleLoginDto.email, queryRunner.manager);
             if(user) {
-                console.log(user.providerId);
+                // console.log(user.providerId);
                 if(user.providerId) return user;
                 else throw new HttpException('이미 로컬계정으로 등록된 이메일입니다.',HttpStatus.CONFLICT);
             }
