@@ -1,3 +1,4 @@
+import { HttpException } from "@nestjs/common";
 import { HealthInfo } from "src/user/entities/health-info.entity";
 import { DeleteResult, EntityManager, InsertResult } from "typeorm";
 
@@ -62,7 +63,8 @@ export class HealthInfoRepository {
         .orderBy("updated_date", "DESC")
         .getOne();
     } catch (err) {
-      throw err;
+      console.log(err)
+      throw new HttpException(err.detail, 500);
     }
   }
 
@@ -78,7 +80,8 @@ export class HealthInfoRepository {
         .where("user_id = :userId", { userId })
         .execute();
     } catch (err) {
-      throw err;
+      console.log(err)
+      throw new HttpException(err.detail, 500);
     }
   }
 }

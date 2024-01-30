@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Module, UseFilters } from "@nestjs/common";
 import { AuthModule } from "./auth/auth.module";
 import { PassportModule } from "@nestjs/passport";
 import { CumulativeRecordModule } from "./cumulative-record/cumulative-record.module";
@@ -16,9 +16,6 @@ import { RecordModule } from "./record/record.module";
 dotenv.config();
 console.log(typeORMConfig);
 import { MailerModule } from "@nestjs-modules/mailer";
-import * as session from "express-session";
-
-console.log('session',session.MemoryStore);
 
 @Module({
   imports: [

@@ -29,8 +29,6 @@ export class UserService {
             const user: User = await this.userRepository.findUserInfosByUserId(userId, queryRunner.manager);
             if (!user) throw new HttpException('해당 유저를 찾을 수 없습니다.', 404); 
 
-            // console.log(user)
-
             // 불필요한 정보 지워주기
             delete user[0].password;
             delete user[0].provider_id;
@@ -81,13 +79,14 @@ export class UserService {
             if(saveHealthInfoDto.recommendIntake){
                 saveHealthInfoDto.recommendIntake = Object.values(saveHealthInfoDto.recommendIntake);
             }
-            // console.log(saveHealthInfoDto.recommendIntake)
-            // saveHealthInfoDto.recommendIntake = Object.values(saveHealthInfoDto.recommendIntake);
 
+            // dto -> entity 타입으로 변환하기
             const userToUpdate = new User().mapUpdateUserDto(updateUserDto);
             let newHealthInfos = new HealthInfo().mapHealthInfoDto(saveHealthInfoDto);
             let healthInfo: HealthInfo = await this.healthInfoRepository.findRecentHealthInfoByUserId(userId, queryRunner.manager);
 
+            // 유저건강정보 저장하기
+            // 기존 건강정보가 존재할 경우
             if(healthInfo){
                 const healthInfosToSave = {...healthInfo, ...newHealthInfos};
                 delete healthInfosToSave.updatedDate;
@@ -95,17 +94,14 @@ export class UserService {
                 healthInfosToSave.healthInfoId = newHealthInfos.healthInfoId;
                 healthInfosToSave.userId = userId;
                 userToUpdate.recentHealthInfoId = healthInfosToSave.healthInfoId;
-                // console.log('저장하기 직전',healthInfosToSave)
-                const result = await this.healthInfoRepository.saveHealthInfo(healthInfosToSave as HealthInfo, queryRunner.manager);
-                // console.log(result)
+                await this.healthInfoRepository.saveHealthInfo(healthInfosToSave as HealthInfo, queryRunner.manager);
+            // 기존 건강정보가 존재하지 않을 경우
             }else{
                 delete newHealthInfos.updatedDate;
                 delete newHealthInfos.deletedDate;
                 userToUpdate.recentHealthInfoId = newHealthInfos.healthInfoId;
                 newHealthInfos.userId = userId;
-                console.log('저장하기 직전',newHealthInfos)
-                const result = await this.healthInfoRepository.saveHealthInfo(newHealthInfos, queryRunner.manager);
-                // console.log(result);
+                await this.healthInfoRepository.saveHealthInfo(newHealthInfos, queryRunner.manager);
             }
 
             // 닉네임 중복검사
@@ -116,11 +112,11 @@ export class UserService {
                 }
             }
             
-            const result = await this.userRepository.updateUserByUserId(userId, userToUpdate, queryRunner.manager);
-            // console.log(result)
+            // 유저정보 업데이트
+            await this.userRepository.updateUserByUserId(userId, userToUpdate, queryRunner.manager);
 
             await queryRunner.commitTransaction();
-            return '유저정보 및 유저건강정보 업데이트 성공';
+            return;
 
         }catch(err){
             await queryRunner.rollbackTransaction();
