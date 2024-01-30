@@ -37,11 +37,12 @@ export class CumulativeRecordService {
       );
 
       // [HealthInfo Table] - 3) targetCalories, 4) recommendNutrient
-      const HealthInfoResult = await this.healthInfoRepository.findHealthInfoByUserId(
-        date,
-        userId,
-        queryRunner.manager
-      );
+      const HealthInfoResult =
+        await this.healthInfoRepository.findHealthInfoByUserId(
+          date,
+          userId,
+          queryRunner.manager
+        );
 
       await queryRunner.commitTransaction();
       const result = {
@@ -94,6 +95,7 @@ export class CumulativeRecordService {
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      return error;
     } finally {
       await queryRunner.release();
     }
@@ -103,8 +105,8 @@ export class CumulativeRecordService {
     try {
       const { mealTypeResult, mealTypeImage } =
         await this.getDateMealTypeRecord(date, userId);
-      if (mealTypeResult.length === 0) {
-        throw new NotFoundException("데이터가 존재하지 않습니다");
+      if (!mealTypeResult || !mealTypeImage) {
+        return [];
       }
       const dateArr = mealTypeResult.map((result, index) => [
         result.mealType,

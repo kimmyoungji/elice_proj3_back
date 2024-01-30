@@ -45,7 +45,6 @@ export class CumulativeRecordController {
           throw new NotFoundException("데이터가 존재하지 않습니다");
         }
         const { totalCalories, ...datas } = totalResultDto;
-        console.log("건강정보결과",HealthInfoResult);
         const { targetCalories, recommendIntake } = await HealthInfoResult;
         const { mealTypeResult, mealTypeImage } =
           await this.cumulativeRecordService.getDateMealTypeRecord(
@@ -53,7 +52,7 @@ export class CumulativeRecordController {
             userId
           );
         if (mealTypeResult.length === 0 || mealTypeImage.length === 0) {
-          throw new NotFoundException("데이터가 존재하지 않습니다");
+          return [];
         }
         const recommendNutrient = {
           carbohydrates: recommendIntake[0],
@@ -82,7 +81,7 @@ export class CumulativeRecordController {
           userId
         );
         if (data.length === 0) {
-          throw new NotFoundException("데이터가 존재하지 않습니다");
+          return [];
         }
         const dateArr = data.map((item) => item.date.getDate());
         const caloriesArr = data.map((item) => item.mealTotalCalories);
@@ -112,16 +111,13 @@ export class CumulativeRecordController {
           date,
           userId
         );
-      if (sortedDateArr.length === 0) {
-        throw new NotFoundException("데이터가 존재하지 않습니다");
-      }
       return { dateArr: sortedDateArr };
     } catch (error) {
       throw error;
     }
   }
-  @Delete("/meal")
-  @ApiOperation({})
+  // @Delete("/meal")
+  // @ApiOperation({})
   @Get("/month")
   // @UseGuards(isLoggedInGuard)
   @ApiOperation({
@@ -143,7 +139,7 @@ export class CumulativeRecordController {
           userId
         );
       if (transformedData.length === 0) {
-        throw new NotFoundException("데이터가 존재하지 않습니다");
+        return [];
       }
       return transformedData;
     } catch (error) {
