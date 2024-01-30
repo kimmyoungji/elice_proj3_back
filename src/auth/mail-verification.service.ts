@@ -18,7 +18,7 @@ export class MailVerificationService {
         await queryRunner.startTransaction();
         try{
             // 인증코드 생성
-            const code = Math.floor(Math.random() * 10000);
+            const code = Math.floor(Math.random() * 10000).toString();
             // 인증코드 객체 생성
             const verificationCode = new VerificationCode(email, code);
             //인증코드 저장
@@ -38,7 +38,7 @@ export class MailVerificationService {
         }finally{ await queryRunner.release(); }
     }
 
-    async verifyCode(email: string, code: number){
+    async verifyCode(email: string, code: string){
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
@@ -51,7 +51,7 @@ export class MailVerificationService {
                 return false;
             }
             // 인증코드가 일치하지 않으면
-            if(verificationCode.code !== Number(code)){
+            if(verificationCode.code !== code){
                 await queryRunner.commitTransaction();
                 return false;
             }

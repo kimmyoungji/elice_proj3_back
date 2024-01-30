@@ -32,15 +32,15 @@ export class AuthController {
     
     /* 구글 로그인 및 사용자등록 */
     @ApiOperation({ summary: '구글 로그인 요청 API' })
-    @UseGuards(isNotLoggedInGuard)
     @UseGuards(GoogleAuthGuard)
+    @UseGuards(isNotLoggedInGuard)
     @Get('google/login')
     handleGoogleLogin() {}
 
     /* 구글 로그인 후 리다이렉트되는 URL*/
     @ApiOperation({ summary: '구글서버에서 사용자인증 후 accessToken을 보내는 주소'})
-    @UseGuards(isNotLoggedInGuard)
     @UseGuards(GoogleAuthGuard) // 여기서 req.user에 user 정보가 담김
+    @UseGuards(isNotLoggedInGuard)
     @Get('google/redirect')
     async handleGoogleRedirect(@Req() request:any ,@Res() response:any) {
         console.log('구글로그인 진행중...')
@@ -129,7 +129,7 @@ export class AuthController {
     @Get('/verify-email/:email/:code')
     async handleVerifyCode(@Param('email') email:string, @Param('code') code: number, @Res() response: any): Promise<void> {
         try{
-            let verified = await this.MailVerificationService.verifyCode(email, Number(code));
+            let verified = await this.MailVerificationService.verifyCode(email, code.toString());
             response.status(200).send({verified});
         }catch(err){ throw err; }
     }

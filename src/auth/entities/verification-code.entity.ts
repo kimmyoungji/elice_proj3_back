@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 @Entity()
 export class VerificationCode {
 
-    constructor(email: string, code: number){
+    constructor(email: string, code: string){
         this.VerificationCodeId = uuidv4();
         this.email = email;
         this.code = code;
@@ -17,7 +17,7 @@ export class VerificationCode {
     email: string;
 
     @Column()
-    code: number;
+    code: string;
 
     @Column({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
     created_date: Timestamp;
