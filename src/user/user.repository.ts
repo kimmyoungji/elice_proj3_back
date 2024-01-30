@@ -51,7 +51,7 @@ export class UserRepository{
     // Update
     public async updateUserByUserId(userId: string, user: User, manager: EntityManager){
         try{
-            console.log("업데이트 될것", user);
+            // console.log("업데이트 될것", user);
             return await manager.createQueryBuilder(User, "user").update(User).set(user).where("user_id = :userId",{userId}).execute();
         }catch(err){
             throw err;
@@ -69,7 +69,7 @@ export class UserRepository{
     // soft Delete
     public async deleteUserByUserId(userId: string, manager: EntityManager){       
         try{
-            console.log(userId);
+            await manager.createQueryBuilder(User, "user").update({email:userId, username: userId, providerId: null}).where("user_id = :userId",{userId}).execute();
             return await manager.createQueryBuilder(User, "user").softDelete().where("user_id = :userId",{userId}).execute();
         }catch(err){
             throw err;

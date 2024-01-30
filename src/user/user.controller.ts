@@ -19,7 +19,7 @@ export class UserController {
     @UseGuards(isLoggedInGuard)
     public async handleGetUserInfos(@Req() request: any, @Res() response: any){
         const result =  await this.userService.getUserInfos(request.user.userId);
-        console.log(result);
+        // console.log(result);
         response.status(200).json(result);
     }
 
