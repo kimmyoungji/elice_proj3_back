@@ -20,7 +20,7 @@ const useMutationggu = <T, E = ApiResponseError>(
 ) => {
   const { showBoundary } = useErrorBoundary();
 
-  return useMutation<T, E, string>({
+  return useMutation<T, E, any>({
     mutationFn: trigger,
     //method get이고 gcTime적용해야 할때는 기존 값을 반환해서 캐싱을 적용해야 함
     onMutate: async () => {
@@ -43,7 +43,7 @@ const useMutationggu = <T, E = ApiResponseError>(
     },
 
     onSuccess: async (data) => {
-      if (applyResult) {
+      if (applyResult && gc !== 0) {
         queryClient.invalidateQueries({ queryKey: itemId });
         queryClient.setQueriesData({ queryKey: itemId }, data);
         return;

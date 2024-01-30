@@ -19,7 +19,12 @@ const usePresignedUrl = ({ fileName, path }: presignedUrlProps) => {
     [fileName]
   );
 
-  return { getPresignedUrl, presignedUrl: result, error, loading };
+  return {
+    getPresignedUrl,
+    presignedUrl: result as { data: string },
+    error,
+    loading,
+  };
 };
 
 export default usePresignedUrl;

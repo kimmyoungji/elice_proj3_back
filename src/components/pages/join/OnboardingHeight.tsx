@@ -1,9 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './Onboarding.css';
 import NumericPad from './NumericPad';
+import { OnboardingProps } from './OnboardingGender';
 
-const OnboardingHeight = () => {
-  const inputHeight = useRef(null);
+const OnboardingHeight: React.FC<OnboardingProps> = ({ onClickOnboarding }) => {
+  const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => onClickOnboarding({ ['height']: inputValue }), [inputValue]);
 
   return (
     <div>
@@ -11,7 +14,6 @@ const OnboardingHeight = () => {
       <div style={{ marginTop: '130px', textAlign: 'center' }}>
         <input
           type='text'
-          ref={inputHeight}
           placeholder='190'
           className='b-super'
           style={{
@@ -20,6 +22,8 @@ const OnboardingHeight = () => {
             display: 'inline-block',
             border: 'none',
           }}
+          value={inputValue}
+          onChange={() => {}}
         />
         <span
           style={{ marginLeft: '5px', verticalAlign: 'top' }}
@@ -29,7 +33,7 @@ const OnboardingHeight = () => {
         </span>
       </div>
       <div style={{ marginTop: '50px' }}>
-        <NumericPad inputRef={inputHeight} />
+        <NumericPad setInputValue={setInputValue} />
       </div>
     </div>
   );

@@ -17,15 +17,15 @@ interface TargetNutrients {
 
 export type UserData = {
   username?: string;
-  gender?: 1 | 2 | 3;
+  gender?: string;
   age: number;
   profileImage?: string | undefined;
   weight: number;
   height: number;
-  diet_goal: 1 | 2 | 3 | 4;
+  dietGoal: string;
   targetCalories: number;
   recommendIntake: TargetNutrients;
-  activityAmount: 1 | 2 | 3 | 4;
+  activityAmount: string;
 };
 
 export interface MyPageEditProps {

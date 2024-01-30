@@ -8,8 +8,7 @@ import getNutritionStandard from '@utils/getNutritionStandard';
 import { mapGoaltoMsg, mapActivitytoMsg, findKeyByValue } from './mapMsg';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import { calBMR, calBMRCalories, adjustCaloriesByGoal } from './calUserData';
-import { storeUserInfo } from '@components/store/userLoginRouter';
-// import { userData } from './DummyUserData';
+import { loginUser } from '@components/store/userLoginRouter';
 import { UserData, MyPageEditProps } from './MypageTypes';
 import useApi, { TriggerType } from '@hooks/useApi';
 import usePresignedUrl from '@hooks/usePresignedUrl';
@@ -26,7 +25,6 @@ const MyPageEdit = () => {
   }: {
     trigger: TriggerType;
   } = useApi({
-    // path: `/user`,
     method: 'put',
   });
 
@@ -68,7 +66,7 @@ const MyPageEdit = () => {
         path: `image/presigned-url/profile/${file.name}`,
       });
     }
-  }, [getPresignedUrl]);
+  }, [getPresignedUrl, file]);
 
   const { uploadToS3 } = useS3ImgUpload();
 
@@ -81,9 +79,16 @@ const MyPageEdit = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const previewImgFile = event.target.files?.[0] || null;
+
     if (previewImgFile) {
-      getImgPreview(previewImgFile, setPreviewImage, (file) => setFile(file));
-      setFileChanged(true);
+      getImgPreview(previewImgFile, setPreviewImage, (file) => {
+        if (file instanceof File) {
+          setFile(file);
+          setFileChanged(true);
+        }
+      });
+    } else {
+      setPreviewImage(previewImage);
     }
   };
 
@@ -119,11 +124,11 @@ const MyPageEdit = () => {
   const handleSelect = (type: 'goal' | 'activity', value: string) => {
     const newGoalValue = findKeyByValue(mapGoaltoMsg, value);
     if (type === 'goal' && newGoalValue) {
-      const newGoal = parseInt(newGoalValue, 10);
-      if ([1, 2, 3, 4].includes(newGoal)) {
+      const newGoal = newGoalValue;
+      if (['1', '2', '3', '4'].includes(newGoal)) {
         const updatedData = {
           ...data,
-          diet_goal: newGoal as 1 | 2 | 3 | 4,
+          dietGoal: newGoal,
         };
         updateDataAndCalories(updatedData);
         setSelectedGoal(value);
@@ -132,11 +137,11 @@ const MyPageEdit = () => {
     } else if (type === 'activity') {
       const newActivityValue = findKeyByValue(mapActivitytoMsg, value);
       if (newActivityValue) {
-        const newActivity = parseInt(newActivityValue, 10);
-        if ([1, 2, 3, 4].includes(newActivity)) {
+        const newActivity = newActivityValue;
+        if (['1', '2', '3', '4'].includes(newActivity)) {
           const updatedData = {
             ...data,
-            activityAmount: newActivity as 1 | 2 | 3 | 4,
+            activityAmount: newActivity,
           };
           updateDataAndCalories(updatedData);
           setSelectedActity(value);
@@ -189,16 +194,27 @@ const MyPageEdit = () => {
   };
 
   const saveAndNavigate = async () => {
-    let uploadedImageUrl = null;
-    const updatedNutrients = getNutritionStandard(data);
+    let uploadedImageUrl;
+    let updatedNutrients;
+    if (data.dietGoal && data.goalCalories && data.gender) {
+      const updatedNutrients = getNutritionStandard(data);
+    } else {
+      const updatedNutrients = {
+        carbohydrate: 0,
+        dietary_fiber: 0,
+        proteins: 0,
+        fats: 0,
+      };
+    }
+
     if (fileChanged) {
       uploadedImageUrl = await uploadProfileImage();
     }
 
     const updatedData = {
       ...data,
-      diet_goal: Number(findKeyByValue(mapGoaltoMsg, selectedGoal)),
-      activityAmount: Number(findKeyByValue(mapActivitytoMsg, selectedActity)),
+      dietGoal: findKeyByValue(mapGoaltoMsg, selectedGoal),
+      activityAmount: findKeyByValue(mapActivitytoMsg, selectedActity),
       height: Number(prevHeight),
       weight: Number(prevWeight),
       recommendIntake: updatedNutrients,
@@ -208,7 +224,7 @@ const MyPageEdit = () => {
     const { username, ...dataToSend } = updatedData;
 
     updateDataAndCalories(updatedData);
-    dispatch(storeUserInfo(updatedData));
+    dispatch(loginUser(updatedData));
 
     await trigger({
       applyResult: true,
@@ -266,7 +282,7 @@ const MyPageEdit = () => {
           <div className={style.infoTitle}>목표</div>
           <MyPageDropdown
             items={goalTypes}
-            selectedItem={selectedGoal}
+            selectedItem={selectedGoal ? `${selectedGoal}` : '목표 설정'}
             onSelectItem={(value) => handleSelect('goal', value)}
             toggleDropdown={toggleGoalDropdown}
             isDropdownVisible={isGoalDropdownVisible}
@@ -274,7 +290,9 @@ const MyPageEdit = () => {
         </div>
         <div className={style.goaltInfo}>
           <div className={style.goalTitle}>목표 칼로리</div>
-          <div className={style.goalDetail}>{goalCalories}kcal</div>
+          <div className={style.goalDetail}>
+            {goalCalories ? `${goalCalories}` : '활동량 설정'}kcal
+          </div>
         </div>
       </div>
 

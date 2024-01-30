@@ -9,13 +9,19 @@ const MealImg = ({
   data,
   selectedMealNumber,
 }: MealImgProps) => {
-  const imgUrl = data[selectedMealNumber].imgurl;
   const navigate = useNavigate();
+  const imgUrl =
+    data && data[selectedMealNumber]
+      ? data[selectedMealNumber].imgUrl
+      : undefined;
+  const foods =
+    data && data[selectedMealNumber] ? data[selectedMealNumber].foods : [];
+  // const imgUrl = data[selectedMealNumber].imgUrl;
 
   return (
     <>
       <div className={className}>
-        {imgUrl || data[selectedMealNumber].food.length > 0 ? (
+        {imgUrl || foods.length > 0 ? (
           <ImgTagContent
             data={data}
             selectedMealNumber={selectedMealNumber}

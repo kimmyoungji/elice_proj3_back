@@ -1,6 +1,6 @@
-import { SVGProps } from 'react';
+import { FC, SVGProps } from 'react';
 
-export const DownArrow = ({
+export const DownArrow: FC<SVGProps<SVGSVGElement>> = ({
   className,
   ...svgStyleProps
 }: SVGProps<SVGSVGElement>) => {

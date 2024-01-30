@@ -5,13 +5,6 @@ import ButtonCommon from '@components/UI/ButtonCommon';
 import CalendarCells from './CalendarCells';
 import { useEffect } from 'react';
 import useCachingApi from '@hooks/useCachingApi';
-import useApi, { TriggerType } from '@hooks/useApi';
-import { MutationFunction, UseMutateFunction } from '@tanstack/react-query';
-
-const cumulative_cal_DateArr = {
-  existedDate: [1, 5, 9, 30, 29],
-  totalCalData: [1200, 1100, 1500, 1000, 400],
-};
 
 //필요한 전역 정보 나의 목표칼로리 (유저 정보에 포함)
 const DUMMYtargetCalories = 1200;
@@ -29,33 +22,21 @@ export interface CalendarBodyResult {
   totalCalData: number[] | any[];
 }
 
-interface CachingApiReturnType {
-  trigger: MutationFunction<any, {}>;
-  result: { data: any };
-}
-
 export type CumulativeCalDateArr = {
-  data: { existedDate: number[] | any[]; totalCalData: number[] | any[] };
+  data: CalendarBodyResult;
 };
 
 const CalendarBody = () => {
   const { thisYear, thisMonth, selectedIndex, setSelectedIndex, isAlbum } =
     useCalendarContext();
-  // const {
-  //   trigger,
-  //   result: data,
-  // }: {
-  // trigger: TriggerType;
-  //   result: CumulativeCalDateArr;
-  // } = useApi({
-  //   path: `/cumulative-record?month=${thisYear}-${returnWithZero(thisMonth)}-01`,
-  // });
-  const { trigger, result }: { trigger: any; result: any } = useCachingApi({
+
+  const { trigger, result } = useCachingApi<CumulativeCalDateArr>({
     path: `/cumulative-record?month=${thisYear}-${returnWithZero(thisMonth)}-01`,
+    gcTime: 20000,
   });
 
   const triggerData = async () => {
-    await trigger({});
+    await trigger('');
   };
 
   useEffect(() => {
@@ -100,7 +81,7 @@ const CalendarBody = () => {
             disabled={!selectedIndex}
             href={`/record/${thisYear}-${returnWithZero(thisMonth)}-${returnWithZero(selectedIndex)}`}
           >
-            {cumulative_cal_DateArr['existedDate'].includes(selectedIndex)
+            {result?.data['existedDate'].includes(selectedIndex)
               ? '기록 보러 가기'
               : '기록 추가하러 가기'}
           </ButtonCommon>

@@ -1,19 +1,17 @@
 export const mapSelectMealToMsg: { [key: string]: string } = {
-  1: '아침',
-  2: '점심',
-  3: '저녁',
-  4: '간식',
+  '1': '아침',
+  '2': '점심',
+  '3': '저녁',
+  '4': '간식',
 };
 
 export const mealTypes = ['아침', '점심', '저녁', '간식'];
 
-export const findMealNumber = (meal: string): 1 | 2 | 3 | 4 => {
-  const mealNumber = Number(
-    Object.keys(mapSelectMealToMsg).find(
-      (key) => mapSelectMealToMsg[key] === meal
-    )
+export const findMealNumber = (meal: string): string => {
+  const mealNumber = Object.keys(mapSelectMealToMsg).find(
+    (key) => mapSelectMealToMsg[key] === meal
   );
-  return (mealNumber as 1 | 2 | 3 | 4) || 1;
+  return mealNumber || '1';
 };
 
 export type NutrientKey =

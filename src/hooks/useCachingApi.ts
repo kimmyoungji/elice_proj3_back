@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 import { API_FETCHER, ApiMethods } from '@utils/axiosConfig';
 import useMutationggu from './useMutationggu';
-import { MutationFunction } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 
 interface UseApiParams {
   method?: ApiMethods;
@@ -13,18 +11,6 @@ interface UseApiParams {
   gcTime?: number;
   applyResult?: boolean;
   isShowBoundary?: boolean;
-}
-
-interface UseCachingApiResult<T> {
-  data: T[];
-}
-
-interface UseCachingApiReturnType<T> {
-  result: T;
-  loading: boolean;
-  reqIdentifier: string;
-  trigger: MutationFunction<any, {}>;
-  error: AxiosError;
 }
 
 const useCachingApi = <T>({
@@ -59,7 +45,6 @@ const useCachingApi = <T>({
   );
 
   useEffect(() => {
-    shouldInitFetch && console.log('초기 요청합니다!!');
     shouldInitFetch && mutate(triggerPath, triggerData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

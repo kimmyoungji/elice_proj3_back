@@ -8,6 +8,21 @@ import OnboardingWeight from './OnboardingWeight';
 import OnboardingGoal from './OnboardingGoal';
 import OnboardingActivity from './OnboardingActivity';
 import useApi from '@hooks/useApi';
+import useCachingApi from '@hooks/useCachingApi';
+
+export interface userDataType {
+  gender: number | null;
+  birthDay: string;
+  height: number | null;
+  weight: number | null;
+  diet_goal: number | null;
+  activityAmount: number | null;
+}
+
+interface OnBoardingResult {
+  data: string;
+  status: number;
+}
 
 const Onboarding = () => {
   const navigate = useNavigate();
@@ -23,27 +38,40 @@ const Onboarding = () => {
     activityAmount: null,
   });
 
-  const { loading, trigger } = useApi({
-    method: 'post',
-    path: '/use',
-    data: { body: userData },
+  const { loading, trigger } = useCachingApi<OnBoardingResult>({
+    method: 'put',
+    path: '/user',
   });
 
-  const onBackClick = () => {
-    const prevStep = currentStep - 1;
-    navigate(`/onboarding/${prevStep}`);
-  };
-
   const onNextClick = async () => {
+    //onBoarding에 정보가 비어있는 경우 해당 화면으로 navigate....
+    //api요청 보내지 않음
+    //home으로 직접입력했을때? (auth)
+    //
     if (currentStep === 6) {
       if (!loading) {
-        await trigger({});
-        navigate('/home');
+        trigger(
+          { data: userData },
+          {
+            onSuccess: (data) => {
+              if (
+                data.data === '유저정보 및 유저건강정보 업데이트 성공' &&
+                data.status === 200
+              ) {
+                navigate('/home');
+              }
+            },
+          }
+        );
       }
     } else {
       const nextStep = Math.min(6, currentStep + 1);
       navigate(`/onboarding/${nextStep}`);
     }
+  };
+
+  const onClickOnboarding = (onboardingInfo: object) => {
+    setUserData((prev) => ({ ...prev, ...onboardingInfo }));
   };
 
   const isNextButtonDisabled = () => {
@@ -56,7 +84,7 @@ const Onboarding = () => {
           userData.birthDay.split('-').some((part) => part === '')
         );
       case 3:
-        return userData.height === null;
+        return userData.height === '';
       case 4:
         return userData.weight === null;
       case 5:
@@ -72,7 +100,6 @@ const Onboarding = () => {
     if (currentStep === 0) {
       navigate('/auth');
     }
-    console.log(currentStep);
   }, [currentStep, navigate]);
 
   const renderProgressBar = () => {
@@ -102,18 +129,42 @@ const Onboarding = () => {
         <div className='progress-bar' style={{ marginBottom: '50px' }}>
           {renderProgressBar()}
         </div>
-        {/* {currentStep === 1 && <Onboarding_gender />}
-        {currentStep === 2 && <Onboarding_birth />}
-        {currentStep === 3 && <Onboarding_height />}
-        {currentStep === 4 && <Onboarding_weight />}
-        {currentStep === 5 && <Onboarding_goal />}
-        {currentStep === 6 && <Onboarding_activity />} */}
-        {currentStep === 1 && <OnboardingGender data={userData} />}
-        {currentStep === 2 && <OnboardingBirth data={userData} />}
-        {currentStep === 3 && <OnboardingHeight data={userData} />}
-        {currentStep === 4 && <OnboardingWeight data={userData} />}
-        {currentStep === 5 && <OnboardingGoal data={userData} />}
-        {currentStep === 6 && <OnboardingActivity data={userData} />}
+        {currentStep === 1 && (
+          <OnboardingGender
+            userData={userData}
+            onClickOnboarding={onClickOnboarding}
+          />
+        )}
+        {currentStep === 2 && (
+          <OnboardingBirth
+            userData={userData}
+            onClickOnboarding={onClickOnboarding}
+          />
+        )}
+        {currentStep === 3 && (
+          <OnboardingHeight
+            userData={userData}
+            onClickOnboarding={onClickOnboarding}
+          />
+        )}
+        {currentStep === 4 && (
+          <OnboardingWeight
+            userData={userData}
+            onClickOnboarding={onClickOnboarding}
+          />
+        )}
+        {currentStep === 5 && (
+          <OnboardingGoal
+            userData={userData}
+            onClickOnboarding={onClickOnboarding}
+          />
+        )}
+        {currentStep === 6 && (
+          <OnboardingActivity
+            userData={userData}
+            onClickOnboarding={onClickOnboarding}
+          />
+        )}
       </div>
       <div className='button-container'>
         <ButtonCommon
