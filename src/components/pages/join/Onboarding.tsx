@@ -24,6 +24,8 @@ interface OnBoardingResult {
   status: number;
 }
 
+//onboarding에서 앞의 데이터가 없을 때
+
 const Onboarding = () => {
   const navigate = useNavigate();
   const { step } = useParams();
@@ -46,12 +48,10 @@ const Onboarding = () => {
   const onNextClick = async () => {
     //onBoarding에 정보가 비어있는 경우 해당 화면으로 navigate....
     //api요청 보내지 않음
-    //home으로 직접입력했을때? (auth)
-    //
     if (currentStep === 6) {
       if (!loading) {
         trigger(
-          { data: userData },
+          { ...userData },
           {
             onSuccess: (data) => {
               if (
