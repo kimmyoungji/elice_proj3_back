@@ -5,9 +5,11 @@ import {
   useMutation,
 } from '@tanstack/react-query';
 import { ApiMethods } from '@utils/axiosConfig';
+import { isAxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { useErrorBoundary } from 'react-error-boundary';
 
-type ApiResponseError = any;
+type ApiResponseError = AxiosError;
 
 const queryClient = new QueryClient({});
 const useMutationggu = <T, E = ApiResponseError>(
@@ -51,7 +53,10 @@ const useMutationggu = <T, E = ApiResponseError>(
       return;
     },
     onError: async (error, variables, context) => {
-      isShowBoundary && showBoundary(error);
+      if (isAxiosError(error)) {
+        console.log(error.message);
+      }
+      // isShowBoundary && showBoundary(error);
     },
     onSettled: async () => {},
     throwOnError: true,

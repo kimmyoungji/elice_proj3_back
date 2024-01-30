@@ -27,6 +27,10 @@ interface Props {
   dateArr: [number, number, string][];
 }
 
+interface PropsReturnType {
+  data: Props;
+}
+
 const now = new Date();
 const nowYear = now.getFullYear();
 const nowMonth = now.getMonth();
@@ -51,11 +55,12 @@ const Home = () => {
 
   const [currentWeekArr, setCurrentWeekArr] = useState<number[]>([]);
 
-  const { trigger, result, reqIdentifier, loading, error } = useApi({
-    method: 'get',
-    path: `/cumulative-record?date=${date}`,
-    shouldInitFetch: false,
-  });
+  const { trigger, result, reqIdentifier, loading, error } =
+    useApi<PropsReturnType>({
+      method: 'get',
+      path: `/cumulative-record?date=${date}`,
+      shouldInitFetch: false,
+    });
 
   useEffect(() => {
     console.log(date);
@@ -67,8 +72,8 @@ const Home = () => {
   // 날짜 변경할 때마다(정확히는 date 의존성으로) api 콜해서 daydata 바꿔주기
 
   useEffect(() => {
-    if (result.data) {
-      setDayData(result.data);
+    if (result?.data) {
+      setDayData(result?.data);
     }
   }, [result?.data]);
 
