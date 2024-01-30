@@ -1,7 +1,9 @@
 import {
+  Body,
   Controller,
   Get,
   NotFoundException,
+  Post,
   Query,
   UseGuards,
 } from "@nestjs/common";
@@ -60,6 +62,19 @@ export class FoodInfoController {
         }
         return foodInfoResult;
       }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // @ApiOperation({ summary: "음식 조회하기" })
+  @Post("/foods")
+  // @UseGuards(isLoggedInGuard)
+  async getFoodList(@Body("foodList", FoodNamePipe) foodList: string[]) {
+    try {
+      const foodIdListResult =
+        await this.foodInfoService.getFoodIdList(foodList);
+      return { foodIdListResult: foodIdListResult };
     } catch (error) {
       throw error;
     }

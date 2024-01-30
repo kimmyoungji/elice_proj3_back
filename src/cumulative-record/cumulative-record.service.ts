@@ -103,23 +103,6 @@ export class CumulativeRecordService {
     }
   }
 
-  async deleteMealRecord(cumulativeId: string) {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      const result = await this.cumulativeRepository.deleteMealRecord(
-        cumulativeId,
-        queryRunner.manager
-      );
-      return result;
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-      return error;
-    } finally {
-      await queryRunner.release();
-    }
-  }
   async transformMealTypeRecord(date: Date, userId: string) {
     try {
       const { mealTypeResult, mealTypeImage } =

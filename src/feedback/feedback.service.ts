@@ -64,7 +64,7 @@ export class FeedbackService {
         // ChatGPT API 호출
         // const outputText = await ChatgptApi(totalResult, userInfo, questionType);
 
-        const outputText = "네 식단를 추천해드릴게요 어쩌구 저쩌구 ~";
+        const outputText = "어쩌구저쩌구 맛있는 추천";
         const data = {
           userId,
           question,

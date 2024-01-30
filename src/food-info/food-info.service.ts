@@ -90,4 +90,33 @@ export class FoodInfoService {
       await queryRunner.release();
     }
   }
+
+  // 구현중
+  async getFoodIdList(foodList: string[]) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const foodInfoIdList = [];
+      console.log(foodList);
+      for (const food of foodList) {
+        const result = await this.foodInfoRepository.getFoodInfo(
+          food,
+          queryRunner.manager
+        );
+        console.log("result.foodInfoId", result.foodInfoId);
+        foodInfoIdList.push(result.foodInfoId);
+      }
+
+      await queryRunner.commitTransaction();
+      return foodInfoIdList;
+    } catch (error) {
+      console.log("error", error);
+      await queryRunner.rollbackTransaction();
+      return error;
+    } finally {
+      await queryRunner.release();
+    }
+  }
 }

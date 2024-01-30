@@ -85,17 +85,4 @@ export class CumulativeRecordRepository {
       .skip((page - 1) * 5)
       .getMany();
   }
-
-  async deleteMealRecord(cumulativeId: string, manager: EntityManager) {
-    try {
-      return await manager
-        .createQueryBuilder(CumulativeRecord, "cumulativeRecord")
-        .softDelete()
-        .from(CumulativeRecord)
-        .where("cumulative_record_id =:cumulativeId", { cumulativeId })
-        .execute();
-    } catch (error) {
-      throw error;
-    }
-  }
 }
