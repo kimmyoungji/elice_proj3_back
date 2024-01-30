@@ -19,7 +19,7 @@ interface Food {
   foodName: string;
   XYCoordinate: number[];
   counts: number;
-  foodInfoId: string;
+  foodInfoId?: string;
   calories?: number;
   carbohydrates?: number;
   dietaryFiber?: number;

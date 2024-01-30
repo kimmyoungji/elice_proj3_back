@@ -11,15 +11,28 @@ interface Props {
 }
 
 const fileName = new Date().getTime() + Math.random().toString().split(".")[0];
-const formData = new FormData();
 
 const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
+  const formData = new FormData();
   const cropRef = useRef<HTMLCanvasElement | null>(null);
   const params = useParams();
   const date = params.date;
   const mealTime = params.mealTime;
   const navigate = useNavigate();
   
+  function base64toFile(base_data: string, filename: string) {
+    const arr = base_data.split(',');
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, { type: 'image/jpg' });
+  }
+
   let canvasUrl:string|undefined;
   const uploadImg = () => {
     const canvas = cropRef.current;
@@ -55,7 +68,7 @@ const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
       },
     });
 
-    const foodsArr = res.data.map((food: any) => ({ ...food, counts: 1, foodInfoId:'' }))
+    const foodsArr = res.data.map((food: any) => ({ ...food, counts: 1}))
 
     const data = {
       imgUrl: canvasUrl,
@@ -66,18 +79,7 @@ const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
   };
   
 
-  function base64toFile(base_data: string, filename: string) {
-    const arr = base_data.split(',');
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-
-    return new File([u8arr], filename, { type: 'image/jpg' });
-  }
+  
 
   return (
     <div className={styles.container}>
@@ -92,7 +94,7 @@ const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
             <canvas
               width='350'
               height='200'
-              style={{ position: 'absolute', bottom: '0' }}
+              style={{ position: 'absolute', bottom: '0', display:'none'}}
               ref={cropRef}
             />
           </div>
