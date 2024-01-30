@@ -17,7 +17,6 @@ const root = ReactDOM.createRoot(
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      gcTime: 20 * 60 * 1000, //20분 //캐싱시간
       retry: 1,
       retryDelay: 0,
     },
