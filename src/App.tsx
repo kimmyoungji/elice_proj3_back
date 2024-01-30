@@ -10,7 +10,6 @@ import {
 import { lazy, Suspense } from 'react';
 import { useLocation, Navigate, Route, Routes } from 'react-router-dom';
 import { TopNavKeyType } from 'typings/propTypes';
-import Loading from '@components/UI/Loading';
 import { ErrorBoundary } from 'react-error-boundary';
 import Error from '@components/error/Error';
 import NotFound from '@components/error/NotFound';
@@ -19,6 +18,7 @@ import {
   useQueryErrorResetBoundary,
 } from '@tanstack/react-query';
 import WithAuth from '@components/hoc/WithAuth';
+import { LoadingBar } from '@components/UI/LoadingBar';
 
 const Login = lazy(() => import('@components/pages/login/Login'));
 const Auth = lazy(() => import('@components/pages/join/Auth'));
@@ -111,7 +111,7 @@ function App() {
               </header>
             )}
             <main className='main'>
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={<LoadingBar />}>
                 <Routes>
                   <Route path='*' element={<NotFound />} />
                   <Route path='/' element={<Navigate to='/auth' />} />

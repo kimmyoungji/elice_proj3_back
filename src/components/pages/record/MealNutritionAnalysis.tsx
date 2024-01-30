@@ -3,12 +3,13 @@ import { NutritionBarChart } from './NutritionBarChart';
 import NutritionBar from './NutritionBar';
 import { useEffect, useState } from 'react';
 import { MealNutritionAnalysisProps } from './RecordTypes';
-import { userData } from '../my-page/DummyUserData';
+// import { userData } from '../my-page/DummyUserData';
 import NutritionDonutChart from './NutritionDonutChart';
 import MealGraphToggle from './MealGraphToggle';
 import { mapSelectMealToMsg } from './recordMappingConstant';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/index';
 
-const goalCalories = userData.targetCalories;
 const initialNutrients = {
   carbohydrates: 0,
   proteins: 0,
@@ -21,6 +22,9 @@ const MealNutritionAnalysis = ({
   data,
   selectedMealNumber,
 }: MealNutritionAnalysisProps) => {
+  const userData = useSelector((state: RootState) => state.user.userInfo);
+  const goalCalories = userData.targetCalories;
+
   const [isShowingTotal, setIsShowingTotal] = useState(true);
   const [animationTrigger, setAnimationTrigger] = useState(false);
   const [totalNutrient, setTotalNutrient] = useState(initialNutrients);

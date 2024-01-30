@@ -1,15 +1,5 @@
 import { UserData } from './MypageTypes';
 
-// export const calBMR = ({ data, age }: { data: UserData; age: number }) => {
-//   return data.gender === 1
-//     ? 10 * data.weight + 6.25 * data.height - 5 * age + 5
-//     : data.gender === 2
-//       ? 10 * data.weight + 6.25 * data.height - 5 * age - 161
-//       : data.gender === 3 && data.height > 175
-//         ? 10 * data.weight + 6.25 * data.height - 5 * age + 5
-//         : 10 * data.weight + 6.25 * data.height - 5 * age - 161;
-// };
-
 export const calBMR = ({ data }: { data: UserData }) => {
   const gender = Number(data.gender);
   const age = Number(data.age);

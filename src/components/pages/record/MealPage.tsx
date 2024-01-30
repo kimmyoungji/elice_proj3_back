@@ -29,16 +29,15 @@ const MealPage = () => {
   const [imgData, setImgData] = useState('');
   const [coordinate, setCoordinate] = useState({});
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-
-  const { trigger, result, error, loading } = useApi<MealDetailData>({});
-
   type mealDataType = {
     data: MealDetailData;
   };
+  const { trigger, result, error, loading } = useApi<mealDataType>({});
 
   useEffect(() => {
     trigger({
-      path: `/records?date=${date}&userId=5c97c044-ea91-4e3e-bf76-eae150c317d1`,
+      // path: `/records?date=${date}&userId=5c97c044-ea91-4e3e-bf76-eae150c317d1`,
+      path: `/records?date=${date}`,
     });
   }, []);
 
@@ -77,7 +76,7 @@ const MealPage = () => {
       method: 'delete',
       path: `/records?date=${date}&mealType=${selectedMealNumber}`,
     });
-    const deleteData = result.data;
+    const deleteData = result?.data;
     const updatedData = { ...deleteData };
     delete updatedData[selectedMealNumber];
     setData(updatedData);

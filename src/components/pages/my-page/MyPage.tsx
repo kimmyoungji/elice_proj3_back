@@ -3,28 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import style from './mypage.module.css';
 import { PencilIcon } from '@assets/PencilIcon';
 import { mapGoaltoMsg, mapActivitytoMsg, findKeyByValue } from './mapMsg';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@components/store';
 import { loginUser } from '@components/store/userLoginRouter';
 
 const MyPage = () => {
-  // 스토어에서 값 받아오기
   const userData = useSelector((state: RootState) => state.user.userInfo);
-
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
-
-  // const [data, setData] = useState(userData);
-  // const [healthData, setHealthData] = useState(userData.healthInfo);
-  // console.log(userData.dietGoal);
-  const goalMsg = mapGoaltoMsg[Number(userData?.dietGoal)];
-  const activityMsg = mapActivitytoMsg[Number(userData?.activityAmount)];
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   setData(userData);
-  // }, [userData]);
+  const goalMsg = mapGoaltoMsg[Number(userData?.dietGoal)];
+  const activityMsg = mapActivitytoMsg[Number(userData?.activityAmount)];
 
   const handleIconClick = () => {
     navigate(`/my-page/edit`, {
@@ -56,7 +44,6 @@ const MyPage = () => {
     navigate('/my-page/settings', {
       state: { nickname: userData.username, gender: userData.gender },
     });
-    console.log(userData.gender);
   };
 
   return (

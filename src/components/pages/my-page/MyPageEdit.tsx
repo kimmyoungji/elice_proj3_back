@@ -9,7 +9,7 @@ import { mapGoaltoMsg, mapActivitytoMsg, findKeyByValue } from './mapMsg';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import { calBMR, calBMRCalories, adjustCaloriesByGoal } from './calUserData';
 import { loginUser } from '@components/store/userLoginRouter';
-import { UserData, MyPageEditProps } from './MypageTypes';
+import { UserData } from './MypageTypes';
 import useApi, { TriggerType } from '@hooks/useApi';
 import usePresignedUrl from '@hooks/usePresignedUrl';
 import useS3ImgUpload from '@hooks/useS3ImgUpload';
@@ -30,7 +30,6 @@ const MyPageEdit = () => {
 
   const { userData, goalMsg, activityMsg } = location.state;
   const [data, setData] = useState(userData);
-  const age = data.age;
 
   const [previewImage, setPreviewImage] = useState<string | undefined>(
     data.profileImage
