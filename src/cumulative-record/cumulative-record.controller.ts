@@ -41,9 +41,13 @@ export class CumulativeRecordController {
       if (date) {
         const { totalResultDto, HealthInfoResult } =
           await this.cumulativeRecordService.getDateRecord(date, userId);
-        if (!totalResultDto || !HealthInfoResult) {
-          throw new NotFoundException("데이터가 존재하지 않습니다");
+        console.log(totalResultDto, HealthInfoResult);
+        if (!totalResultDto && !HealthInfoResult) {
+          return [];
+        } else if (!totalResultDto || !HealthInfoResult) {
+          throw new NotFoundException("데이터 조회에서 오류가 발생했습니다");
         }
+
         const { totalCalories, ...datas } = totalResultDto;
         const { targetCalories, recommendIntake } = await HealthInfoResult;
         const { mealTypeResult, mealTypeImage } =

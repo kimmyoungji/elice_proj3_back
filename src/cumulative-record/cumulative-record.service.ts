@@ -31,6 +31,7 @@ export class CumulativeRecordService {
         userId,
         queryRunner.manager
       );
+
       const totalResultDto = plainToInstance(
         CumulativeRecordDateDto,
         totalResult
@@ -43,8 +44,8 @@ export class CumulativeRecordService {
           userId,
           queryRunner.manager
         );
-
       await queryRunner.commitTransaction();
+
       const result = {
         totalResultDto,
         HealthInfoResult,
