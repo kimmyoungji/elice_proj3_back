@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CumulativeRecordRepository } from "./cumulative.repository";
 import {
   CumulativeDateMealTypeDto,
@@ -44,11 +44,34 @@ export class CumulativeRecordService {
           userId,
           queryRunner.manager
         );
+      if (!totalResultDto) {
+        return [];
+      } else if (totalResultDto && !HealthInfoResult) {
+        throw new NotFoundException("데이터 조회에서 오류가 발생했습니다");
+      }
       await queryRunner.commitTransaction();
 
+      const { totalCalories, ...datas } = totalResultDto;
+      const { targetCalories, recommendIntake } = HealthInfoResult;
+      const { mealTypeResult, mealTypeImage } =
+        await this.getDateMealTypeRecord(date, userId);
+      const recommendNutrient = {
+        carbohydrates: recommendIntake[0],
+        proteins: recommendIntake[1],
+        fats: recommendIntake[2],
+        dietaryFiber: recommendIntake[3],
+      };
+      const dateArr = mealTypeResult.map((result, index) => [
+        result.mealType,
+        result.mealTotalCalories / 100,
+        mealTypeImage[index],
+      ]);
       const result = {
-        totalResultDto,
-        HealthInfoResult,
+        totalCalories,
+        targetCalories,
+        totalNutrient: datas,
+        recommendNutrient,
+        dateArr,
       };
       return result;
     } catch (error) {

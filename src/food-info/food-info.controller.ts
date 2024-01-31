@@ -8,16 +8,21 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { FoodInfoService } from "./food-info.service";
-import { ApiOperation } from "@nestjs/swagger";
+import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { isLoggedInGuard } from "src/auth/utils/guards/isLoggedin.guard";
 import { FoodNamePipe } from "./pipe/food-name.pipe";
 
 @Controller("food-info")
+@ApiTags("Food Info API")
 export class FoodInfoController {
   constructor(private foodInfoService: FoodInfoService) {}
 
-  @ApiOperation({ summary: "음식 조회하기" })
   @Get("/foods")
+  @ApiOperation({
+    summary: "음식 조회하기",
+    description:
+      "keyword&lastFoodId: 음식 검색 리스트를 조회한다. foodName: AI로 인식된 음식의 영양성분을 조회한다. foodInfoId: 음식 리스트에서 선택한 음식의 영양성분을 조회한다.",
+  })
   // @UseGuards(isLoggedInGuard)
   async getFoodInfo(
     @Query("keyword") keyword: string,
@@ -67,8 +72,11 @@ export class FoodInfoController {
     }
   }
 
-  @ApiOperation({ summary: "음식들의 foodInfoId 조회하기" })
   @Post("/foods")
+  @ApiOperation({
+    summary: "음식들 foodInfoId 리스트 조회하기",
+    description: "AI로 인식된 음식들의 foodInfoId를 조회한다.",
+  })
   // @UseGuards(isLoggedInGuard)
   async getFoodList(@Body("foodList", FoodNamePipe) foodList: string[]) {
     try {

@@ -17,8 +17,6 @@ export class Feedback {
 
   @Column()
   @IsUUID()
-  // @JoinColumn()
-  // @ManyToOne(() => User, (user) => user.userId, { cascade: true })
   userId: string;
 
   @Column()

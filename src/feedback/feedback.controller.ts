@@ -15,12 +15,19 @@ import {
 import { FeedbackService } from "./feedback.service";
 import { request } from "http";
 import { ResponseDataDto } from "./dto/feedback.dto";
+import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @Controller("feedback")
+@ApiTags("Feedback API")
 export class FeedbackController {
   constructor(private feedbackService: FeedbackService) {}
 
   @Post("/")
+  @ApiOperation({
+    summary: "AI 피드백 요청하기",
+    description: "AI가 유저의 질문에 맞는 피드백을 생성해서 응답한다.",
+  })
+  @ApiBody({ type: ResponseDataDto })
   async getFeedbacktoAI(
     @Req() request: any,
     @Query("date") date: Date,
@@ -36,6 +43,10 @@ export class FeedbackController {
   }
 
   @Get("/save")
+  @ApiOperation({
+    summary: "AI 피드백 저장하기",
+    description: "유저가 희망하는 AI 피드백을 저장한다.",
+  })
   async saveFeedbackData(@Query("feedbackId") feedbackId: string) {
     try {
       const saveResult =
@@ -53,6 +64,11 @@ export class FeedbackController {
   }
 
   @Get("/")
+  @ApiOperation({
+    summary: "피드백 및 대화내용 조회하기",
+    description:
+      "startDate&date: 7일치의 대화를 조회한다. page: 저장한 모든 피드백을 5개씩 조회한다. feedbackId: 상세한 AI 피드백을 조회한다.",
+  })
   async getFeedbackData(
     @Req() request: any,
     @Query("startDate") startDate: Date,
@@ -101,6 +117,10 @@ export class FeedbackController {
   }
 
   @Delete("/")
+  @ApiOperation({
+    summary: "피드백 삭제하기",
+    description: "AI 피드백을 삭제한다.",
+  })
   async deleteFeedbackData(
     @Query("feedbackId") feedbackId: string,
     @Res() response: any

@@ -22,8 +22,6 @@ export class CumulativeRecord {
   imageId: number;
 
   @Column()
-  // @JoinColumn()
-  // @ManyToOne(() => User, (user) => user.userId, { cascade: true })
   userId: string;
 
   @Column({ type: "enum", name: "meal_type", enum: MealType, nullable: true })

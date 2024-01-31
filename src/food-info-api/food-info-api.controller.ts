@@ -1,7 +1,9 @@
 import { Controller, Get } from "@nestjs/common";
 import { FoodInfoApiService } from "./food-info-api.service";
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller("food-info-api")
+@ApiTags("Food Info (외부 api) API")
 export class FoodInfoApiController {
   constructor(private foodInfoApiservice: FoodInfoApiService) {}
 

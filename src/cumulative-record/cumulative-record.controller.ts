@@ -1,16 +1,7 @@
-import {
-  Controller,
-  Get,
-  NotFoundException,
-  Query,
-  Req,
-  Res,
-  UseGuards,
-} from "@nestjs/common";
+import { Controller, Get, Query, Req, UseGuards } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CumulativeRecordService } from "./cumulative-record.service";
 import { isLoggedInGuard } from "src/auth/utils/guards/isLoggedin.guard";
-import { Health } from "aws-sdk";
 
 @Controller("cumulative-record")
 @ApiTags("Cumulative Record API")
@@ -21,9 +12,10 @@ export class CumulativeRecordController {
   // @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "월별/일별 누적 식단 데이터 조회하기",
-    description: "유저의 누적 식단 데이터를 조회한다.",
+    description:
+      "유저의 누적 식단 데이터를 조회한다. Query는 date이거나 month이다.",
   })
-  async getRecord(
+  public async getRecord(
     @Req() request: any,
     @Query("date") date: Date,
     @Query("month") month: Date
@@ -38,39 +30,12 @@ export class CumulativeRecordController {
       // 4) [HealthInfo Table] 유저의 목표 영양성분 조회 -> recommendNutrient
       // 5) [Cumulative Table & Image Table] meal type별 칼로리와 image -> dateArr
       if (date) {
-        const { totalResultDto, HealthInfoResult } =
-          await this.cumulativeRecordService.getDateRecord(date, userId);
-        if (!totalResultDto && !totalResultDto) {
-          return [];
-        } else if (!totalResultDto || !HealthInfoResult) {
-          throw new NotFoundException("데이터 조회에서 오류가 발생했습니다");
-        }
-        const { totalCalories, ...datas } = totalResultDto;
-        const { targetCalories, recommendIntake } = HealthInfoResult;
-        const { mealTypeResult, mealTypeImage } =
-          await this.cumulativeRecordService.getDateMealTypeRecord(
-            date,
-            userId
-          );
-        const recommendNutrient = {
-          carbohydrates: recommendIntake[0],
-          proteins: recommendIntake[1],
-          fats: recommendIntake[2],
-          dietaryFiber: recommendIntake[3],
-        };
-        const dateArr = mealTypeResult.map((result, index) => [
-          result.mealType,
-          result.mealTotalCalories / 100,
-          mealTypeImage[index],
-        ]);
-
-        return {
-          totalCalories,
-          targetCalories,
-          totalNutrient: datas,
-          recommendNutrient,
-          dateArr,
-        };
+        const result = await this.cumulativeRecordService.getDateRecord(
+          date,
+          userId
+        );
+        console.log(result);
+        return result;
       }
 
       if (month) {
@@ -97,7 +62,10 @@ export class CumulativeRecordController {
     summary: "일별 & meal 타입별 누적 식단 데이터 조회하기",
     description: "유저의 누적 식단 데이터를 조회한다.",
   })
-  async getDateMealTypeRecord(@Req() request: any, @Query("date") date: Date) {
+  public async getDateMealTypeRecord(
+    @Req() request: any,
+    @Query("date") date: Date
+  ) {
     try {
       const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
       // const userId = request.user.userId;
@@ -118,7 +86,7 @@ export class CumulativeRecordController {
     summary: "월별 & meal 타입별 누적 식단 데이터 조회하기",
     description: "유저의 월별 아침, 점심, 저녁 누적 식단 데이터를 조회한다.",
   })
-  async getMonthDetailRecord(
+  public async getMonthDetailRecord(
     @Req() request: any,
     @Query("month") month: Date,
     @Query("page") page: number
