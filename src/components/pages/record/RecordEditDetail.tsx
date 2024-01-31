@@ -1,7 +1,7 @@
 import InputCommon from '@components/UI/InputCommon';
 import styles from './recordeditdetail.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useApi from '@hooks/useApi';
 import useIntersect from '@hooks/useIntersect';
 import getFoodId from '@utils/getFoodId';

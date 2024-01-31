@@ -17,6 +17,7 @@ interface Food {
   fats?: number;
   proteins?: number;
   totalCapacity?: number;
+  recordId?: string;
 }
 
 interface MealTime {
@@ -64,13 +65,6 @@ const RecordEdit = () => {
     foodName: '',
     XYCoordinate: [],
     counts: 1,
-    foodInfoId: '',
-    calories: 0,
-    carbohydrates: 0,
-    dietaryFiber: 0,
-    fats: 0,
-    proteins: 0,
-    totalCapacity: 0,
   }]);
   const [imgUrl, setImgUrl] = useState('');
 
@@ -193,6 +187,10 @@ const RecordEdit = () => {
     method:'post',
   })
 
+  const recordPut = useApi<Result>({
+    method: 'put',
+  })
+
   const getFoodInfoId = useApi<SearchIdResult>({
     method:'post'
   })
@@ -220,6 +218,7 @@ const RecordEdit = () => {
   useEffect(() => {
     if (imgUrl===undefined||imgUrl==='') return;
     if (presignedUrl.result && !file) return;
+    if (foods[0].recordId) return;
     presignedUrl.trigger({
       path:`/image/presigned-url/food/${fileName}`,
       data:{fileName}
@@ -228,7 +227,8 @@ const RecordEdit = () => {
 
 
   useEffect(() => {
-    if (imgUrl===undefined) return;
+    if (imgUrl === undefined) return;
+    if (foods[0].recordId) return;
     if (!presignedUrl.result && !file) return;
     s3Upload.trigger({
       path: presignedUrl.result?.data,
@@ -251,20 +251,36 @@ const RecordEdit = () => {
       delete food.totalCapacity;
     })
 
-    recordPost.trigger({
-      path: '/records',
-      data: {
-        mealType:  mealTime ,
-        foodImageUrl:  pUrl ,
-        foods:newFoods,
-      }
-    })
+    if (newFoods[0].recordId) {
+      recordPut.trigger({
+        path: `/records?date=${date}&mealType=${mealTime}`,
+        data: {
+          mealType: mealTime ,
+          foodImageUrl: imgUrl,
+          foods:newFoods,
+        }
+      })
+    }
+
+    if (!newFoods[0].recordId) {
+      recordPost.trigger({
+        path: '/records',
+        data: {
+          mealType:  mealTime ,
+          foodImageUrl:  pUrl ,
+          foods:newFoods,
+        }
+      })
+    }
+
   }
 
   useEffect(() => {
-    if (!recordPost.result) return;
-    recordPost.result.data === '식단 기록 성공' && navigate(`/record/${date}/${mealTime}`); 
-  },[recordPost.result])
+    if (!recordPost.result || !recordPut.result) return;
+    if (recordPost.result.data === '식단 기록 성공'||recordPut.result.data === '식단 기록 성공') {
+      navigate(`/record/${date}/${mealTime}`); 
+    }
+  },[recordPost.result, recordPut.result])
 
   return (
     <>
