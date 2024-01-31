@@ -40,7 +40,7 @@ export class FeedbackRepository {
         })
         .andWhere("feedback.questionType = :questionType", { questionType })
         .andWhere("feedback.question =:question", { question })
-        .getOneOrFail();
+        .getOne();
     } catch (error) {
       throw error;
     }

@@ -13,9 +13,9 @@ import { CumulativeRecord } from "./cumulative-record.entity";
 @Injectable()
 export class CumulativeRecordService {
   constructor(
-    private cumulativeRepository: CumulativeRecordRepository,
-    private healthInfoRepository: HealthInfoRepository,
-    private imageRepository: ImageRepository,
+    private readonly cumulativeRepository: CumulativeRecordRepository,
+    private readonly healthInfoRepository: HealthInfoRepository,
+    private readonly imageRepository: ImageRepository,
     private readonly dataSource: DataSource
   ) {}
 

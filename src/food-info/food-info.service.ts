@@ -7,7 +7,7 @@ import { DataSource } from "typeorm";
 @Injectable()
 export class FoodInfoService {
   constructor(
-    private foodInfoRepository: FoodInfoRepository,
+    private readonly foodInfoRepository: FoodInfoRepository,
     private readonly dataSource: DataSource
   ) {}
 

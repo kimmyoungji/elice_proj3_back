@@ -11,9 +11,9 @@ import { ChatgptApi } from "./utils/chatgpt-api";
 @Injectable()
 export class FeedbackService {
   constructor(
-    private feedBackRepository: FeedbackRepository,
-    private cumulativeRepository: CumulativeRecordRepository,
-    private userRepository: UserRepository,
+    private readonly feedBackRepository: FeedbackRepository,
+    private readonly cumulativeRepository: CumulativeRecordRepository,
+    private readonly userRepository: UserRepository,
     private readonly dataSource: DataSource
   ) {}
 
@@ -45,15 +45,15 @@ export class FeedbackService {
         return checkResult.feedback;
       } else {
         // 만약 동일 유저의 질문이 없다면, api 호출
-        const totalResult = await this.cumulativeRepository.getDateRecord(
-          date,
-          userId,
-          queryRunner.manager
-        );
-        const userInfo = await this.userRepository.findUserInfosByUserId(
-          userId,
-          queryRunner.manager
-        );
+        // const totalResult = await this.cumulativeRepository.getDateRecord(
+        //   date,
+        //   userId,
+        //   queryRunner.manager
+        // );
+        // const userInfo = await this.userRepository.findUserInfosByUserId(
+        //   userId,
+        //   queryRunner.manager
+        // );
         // 추후 다른 파일로 빼기
 
         // ChatGPT API 호출
@@ -74,7 +74,7 @@ export class FeedbackService {
           queryRunner.manager
         );
         await queryRunner.commitTransaction();
-        return outputText;
+        return { feedback: outputText, feedbackId: feedbackData.feedbackId };
       }
     } catch (error) {
       await queryRunner.rollbackTransaction();
