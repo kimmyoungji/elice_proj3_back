@@ -19,9 +19,6 @@ interface Food {
   totalCapacity?: number;
 }
 
-interface SearchResult {
-  data: Food;
-}
 interface MealTime {
   [key: string]: string;
 }
@@ -192,7 +189,7 @@ const RecordEdit = () => {
     method: 'put',
   });
 
-  const recordPost = useApi({
+  const recordPost = useApi<Result>({
     method:'post',
   })
 
@@ -220,29 +217,29 @@ const RecordEdit = () => {
     setFoods(newArr);
   },[getFoodInfoId.result])
 
-  // useEffect(() => {
-  //   if (imgUrl===undefined||imgUrl==='') return;
-  //   if (presignedUrl.result && !file) return;
-  //   presignedUrl.trigger({
-  //     path:`/image/presigned-url/food/${fileName}`,
-  //     data:{fileName}
-  //   })
-  // },[imgUrl])
+  useEffect(() => {
+    if (imgUrl===undefined||imgUrl==='') return;
+    if (presignedUrl.result && !file) return;
+    presignedUrl.trigger({
+      path:`/image/presigned-url/food/${fileName}`,
+      data:{fileName}
+    })
+  },[imgUrl])
 
 
-  // useEffect(() => {
-  //   if (imgUrl===undefined) return;
-  //   if (!presignedUrl.result && !file) return;
-  //   s3Upload.trigger({
-  //     path: presignedUrl.result?.data,
-  //     data:file
-  //   });
-  // },[presignedUrl.result?.data])
+  useEffect(() => {
+    if (imgUrl===undefined) return;
+    if (!presignedUrl.result && !file) return;
+    s3Upload.trigger({
+      path: presignedUrl.result?.data,
+      data:file
+    });
+  },[presignedUrl.result?.data])
 
 
   const editDone = () => {
-    // const pUrl = imgUrl && presignedUrl.result?.data.split('?')[0];
-    if (!foods || foods[0].foodName === '') return;
+    const pUrl = imgUrl && presignedUrl.result?.data.split('?')[0];
+    if (!foods || foods[0].foodName === '' || !foods[0].foodInfoId) return;
     const newFoods = [...foods];
     newFoods.map((food: Food) => {
       
@@ -254,18 +251,20 @@ const RecordEdit = () => {
       delete food.totalCapacity;
     })
 
-    // recordPost.trigger({
-    //   path: '/records',
-    //   data: {
-    //     userId: '5c97c044-ea91-4e3e-bf76-eae150c317d1',
-    //     mealType:  mealTime ,
-    //     foodImageUrl:  pUrl ,
-    //     foods:newFoods,
-    //   }
-    // })
-    // navigate(`/record/${date}/${mealTime}`);    
+    recordPost.trigger({
+      path: '/records',
+      data: {
+        mealType:  mealTime ,
+        foodImageUrl:  pUrl ,
+        foods:newFoods,
+      }
+    })
   }
-    
+
+  useEffect(() => {
+    if (!recordPost.result) return;
+    recordPost.result.data === '식단 기록 성공' && navigate(`/record/${date}/${mealTime}`); 
+  },[recordPost.result])
 
   return (
     <>
