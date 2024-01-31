@@ -54,7 +54,7 @@ export class FoodInfoRepository {
         .createQueryBuilder(FoodInfo, "entity")
         .where("REPLACE(entity.food_name, ' ', '') = :foodName", { foodName })
         .orderBy("entity.created_date", "DESC")
-        .getOneOrFail();
+        .getOne();
       if (!firstResult) {
         const result = await manager
           .createQueryBuilder(FoodInfo, "entity")

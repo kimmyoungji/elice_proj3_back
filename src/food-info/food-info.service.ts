@@ -105,7 +105,6 @@ export class FoodInfoService {
           food,
           queryRunner.manager
         );
-        console.log("result.foodInfoId", result.foodInfoId);
         foodInfoIdList.push(result.foodInfoId);
       }
 

@@ -82,7 +82,7 @@ export class FoodInfoController {
     try {
       const foodIdListResult =
         await this.foodInfoService.getFoodIdList(foodList);
-      return { foodIdListResult: foodIdListResult };
+      return { foodInfoIdList: foodIdListResult };
     } catch (error) {
       return error;
     }
