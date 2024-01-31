@@ -70,9 +70,8 @@ export class CumulativeRecordService {
           userId,
           queryRunner.manager
         );
-      console.log("get mealTypeResult", mealTypeResult);
       if (mealTypeResult.length === 0) {
-        throw new NotFoundException("데이터가 존재하지 않습니다");
+        return mealTypeResult;
       }
       const mealTypeImage = [];
       mealTypeResult.map(async (image, index) => {

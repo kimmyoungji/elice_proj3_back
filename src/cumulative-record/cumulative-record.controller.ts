@@ -41,23 +41,21 @@ export class CumulativeRecordController {
       if (date) {
         const { totalResultDto, HealthInfoResult } =
           await this.cumulativeRecordService.getDateRecord(date, userId);
-        console.log(totalResultDto, HealthInfoResult);
-        if (!totalResultDto && !HealthInfoResult) {
+        if (!totalResultDto && !totalResultDto) {
           return [];
         } else if (!totalResultDto || !HealthInfoResult) {
           throw new NotFoundException("데이터 조회에서 오류가 발생했습니다");
         }
-
         const { totalCalories, ...datas } = totalResultDto;
-        const { targetCalories, recommendIntake } = await HealthInfoResult;
+        const { targetCalories, recommendIntake } = HealthInfoResult;
         const { mealTypeResult, mealTypeImage } =
           await this.cumulativeRecordService.getDateMealTypeRecord(
             date,
             userId
           );
-        if (mealTypeResult.length === 0 || mealTypeImage.length === 0) {
-          return [];
-        }
+        // if (mealTypeResult.length === 0 || mealTypeImage.length === 0) {
+        //   throw new NotFoundException("데이터 조회에서 오류가 발생했습니다");
+        // }
         const recommendNutrient = {
           carbohydrates: recommendIntake[0],
           proteins: recommendIntake[1],
@@ -84,9 +82,6 @@ export class CumulativeRecordController {
           month,
           userId
         );
-        if (data.length === 0) {
-          return [];
-        }
         const dateArr = data.map((item) => item.date.getDate());
         const caloriesArr = data.map((item) => item.mealTotalCalories);
 
@@ -141,9 +136,6 @@ export class CumulativeRecordController {
           page,
           userId
         );
-      if (transformedData.length === 0) {
-        return [];
-      }
       return transformedData;
     } catch (error) {
       throw error;
