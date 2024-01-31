@@ -66,6 +66,16 @@ export class RecordRepository extends Repository<Record> {
     if (!healthInfo) {
       throw new NotFoundException(`Health info 정보가 없는 user ID ${userId}`);
     }
+
+    const record = await this.recordRepository.findOneBy({
+      userId: userId
+    })
+
+    const foodImage = await this.imageRecordRepository.findOne({
+      where: {
+        imageId: record.imageId
+      }
+    })
   
     const recommendIntake = healthInfo.recommendIntake || [0, 0, 0, 0]; // 기본값
 
@@ -78,6 +88,7 @@ export class RecordRepository extends Repository<Record> {
         fats: recommendIntake[2],
         dietaryFiber: recommendIntake[3],
       },
+      
     };
   
     // mealType에 따라 정보를 누적할 객체를 준비
@@ -87,6 +98,7 @@ export class RecordRepository extends Repository<Record> {
         foods: [], 
         totalCalories: 0, 
         totalNutrient: { carbohydrates: 0, proteins: 0, fats: 0, dietaryFiber: 0 }, 
+        imgUrl: foodImage.foodImageUrl,
         ...defaultMealInfo 
       };
     }
