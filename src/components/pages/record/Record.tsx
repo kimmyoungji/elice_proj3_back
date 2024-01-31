@@ -18,7 +18,7 @@ const Record = () => {
 
   const [foodData, setFoodData] = useState<RecordProps>({
     dateArr: [[1], [2], [3], [4]] as unknown as Array<
-      [number, number, string | null]
+      [number, string | null, number, string | null]
     >,
   });
 
@@ -37,8 +37,9 @@ const Record = () => {
   }, []);
 
   useEffect(() => {
-    if (data && data.data) {
+    if (data && data.data.dateArr.length > 0) {
       setFoodData(data.data);
+      console.log(data.data);
     }
   }, [data]);
 
@@ -56,7 +57,7 @@ const Record = () => {
   };
   const handleMealDelete = (meal: number) => {
     const updatedFoodData = { ...foodData };
-    updatedFoodData.dateArr[meal - 1] = [meal, 0, null];
+    updatedFoodData.dateArr[meal - 1] = [meal, null, 0, null];
     trigger({
       method: 'delete',
       path: `/cumulative-record/meal?date=${dateSplit[0]}-${dateSplit[1]}-${dateSplit[2]}&meal=${meal}`,
@@ -76,11 +77,11 @@ const Record = () => {
               className={style.meal_content}
             >
               <div className={style.meal_info}>
-                {mealData[1] || mealData[2] ? (
+                {mealData[2] || mealData[3] ? (
                   <>
                     <img
                       className={style.meal_contentBackground}
-                      src={mealData[2] || mealLogo}
+                      src={mealData[3] || mealLogo}
                       alt='하루 식단 이미지'
                     />
                     s
@@ -89,7 +90,7 @@ const Record = () => {
                     </div>
                     <div className={style.meal_calories}>
                       {' '}
-                      {mealData[1] ?? 0} kcal{' '}
+                      {mealData[2] ?? 0} kcal{' '}
                     </div>
                   </>
                 ) : (
@@ -105,17 +106,17 @@ const Record = () => {
               <img
                 className={style.meal_button}
                 src={
-                  !mealData[1] && !mealData[2]
+                  !mealData[2] && !mealData[3]
                     ? '/icons/meal_plus_button.png'
                     : '/icons/meal_delete.png'
                 }
                 onClick={() =>
-                  !mealData[1] && !mealData[2]
+                  !mealData[2] && !mealData[3]
                     ? handleMealClick(mealData[0])
                     : handleMealDelete(mealData[0])
                 }
                 alt={
-                  !mealData[1] && !mealData[2]
+                  !mealData[2] && !mealData[3]
                     ? '하루 식단 추가 버튼'
                     : '하루 식단 삭제 버튼'
                 }
