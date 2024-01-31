@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useActionData } from 'react-router-dom';
 import { RootState } from '../store/index';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { loginUser } from '@components/store/userLoginRouter';
 import useCachingApi from '@hooks/useCachingApi';
 import { UserInfo } from '@components/store/userLoginRouter';
@@ -21,18 +21,17 @@ const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
   const AuthComponent: React.FC = (props: any) => {
     const dispatch = useDispatch();
     const userData = useSelector((state: RootState) => state.user.userInfo);
-    const isLoggedIn = useSelector(
-      (state: RootState) => state.user.userInfo.username !== ''
-    );
-    const isUserInfoFilled = useSelector(
-      (state: RootState) =>
+    const isLoggedIn = userData && userData.username !== '';
+    const isUserInfoFilled = useMemo(() => {
+      return (state: RootState) =>
+        userData &&
         (state.user.userInfo.dietGoal &&
           state.user.userInfo.gender &&
           state.user.userInfo.height &&
           state.user.userInfo.activityAmount &&
           state.user.userInfo.weight &&
-          state.user.userInfo.age) !== null
-    );
+          state.user.userInfo.age) !== null;
+    }, [userData]);
 
     const [redirectPath, setRedirectPath] = useState<string | null>(null);
     type CachingType = {
@@ -50,7 +49,7 @@ const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
             if (data) {
               dispatch(loginUser(data.data));
             }
-            if (!userData.username) {
+            if (!userData || !userData.username) {
               return <Navigate to='/' />;
             }
           },
