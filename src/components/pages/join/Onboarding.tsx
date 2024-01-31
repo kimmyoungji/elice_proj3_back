@@ -15,7 +15,7 @@ export interface userDataType {
   birthDay: string;
   height: number | null;
   weight: number | null;
-  diet_goal: number | null;
+  dietGoal: number | null;
   activityAmount: number | null;
 }
 
@@ -36,7 +36,7 @@ const Onboarding = () => {
     birthDay: '',
     height: null,
     weight: null,
-    diet_goal: null,
+    dietGoal: null,
     activityAmount: null,
   });
 
@@ -88,7 +88,7 @@ const Onboarding = () => {
       case 4:
         return userData.weight === null;
       case 5:
-        return userData.diet_goal === null;
+        return userData.dietGoal === null;
       case 6:
         return userData.activityAmount === null;
       default:
