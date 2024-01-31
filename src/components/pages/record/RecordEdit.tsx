@@ -88,7 +88,7 @@ const RecordEdit = () => {
       date + ' ' + mealTimetoStr[mealTime as string] + Math.random() + '.jpg'
     );
   }, []);
-  const file = imgUrl && base64toFile(imgUrl, fileName);
+  const file = foods && !foods[0].recordId && imgUrl && base64toFile(imgUrl, fileName);
 
   useEffect(() => {
     if (state) {
@@ -202,7 +202,7 @@ const RecordEdit = () => {
     if (foods[0].foodName === '음식명') return;
     if (foods[0].foodName === '') return;
     if (foods[0].foodInfoId) return;
-    const foodList = foods.map((food) => food.foodName);
+    const foodList = foods.length===1 ? foods[0].foodName : foods.map((food) => food.foodName);
     getFoodInfoId.trigger({
       path: '/food-info/foods',
       data: { foodList },
@@ -212,11 +212,13 @@ const RecordEdit = () => {
   useEffect(() => {
     if (!getFoodInfoId.result) return;
     const foodInfoIdList = getFoodInfoId.result.data.foodInfoIdList;
-    const newArr = [...foods];
-    newArr.map((food, index) => {
+    const newFoods = foods.length===1 ? foods[0] :[...foods];
+    foods.length === 1
+      ? foods[0].foodInfoId = foodInfoIdList[0]
+    : (newFoods as Food[]).map((food, index) => {
       food.foodInfoId = foodInfoIdList[index];
     });
-    setFoods(newArr);
+    foods.length===1 ? setFoods([newFoods] as Food[]): setFoods(newFoods as Food[]);
   }, [getFoodInfoId.result]);
 
   useEffect(() => {
@@ -238,7 +240,6 @@ const RecordEdit = () => {
       data: file,
     });
   }, [presignedUrl.result?.data]);
-  console.log(foods);
 
   const editDone = () => {
     const pUrl = imgUrl && presignedUrl.result?.data.split('?')[0];
@@ -253,7 +254,6 @@ const RecordEdit = () => {
       delete food.proteins;
       delete food.totalCapacity;
     });
-    console.log(newFoods);
 
     if (newFoods[0].recordId) {
       recordPut.trigger({
