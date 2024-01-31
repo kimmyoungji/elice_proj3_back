@@ -12,12 +12,6 @@ body {
   height: 100%;
 }
 
-body {
-  /* background: #202020; */
-  font-family: 'Inconsolata', monospace;
-  /* overflow: hidden; */
-}
-
 .wrapper {
   position: absolute;
   margin: auto;
@@ -39,27 +33,28 @@ body {
   width: 200px;
   height: 30px;
   border-radius: 20px;
-  border-bottom: 1px solid #303030;
-  background: #151515;
-  box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid #a0bfed;
+  background: #a0bfed;
+  box-shadow: inset 0 0 10px 0 rgba(0, 0, 0, 0.2);
   overflow: hidden;
-  z-index: 1;
+  z-index: 55;
 }
 
 .loaderInner {
   position: absolute;
   margin: auto;
-  top: 0;
+  top: 50%;
   bottom: 0;
-  left: -100px;
+  left: -150px;
   width: auto;
-  height: 58px;
-  color: crimson;
+  height: 64px;
+  color: #346dff;
   text-align: center;
-  text-shadow: 0 0 20px crimson;
+  text-shadow: 0 0 20px #346dff;
   font-size: 60px;
-  z-index: 2;
-  animation: load 2s infinite linear;
+  z-index: 555555;
+  animation: load 3s infinite linear;
+  transform: translateY(-30%);
 }
 
 .title {
@@ -69,29 +64,29 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  width: 85px;
+  width: 90px;
   height: 40px;
   text-transform: uppercase;
   text-align: left;
-  text-shadow: 0 0 20px crimson;
+  text-shadow: 0 0 20px #346dff;
   letter-spacing: 0.1em;
   font-size: 14px;
   font-weight: lighter;
-  color: crimson;
+  color: #346dff;
 }
 
 .titleSpan {
   display: none;
 }
 
-.titleAfter {
+.title::after {
   animation: txt 1s infinite;
   content: '';
 }
 
 @keyframes load {
   0% {
-    left: -100px;
+    left: 0px;
   }
   100% {
     left: 220px;
