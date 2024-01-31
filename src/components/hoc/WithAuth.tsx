@@ -55,12 +55,22 @@ const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
             }
           },
         });
-      } 
+      } else {
+        if (isLoggedIn && !isUserInfoFilled) {
+          // for (const { field, path } of onboardingPaths) {
+          //   if (!(userData as any)[field]) {
+          //     setRedirectPath(path);
+          //     break;
+          //   }
+          // }
+          setRedirectPath(path);
+        }
+      }
     }, [isLoggedIn, userData]);
 
-    // if (redirectPath) {
-    //   return <Navigate to={redirectPath} />;
-    // }
+    if (redirectPath) {
+      return <Navigate to={redirectPath} />;
+    }
 
     return <WrappedComponent {...props} />;
   };
