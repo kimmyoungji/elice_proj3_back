@@ -7,9 +7,11 @@ import { UpdateImageDto } from './dtos/UpdateImage.dto';
 import { CreateSplitImageDto } from './dtos/CreateSplitImage.dto';
 import { UpdateSplitImageDto } from './dtos/UpdateSplitImage.dto';
 import { SplitImage } from './entities/splitImage.entity';
-import * as AWS from 'aws-sdk';
-import { S3 } from '@aws-sdk/client-s3';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { SplitImageRepository } from "./repositories/splitImage.repository";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Injectable()
 export class ImageService {
@@ -18,28 +20,18 @@ export class ImageService {
     constructor(
         private imageRepository: ImageRepository,
         private splitImageRepository: SplitImageRepository,
-        private dataSource: DataSource) {
-        // JS SDK v3 does not support global configuration.
-        // Codemod has attempted to pass values to each service client in this file.
-        // You may need to update clients outside of this file, if they use global config.
-        this.s3 = new S3({
-            region: "ap-northeast-2",
-
-            credentials: {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-            },
-        });
+        private dataSource: DataSource,
+    ) {
+        this.s3 = new S3Client({ region: process.env.AWS_S3_REGION });
     }
     
     /* 프리사인드 유알엘 받아오기 */
     async getPresignedUrlForPut(fileName: string) {
-        const params = {
+        const command = new PutObjectCommand({
             Bucket: process.env.AWS_S3_BUCKET, 
             Key: fileName,
-            Expires: 60 * 5,
-        };
-        const url = await this.s3.getSignedUrlPromise('putObject', params); 
+        });
+        const url = await getSignedUrl(this.s3, command, { expiresIn: 60 * 5 }); 
         return url;
     }
 
