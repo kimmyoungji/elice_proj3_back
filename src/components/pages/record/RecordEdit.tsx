@@ -220,6 +220,7 @@ const RecordEdit = () => {
   useEffect(() => {
     if (imgUrl===undefined||imgUrl==='') return;
     if (presignedUrl.result && !file) return;
+    if (foods.length === 0) return;
     if (foods[0].recordId) return;
     presignedUrl.trigger({
       path:`/image/presigned-url/food/${fileName}`,
@@ -230,6 +231,7 @@ const RecordEdit = () => {
 
   useEffect(() => {
     if (imgUrl === undefined) return;
+    if (foods.length === 0) return;
     if (foods[0].recordId) return;
     if (!presignedUrl.result && !file) return;
     s3Upload.trigger({
@@ -241,6 +243,7 @@ const RecordEdit = () => {
 
   const editDone = () => {
     const pUrl = imgUrl && presignedUrl.result?.data.split('?')[0];
+    if (foods.length === 0) return;
     if (!foods || foods[0].foodName === '' || !foods[0].foodInfoId) return;
     const newFoods = [...foods];
     newFoods.map((food: Food) => {
