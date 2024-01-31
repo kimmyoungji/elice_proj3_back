@@ -9,6 +9,7 @@ import { loginUser } from '@components/store/userLoginRouter';
 
 const MyPage = () => {
   const userData = useSelector((state: RootState) => state.user.userInfo);
+  console.log(userData.height);
   const navigate = useNavigate();
 
   const goalMsg = mapGoaltoMsg[Number(userData?.dietGoal)];

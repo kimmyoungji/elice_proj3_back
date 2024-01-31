@@ -19,7 +19,7 @@ export type UserData = {
   username?: string;
   gender?: string;
   age: number;
-  profileImage?: string | undefined;
+  profileImage?: string;
   weight: number;
   height: number;
   dietGoal: string;

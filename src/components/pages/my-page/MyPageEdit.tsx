@@ -160,7 +160,7 @@ const MyPageEdit = () => {
     try {
       const updatedData = {
         ...data,
-        diet_goal: Number(findKeyByValue(mapGoaltoMsg, selectedGoal)),
+        dietGoal: Number(findKeyByValue(mapGoaltoMsg, selectedGoal)),
         activityAmount: Number(
           findKeyByValue(mapActivitytoMsg, selectedActity)
         ),

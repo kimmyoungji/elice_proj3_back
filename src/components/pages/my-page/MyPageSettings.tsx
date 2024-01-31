@@ -7,6 +7,7 @@ import MyPageDropdown from './MyPageDropdwon';
 import { findKeyByValue, gendertoMsg } from './mapMsg';
 import { loginUser } from '@components/store/userLoginRouter';
 import { useDispatch } from 'react-redux';
+import { logoutUser } from '@components/store/userLoginRouter';
 
 const MyPageSettings = () => {
   const location = useLocation();
@@ -58,7 +59,9 @@ const MyPageSettings = () => {
 
   const handleConfirmLogout = () => {
     trigger({ path: '/auth/logout' });
-    navigate('/');
+    //에러 분기처리 할 부분?
+    dispatch(logoutUser());
+    // navigate('/'); useEffect
   };
   const handleWithdrawal = () => {
     setShowModal(true);
@@ -67,6 +70,7 @@ const MyPageSettings = () => {
 
   const handleConfirmWithdrawal = () => {
     trigger({ path: '/auth/withdrawal' });
+    //에러 분기처리 할 부분?
     navigate('/');
   };
 
