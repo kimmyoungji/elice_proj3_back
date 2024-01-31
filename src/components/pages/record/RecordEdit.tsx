@@ -272,15 +272,21 @@ const RecordEdit = () => {
         }
       })
     }
-
   }
 
   useEffect(() => {
-    if (!recordPost.result || !recordPut.result) return;
-    if (recordPost.result.data === '식단 기록 성공'||recordPut.result.data === '식단 기록 성공') {
+    if (!recordPost.result) return;
+    if (recordPost.result.data === '식단 기록 성공') {
       navigate(`/record/${date}/${mealTime}`); 
     }
-  },[recordPost.result, recordPut.result])
+  },[recordPost.result])
+
+  useEffect(() => {
+    if (!recordPut.result) return;
+    if (recordPut.result.data === '식단 기록 성공') {
+      navigate(`/record/${date}/${mealTime}`); 
+    }
+  },[recordPut.result])
 
   return (
     <>
