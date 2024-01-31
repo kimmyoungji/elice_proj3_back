@@ -54,12 +54,6 @@ export class CumulativeDateMealTypeDto {
   mealType: MealType;
 
   @Expose()
-  @ApiProperty()
-  @IsUUID()
-  @IsNotEmpty()
-  cumulativeRecordId: string;
-
-  @Expose()
   @ApiProperty({ description: "하루 섭취한 총 칼로리" })
   @IsNotEmpty()
   @IsInt()

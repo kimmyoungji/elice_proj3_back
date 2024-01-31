@@ -135,14 +135,13 @@ export class CumulativeRecordService {
       }
       const dateArr = mealTypeResult.map((result, index) => [
         result.mealType,
-        result.cumulativeRecordId,
         result.mealTotalCalories / 100,
         mealTypeImage[index],
       ]);
       const includeArr = mealTypeResult.map((item) => item.mealType);
       for (let i = 1; i <= 4; i++) {
         if (!includeArr.includes(i)) {
-          dateArr.push([i, null, 0, null]);
+          dateArr.push([i, 0, null]);
         }
       }
       const sortedDateArr = dateArr.sort((a, b) => a[0] - b[0]);
