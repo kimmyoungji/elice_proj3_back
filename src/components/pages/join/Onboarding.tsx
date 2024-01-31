@@ -30,7 +30,7 @@ interface OnBoardingResult {
 const initialUserInfo = {
   activityAmount: undefined,
   dietGoal: '',
-  username: '',
+  username: undefined,
   height: undefined,
   gender: undefined,
   birthDay: '',
@@ -52,17 +52,19 @@ const Onboarding = () => {
     method: 'put',
     path: '/user',
   });
-  const changeTypedUserData: UserInfo = Object.assign({}, returnedUserData, {
-    activityAmount:
-      returnedUserData.activityAmount &&
-      returnedUserData.activityAmount.toString(),
-    dietGoal: returnedUserData.dietGoal,
-    username: returnedUserData.username,
-    height: returnedUserData.height,
-    gender: returnedUserData.gender,
-    birthDay: '',
-    weight: returnedUserData.weight,
-  });
+  const changeTypedUserData: UserInfo = Object.assign(
+    {},
+    {
+      activityAmount:
+        returnedUserData.activityAmount &&
+        returnedUserData.activityAmount.toString(),
+      dietGoal: returnedUserData.dietGoal,
+      height: returnedUserData.height,
+      gender: returnedUserData.gender,
+      birthDay: '',
+      weight: returnedUserData.weight,
+    }
+  );
 
   useEffect(() => {
     setUserData(changeTypedUserData);
