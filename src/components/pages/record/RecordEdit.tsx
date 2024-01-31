@@ -196,7 +196,8 @@ const RecordEdit = () => {
   })
 
   useEffect(() => {
-    if (!foods || foods[0].foodName === '') return;
+    if (!foods) return;
+    if (foods[0].foodName === '') return;
     if (foods[0].foodInfoId) return;
     const foodList = foods.map((food) => food.foodName);
     getFoodInfoId.trigger({
