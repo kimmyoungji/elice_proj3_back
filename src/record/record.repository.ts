@@ -119,12 +119,12 @@ export class RecordRepository extends Repository<Record> {
       };
   
       // 각 영양소의 누적 값을 계산
-      mealAccumulator[mealType].totalCalories += record.totalCalories / 100;
-      mealAccumulator[mealType].totalNutrient.carbohydrates += record.carbohydrates / 100;
-      mealAccumulator[mealType].totalNutrient.proteins += record.proteins / 100;
-      mealAccumulator[mealType].totalNutrient.fats += record.fats / 100;
-      mealAccumulator[mealType].totalNutrient.dietaryFiber += record.dietaryFiber / 100;
-  
+      mealAccumulator[mealType].totalCalories += parseFloat((record.totalCalories / 100).toFixed(2));
+      mealAccumulator[mealType].totalNutrient.carbohydrates += parseFloat((record.carbohydrates / 100).toFixed(2));
+      mealAccumulator[mealType].totalNutrient.proteins += parseFloat((record.proteins / 100).toFixed(2));
+      mealAccumulator[mealType].totalNutrient.fats += parseFloat((record.fats / 100).toFixed(2));
+      mealAccumulator[mealType].totalNutrient.dietaryFiber += parseFloat((record.dietaryFiber / 100).toFixed(2));
+    
       // 해당 식사 유형에 음식 데이터를 추가
       mealAccumulator[mealType].foods.push(foodData);
     }
@@ -175,6 +175,18 @@ export class RecordRepository extends Repository<Record> {
       foodImageUrl: imgUrl,
     });
 
+    if (!foodImage) {
+      // 이미지 레코드가 존재하지 않을 경우, 새로운 레코드 생성
+      
+      const newImageRecord = this.imageRecordRepository.create({
+        foodImageUrl: imgUrl
+      });
+    
+      // 생성한 레코드를 데이터베이스에 저장
+      await this.imageRecordRepository.save(newImageRecord);
+    }
+
+    console.log("foodImage : ", foodImage)
     for (const food of foods) {
       const foodInfo = await this.foodInfoRepository.findOneBy({
         foodInfoId: food.foodInfoId,
@@ -185,6 +197,10 @@ export class RecordRepository extends Repository<Record> {
           `음식 정보를 찾을 수 없습니다: ${food.foodInfoId}`
         );
       }
+
+      const foodImage = await this.imageRecordRepository.findOneBy({
+        foodImageUrl: imgUrl,
+      });
 
       const newRecord = this.recordRepository.create({
         userId: userId,
