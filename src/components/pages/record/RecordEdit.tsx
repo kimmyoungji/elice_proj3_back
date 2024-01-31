@@ -198,6 +198,7 @@ const RecordEdit = () => {
   useEffect(() => {
     if (!foods) return;
     if (foods.length === 0) return;
+    if (foods[0].foodName==='음식명') return;
     if (foods[0].foodName === '') return;
     if (foods[0].foodInfoId) return;
     const foodList = foods.map((food) => food.foodName);
@@ -220,8 +221,7 @@ const RecordEdit = () => {
   useEffect(() => {
     if (imgUrl===undefined||imgUrl==='') return;
     if (presignedUrl.result && !file) return;
-    if (foods.length === 0) return;
-    if (foods[0].recordId) return;
+    if (foods[0] && foods[0].recordId) return;
     presignedUrl.trigger({
       path:`/image/presigned-url/food/${fileName}`,
       data:{fileName}
@@ -231,8 +231,7 @@ const RecordEdit = () => {
 
   useEffect(() => {
     if (imgUrl === undefined) return;
-    if (foods.length === 0) return;
-    if (foods[0].recordId) return;
+    if (foods[0] && foods[0].recordId) return;
     if (!presignedUrl.result && !file) return;
     s3Upload.trigger({
       path: presignedUrl.result?.data,

@@ -62,6 +62,7 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
   useEffect(() => {
     if (focus === undefined) return;
     if (focusing.calories) return;
+    if (focusing.foodName === "음식명") return;
     trigger({});
   }, [foods[focus as number]]);
 
