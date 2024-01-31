@@ -9,7 +9,7 @@ import {
 } from "@nestjs/common";
 import { FoodInfoService } from "./food-info.service";
 import { ApiOperation } from "@nestjs/swagger";
-import { isLoggedInGuard } from "src/auth/utils/isLoggedin.guard";
+import { isLoggedInGuard } from "src/auth/utils/guards/isLoggedin.guard";
 import { FoodNamePipe } from "./pipe/food-name.pipe";
 
 @Controller("food-info")

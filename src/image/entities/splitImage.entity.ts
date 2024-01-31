@@ -11,6 +11,9 @@ export class SplitImage {
   imageId: number;
 
   @Column()
+  foodName: string;
+
+  @Column()
   xCoordinate: number;
 
   @Column()

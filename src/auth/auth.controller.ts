@@ -1,41 +1,47 @@
+import { MailVerificationService } from './mail-verification.service';
+import { DataSource } from 'typeorm';
+import { VerificationCode } from './entities/verification-code.entity';
+import { VerificationCodeRepository } from './repositories/verification-code.repository';
 import { UserService } from 'src/user/user.service';
-import { Body, Controller, Get, Param, Post, Req, Res, UseFilters, UseGuards } from '@nestjs/common';
-import { GoogleAuthGuard } from './utils/google.guard';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Req, Res, UseFilters, UseGuards } from '@nestjs/common';
+import { GoogleAuthGuard } from './utils/guards/google.auth.guard';
 import { AuthService } from './auth.service';
 import { LocalSignupDto } from './dto/localSignupDto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { LocalAuthGuard } from './utils/local.guard';
-import { isLoggedInGuard } from './utils/isLoggedin.guard';
-import { RedirectFilter } from './utils/redirectFilter';
+import { LocalAuthGuard } from './utils/guards/local.auth.guard';
+import { isLoggedInGuard } from './utils/guards/isLoggedin.guard';
 import { LocalLoginDto } from './dto/localLoginDto';
 import { HealthInfo } from 'src/user/entities/health-info.entity';
 import { User } from 'src/user/entities/user.entity';
 import * as dotenv from 'dotenv';
+import { isNotLoggedInGuard } from './utils/guards/isNotLoggedIn.guard';
 dotenv.config();
+import { MailerService } from '@nestjs-modules/mailer';
 
-@UseFilters(new RedirectFilter())
+// @UseFilters(new RedirectFilter())
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
 
     constructor(
         private readonly authService: AuthService,
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private readonly MailVerificationService: MailVerificationService,
     ) {}
 
     
     /* 구글 로그인 및 사용자등록 */
     @ApiOperation({ summary: '구글 로그인 요청 API' })
-    @ApiResponse({ status: 301, description: '구글 로그인 창으로 이동'})
-    @Get('google/login')
     @UseGuards(GoogleAuthGuard)
+    @UseGuards(isNotLoggedInGuard)
+    @Get('google/login')
     handleGoogleLogin() {}
 
+    /* 구글 로그인 후 리다이렉트되는 URL*/
     @ApiOperation({ summary: '구글서버에서 사용자인증 후 accessToken을 보내는 주소'})
-    @ApiResponse({ status: 200, description: '구글 로그인 성공. 쿠키저장소에 sessionID가 등록됩니다.'})
-    @ApiResponse({ status: 409, description: '이미 로컬계정으로 등록된 이메일입니다.'})
-    @Get('google/redirect')
     @UseGuards(GoogleAuthGuard) // 여기서 req.user에 user 정보가 담김
+    @UseGuards(isNotLoggedInGuard)
+    @Get('google/redirect')
     async handleGoogleRedirect(@Req() request:any ,@Res() response:any) {
         console.log('구글로그인 진행중...')
         const user: User & HealthInfo = await this.userService.getUserInfos(request.user.userId);
@@ -43,28 +49,25 @@ export class AuthController {
             response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/onboarding/1`);
         }else{
             response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/home`);
-        }    
+        }
     }
 
-
-    /* 로컬 로그인 및 회원가입 */
+    /* 로컬 회원가입 */
     @ApiOperation({ summary: '로컬 회원가입 요청 API' })
     @ApiBody({ type: LocalSignupDto, description: '회원가입 정보'})
-    @ApiResponse({ status: 200, description: '로컬 회원가입 성공.'})
-    @ApiResponse({ status: 409, description: '이미 구글계정으로 등록된 이메일입니다. / 이미 로컬계정으로 등록된 이메일입니다.'})
+    @UseGuards(isNotLoggedInGuard)
     @Post('local/signup')
     async handleLocalSignup(@Body() localSignupDto: LocalSignupDto, @Res() response: any) {
         console.log('회원가입진행중...', localSignupDto);
         await this.authService.localSignup(localSignupDto);
         response.status(200).send('회원가입 성공'); //분기처리 필요
     }
-
+    /* 로컬 로그인 */
     @ApiOperation({ summary: '로컬 로그인 요청 API' })
     @ApiBody({ type: LocalLoginDto, description: '로그인 정보'})
-    @ApiResponse({ status: 200, description: '로컬 로그인 성공. 쿠키저장소에 sessionID가 등록됩니다.'})
-    @ApiResponse({ status: 401, description: '등록되지 않은 이메일입니다. / 비밀번호가 일치하지 않습니다.'},{overrideExisting: false})
-    @Post('local/login')
     @UseGuards(LocalAuthGuard)
+    @UseGuards(isNotLoggedInGuard)
+    @Post('local/login')
     async handleLocalLogin(
         @Req() request: any, @Res() response: any){
         console.log('로그인 진행중...', request.user);
@@ -72,11 +75,8 @@ export class AuthController {
         response.status(200).send(user);
     }
 
-
-    /* 구글 로그아웃, 로컬 로그아웃 공용 API */
+    /* 구글, 로컬 공용 로그아웃 API */
     @ApiOperation({ summary: '로그아웃 uri' })
-    @ApiResponse({ status: 200, description: '로그아웃 성공. 쿠키저장소에 sessionID가 삭제됩니다.'})
-    @ApiResponse({ status: 401, description: '로그인이 필요합니다.'})
     @UseGuards(isLoggedInGuard)
     @Get('logout')
     async handleGoogleLogout(@Req() request: any, @Res() response: any): Promise<void> {
@@ -85,7 +85,7 @@ export class AuthController {
             const sessionId = request.signedCookies[process.env.SESSION_COOKIE_NAME];
             // console.log('로그아웃 후의 세션저장소 :', request.sessionStore,'\n로그아웃 힐 세션아이디: ', sessionId );
             await request.sessionStore.destroy(sessionId, (err)=>err && {msg: 'logout fail', err: err});
-            request.user = null;
+            delete request.user;
             await response.clearCookie(process.env.SESSION_COOKIE_NAME, {signed: true});
             response.status(200).send('로그아웃 성공, 백엔드에 요청시 로그인 페이지로 리다이렉팅해드립니다.');
             console.log(`${sessionId}가 로그아웃 되었습니다.`)
@@ -94,12 +94,8 @@ export class AuthController {
         // finally{ console.log('로그아웃 후의 세션저장소: ', request.sessionStore); }
     }
 
-    
-
-    /* 회원 탈퇴 API */
+    /* 구글, 로컬 공용 회원 탈퇴 API */
     @ApiOperation({ summary: '회원 탈퇴 API' })
-    @ApiResponse({ status: 200, description: '회원 탈퇴 성공. 쿠키저장소에 sessionID가 삭제됩니다. 유저건강정보도 삭제됩니다.'})
-    @ApiResponse({ status: 401, description: '로그인이 필요합니다.'})
     @UseGuards(isLoggedInGuard)
     @Get('withdrawal')
     async handleWithdrawal(@Req() request: any, @Res() response: any): Promise<void> {
@@ -111,9 +107,30 @@ export class AuthController {
             // 세션, req.user, cookie 삭제
             const sessionId = request.signedCookies[process.env.SESSION_COOKIE_NAME];
             await request.sessionStore.destroy(sessionId, (err)=>err && {msg: 'logout fail', err: err});
-            request.user = null;
+            delete request.user;
             await response.clearCookie(process.env.SESSION_COOKIE_NAME, {signed: true});
             await response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/`);
         }catch(err){ console.log(err); throw err; }
+    }
+
+    /* 이메일 인증 코드 발송하기 */
+    @ApiOperation({ summary: '이메일 인증 코드 발송하기' })
+    @Get('/verify-email/:email')
+    async handleSendVerificationCode(@Param('email') email:string, @Req() request: any, @Res() response: any): Promise<void> {
+        try{
+            const result = await this.MailVerificationService.sendVerificationCode(email);
+            console.log(result);
+            response.status(200).send('이메일 인증 코드 발송 성공');
+        }catch(err){ throw err; }
+    }
+
+    /* 인증코드 검증하기 */
+    @ApiOperation({ summary: '인증코드 검증하기' })
+    @Get('/verify-email/:email/:code')
+    async handleVerifyCode(@Param('email') email:string, @Param('code') code: number, @Res() response: any): Promise<void> {
+        try{
+            let verified = await this.MailVerificationService.verifyCode(email, code.toString());
+            response.status(200).send({verified});
+        }catch(err){ throw err; }
     }
 }

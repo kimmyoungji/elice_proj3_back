@@ -1,11 +1,11 @@
 import { HealthInfo } from 'src/user/entities/health-info.entity';
-import { HealthInfoRepository } from './../user/health-info.repository';
+import { HealthInfoRepository } from '../user/repositories/health-info.repository';
 import { LocalSignupDto } from './dto/localSignupDto';
 import { GoogleLoginDto } from './dto/googleLoginDto';
 import { User } from '../user/entities/user.entity';
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { DataSource, InsertResult } from 'typeorm';
-import { UserRepository } from '../user/user.repository';
+import { UserRepository } from '../user/repositories/user.repository';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -71,7 +71,7 @@ export class AuthService {
                 }
                 else throw new HttpException('비밀번호가 일치하지 않습니다.', HttpStatus.UNAUTHORIZED);
             }
-            else throw new HttpException('등록되지 않은 이메일입니다.', HttpStatus.UNAUTHORIZED);
+            else { throw new HttpException('등록되지 않은 이메일입니다.', HttpStatus.UNAUTHORIZED)} 
             
             // return null; // 로그인 실패
         }catch(err){
@@ -108,9 +108,9 @@ export class AuthService {
             // newUser 생성하기
             const newUser = new User().mapLocalSignupDto(localSignupDto);
             // saveUser 호출하기
-            const result = await this.userRepository.saveUser(newUser, queryRunner.manager);
+            await this.userRepository.saveUser(newUser, queryRunner.manager);
             await queryRunner.commitTransaction();
-            return result;
+            return;
         }catch(err){
             await queryRunner.rollbackTransaction();
             throw err;
@@ -154,4 +154,5 @@ export class AuthService {
             await queryRunner.release();
         }
     }
+
 }

@@ -1,6 +1,7 @@
 import { EntityManager, InsertResult } from "typeorm";
-import { User } from "./entities/user.entity";
-import { HealthInfo } from "./entities/health-info.entity";
+import { User } from "../entities/user.entity";
+import { HealthInfo } from "../entities/health-info.entity";
+import { HttpException } from "@nestjs/common";
 
 export class UserRepository{
 
@@ -10,9 +11,9 @@ export class UserRepository{
             return await manager.createQueryBuilder(User, "user").insert()
                                 .into(User,['userId','email','password','providerId','username']).values(user).execute(); 
         }catch(err){
-            throw err;
+            console.log(err)
+            throw new HttpException(err.detail, 500);
         }
-       
     }
 
     // Read
@@ -20,7 +21,8 @@ export class UserRepository{
         try{
             return await manager.createQueryBuilder(User, "user").where("email = :email", {email}).getOne();
         }catch(err){
-            throw err;
+            console.log(err)
+            throw new HttpException(err.detail, 500);
         }
     }
 
@@ -28,7 +30,8 @@ export class UserRepository{
         try{
             return await manager.query('SELECT * FROM "user" AS u LEFT JOIN health_info as h ON u.user_id = h.user_id WHERE u.user_id = $1 ORDER BY h.updated_date DESC limit 1;', [userId]);
         }catch(err){
-            throw err;
+            console.log(err)
+            throw new HttpException(err.detail, 500);
         }
     }
 
@@ -36,7 +39,8 @@ export class UserRepository{
         try{
             return await manager.createQueryBuilder(User, "user").select().where("user_id = :userId",{userId}).getOne();
         }catch(err){
-            throw err;
+            console.log(err)
+            throw new HttpException(err.detail, 500);
         }
     }
 
@@ -44,7 +48,8 @@ export class UserRepository{
         try{
             return await manager.createQueryBuilder(User, "user").select().where("username = :username",{username}).getOne();
         }catch(err){
-            throw err;
+            console.log(err)
+            throw new HttpException(err.detail, 500);
         }
     }
 
@@ -54,7 +59,8 @@ export class UserRepository{
             // console.log("업데이트 될것", user);
             return await manager.createQueryBuilder(User, "user").update(User).set(user).where("user_id = :userId",{userId}).execute();
         }catch(err){
-            throw err;
+            console.log(err)
+            throw new HttpException(err.detail, 500);
         }
     }
 
@@ -62,7 +68,8 @@ export class UserRepository{
         try{
             return await manager.createQueryBuilder(User, "user").update(User).set({recentHealthInfoId}).where("user_id = :userId",{userId}).execute();
         }catch(err){
-            throw err;
+            console.log(err)
+            throw new HttpException(err.detail, 500);
         }
     }
 
@@ -72,7 +79,8 @@ export class UserRepository{
             await manager.createQueryBuilder(User, "user").update({email:userId, username: userId, providerId: null}).where("user_id = :userId",{userId}).execute();
             return await manager.createQueryBuilder(User, "user").softDelete().where("user_id = :userId",{userId}).execute();
         }catch(err){
-            throw err;
+            console.log(err)
+            throw new HttpException(err.detail, 500);
         }
     }
 

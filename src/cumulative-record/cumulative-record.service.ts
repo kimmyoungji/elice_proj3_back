@@ -6,7 +6,7 @@ import {
 } from "./dto/cumulative-record.dto";
 import { plainToInstance } from "class-transformer";
 import { DataSource } from "typeorm";
-import { HealthInfoRepository } from "../user/health-info.repository";
+import { HealthInfoRepository } from "../user/repositories/health-info.repository";
 import { ImageRepository } from "src/image/repositories/image.repository";
 import { CumulativeRecord } from "./cumulative-record.entity";
 
