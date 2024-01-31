@@ -162,12 +162,12 @@ export class RecordRepository extends Repository<Record> {
 
     for (const food of foods) {
       const foodInfo = await this.foodInfoRepository.findOneBy({
-        foodName: food.foodName,
+        foodInfoId: food.foodInfoId,
       });
 
       if (!foodInfo) {
         throw new NotFoundException(
-          `음식 정보를 찾을 수 없습니다: ${food.foodName}`
+          `음식 정보를 찾을 수 없습니다: ${food.foodInfoId}`
         );
       }
 
