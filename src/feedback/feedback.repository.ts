@@ -5,6 +5,7 @@ import {
   GetFeedbackDataDto,
   MakeFeedbackDataDto,
 } from "./dto/feedback.dto";
+import { HttpException } from "@nestjs/common";
 
 export class FeedbackRepository {
   async saveFeedBack(
@@ -19,7 +20,7 @@ export class FeedbackRepository {
         .values(feedbackData)
         .execute();
     } catch (error) {
-      throw error;
+      throw new HttpException(error.detail, 500);
     }
   }
 
@@ -27,26 +28,35 @@ export class FeedbackRepository {
     checkfeedbackData: CheckFeedbackDataDto,
     manager: EntityManager
   ) {
-    const { userId, question, questionType, feedbackDate } = checkfeedbackData;
-    return await manager
-      .createQueryBuilder(Feedback, "feedback")
-      .select("feedback.feedback")
-      .where("feedback.user_id =:userId", { userId })
-      .where("feedback.feedback_date =:feedbackDate", {
-        feedbackDate,
-      })
-      .andWhere("feedback.questionType = :questionType", { questionType })
-      .andWhere("feedback.question =:question", { question })
-      .getOne();
+    try {
+      const { userId, question, questionType, feedbackDate } =
+        checkfeedbackData;
+      return await manager
+        .createQueryBuilder(Feedback, "feedback")
+        .select("feedback.feedback")
+        .where("feedback.user_id =:userId", { userId })
+        .where("feedback.feedback_date =:feedbackDate", {
+          feedbackDate,
+        })
+        .andWhere("feedback.questionType = :questionType", { questionType })
+        .andWhere("feedback.question =:question", { question })
+        .getOneOrFail();
+    } catch (error) {
+      throw error;
+    }
   }
 
   async saveFeedBackYes(feedbackId: string, manager: EntityManager) {
-    return await manager
-      .createQueryBuilder(Feedback, "feedback")
-      .update(Feedback)
-      .set({ saveYn: true })
-      .where("feedback.feedback_id = :feedbackId", { feedbackId })
-      .execute();
+    try {
+      return await manager
+        .createQueryBuilder(Feedback, "feedback")
+        .update(Feedback)
+        .set({ saveYn: true })
+        .where("feedback.feedback_id = :feedbackId", { feedbackId })
+        .execute();
+    } catch (error) {
+      throw new HttpException(error.detail, 500);
+    }
   }
 
   async getFeedbackData(
@@ -54,14 +64,18 @@ export class FeedbackRepository {
     page: number,
     manager: EntityManager
   ): Promise<GetFeedbackDataDto[]> {
-    return await manager
-      .createQueryBuilder(Feedback, "feedback")
-      .where("feedback.user_id =:userId", { userId })
-      .where("feedback.save_yn =:yn", { yn: true })
-      .orderBy("feedback.feedback_date", "DESC")
-      .take(5)
-      .skip((page - 1) * 5)
-      .getMany();
+    try {
+      return await manager
+        .createQueryBuilder(Feedback, "feedback")
+        .where("feedback.user_id =:userId", { userId })
+        .where("feedback.save_yn =:yn", { yn: true })
+        .orderBy("feedback.feedback_date", "DESC")
+        .take(5)
+        .skip((page - 1) * 5)
+        .getMany();
+    } catch (error) {
+      throw new HttpException(error.detail, 500);
+    }
   }
 
   async getFeedbackChatData(
@@ -70,23 +84,31 @@ export class FeedbackRepository {
     date: Date,
     manager: EntityManager
   ): Promise<GetFeedbackDataDto[]> {
-    return await manager
-      .createQueryBuilder(Feedback, "feedback")
-      .where("feedback.user_id =:userId", { userId })
-      .andWhere("feedback.feedback_date >= :startDate", { startDate })
-      .andWhere("feedback.feedback_date <= :date", { date })
-      .orderBy("feedback.feedback_date", "ASC")
-      .getMany();
+    try {
+      return await manager
+        .createQueryBuilder(Feedback, "feedback")
+        .where("feedback.user_id =:userId", { userId })
+        .andWhere("feedback.feedback_date >= :startDate", { startDate })
+        .andWhere("feedback.feedback_date <= :date", { date })
+        .orderBy("feedback.feedback_date", "ASC")
+        .getMany();
+    } catch (error) {
+      throw new HttpException(error.detail, 500);
+    }
   }
 
   async getFeedbackDetailData(
     feedbackId: string,
     manager: EntityManager
   ): Promise<GetFeedbackDataDto> {
-    return await manager
-      .createQueryBuilder(Feedback, "feedback")
-      .where("feedback_id =:feedbackId", { feedbackId })
-      .getOne();
+    try {
+      return await manager
+        .createQueryBuilder(Feedback, "feedback")
+        .where("feedback_id =:feedbackId", { feedbackId })
+        .getOneOrFail();
+    } catch (error) {
+      throw error;
+    }
   }
 
   async deleteFeedbackData(feedbackId: string, manager: EntityManager) {
@@ -98,8 +120,7 @@ export class FeedbackRepository {
         .where("feedback_id =:feedbackId", { feedbackId })
         .execute();
     } catch (error) {
-      console.log("error", error);
-      throw error;
+      throw new HttpException(error.detail, 500);
     }
   }
 }

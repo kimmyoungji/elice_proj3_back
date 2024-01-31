@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { CumulativeRecordRepository } from "./cumulative.repository";
 import {
   CumulativeDateMealTypeDto,
@@ -53,6 +53,7 @@ export class CumulativeRecordService {
       return result;
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      return error;
     } finally {
       await queryRunner.release();
     }
@@ -124,7 +125,7 @@ export class CumulativeRecordService {
       const sortedDateArr = dateArr.sort((a, b) => a[0] - b[0]);
       return sortedDateArr;
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
@@ -146,6 +147,7 @@ export class CumulativeRecordService {
       return plainToInstance(CumulativeDateMealTypeDto, result);
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      return error;
     } finally {
       await queryRunner.release();
     }
@@ -155,7 +157,6 @@ export class CumulativeRecordService {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
-
     try {
       const mealData = await this.cumulativeRepository.getMonthDetailRecord(
         month,
@@ -207,6 +208,7 @@ export class CumulativeRecordService {
       return transformedData;
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      return error;
     } finally {
       await queryRunner.release();
     }

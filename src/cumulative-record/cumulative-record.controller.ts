@@ -1,6 +1,5 @@
 import {
   Controller,
-  Delete,
   Get,
   NotFoundException,
   Query,
@@ -53,9 +52,6 @@ export class CumulativeRecordController {
             date,
             userId
           );
-        // if (mealTypeResult.length === 0 || mealTypeImage.length === 0) {
-        //   throw new NotFoundException("데이터 조회에서 오류가 발생했습니다");
-        // }
         const recommendNutrient = {
           carbohydrates: recommendIntake[0],
           proteins: recommendIntake[1],
@@ -98,7 +94,7 @@ export class CumulativeRecordController {
   @Get("/meal")
   // @UseGuards(isLoggedInGuard)
   @ApiOperation({
-    summary: "일별/meal 타입별 누적 식단 데이터 조회하기",
+    summary: "일별 & meal 타입별 누적 식단 데이터 조회하기",
     description: "유저의 누적 식단 데이터를 조회한다.",
   })
   async getDateMealTypeRecord(@Req() request: any, @Query("date") date: Date) {
@@ -119,7 +115,7 @@ export class CumulativeRecordController {
   @Get("/month")
   // @UseGuards(isLoggedInGuard)
   @ApiOperation({
-    summary: "월별 식사별 누적 식단 데이터 조회하기",
+    summary: "월별 & meal 타입별 누적 식단 데이터 조회하기",
     description: "유저의 월별 아침, 점심, 저녁 누적 식단 데이터를 조회한다.",
   })
   async getMonthDetailRecord(

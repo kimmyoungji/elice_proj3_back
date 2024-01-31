@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { FeedbackRepository } from "./feedback.repository";
 import { DataSource } from "typeorm";
 import { Feedback } from "./feedback.entity";
@@ -83,6 +78,7 @@ export class FeedbackService {
       }
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      return error;
     } finally {
       await queryRunner.release();
     }
@@ -127,6 +123,7 @@ export class FeedbackService {
       return plainToInstance(GetFeedbackDataDto, result);
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      return error;
     } finally {
       await queryRunner.release();
     }
@@ -215,6 +212,7 @@ export class FeedbackService {
       return deleteResult;
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      return error;
     } finally {
       await queryRunner.release();
     }

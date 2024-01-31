@@ -63,11 +63,11 @@ export class FoodInfoController {
         return foodInfoResult;
       }
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
-  // @ApiOperation({ summary: "음식 조회하기" })
+  @ApiOperation({ summary: "음식들의 foodInfoId 조회하기" })
   @Post("/foods")
   // @UseGuards(isLoggedInGuard)
   async getFoodList(@Body("foodList", FoodNamePipe) foodList: string[]) {
@@ -76,7 +76,7 @@ export class FoodInfoController {
         await this.foodInfoService.getFoodIdList(foodList);
       return { foodIdListResult: foodIdListResult };
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 }
