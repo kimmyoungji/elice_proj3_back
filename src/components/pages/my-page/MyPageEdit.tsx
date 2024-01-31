@@ -196,7 +196,6 @@ const MyPageEdit = () => {
 
   const saveAndNavigate = async () => {
     let uploadedImageUrl;
-    // const updatedNutrients
     let updatedNutrients = getNutritionStandard(data);
     console.log(updatedNutrients);
 
@@ -218,8 +217,8 @@ const MyPageEdit = () => {
     console.log(file);
     const updatedData = {
       ...data,
-      dietGoal: findKeyByValue(mapGoaltoMsg, selectedGoal),
-      activityAmount: findKeyByValue(mapActivitytoMsg, selectedActity),
+      dietGoal: Number(findKeyByValue(mapGoaltoMsg, selectedGoal)),
+      activityAmount: Number(findKeyByValue(mapActivitytoMsg, selectedActity)),
       height: Number(prevHeight),
       weight: Number(prevWeight),
       recommendIntake: updatedNutrients,

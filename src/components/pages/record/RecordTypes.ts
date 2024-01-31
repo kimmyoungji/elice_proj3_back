@@ -1,14 +1,6 @@
 export interface RecordProps {
-  dateArr: Array<[number, number, string | null]>;
+  dateArr: Array<[number, string | null, number, string | null]>;
 }
-
-// export const MealDataToSelectedMealDataType = (
-//   data: MealDetailData[keyof MealDetailData]
-// ): selecetedMealDataType => {
-//   return {
-//     ...data,
-//   };
-// };
 
 export interface MealDetailData {
   [key: number]: {
