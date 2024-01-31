@@ -6,9 +6,9 @@ import { Modal } from './MyPageModal';
 import MyPageDropdown from './MyPageDropdwon';
 import { findKeyByValue, gendertoMsg } from './mapMsg';
 import { loginUser } from '@components/store/userLoginRouter';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '@components/store/userLoginRouter';
-import { createCompilerHost } from 'typescript';
+import { RootState } from '@components/store';
 
 const MyPageSettings = () => {
   const location = useLocation();
@@ -22,58 +22,68 @@ const MyPageSettings = () => {
   const genderArr = ['남성', '여성', '기타'];
   const { trigger, result } = useApi<Nickname>({});
   const navigate = useNavigate();
-
-  console.log(genderSelect);
   const dispatch = useDispatch();
+  const userData = useSelector((state: RootState) => state.user.userInfo);
 
-  type Nickname = {
-    isAvailable?: boolean;
-    username?: string;
-  };
+  type Nickname =
+    | {
+        data?: { isAvailable: boolean };
+      }
+    | undefined;
 
   const handleEditName = () => {
     setisEditing(!isEditing);
-    console.log(isEditing);
-    if (isEditing === true) {
-      trigger({ path: `/user/username/${nickname}`, method: 'get' });
+    if (isEditing) {
+      trigger({ path: `/user/username/${newNickname}`, method: 'get' });
     }
-    if (result?.isAvailable) {
-      console.log('나오냐?');
+  };
+
+  useEffect(() => {
+    if (result?.data?.isAvailable) {
+      const updateData = {
+        ...userData,
+        username: newNickname,
+      };
+
+      setNewNickName(newNickname);
+      console.log(updateData);
       trigger({
         path: '/user',
         method: 'put',
         data: { username: newNickname },
       });
+      dispatch(loginUser(updateData));
     }
-  };
+  }, [result?.data, userData.username]);
 
   const editNickName = () => {
     setisEditing(!isEditing);
-    setNewNickName(result?.username);
   };
 
   const handleSelect = (value: string) => {
     const newGenderValue = Number(findKeyByValue(gendertoMsg, value));
-    console.log(newGenderValue);
     if (newGenderValue) {
+      const updateData = {
+        ...userData,
+        gender: newGenderValue,
+      };
+      console.log();
       setGenderSelect(gendertoMsg[newGenderValue]);
-
-      dispatch(loginUser({ gender: newGenderValue }));
+      dispatch(loginUser(updateData));
       trigger({
         path: '/user',
         method: 'put',
         data: { gender: newGenderValue },
       });
     }
-    console.log(genderSelect);
     setGenderDropdownVisible(false);
   };
 
   useEffect(() => {
-    if (gender) {
-      setGenderSelect(gendertoMsg[gender]);
+    if (userData.gender) {
+      setGenderSelect(gendertoMsg[Number(userData.gender)]);
     }
-  }, [gender]);
+  }, [genderSelect, userData.gender]);
 
   const handleLogOut = () => {
     setShowModal(true);
@@ -84,7 +94,6 @@ const MyPageSettings = () => {
     trigger({ path: '/auth/logout' });
     //에러 분기처리 할 부분?
     dispatch(logoutUser());
-    // navigate('/'); useEffect
   };
   const handleWithdrawal = () => {
     setShowModal(true);
@@ -114,16 +123,23 @@ const MyPageSettings = () => {
             <div className={style.accountSettings}> 닉네임 </div>
             <div className={style.editContainer}>
               {isEditing ? (
-                <input
-                  placeholder={nickname}
-                  onChange={(e) => setNewNickName(e.target.value)}
-                />
+                <>
+                  <input
+                    placeholder={newNickname}
+                    onChange={(e) => setNewNickName(e.target.value)}
+                  />
+                  <button className={style.editButton} onClick={handleEditName}>
+                    완료
+                  </button>
+                </>
               ) : (
-                <div className={style.showNickName}>{nickname}</div>
+                <>
+                  <div className={style.showNickName}>{newNickname}</div>
+                  <button className={style.editButton} onClick={editNickName}>
+                    편집
+                  </button>
+                </>
               )}
-              <button className={style.editButton} onClick={handleEditName}>
-                편집
-              </button>
             </div>
           </div>
 
