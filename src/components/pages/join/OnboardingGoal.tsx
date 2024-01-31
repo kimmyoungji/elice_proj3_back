@@ -8,14 +8,18 @@ const OnboardingGoal: React.FC<OnboardingProps> = ({
   onClickOnboarding,
 }) => {
   const onClickGoal = (value: number) => {
-    onClickOnboarding({ dietGoal: value });
+    if (userData.dietGoal === value.toString()) {
+      onClickOnboarding({ dietGoal: '' });
+    } else {
+      onClickOnboarding({ dietGoal: value });
+    }
   };
   return (
     <div className='onboarding-container'>
       <h1 className='b-medium'>당신의 목표는 무엇인가요?</h1>
       <div style={{ marginTop: '30px' }}>
         <ButtonCommon
-          variant={userData.dietGoal === 1 ? 'active' : 'default'}
+          variant={Number(userData.dietGoal) === 1 ? 'active' : 'default'}
           size='large'
           onClickBtn={() => onClickGoal(1)}
         >
@@ -24,7 +28,7 @@ const OnboardingGoal: React.FC<OnboardingProps> = ({
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          variant={userData.dietGoal === 2 ? 'active' : 'default'}
+          variant={Number(userData.dietGoal) === 2 ? 'active' : 'default'}
           size='large'
           onClickBtn={() => onClickGoal(2)}
         >
@@ -33,7 +37,7 @@ const OnboardingGoal: React.FC<OnboardingProps> = ({
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          variant={userData.dietGoal === 3 ? 'active' : 'default'}
+          variant={Number(userData.dietGoal) === 3 ? 'active' : 'default'}
           size='large'
           onClickBtn={() => onClickGoal(3)}
         >
@@ -42,7 +46,7 @@ const OnboardingGoal: React.FC<OnboardingProps> = ({
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          variant={userData.dietGoal === 4 ? 'active' : 'default'}
+          variant={Number(userData.dietGoal) === 4 ? 'active' : 'default'}
           size='large'
           onClickBtn={() => onClickGoal(4)}
         >

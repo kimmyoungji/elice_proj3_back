@@ -8,6 +8,7 @@ import { findKeyByValue, gendertoMsg } from './mapMsg';
 import { loginUser } from '@components/store/userLoginRouter';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '@components/store/userLoginRouter';
+import { createCompilerHost } from 'typescript';
 
 const MyPageSettings = () => {
   const location = useLocation();
@@ -17,16 +18,38 @@ const MyPageSettings = () => {
   const [modalSelect, setModalSelect] = useState(false);
   const [genderSelect, setGenderSelect] = useState(gendertoMsg[gender]);
   const [isGenderDropdwonVisible, setGenderDropdownVisible] = useState(false);
+  const [newNickname, setNewNickName] = useState(nickname);
   const genderArr = ['남성', '여성', '기타'];
-  const { trigger, result } = useApi({});
+  const { trigger, result } = useApi<Nickname>({});
   const navigate = useNavigate();
 
   console.log(genderSelect);
   const dispatch = useDispatch();
 
+  type Nickname = {
+    isAvailable?: boolean;
+    username?: string;
+  };
+
   const handleEditName = () => {
     setisEditing(!isEditing);
-    trigger({ path: '/이름 편집 요청 api', method: 'put' });
+    console.log(isEditing);
+    if (isEditing === true) {
+      trigger({ path: `/user/username/${nickname}`, method: 'get' });
+    }
+    if (result?.isAvailable) {
+      console.log('나오냐?');
+      trigger({
+        path: '/user',
+        method: 'put',
+        data: { username: newNickname },
+      });
+    }
+  };
+
+  const editNickName = () => {
+    setisEditing(!isEditing);
+    setNewNickName(result?.username);
   };
 
   const handleSelect = (value: string) => {
@@ -91,7 +114,10 @@ const MyPageSettings = () => {
             <div className={style.accountSettings}> 닉네임 </div>
             <div className={style.editContainer}>
               {isEditing ? (
-                <input value={nickname} />
+                <input
+                  placeholder={nickname}
+                  onChange={(e) => setNewNickName(e.target.value)}
+                />
               ) : (
                 <div className={style.showNickName}>{nickname}</div>
               )}
