@@ -18,7 +18,7 @@ const Record = () => {
 
   const [foodData, setFoodData] = useState<RecordProps>({
     dateArr: [[1], [2], [3], [4]] as unknown as Array<
-      [number, string | null, number, string | null]
+      [number, number, string | null]
     >,
   });
 
@@ -57,7 +57,7 @@ const Record = () => {
   };
   const handleMealDelete = (meal: number) => {
     const updatedFoodData = { ...foodData };
-    updatedFoodData.dateArr[meal - 1] = [meal, null, 0, null];
+    updatedFoodData.dateArr[meal - 1] = [meal, 0, null];
     trigger({
       method: 'delete',
       path: `/cumulative-record/meal?date=${dateSplit[0]}-${dateSplit[1]}-${dateSplit[2]}&meal=${meal}`,
@@ -77,20 +77,20 @@ const Record = () => {
               className={style.meal_content}
             >
               <div className={style.meal_info}>
-                {mealData[2] || mealData[3] ? (
+                {mealData[1] || mealData[2] ? (
                   <>
                     <img
                       className={style.meal_contentBackground}
-                      src={mealData[3] || mealLogo}
+                      src={mealData[2] || mealLogo}
                       alt='하루 식단 이미지'
                     />
-                    s
+
                     <div className={style.meal_time}>
                       {mapSelectMealToMsg[mealData[0]]}
                     </div>
                     <div className={style.meal_calories}>
                       {' '}
-                      {mealData[2] ?? 0} kcal{' '}
+                      {mealData[1] ?? 0} kcal{' '}
                     </div>
                   </>
                 ) : (
@@ -106,17 +106,17 @@ const Record = () => {
               <img
                 className={style.meal_button}
                 src={
-                  !mealData[2] && !mealData[3]
+                  !mealData[1] && !mealData[2]
                     ? '/icons/meal_plus_button.png'
                     : '/icons/meal_delete.png'
                 }
                 onClick={() =>
-                  !mealData[2] && !mealData[3]
+                  !mealData[1] && !mealData[2]
                     ? handleMealClick(mealData[0])
                     : handleMealDelete(mealData[0])
                 }
                 alt={
-                  !mealData[2] && !mealData[3]
+                  !mealData[1] && !mealData[2]
                     ? '하루 식단 추가 버튼'
                     : '하루 식단 삭제 버튼'
                 }

@@ -93,7 +93,7 @@ const MealPage = () => {
           />
           <div className={style.headerButton}>
             {data[selectedMealNumber] &&
-              data[selectedMealNumber].foods.length > 0 && (
+              data[selectedMealNumber].foods?.length > 0 && (
                 <>
                   <ButtonCommon
                     variant='default-active'

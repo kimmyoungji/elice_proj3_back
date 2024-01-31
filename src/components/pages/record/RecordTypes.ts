@@ -1,5 +1,5 @@
 export interface RecordProps {
-  dateArr: Array<[number, string | null, number, string | null]>;
+  dateArr: Array<[number, number, string | null]>;
 }
 
 export interface MealDetailData {

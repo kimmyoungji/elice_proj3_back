@@ -21,7 +21,7 @@ const MealImg = ({
   return (
     <>
       <div className={className}>
-        {imgUrl || foods.length > 0 ? (
+        {imgUrl || foods?.length > 0 ? (
           <ImgTagContent
             data={data}
             selectedMealNumber={selectedMealNumber}
