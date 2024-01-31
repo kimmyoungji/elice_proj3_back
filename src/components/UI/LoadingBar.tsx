@@ -5,7 +5,13 @@ export const LoadingBar = () => {
     <div className={styles.wrapper}>
       <div className={styles.loaderOuter}>
         <div className={styles.loaderInner}>
-          <i className='fa fa-ellipsis-h' aria-hidden='true'></i>
+          <i className='fas fa-utensils' aria-hidden='true' />
+          <i
+            className='fas fa-robot'
+            style={{ color: '#74C0FC' }}
+            aria-hidden='true'
+          />
+          <i className='fas fa-cookie-bite' aria-hidden='true' />
         </div>
       </div>
       <h1 className={styles.title}>
