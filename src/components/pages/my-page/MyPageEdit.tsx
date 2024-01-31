@@ -9,7 +9,7 @@ import { mapGoaltoMsg, mapActivitytoMsg, findKeyByValue } from './mapMsg';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import { calBMR, calBMRCalories, adjustCaloriesByGoal } from './calUserData';
 import { loginUser } from '@components/store/userLoginRouter';
-import { UserData, MyPageEditProps } from './MypageTypes';
+import { UserData } from './MypageTypes';
 import useApi, { TriggerType } from '@hooks/useApi';
 import usePresignedUrl from '@hooks/usePresignedUrl';
 import useS3ImgUpload from '@hooks/useS3ImgUpload';
@@ -30,14 +30,13 @@ const MyPageEdit = () => {
 
   const { userData, goalMsg, activityMsg } = location.state;
   const [data, setData] = useState(userData);
-  const age = data.age;
 
   const [previewImage, setPreviewImage] = useState<string | undefined>(
     data.profileImage
   );
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | null>(userData.profileImage);
   const [fileChanged, setFileChanged] = useState(false);
-  const [bmr, setBmr] = useState(calBMR({ data, age }));
+  const [bmr, setBmr] = useState(calBMR({ data }));
   const [bmrCalories, setBmrCalories] = useState(calBMRCalories({ bmr, data }));
   const [goalCalories, setGoalCalories] = useState(
     Math.round(adjustCaloriesByGoal({ data, bmrCalories }))
@@ -103,7 +102,7 @@ const MyPageEdit = () => {
   };
 
   const updateDataAndCalories = (updatedData: UserData) => {
-    const updatedBmr = calBMR({ data: updatedData, age });
+    const updatedBmr = calBMR({ data: updatedData });
     const updatedBmrCalories = calBMRCalories({
       bmr: updatedBmr,
       data: updatedData,
@@ -185,6 +184,8 @@ const MyPageEdit = () => {
         });
         if (uploadUrl) {
           const uploadedImageUrl = presignedUrl.data.split('?')[0];
+          console.log(uploadedImageUrl);
+
           return uploadedImageUrl;
         }
       }
@@ -195,22 +196,26 @@ const MyPageEdit = () => {
 
   const saveAndNavigate = async () => {
     let uploadedImageUrl;
-    let updatedNutrients;
-    if (data.dietGoal && data.goalCalories && data.gender) {
-      const updatedNutrients = getNutritionStandard(data);
-    } else {
+    // const updatedNutrients
+    let updatedNutrients = getNutritionStandard(data);
+    console.log(updatedNutrients);
+
+    if (!(data.dietGoal && data.targetCalories && data.gender)) {
       const updatedNutrients = {
-        carbohydrate: 0,
-        dietary_fiber: 0,
+        carbohydrates: 0,
+        dietaryFiber: 0,
         proteins: 0,
         fats: 0,
       };
+      console.log(updatedNutrients);
     }
 
     if (fileChanged) {
       uploadedImageUrl = await uploadProfileImage();
+      console.log(uploadedImageUrl);
     }
 
+    console.log(file);
     const updatedData = {
       ...data,
       dietGoal: findKeyByValue(mapGoaltoMsg, selectedGoal),
@@ -222,6 +227,7 @@ const MyPageEdit = () => {
       profileImage: uploadedImageUrl || file,
     };
     const { username, ...dataToSend } = updatedData;
+    console.log(updatedData);
 
     updateDataAndCalories(updatedData);
     dispatch(loginUser(updatedData));
