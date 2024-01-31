@@ -35,6 +35,19 @@ interface Result {
   statusText: string;
 }
 
+interface FoodInfoList {
+  foodInfoIdList: string[];
+}
+
+interface SearchIdResult {
+  config: {};
+  data: FoodInfoList;
+  headers: {};
+  request: {};
+  status: number;
+  statusText: string;
+}
+
 const RecordEdit = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -183,6 +196,30 @@ const RecordEdit = () => {
     method:'post',
   })
 
+  const getFoodInfoId = useApi<SearchIdResult>({
+    method:'post'
+  })
+
+  useEffect(() => {
+    if (!foods || foods[0].foodName === '') return;
+    if (foods[0].foodInfoId) return;
+    const foodList = foods.map((food) => food.foodName);
+    getFoodInfoId.trigger({
+      path: '/food-info/foods',
+      data:{foodList}
+    })
+  }, [foods])
+  
+  useEffect(() => {
+    if (!getFoodInfoId.result) return;
+    const foodInfoIdList = getFoodInfoId.result.data.foodInfoIdList;
+    const newArr = [...foods];
+    newArr.map((food, index) => {
+      food.foodInfoId = foodInfoIdList[index];
+  })
+    setFoods(newArr);
+  },[getFoodInfoId.result])
+
   // useEffect(() => {
   //   if (imgUrl===undefined||imgUrl==='') return;
   //   if (presignedUrl.result && !file) return;
@@ -205,7 +242,7 @@ const RecordEdit = () => {
 
   const editDone = () => {
     // const pUrl = imgUrl && presignedUrl.result?.data.split('?')[0];
-    if (!foods) return;
+    if (!foods || foods[0].foodName === '') return;
     const newFoods = [...foods];
     newFoods.map((food: Food) => {
       
