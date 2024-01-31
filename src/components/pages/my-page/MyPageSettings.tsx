@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '@components/store/userLoginRouter';
 import { RootState } from '@components/store';
 
+const genderArr = ['남성', '여성', '기타'];
+
 const MyPageSettings = () => {
   const location = useLocation();
   const { nickname, gender } = location.state;
@@ -19,7 +21,6 @@ const MyPageSettings = () => {
   const [genderSelect, setGenderSelect] = useState(gendertoMsg[gender]);
   const [isGenderDropdwonVisible, setGenderDropdownVisible] = useState(false);
   const [newNickname, setNewNickName] = useState(nickname);
-  const genderArr = ['남성', '여성', '기타'];
   const { trigger, result } = useApi<Nickname>({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -46,7 +47,6 @@ const MyPageSettings = () => {
       };
 
       setNewNickName(newNickname);
-      console.log(updateData);
       trigger({
         path: '/user',
         method: 'put',
@@ -67,7 +67,6 @@ const MyPageSettings = () => {
         ...userData,
         gender: newGenderValue,
       };
-      console.log();
       setGenderSelect(gendertoMsg[newGenderValue]);
       dispatch(loginUser(updateData));
       trigger({
@@ -125,10 +124,14 @@ const MyPageSettings = () => {
               {isEditing ? (
                 <>
                   <input
+                    className={style.inputNickName}
                     placeholder={newNickname}
                     onChange={(e) => setNewNickName(e.target.value)}
                   />
-                  <button className={style.editButton} onClick={handleEditName}>
+                  <button
+                    className={style.editButtonClicked}
+                    onClick={handleEditName}
+                  >
                     완료
                   </button>
                 </>
@@ -172,7 +175,6 @@ const MyPageSettings = () => {
               className={style.rightButton}
               src='/icons/right-arrow-icon.png'
               alt='계정 설정 화살표'
-              // onClick={handleSettingNavigate}
             />
           </div>
         </div>
@@ -188,7 +190,6 @@ const MyPageSettings = () => {
               onClick={handleLogOut}
               src='/icons/right-arrow-icon.png'
               alt='계정 설정 화살표'
-              // onClick={handleSettingNavigate}
             />
           </div>
         </div>
@@ -201,7 +202,6 @@ const MyPageSettings = () => {
               onClick={handleWithdrawal}
               src='/icons/right-arrow-icon.png'
               alt='계정 설정 화살표'
-              // onClick={handleSettingNavigate}
             />
           </div>
         </div>
