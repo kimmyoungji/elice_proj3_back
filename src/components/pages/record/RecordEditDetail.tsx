@@ -18,6 +18,7 @@ interface FoodInfo {
 interface Food {
   foodName: string;
   XYCoordinate: number[];
+  recordId?: string;
   counts: number;
   foodInfoId?: string;
   calories?: number;
@@ -73,6 +74,7 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
     res.foodName = focusing.foodName;
     res.counts = focusing.counts;
     res.XYCoordinate = focusing.XYCoordinate;
+    focusing.recordId && (res.recordId = focusing.recordId);
     const newFocusFood = { ...res };
     let copyFoods = [...foods];
     copyFoods[focus] = newFocusFood;
@@ -146,7 +148,17 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
       let newArr = [...foods];
       if (focus === undefined) return;
 
-      const newObj = {
+      const newObj = newArr[focus].recordId ? {
+        foodName: e.currentTarget.textContent as string,
+        XYCoordinate: newArr[focus].XYCoordinate,
+        counts: newArr[focus].counts,
+        foodInfoId: getFoodId(
+          e.currentTarget.textContent as string,
+          foodInfo,
+          searchInput
+        ) as string,
+        recordId: newArr[focus].recordId
+      }: {
         foodName: e.currentTarget.textContent as string,
         XYCoordinate: newArr[focus].XYCoordinate,
         counts: newArr[focus].counts,

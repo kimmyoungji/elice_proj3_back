@@ -237,8 +237,8 @@ const RecordEdit = () => {
       path: presignedUrl.result?.data,
       data:file
     });
-  },[presignedUrl.result?.data])
-
+  }, [presignedUrl.result?.data])
+  console.log(foods)
 
   const editDone = () => {
     const pUrl = imgUrl && presignedUrl.result?.data.split('?')[0];
@@ -254,6 +254,7 @@ const RecordEdit = () => {
       delete food.proteins;
       delete food.totalCapacity;
     })
+    console.log(newFoods)
 
     if (newFoods[0].recordId) {
       recordPut.trigger({
@@ -287,7 +288,7 @@ const RecordEdit = () => {
 
   useEffect(() => {
     if (!recordPut.result) return;
-    if (recordPut.result.data === '식단 기록 성공') {
+    if (recordPut.result.data === '식단 수정 성공') {
       navigate(`/record/${date}/${mealTime}`); 
     }
   },[recordPut.result])
@@ -336,7 +337,7 @@ const RecordEdit = () => {
             foods.map((food: Food, index: number) => (
               <div key={index} className={styles.tagitem}>
                 <div className={styles.tagimgwrap}>
-                  {food.XYCoordinate.length === 0 ? (
+                  {food.XYCoordinate.length === 0 || food.XYCoordinate[0]===null ? (
                     <img
                       className={`${styles.tagimg} ${
                         focus === index && styles.focusimg
