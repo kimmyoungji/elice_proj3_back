@@ -116,9 +116,6 @@ export class FeedbackService {
         page,
         queryRunner.manager
       );
-      if (result.length === 0) {
-        return [];
-      }
       await queryRunner.commitTransaction();
       return plainToInstance(GetFeedbackDataDto, result);
     } catch (error) {
@@ -144,9 +141,6 @@ export class FeedbackService {
         date,
         queryRunner.manager
       );
-      if (result.length === 0) {
-        return [];
-      }
       await queryRunner.commitTransaction();
       return plainToInstance(GetFeedbackDataDto, result);
     } catch (error) {
