@@ -1,7 +1,9 @@
 import { UserData } from '@components/pages/my-page/MypageTypes';
 
 const getNutritionStandard = (data: UserData) => {
-  const userGoal = data.dietGoal.toString();
+  // const userGoal = data.dietGoal.toString();
+  const userGoal = data.dietGoal;
+
   const userGoalCalories = data.targetCalories;
   const userGender = data.gender;
   const goalRatio: { [key: string]: number[] } = {
@@ -10,7 +12,7 @@ const getNutritionStandard = (data: UserData) => {
     '3': [5, 2, 3],
     '4': [4, 2, 4],
   };
-  const [ratioX, ratioY, ratioZ] = goalRatio[userGoal];
+  const [ratioX, ratioY, ratioZ] = goalRatio[userGoal.toString()];
 
   const k = userGender === '1' ? 38 : userGender === '2' ? 25 : 30;
 
