@@ -1,23 +1,31 @@
-import { Controller, Get, Param, Query, Post, Put, Delete, Body, Req, HttpStatus, Res, UsePipes } from "@nestjs/common";
-import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { Controller, Get, Param, Query, Post, Put, Delete, Body, Req, HttpStatus, Res, UsePipes, UseGuards } from "@nestjs/common";
+import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { RecordService } from "./record.service";
 import { Record } from "./record.entity";
 import { CreateRecordDto } from "./dtos/createRecord.dto";
 import { ValidateFoodPipe } from "./pipes/record.pipe";
 import { UpdateRecordDto } from "./dtos/updateRecord.dto";
-
+import { LocalAuthGuard } from "src/auth/utils/guards/local.auth.guard";
+import { isLoggedInGuard } from "src/auth/utils/guards/isLoggedin.guard";
 @Controller("records")
 @ApiTags("Record API")
 export class RecordController {
   constructor(private recordService: RecordService) {}
 
   // GET /records?date=yyyy-mm-dd
+  // @ApiBody({ type: LocalLoginDto, description: '로그인 정보'})
+
+  //@UseGuards(LocalAuthGuard)
+  @UseGuards(isLoggedInGuard)
   @Get()
   @ApiOperation({ summary: "특정 날짜의 식단 조회" })
   async getDailyRecords(
-    @Query("userId") userId: string,
+    @Req() req,
     @Query("date") date: string
   ): Promise<Record[]> {
+    console.log("req userId : ", req.user.userId)
+    const userId = req.user.userId
+
     const records = await this.recordService.getDailyRecord(userId, date);
     return records;
   }
@@ -27,9 +35,11 @@ export class RecordController {
   @UsePipes(new ValidateFoodPipe())
   @ApiOperation({ summary: "식단 기록" })
   async createRecord(
+    @Req() req,
     @Body() createRecordDto: CreateRecordDto
   ): Promise<string> {
-    await this.recordService.createRecord(createRecordDto);
+    const userId = req.user.userId
+    await this.recordService.createRecord(userId, createRecordDto);
     return "식단 기록 성공";
   }
 
@@ -38,12 +48,13 @@ export class RecordController {
   @Put()
   @ApiOperation({ summary: "특정 날짜와 식단 구분 수정" })
   async updateDailyRecord(
+    @Req() req,
     @Query('date') date: string,
     @Query('mealType') queryMealType: number,
-    @Body() recordId: string,
     @Body() updateRecordDto: UpdateRecordDto,
   ): Promise<string> {
-    await this.recordService.updateDailyRecord(date, queryMealType, updateRecordDto);
+    const userId = req.user.userId
+    await this.recordService.updateDailyRecord(userId, date, queryMealType, updateRecordDto);
     return "식단 수정 성공";
   }
 
@@ -51,10 +62,12 @@ export class RecordController {
   @Delete()
   @ApiOperation({ summary: "특정 날짜와 식단 구분 삭제" })
   async deleteDailyRecord(
+    @Req() req,
     @Query('date') date: string,
     @Query('mealType') mealType: number,
   ): Promise<string> {
-    await this.recordService.deleteDailyRecord(date, mealType);
+    const userId = req.user.userId
+    await this.recordService.deleteDailyRecord(userId, date, mealType);
     return "식단 삭제 성공"
   }
 }

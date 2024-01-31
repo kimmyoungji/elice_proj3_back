@@ -18,18 +18,18 @@ export class RecordService {
   }
 
   // 식단을 기록하는 메서드
-  async createRecord(createRecordDto: CreateRecordDto): Promise<Record[]> {
-    const savedRecord = await this.recordRepository.createRecord(createRecordDto);
+  async createRecord(userId: string, createRecordDto: CreateRecordDto): Promise<Record[]> {
+    const savedRecord = await this.recordRepository.createRecord(userId, createRecordDto);
     return savedRecord;
   }
 
   // 특정 날짜의 식단을 수정하는 메서드
-  async updateDailyRecord(date: string, mealType: number, updateRecordDto: UpdateRecordDto): Promise<Record[]> {
-    return await this.recordRepository.updateRecord(date, mealType, updateRecordDto);
+  async updateDailyRecord(userId: string, date: string, mealType: number, updateRecordDto: UpdateRecordDto): Promise<Record[]> {
+    return await this.recordRepository.updateRecord(userId, date, mealType, updateRecordDto);
   }
 
   // 특정 날짜의 식단을 삭제하는 메서드
-  async deleteDailyRecord(date: string, mealType: number): Promise<void> {
-    await this.recordRepository.deleteRecord(date, mealType);
+  async deleteDailyRecord(userId: string, date: string, mealType: number): Promise<void> {
+    await this.recordRepository.deleteRecord(userId,date, mealType);
   }
 }

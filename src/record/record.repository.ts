@@ -1,6 +1,7 @@
 import {
   Equal,
   LessThanOrEqual,
+  MoreThanOrEqual,
   Repository,
 } from "typeorm";
 import { MealType, Record } from "./record.entity";
@@ -17,6 +18,7 @@ import { Image } from "src/image/entities/image.entity";
 import { SplitImage } from "src/image/entities/splitImage.entity";
 import { UpdateRecordDto } from "./dtos/updateRecord.dto";
 import { HealthInfo } from "src/user/entities/health-info.entity";
+import { User } from "src/user/entities/user.entity";
 
 @Injectable()
 export class RecordRepository extends Repository<Record> {
@@ -26,7 +28,8 @@ export class RecordRepository extends Repository<Record> {
     @InjectRepository(CumulativeRecord) private cumulativeRecordRepository: Repository<CumulativeRecord>,
     @InjectRepository(Image) private imageRecordRepository: Repository<Image>,
     @InjectRepository(SplitImage) private splitImageRepository: Repository<SplitImage>,
-    @InjectRepository(HealthInfo) private healthInfoRepository: Repository<HealthInfo>
+    @InjectRepository(HealthInfo) private healthInfoRepository: Repository<HealthInfo>,
+    @InjectRepository(User) private userRepository: Repository<User>
   ) {
     super(
       recordRepository.target,
@@ -34,21 +37,29 @@ export class RecordRepository extends Repository<Record> {
       recordRepository.queryRunner
     );
   }
+
   // 식단 조회
   async findByDate(userId: string, date: string): Promise<any> {
     const dateObj = new Date(date);
     const records = await this.recordRepository.find({
       where: {
-        userId,
+        userId: userId,
         firstRecordDate: Equal(dateObj),
       },
     });
+
+    // 사용자 정보
+    const user = await this.userRepository.findOne({
+      where: {
+        userId: userId
+      }
+    })
   
-    // 사용자의 건강 정보를 가져옵니다.
+    // 사용자의 건강 정보
     const healthInfo = await this.healthInfoRepository.findOne({
       where: {
-        userId,
-        updatedDate: LessThanOrEqual(dateObj),
+        userId: userId,
+        healthInfoId: user.recentHealthInfoId,
       },
     });
   
@@ -56,18 +67,20 @@ export class RecordRepository extends Repository<Record> {
       throw new NotFoundException(`Health info 정보가 없는 user ID ${userId}`);
     }
   
-    // 각 mealType에 대한 기본 정보를 설정합니다.
+    const recommendIntake = healthInfo.recommendIntake || [0, 0, 0, 0]; // 기본값
+
+    // 각 mealType에 대한 기본 정보를 설정
     const defaultMealInfo = {
       targetCalories: healthInfo.targetCalories,
       recommendNutrient: {
-        carbohydrates: healthInfo.recommendIntake[0],
-        proteins: healthInfo.recommendIntake[1],
-        fats: healthInfo.recommendIntake[2],
-        dietaryFiber: healthInfo.recommendIntake[3],
+        carbohydrates: recommendIntake[0],
+        proteins: recommendIntake[1],
+        fats: recommendIntake[2],
+        dietaryFiber: recommendIntake[3],
       },
     };
   
-    // mealType에 따라 정보를 누적할 객체를 준비합니다.
+    // mealType에 따라 정보를 누적할 객체를 준비
     const mealAccumulator = {};
     for (let mealType = 1; mealType <= 4; mealType++) {
       mealAccumulator[mealType] = { 
@@ -78,7 +91,7 @@ export class RecordRepository extends Repository<Record> {
       };
     }
   
-    // 조회된 레코드들을 처리합니다.
+    // 조회된 레코드들을 처리
     for (const record of records) {
       const foodInfo = await this.foodInfoRepository.findOne({
         where: {
@@ -87,7 +100,7 @@ export class RecordRepository extends Repository<Record> {
       });
       
       if (!foodInfo) {
-        continue; // 음식 정보가 없는 경우에는 이 레코드를 건너뜁니다.
+        continue; // 음식 정보가 없는 경우에는 이 레코드를 건너뜀
       }
   
       const splitImageRecord = await this.splitImageRepository.findOne({
@@ -99,20 +112,20 @@ export class RecordRepository extends Repository<Record> {
       const mealType = record.mealType;
       const foodData = {
         foodInfoId: record.foodInfoId,
-        recordId: record.recordId, // 또는 다른 식별자
+        recordId: record.recordId,
         foodName: foodInfo.foodName,
         counts: record.foodCounts,
         XYCoordinate: splitImageRecord ? [splitImageRecord.xCoordinate, splitImageRecord.yCoordinate, splitImageRecord.width, splitImageRecord.height] : [],
       };
   
-      // 각 영양소의 누적 값을 계산합니다.
+      // 각 영양소의 누적 값을 계산
       mealAccumulator[mealType].totalCalories += record.totalCalories;
       mealAccumulator[mealType].totalNutrient.carbohydrates += record.carbohydrates;
       mealAccumulator[mealType].totalNutrient.proteins += record.proteins;
       mealAccumulator[mealType].totalNutrient.fats += record.fats;
       mealAccumulator[mealType].totalNutrient.dietaryFiber += record.dietaryFiber;
   
-      // 해당 식사 유형에 음식 데이터를 추가합니다.
+      // 해당 식사 유형에 음식 데이터를 추가
       mealAccumulator[mealType].foods.push(foodData);
     }
   
@@ -131,8 +144,8 @@ export class RecordRepository extends Repository<Record> {
 }
 
   // 식사 기록 생성
-  async createRecord(createRecordDto: CreateRecordDto): Promise<Record[]> {
-    const { userId, mealType, imgUrl, foods } = createRecordDto;
+  async createRecord(userId: string, createRecordDto: CreateRecordDto): Promise<Record[]> {
+    const { mealType, imgUrl, foods } = createRecordDto;
     const records: Record[] = [];
     let cumulativeCarbohydrates = 0;
     let cumulativeProteins = 0;
@@ -250,9 +263,9 @@ export class RecordRepository extends Repository<Record> {
   }
 
   // 식단 수정
-  async updateRecord(date: string, mealType: number, updateRecordDto: UpdateRecordDto): Promise<any> {
+  async updateRecord(userId: string, date: string, mealType: number, updateRecordDto: UpdateRecordDto): Promise<any> {
     const recordDate = new Date(date);
-    const { userId, foods } = updateRecordDto;
+    const { foods } = updateRecordDto;
   
     // 기존 레코드 검색
     const existingRecords = await this.recordRepository.find({
@@ -428,12 +441,13 @@ export class RecordRepository extends Repository<Record> {
   }
 
   // 식단 삭제
-  async deleteRecord(date: string, mealType: number): Promise<void> {
+  async deleteRecord(userId: string, date: string, mealType: number): Promise<void> {
     const dateObj = new Date(date);
 
     // 해당 날짜와 식사 유형에 맞는 레코드를 가져오기
     const recordsToDelete = await this.recordRepository.find({
       where: {
+        userId: userId,
         firstRecordDate: Equal(dateObj),
         mealType: mealType,
       },
@@ -446,7 +460,7 @@ export class RecordRepository extends Repository<Record> {
     // splitImage 레코드를 삭제
     for (const record of recordsToDelete) {
       await this.splitImageRepository.delete({
-        imageId: record.imageId,
+        imageId: record.imageId
       });
     }
 
@@ -455,6 +469,7 @@ export class RecordRepository extends Repository<Record> {
 
     // 연관된 CumulativeRecord를 삭제
     const cumulativeRecordResult = await this.cumulativeRecordRepository.delete({
+      userId: userId,
       date: Equal(dateObj),
       mealType: mealType,
     });

@@ -27,12 +27,6 @@ class Food {
 @Exclude()
 export class CreateRecordDto {
     @Expose()
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty({ description: "사용자 id" })
-    userId: string;
-
-    @Expose()
     @IsEnum(MealType)
     @ApiProperty({ description: "식단 구분", enum: MealType })
     mealType: MealType;

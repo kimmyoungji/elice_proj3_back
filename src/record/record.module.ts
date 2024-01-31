@@ -10,6 +10,7 @@ import { HealthInfo } from "src/user/entities/health-info.entity";
 import { Image } from "src/image/entities/image.entity";
 import { SplitImage } from "src/image/entities/splitImage.entity";
 import { HealthInfoRepository } from "src/user/repositories/health-info.repository";
+import { User } from "src/user/entities/user.entity";
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { HealthInfoRepository } from "src/user/repositories/health-info.reposito
       Image,
       SplitImage,
       HealthInfo,
-      HealthInfoRepository
+      HealthInfoRepository,
+      User
     ]),
   ],
   providers: [RecordService, RecordRepository, HealthInfoRepository],

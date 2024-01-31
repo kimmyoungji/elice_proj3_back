@@ -27,12 +27,6 @@ export class FoodUpdateDto {
 @Exclude()
 export class UpdateRecordDto {
    @Expose()
-   @IsString()
-   @IsNotEmpty()
-   @ApiProperty({ description: "사용자 id" })
-   userId: string;
-   
-   @Expose()
    @IsInt()
    @ApiProperty({ description: "식단 구분", enum: MealType })
    mealType: number;
