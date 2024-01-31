@@ -113,7 +113,7 @@ export class RecordRepository extends Repository<Record> {
       const foodData = {
         foodInfoId: record.foodInfoId,
         recordId: record.recordId,
-        foodName: foodInfo.foodName,
+        recordFoodName: record.recordFoodName,
         counts: record.foodCounts,
         XYCoordinate: splitImageRecord ? [splitImageRecord.xCoordinate, splitImageRecord.yCoordinate, splitImageRecord.width, splitImageRecord.height] : [],
       };
@@ -175,6 +175,7 @@ export class RecordRepository extends Repository<Record> {
         userId: userId,
         mealType: mealType,
         foodInfoId: food.foodInfoId,
+        recordFoodName: food.foodName,
         foodCounts: food.counts,
         imageId: foodImage.imageId,
         carbohydrates: foodInfo.carbohydrates * food.counts,
@@ -290,7 +291,7 @@ export class RecordRepository extends Repository<Record> {
         where: {
           userId: userId,
           mealType: mealType,
-          foodInfoId: food.foodInfoId
+          recordFoodName: food.foodName
         }
       });
       console.log("existingRecord :", existingRecord)
@@ -314,16 +315,10 @@ export class RecordRepository extends Repository<Record> {
         // 레코드 업데이트
         await this.recordRepository.save(updatedRecord);
 
-      const foodForUpdate = await this.foodInfoRepository.findOne({
-        where: {
-          foodInfoId: existingRecord.foodInfoId
-        }
-      });
-
       // split_image 테이블에서 해당 imageId를 가진 레코드를 찾아 정보를 업데이트
       const splitImageRecord = await this.splitImageRepository.findOneBy({
         imageId: existingRecord.imageId,
-        foodName: foodForUpdate.foodName
+        foodName: existingRecord.recordFoodName
       });
 
       if (splitImageRecord) {
@@ -342,6 +337,7 @@ export class RecordRepository extends Repository<Record> {
         userId: userId,
         mealType: mealType,
         foodInfoId: food.foodInfoId,
+        recordFoodName: food.foodName,
         foodCounts: food.counts,
         imageId: imageRecord.imageId,
         carbohydrates: foodInfo.carbohydrates * food.counts,
@@ -378,7 +374,7 @@ export class RecordRepository extends Repository<Record> {
 
       await this.splitImageRepository.delete({
         imageId: record.imageId,
-        foodName: foodForDelete.foodName
+        foodName: record.recordFoodName
       });
 
       // 레코드 삭제

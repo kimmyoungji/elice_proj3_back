@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, ValueTransformer } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 export enum MealType {
   "아침" = 1,
@@ -30,6 +30,9 @@ export class Record extends BaseEntity {
 
   @Column({ type: "varchar", nullable: false })
   foodInfoId: string;
+
+  @Column({ type: "varchar", nullable: false })
+  recordFoodName : string;
 
   @Column({ type: "int", nullable: false })
   foodCounts: number;
