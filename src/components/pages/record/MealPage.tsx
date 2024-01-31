@@ -4,6 +4,7 @@ import style from './mealpage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates from '@utils/getDates';
 import MealDetail from './MealDetail';
+import { MealDropDown } from './MealDropDown';
 import { MealDetailData, selecetedMealDataType } from './RecordTypes';
 import useApi from '@hooks/useApi';
 
@@ -36,33 +37,31 @@ const MealPage = () => {
 
   useEffect(() => {
     trigger({
-      // path: `/records?date=${date}&userId=5c97c044-ea91-4e3e-bf76-eae150c317d1`,
       path: `/records?date=${date}`,
     });
-  }, []);
+  }, [date]);
 
   useEffect(() => {
     if (!result?.data) return;
-    const mealData = result.data[selectedMealNumber] as selecetedMealDataType;
-    console.log(mealData);
-    if (selectedMealNumber && mealData) {
-      if (mealData.foods && mealData.imgUrl) {
-        setData(result.data);
-        setCoordinate(mealData.foods);
-        setImgData(mealData.imgUrl || '');
+    const mealData = result.data;
+    if (mealData) {
+      setData(result.data);
+      if (mealData && mealData[selectedMealNumber]) {
+        setCoordinate(mealData[selectedMealNumber].foods);
+        setImgData(mealData[selectedMealNumber].imgUrl || '');
       }
     } else {
       setData({});
       setCoordinate([]);
       setImgData('');
     }
-  }, [result, selectedMealNumber]);
+  }, [result?.data]);
 
   useEffect(() => {
     if (selectedMealNumber) {
       navigate(`/record/${date}/${selectedMealNumber}`);
     }
-  }, [selectedMealNumber, date]);
+  }, [date]);
 
   const handleMealSelect = (mealType: string) => {
     setSelectedMeal(mealType);
@@ -88,24 +87,10 @@ const MealPage = () => {
       <div className={style.container}>
         <div className={style.pageTitle}>
           <div>{formatDate}</div>
-          <div className={style.mealToggle}>
-            <div onClick={() => setDropdownVisible(!isDropdownVisible)}>
-              {selectedMeal || '아침'} ▼
-            </div>
-            {isDropdownVisible && (
-              <div className={style.dropdown}>
-                {mealTypes.map((mealType) => (
-                  <div
-                    key={mealType}
-                    onClick={() => handleMealSelect(mealType)}
-                    className={selectedMeal === mealType ? style.active : ''}
-                  >
-                    {mealType}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <MealDropDown
+            selectedMeal={selectedMeal}
+            handleMealSelect={handleMealSelect}
+          />
           <div className={style.headerButton}>
             {data[selectedMealNumber] &&
               data[selectedMealNumber].foods.length > 0 && (
