@@ -119,11 +119,11 @@ export class RecordRepository extends Repository<Record> {
       };
   
       // 각 영양소의 누적 값을 계산
-      mealAccumulator[mealType].totalCalories += record.totalCalories;
-      mealAccumulator[mealType].totalNutrient.carbohydrates += record.carbohydrates;
-      mealAccumulator[mealType].totalNutrient.proteins += record.proteins;
-      mealAccumulator[mealType].totalNutrient.fats += record.fats;
-      mealAccumulator[mealType].totalNutrient.dietaryFiber += record.dietaryFiber;
+      mealAccumulator[mealType].totalCalories += record.totalCalories / 100;
+      mealAccumulator[mealType].totalNutrient.carbohydrates += record.carbohydrates / 100;
+      mealAccumulator[mealType].totalNutrient.proteins += record.proteins / 100;
+      mealAccumulator[mealType].totalNutrient.fats += record.fats / 100;
+      mealAccumulator[mealType].totalNutrient.dietaryFiber += record.dietaryFiber / 100;
   
       // 해당 식사 유형에 음식 데이터를 추가
       mealAccumulator[mealType].foods.push(foodData);
