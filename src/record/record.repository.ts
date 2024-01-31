@@ -34,98 +34,98 @@ export class RecordRepository extends Repository<Record> {
       recordRepository.queryRunner
     );
   }
-
+  // 식단 조회
   async findByDate(userId: string, date: string): Promise<any> {
     const dateObj = new Date(date);
     const records = await this.recordRepository.find({
       where: {
+        userId,
         firstRecordDate: Equal(dateObj),
       },
     });
   
-    if (!records.length) {
-      throw new NotFoundException(`해당 날짜에 대한 기록을 찾을 수 없습니다: ${date}`);
-    }
-
-    // 사용자의 건강 정보를 조회
-    const healthInfo = await this.healthInfoRepository.findOneBy({ 
-      userId: userId,
-      updatedDate: LessThanOrEqual(dateObj)
+    // 사용자의 건강 정보를 가져옵니다.
+    const healthInfo = await this.healthInfoRepository.findOne({
+      where: {
+        userId,
+        updatedDate: LessThanOrEqual(dateObj),
+      },
     });
+  
     if (!healthInfo) {
-      throw new NotFoundException(`건강 정보를 찾을 수 없습니다: 사용자 ID ${userId}`);
+      throw new NotFoundException(`Health info 정보가 없는 user ID ${userId}`);
     }
   
-    // 식사 기록 비동기적으로 조회
+    // 각 mealType에 대한 기본 정보를 설정합니다.
+    const defaultMealInfo = {
+      targetCalories: healthInfo.targetCalories,
+      recommendNutrient: {
+        carbohydrates: healthInfo.recommendIntake[0],
+        proteins: healthInfo.recommendIntake[1],
+        fats: healthInfo.recommendIntake[2],
+        dietaryFiber: healthInfo.recommendIntake[3],
+      },
+    };
+  
+    // mealType에 따라 정보를 누적할 객체를 준비합니다.
     const mealAccumulator = {};
+    for (let mealType = 1; mealType <= 4; mealType++) {
+      mealAccumulator[mealType] = { 
+        foods: [], 
+        totalCalories: 0, 
+        totalNutrient: { carbohydrates: 0, proteins: 0, fats: 0, dietaryFiber: 0 }, 
+        ...defaultMealInfo 
+      };
+    }
   
+    // 조회된 레코드들을 처리합니다.
     for (const record of records) {
-      const foodInfo = await this.foodInfoRepository.findOneBy({
-        foodInfoId: record.foodInfoId,
+      const foodInfo = await this.foodInfoRepository.findOne({
+        where: {
+          foodInfoId: record.foodInfoId,
+        },
       });
-  
+      
       if (!foodInfo) {
-        throw new NotFoundException(`음식 정보를 찾을 수 없습니다: ID ${record.foodInfoId}`);
+        continue; // 음식 정보가 없는 경우에는 이 레코드를 건너뜁니다.
       }
   
-      // splitImageRepository에서 XY 좌표 정보를 조회
-      const splitImageRecord = await this.splitImageRepository.findOneBy({
-        imageId: record.imageId,
-      });
-  
-      // imageRecordRepository에서 이미지 URL을 조회
-      const imageRecord = await this.imageRecordRepository.findOneBy({
-        imageId: record.imageId,
+      const splitImageRecord = await this.splitImageRepository.findOne({
+        where: {
+          imageId: record.imageId,
+        },
       });
   
       const mealType = record.mealType;
-      if (!mealAccumulator[mealType]) {
-        mealAccumulator[mealType as number] = { foods: [], totalCalories: 0, totalNutrient: {
-          carbohydrates: 0,
-          proteins: 0,
-          fats: 0,
-          dietaryFiber: 0,
-        }, 
-        imgUrl: imageRecord ? imageRecord.foodImageUrl : undefined,
-        targetCalories: healthInfo.targetCalories,
-        recommendNutrient: {
-          carbohydrates: healthInfo.recommendIntake[0],
-          proteins: healthInfo.recommendIntake[1],
-          fats: healthInfo.recommendIntake[2],
-          dietaryFiber: healthInfo.recommendIntake[3],
-        },
-      }
+      const foodData = {
+        foodInfoId: record.foodInfoId,
+        recordId: record.recordId, // 또는 다른 식별자
+        foodName: foodInfo.foodName,
+        counts: record.foodCounts,
+        XYCoordinate: splitImageRecord ? [splitImageRecord.xCoordinate, splitImageRecord.yCoordinate, splitImageRecord.width, splitImageRecord.height] : [],
+      };
+  
+      // 각 영양소의 누적 값을 계산합니다.
+      mealAccumulator[mealType].totalCalories += record.totalCalories;
+      mealAccumulator[mealType].totalNutrient.carbohydrates += record.carbohydrates;
+      mealAccumulator[mealType].totalNutrient.proteins += record.proteins;
+      mealAccumulator[mealType].totalNutrient.fats += record.fats;
+      mealAccumulator[mealType].totalNutrient.dietaryFiber += record.dietaryFiber;
+  
+      // 해당 식사 유형에 음식 데이터를 추가합니다.
+      mealAccumulator[mealType].foods.push(foodData);
     }
   
-    const food = {
-      foodInfoId: record.foodInfoId,
-      recordId: record.recordId,
-      foodName: foodInfo.foodName,
-      counts: record.foodCounts,
-      XYCoordinate: splitImageRecord
-        ? [
-            splitImageRecord.xCoordinate,
-            splitImageRecord.yCoordinate,
-            splitImageRecord.height,
-            splitImageRecord.width,
-          ]
-        : [],
-    };
-  
-    // 영양소 계산 로직을 추가
-    mealAccumulator[mealType].totalCalories += record.totalCalories;
-    mealAccumulator[mealType].totalNutrient.carbohydrates += record.carbohydrates;
-    mealAccumulator[mealType].totalNutrient.proteins += record.proteins;
-    mealAccumulator[mealType].totalNutrient.fats += record.fats;
-    mealAccumulator[mealType].totalNutrient.dietaryFiber += record.dietaryFiber;
-
-    mealAccumulator[mealType].foods.push(food);
+  // 최종 정보 반환
+  const response = {};
+  for (const mealType in mealAccumulator) {
+    if (mealAccumulator[mealType].foods.length > 0) {
+      response[mealType] = mealAccumulator[mealType];
+    } else {
+      // foods 배열이 비어 있으면 defaultMealInfo만 포함
+      response[mealType] = { ...defaultMealInfo };
+    }
   }
-
-  // 최종 응답 데이터를 전달
-  const response = {
-    ...mealAccumulator
-  };
 
   return response;
 }
