@@ -8,6 +8,7 @@ import { MealType, Record } from "./record.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
@@ -56,12 +57,11 @@ export class RecordRepository extends Repository<Record> {
     })
   
     // 사용자의 건강 정보
-    const healthInfo = await this.healthInfoRepository.findOne({
-      where: {
-        userId: userId,
-        healthInfoId: user.recentHealthInfoId,
-      },
-    });
+    const healthInfo = await this.healthInfoRepository.createQueryBuilder('healthInfo')
+      .where('healthInfo.userId = :userId', { userId: userId })
+      .andWhere('healthInfo.updatedDate <= :recordedDate', { recordedDate: dateObj })
+      .orderBy('healthInfo.updatedDate', 'DESC')
+      .getOne();
   
     if (!healthInfo) {
       throw new NotFoundException(`Health info 정보가 없는 user ID ${userId}`);
@@ -129,19 +129,19 @@ export class RecordRepository extends Repository<Record> {
       mealAccumulator[mealType].foods.push(foodData);
     }
   
-  // 최종 정보 반환
-  const response = {};
-  for (const mealType in mealAccumulator) {
-    if (mealAccumulator[mealType].foods.length > 0) {
-      response[mealType] = mealAccumulator[mealType];
-    } else {
-      // foods 배열이 비어 있으면 defaultMealInfo만 포함
-      response[mealType] = { ...defaultMealInfo };
+    // 최종 정보 반환
+    const response = {};
+    for (const mealType in mealAccumulator) {
+      if (mealAccumulator[mealType].foods.length > 0) {
+        response[mealType] = mealAccumulator[mealType];
+      } else {
+        // foods 배열이 비어 있으면 defaultMealInfo만 포함
+        response[mealType] = { ...defaultMealInfo };
+      }
     }
-  }
 
-  return response;
-}
+    return response;
+  }
 
   // 식사 기록 생성
   async createRecord(userId: string, createRecordDto: CreateRecordDto): Promise<Record[]> {
@@ -153,12 +153,27 @@ export class RecordRepository extends Repository<Record> {
     let cumulativeDietaryFiber = 0;
     let cumulativeTotalCalories = 0;
 
+    // 현재 날짜를 기준으로 설정
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // 시간, 분, 초, 밀리초를 0으로 설정하여 날짜만 고려
+
+    // 해당 날짜에 mealType이 이미 존재하는지 확인
+    const existingRecord = await this.recordRepository.findOne({
+      where: {
+        userId: userId,
+        mealType: mealType,
+        firstRecordDate: Equal(today)
+      },
+    });
+
+    // 이미 존재한다면 생성 제한
+    if (existingRecord) {
+      throw new ConflictException(`이미 있는 mealType: ${mealType} 입니다`);
+    }
+
     const foodImage = await this.imageRecordRepository.findOneBy({
       foodImageUrl: imgUrl,
     });
-    if (!foodImage) {
-      throw new NotFoundException(`이미지를 찾을 수 없습니다: ${imgUrl}`);
-    }
 
     for (const food of foods) {
       const foodInfo = await this.foodInfoRepository.findOneBy({
@@ -277,8 +292,6 @@ export class RecordRepository extends Repository<Record> {
       },
     });
 
-    console.log("existingRecords : ", existingRecords)
-
     const imageRecord = await this.imageRecordRepository.findOneBy({
       foodImageUrl: updateRecordDto.imgUrl,
     });
@@ -372,19 +385,18 @@ export class RecordRepository extends Repository<Record> {
         }
       });
 
-      await this.splitImageRepository.delete({
-        imageId: record.imageId,
-        foodName: record.recordFoodName
-      });
+        await this.splitImageRepository.delete({
+          imageId: record.imageId,
+          foodName: record.recordFoodName
+        });
 
-      // 레코드 삭제
-      await this.recordRepository.delete(record.recordId);  
- 
+        // 레코드 삭제
+        await this.recordRepository.delete(record.recordId);  
+      }
+      // 누적 영양 정보 업데이트
+      await this.updateCumulativeNutrients(userId, mealType, recordDate);    
     }
-    // 누적 영양 정보 업데이트
-    await this.updateCumulativeNutrients(userId, mealType, recordDate);    
   }
-}
 
   // 누적 정보 업데이트 로직
   async updateCumulativeNutrients(userId: string, mealType: number, date: Date) {

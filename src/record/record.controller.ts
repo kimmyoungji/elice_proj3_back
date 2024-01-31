@@ -31,6 +31,7 @@ export class RecordController {
   }
 
   // POST /records
+  @UseGuards(isLoggedInGuard)
   @Post()
   @UsePipes(new ValidateFoodPipe())
   @ApiOperation({ summary: "식단 기록" })
@@ -45,6 +46,7 @@ export class RecordController {
 
 
   // PUT /records?date=yyyy-mm-dd&mealType
+  @UseGuards(isLoggedInGuard)
   @Put()
   @ApiOperation({ summary: "특정 날짜와 식단 구분 수정" })
   async updateDailyRecord(
@@ -59,6 +61,7 @@ export class RecordController {
   }
 
   // DELETE /records?date=yyyy-mm-dd&mealType
+  @UseGuards(isLoggedInGuard)
   @Delete()
   @ApiOperation({ summary: "특정 날짜와 식단 구분 삭제" })
   async deleteDailyRecord(
