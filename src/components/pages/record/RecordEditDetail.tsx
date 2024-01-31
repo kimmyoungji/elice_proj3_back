@@ -1,9 +1,10 @@
 import InputCommon from '@components/UI/InputCommon';
 import styles from './recordeditdetail.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useApi from '@hooks/useApi';
 import useIntersect from '@hooks/useIntersect';
+import getFoodId from '@utils/getFoodId';
 
 interface Nutrition {
   name: string;
@@ -14,37 +15,33 @@ interface FoodInfo {
   foodName: string;
 }
 
+interface Food {
+  foodName: string;
+  XYCoordinate: number[];
+  counts: number;
+  foodInfoId?: string;
+  calories?: number;
+  carbohydrates?: number;
+  dietaryFiber?: number;
+  fats?: number;
+  proteins?: number;
+  totalCapacity?: number;
+}
+
 interface Props {
   focus: number | undefined;
-  foods: {
-    foodName: string;
-    XYCoordinate: number[];
-    counts: number;
-    foodInfoId: string;
-    calories?: number;
-    carbohydrates?: number;
-    dietaryFiber?: number;
-    fats?: number;
-    proteins?: number;
-    totalCapacity?: number;
-  }[];
-  setFoods: React.Dispatch<
-    React.SetStateAction<
-      {
-        foodName: string;
-        XYCoordinate: number[];
-        counts: number;
-        foodInfoId: string;
-        calories?: number;
-        carbohydrates?: number;
-        dietaryFiber?: number;
-        fats?: number;
-        proteins?: number;
-        totalCapacity?: number;
-      }[]
-    >
-  >;
+  foods: Food[];
+  setFoods: React.Dispatch<React.SetStateAction<Food[]>>;
 }
+
+interface Result {
+  data: Food;
+}
+
+interface SearchResult {
+  data: FoodInfo[];
+}
+
 
 const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
   const [searchInput, setSearchInput] = useState('');
@@ -58,7 +55,7 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
     ? `/food-info/foods?${byFoodInfoId}`
     : `/food-info/foods?${byFoodName}`;
 
-  const { result, trigger } = useApi({
+  const { result, trigger } = useApi<Result>({
     path: path,
   });
 
@@ -72,8 +69,10 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
     if (!result) return;
     if (focus === undefined) return;
     let res = result.data;
-    delete res.foodName;
-    const newFocusFood = { ...focusing, ...res };
+    res.foodName = focusing.foodName;
+    res.counts = focusing.counts;
+    res.XYCoordinate = focusing.XYCoordinate;
+    const newFocusFood = { ...res };
     let copyFoods = [...foods];
     copyFoods[focus] = newFocusFood;
     setFoods(copyFoods);
@@ -82,34 +81,31 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
   const [searchResults, setSearchResults] = useState(['']);
   const [foodInfo, setFoodInfo] = useState<FoodInfo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  
-  
-    const firstSearch = useApi({
-      path: `/food-info/foods?keyword=${searchInput}`,
-    });
-  
-    const handleSearch = () => {
-      if (!searchInput) return;
-      if (searchResults.length >= 10) return;
-      firstSearch.trigger({});
-    };
-  
-    useEffect(() => {
-      if (!firstSearch.result) return;
-      const newResults = firstSearch.result.data.map((food: FoodInfo) => (
-        food.foodName.includes('_')
-          ? food.foodName.split('_')[1]
-          : food.foodName
-    ));
-      setSearchResults(newResults);
-      setFoodInfo(firstSearch.result.data);
-      setSearching(true);
-    }, [firstSearch.result])
 
-    const lastFoodId =
+  const firstSearch = useApi<SearchResult>({
+    path: `/food-info/foods?keyword=${searchInput}`,
+  });
+
+  const handleSearch = () => {
+    if (!searchInput) return;
+    if (searchResults.length >= 10) return;
+    firstSearch.trigger({});
+  };
+
+  useEffect(() => {
+    if (!firstSearch.result) return;
+    const newResults = firstSearch.result.data.map((food: FoodInfo) =>
+      food.foodName.includes('_') ? food.foodName.split('_')[1] : food.foodName
+    );
+    setSearchResults(newResults);
+    setFoodInfo(firstSearch.result.data);
+    setSearching(true);
+  }, [firstSearch.result]);
+
+  const lastFoodId =
     foodInfo.length > 0 && foodInfo[foodInfo.length - 1].foodInfoId;
-  
-  const scrollSearch = useApi({
+
+  const scrollSearch = useApi<SearchResult>({
     path: `/food-info/foods?keyword=${searchInput}&lastFoodId=${lastFoodId}`,
   });
 
@@ -133,7 +129,6 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
     onIntersect,
   });
 
-
   useEffect(() => {
     if (!scrollSearch.result) return;
     const newResults = scrollSearch.result.data.map((food: FoodInfo) =>
@@ -149,18 +144,17 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
     } else {
       let newArr = [...foods];
       if (focus === undefined) return;
-      const getFoodId = (tag:string) => {
-        for (let i = 0; i < foodInfo.length; i++){
-          if (foodInfo[i].foodName.split('_')[1] === tag || foodInfo[i].foodName.split('_')[1] ===(tag.split(searchInput)[0])) return foodInfo[i].foodInfoId;
-          if (foodInfo[i].foodName===tag) return foodInfo[foodInfo.findIndex((info)=>info.foodName===tag)].foodInfoId;
-        }
-      }
+
       const newObj = {
         foodName: e.currentTarget.textContent as string,
         XYCoordinate: newArr[focus].XYCoordinate,
         counts: newArr[focus].counts,
-        foodInfoId: getFoodId(e.currentTarget.textContent as string) as string,
-      }
+        foodInfoId: getFoodId(
+          e.currentTarget.textContent as string,
+          foodInfo,
+          searchInput
+        ) as string,
+      };
       newArr[focus] = newObj;
       setFoods(newArr);
       setSearching(false);
@@ -173,7 +167,7 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
     copyArr[focus].counts += 0.25;
     setFoods(copyArr);
   };
-  
+
   const decrement = () => {
     if (focus === undefined) return;
     if (focusing.counts === 0.25) {
@@ -185,10 +179,16 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
     }
   };
 
-  const calCH = Math.round((focusing.carbohydrates as number) * focusing.counts);
-  const calPT = Math.round((focusing.proteins as number) * focusing.counts);
-  const calFT = Math.round((focusing.fats as number) * focusing.counts);
-  const calDF = Math.round((focusing.dietaryFiber as number) * focusing.counts);
+  const [calCH, calPT, calFT, calDF] = useMemo(
+    () =>
+      [
+        focusing.carbohydrates,
+        focusing.proteins,
+        focusing.fats,
+        focusing.dietaryFiber,
+      ].map((data) => data && Math.round(data * focusing.counts)),
+    [focusing]
+  );
 
   const nutrients = [
     { name: '탄수화물', gram: calCH ? calCH : 0 },
@@ -202,7 +202,10 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
       <div className={styles.titlebox}>
         <p className='s-large'>{focusing.foodName}</p>
         <p className='r-super' style={{ marginLeft: 'auto' }}>
-          {focusing.calories ? Math.round(focusing.counts * focusing.calories) : 0}Kcal
+          {focusing.calories
+            ? Math.round(focusing.counts * focusing.calories)
+            : 0}
+          Kcal
         </p>
       </div>
 
@@ -306,7 +309,10 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
         <div className={styles.caltext}>
           <p className='r-large'>얼마나 먹었나요?</p>
           <p className='r-super'>
-            {focusing.totalCapacity ? focusing.counts * focusing.totalCapacity : 0}g
+            {focusing.totalCapacity
+              ? focusing.counts * focusing.totalCapacity
+              : 0}
+            g
           </p>
         </div>
         <div className={styles.calinput}>
