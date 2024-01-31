@@ -1,5 +1,5 @@
 .container {
-  height: 704px;
+  height: 674px;
   display: flex;
   flex-direction: column;
 }
@@ -16,14 +16,15 @@
 
 .resultbox {
   flex: auto;
+  max-height: 400px;
   padding: 0px 20px;
   align-items: start;
   position: relative;
 }
 
 .tagbox {
-  min-height: 80px;
-  margin: 19px 20px 0px 20px;
+  min-height: 90px;
+  margin: 20px 20px 20px 20px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;

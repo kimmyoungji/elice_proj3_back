@@ -1,25 +1,49 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styles from './recordedit.module.css';
 import RecordEditDetail from './RecordEditDetail';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import { MergingTags } from './MergingTags';
+import useApi from '@hooks/useApi';
 
 interface Food {
   foodName: string;
   XYCoordinate: number[];
   counts: number;
-  foodInfoId: string;
+  foodInfoId?: string;
   calories?: number;
   carbohydrates?: number;
   dietaryFiber?: number;
   fats?: number;
   proteins?: number;
   totalCapacity?: number;
+  recordId?: string;
 }
 
 interface MealTime {
   [key: string]: string;
+}
+
+interface Result {
+  config: {};
+  data: string;
+  headers: {};
+  request: {};
+  status: number;
+  statusText: string;
+}
+
+interface FoodInfoList {
+  foodInfoIdList: string[];
+}
+
+interface SearchIdResult {
+  config: {};
+  data: FoodInfoList;
+  headers: {};
+  request: {};
+  status: number;
+  statusText: string;
 }
 
 const RecordEdit = () => {
@@ -37,15 +61,32 @@ const RecordEdit = () => {
     '4': '간식',
   };
 
-  const [foods, setFoods] = useState([
-    {
-      foodName: '',
-      XYCoordinate: [0, 0, 0, 0],
-      counts: 1,
-      foodInfoId: '',
-    },
-  ]);
+  const [foods, setFoods] = useState<Food[]>([{
+    foodName: '',
+    XYCoordinate: [],
+    counts: 1,
+  }]);
   const [imgUrl, setImgUrl] = useState('');
+
+  function base64toFile(base_data: string, filename: string) {
+    const arr = base_data.split(',');
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, { type: 'image/jpg' });
+  }
+
+
+  const fileName = useMemo(() => {
+    return date + ' ' + mealTimetoStr[mealTime as string] + Math.random() + '.jpg';
+  }, []);
+  const file = imgUrl && base64toFile(imgUrl, fileName);
+
 
   useEffect(() => {
     if (state) {
@@ -53,6 +94,7 @@ const RecordEdit = () => {
       setImgUrl(state.imgUrl);
     }
   }, []);
+
 
   const [focus, setFocus] = useState<number | undefined>();
 
@@ -133,10 +175,118 @@ const RecordEdit = () => {
     });
   }, [foods]);
 
+  const presignedUrl = useApi<Result>({
+    method: 'post',
+  });
+
+  const s3Upload = useApi<Result>({
+    method: 'put',
+  });
+
+  const recordPost = useApi<Result>({
+    method:'post',
+  })
+
+  const recordPut = useApi<Result>({
+    method: 'put',
+  })
+
+  const getFoodInfoId = useApi<SearchIdResult>({
+    method:'post'
+  })
+
+  useEffect(() => {
+    if (!foods || foods[0].foodName === '') return;
+    if (foods[0].foodInfoId) return;
+    const foodList = foods.map((food) => food.foodName);
+    getFoodInfoId.trigger({
+      path: '/food-info/foods',
+      data:{foodList}
+    })
+  }, [foods])
+  
+  useEffect(() => {
+    if (!getFoodInfoId.result) return;
+    const foodInfoIdList = getFoodInfoId.result.data.foodInfoIdList;
+    const newArr = [...foods];
+    newArr.map((food, index) => {
+      food.foodInfoId = foodInfoIdList[index];
+  })
+    setFoods(newArr);
+  },[getFoodInfoId.result])
+
+  useEffect(() => {
+    if (imgUrl===undefined||imgUrl==='') return;
+    if (presignedUrl.result && !file) return;
+    if (foods[0].recordId) return;
+    presignedUrl.trigger({
+      path:`/image/presigned-url/food/${fileName}`,
+      data:{fileName}
+    })
+  },[imgUrl])
+
+
+  useEffect(() => {
+    if (imgUrl === undefined) return;
+    if (foods[0].recordId) return;
+    if (!presignedUrl.result && !file) return;
+    s3Upload.trigger({
+      path: presignedUrl.result?.data,
+      data:file
+    });
+  },[presignedUrl.result?.data])
+
+
   const editDone = () => {
-    //수정완료 된 foodDate api
-    navigate(`/record/${date}/${mealTime}`);
-  };
+    const pUrl = imgUrl && presignedUrl.result?.data.split('?')[0];
+    if (!foods || foods[0].foodName === '' || !foods[0].foodInfoId) return;
+    const newFoods = [...foods];
+    newFoods.map((food: Food) => {
+      
+      delete food.calories;
+      delete food.carbohydrates;
+      delete food.dietaryFiber;
+      delete food.fats;
+      delete food.proteins;
+      delete food.totalCapacity;
+    })
+
+    if (newFoods[0].recordId) {
+      recordPut.trigger({
+        path: `/records?date=${date}&mealType=${mealTime}`,
+        data: {
+          mealType: mealTime ,
+          foodImageUrl: imgUrl,
+          foods:newFoods,
+        }
+      })
+    }
+
+    if (!newFoods[0].recordId) {
+      recordPost.trigger({
+        path: '/records',
+        data: {
+          mealType:  mealTime ,
+          foodImageUrl:  pUrl ,
+          foods:newFoods,
+        }
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (!recordPost.result) return;
+    if (recordPost.result.data === '식단 기록 성공') {
+      navigate(`/record/${date}/${mealTime}`); 
+    }
+  },[recordPost.result])
+
+  useEffect(() => {
+    if (!recordPut.result) return;
+    if (recordPut.result.data === '식단 기록 성공') {
+      navigate(`/record/${date}/${mealTime}`); 
+    }
+  },[recordPut.result])
 
   return (
     <>
@@ -227,11 +377,7 @@ const RecordEdit = () => {
         </div>
       </div>
       {focus !== undefined && (
-        <RecordEditDetail
-          focus={focus}
-          foods={foods}
-          setFoods={setFoods}
-        />
+        <RecordEditDetail focus={focus} foods={foods} setFoods={setFoods} />
       )}
 
       <div className={styles.btnbox}>
