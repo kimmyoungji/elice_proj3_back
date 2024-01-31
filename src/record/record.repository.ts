@@ -113,7 +113,7 @@ export class RecordRepository extends Repository<Record> {
       const foodData = {
         foodInfoId: record.foodInfoId,
         recordId: record.recordId,
-        recordFoodName: record.recordFoodName,
+        foodName: record.recordFoodName,
         counts: record.foodCounts,
         XYCoordinate: splitImageRecord ? [splitImageRecord.xCoordinate, splitImageRecord.yCoordinate, splitImageRecord.width, splitImageRecord.height] : [],
       };
