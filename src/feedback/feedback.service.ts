@@ -35,14 +35,15 @@ export class FeedbackService {
         feedbackDate: date,
       };
       const feedbackData = new Feedback().checkfeedbackDataDto(checkdata);
-      const checkResult = await this.feedBackRepository.checkFeedBack(
-        feedbackData,
-        queryRunner.manager
-      );
+      const { feedback, feedbackId } =
+        await this.feedBackRepository.checkFeedBack(
+          feedbackData,
+          queryRunner.manager
+        );
       // 만약 동일 유저의 질문이 있다면, api 호출 x
-      if (checkResult) {
+      if (feedbackId) {
         await queryRunner.commitTransaction();
-        return checkResult.feedback;
+        return { feedback: feedback, feedbackId: feedbackId };
       } else {
         // 만약 동일 유저의 질문이 없다면, api 호출
         // const totalResult = await this.cumulativeRepository.getDateRecord(

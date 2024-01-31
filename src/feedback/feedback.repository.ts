@@ -33,7 +33,7 @@ export class FeedbackRepository {
         checkfeedbackData;
       return await manager
         .createQueryBuilder(Feedback, "feedback")
-        .select("feedback.feedback")
+        .select(["feedback.feedback", "feedback.feedback_id"])
         .where("feedback.user_id =:userId", { userId })
         .where("feedback.feedback_date =:feedbackDate", {
           feedbackDate,
