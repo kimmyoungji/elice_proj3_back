@@ -16,14 +16,13 @@ const nowDay = now.getDay();
 
 const currentLastDayIndex = new Date(nowYear, nowMonth + 1, 0).getDate(); // 이번달 마지막 날짜
 const lastLastDayIndex = new Date(nowYear, nowMonth, 0).getDate(); // 저번달 마지막 날짜
-const currentFirstDayIndex = new Date(nowYear, nowMonth, 1).getDate(); // 이번달 첫번째 날
-const totalWeek = Math.ceil((lastLastDayIndex + currentFirstDayIndex) / 7); // 이번달 전체 주차
-const nowWeek = Math.ceil((nowDate + currentFirstDayIndex) / 7); // 이번달 지금 주차
+const currentFirstDayIndex = new Date(nowYear, nowMonth, 1).getDay(); // 이번달 첫번째 날
+const totalWeek = Math.ceil(
+  (currentLastDayIndex + currentFirstDayIndex + 1) / 7
+); // 이번달 전체 주차
+const nowWeek = Math.ceil((nowDate + 1) / 7); // 이번달 지금 주차
 
 const Home = () => {
-  console.log('lastLastDayIndex: ', lastLastDayIndex);
-  console.log('currentFirstDayIndex: ', currentFirstDayIndex);
-
   const [selectedWeek, setSelectedWeek] = useState(nowWeek);
   const [selectedDay, setSelectedDay] = useState(nowDay);
   const [selectedNow, setSelectedNow] = useState(true);
@@ -45,12 +44,12 @@ const Home = () => {
 
   useEffect(() => {
     triggerData();
-  }, [selectedDay]);
+  }, [date]);
 
   const handleClick = (idx: number) => {
     setSelectedDay(idx);
     setDate(
-      `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${currentWeekArr[idx]}`
+      `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${currentWeekArr[idx] >= 10 ? currentWeekArr[idx] : `0${currentWeekArr[idx]}`}`
     );
     // setDate로 api 콜할 날짜 변경해주기
     if (idx === nowDay) {
@@ -68,10 +67,8 @@ const Home = () => {
   };
 
   const weekly = () => {
-    const firstDate = (selectedWeek - 1) * 7; // 해당주차 일요일 날짜
+    const firstDate = (selectedWeek - 1) * 7 - currentFirstDayIndex + 1; // 해당주차 일요일 날짜
     const newWeekArr = [];
-    console.log(firstDate);
-
     for (let i = 0; i < 7; i++) {
       let date = firstDate + i;
       //마지막 데이터가 다음월이거나 처음 데이터가 전월인 경우
@@ -80,6 +77,15 @@ const Home = () => {
       }
       newWeekArr.push(date);
     }
+    for (let i = 0; i < 7; i++) {
+      if (newWeekArr[i] !== 0) {
+        setSelectedDay(i);
+        setDate(
+          `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${newWeekArr[i] >= 10 ? newWeekArr[i] : `0${newWeekArr[i]}`}`
+        );
+        break;
+      }
+    }
     setCurrentWeekArr(newWeekArr);
     setIsOpen(false);
   };
@@ -87,8 +93,6 @@ const Home = () => {
   useEffect(() => {
     weekly();
   }, [selectedWeek]);
-
-  console.log(currentWeekArr);
 
   return (
     <div className={styles.home_wrapper}>
