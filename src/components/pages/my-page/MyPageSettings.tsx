@@ -2,7 +2,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import style from './mypagesettings.module.css';
 import { useEffect, useState } from 'react';
 import useApi from '@hooks/useApi';
-import { Modal } from './MyPageModal';
+import { Modal } from '../../UI/Modal';
+import { mapSelectModalMsg } from '../../UI/Modal';
 import MyPageDropdown from './MyPageDropdwon';
 import { findKeyByValue, gendertoMsg } from './mapMsg';
 import { loginUser } from '@components/store/userLoginRouter';
@@ -17,7 +18,8 @@ const MyPageSettings = () => {
   const { nickname, gender } = location.state;
   const [isEditing, setisEditing] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [modalSelect, setModalSelect] = useState(false);
+  const [modalSelect, setModalSelect] = useState('');
+  const [modalMsg, setModalMsg] = useState('');
   const [genderSelect, setGenderSelect] = useState(gendertoMsg[gender]);
   const [isGenderDropdwonVisible, setGenderDropdownVisible] = useState(false);
   const [newNickname, setNewNickName] = useState(nickname);
@@ -86,7 +88,8 @@ const MyPageSettings = () => {
 
   const handleLogOut = () => {
     setShowModal(true);
-    setModalSelect(true);
+    setModalSelect('login');
+    setModalMsg(mapSelectModalMsg.login);
   };
 
   const handleConfirmLogout = () => {
@@ -102,7 +105,8 @@ const MyPageSettings = () => {
 
   const handleWithdrawal = () => {
     setShowModal(true);
-    setModalSelect(false);
+    setModalSelect('withdrawal');
+    setModalMsg(mapSelectModalMsg.withdrawal);
   };
 
   const handleConfirmWithdrawal = () => {
@@ -110,15 +114,17 @@ const MyPageSettings = () => {
     dispatch(logoutUser());
   };
 
+  const confirmHandler =
+    modalSelect === 'login' ? handleConfirmLogout : handleConfirmWithdrawal;
+
   return (
     <>
       {showModal && (
         <Modal
           modalSelect={modalSelect}
+          modalMsg={modalMsg}
           onClose={() => setShowModal(false)}
-          onConfirm={
-            modalSelect ? handleConfirmLogout : handleConfirmWithdrawal
-          }
+          onConfirm={confirmHandler}
         />
       )}
       <div className={style.container}>

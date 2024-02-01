@@ -4,6 +4,7 @@ import getDates from '@utils/getDates';
 import { useState, useEffect } from 'react';
 import { mapSelectMealToMsg, mealTypes } from './recordMappingConstant';
 import useApi, { TriggerType } from '@hooks/useApi';
+import { Modal, mapSelectModalMsg } from '@components/UI/Modal';
 import { RecordProps } from './RecordTypes';
 const mealLogo = '/images/9gram_logo_box.png';
 
@@ -21,6 +22,10 @@ const Record = () => {
       [number, number, string | null]
     >,
   });
+  const [showModal, setShowModal] = useState(false);
+  const [modalSelect, setModalSelect] = useState('');
+  const [modalMsg, setModalMsg] = useState('');
+  const [selectedMealDelete, setSelectedMealDelete] = useState(null);
 
   const {
     trigger,
@@ -34,7 +39,7 @@ const Record = () => {
 
   useEffect(() => {
     trigger({});
-  }, []);
+  }, [data?.data?.dateArr?.length]);
 
   useEffect(() => {
     if (data && data.data.dateArr?.length > 0) {
@@ -55,22 +60,47 @@ const Record = () => {
   const handleMealClick = (meal: number) => {
     navigate(`/record/${selectedDate || todayDate}/${meal}`);
   };
-  const handleMealDelete = (
-    event: React.MouseEvent<HTMLImageElement>,
-    meal: number
-  ) => {
-    event.stopPropagation();
+
+  const handleShowDelteModal = (meal: number) => {
+    setShowModal(true);
+    setModalSelect('mealDelete');
+    setModalMsg(mapSelectModalMsg.mealDelete);
+    setSelectedMealDelete(meal);
+  };
+
+  const handleMealDelete = () => {
+    if (selectedMealDelete === null) return;
     const updatedFoodData = { ...foodData };
-    updatedFoodData.dateArr[meal - 1] = [meal, 0, null];
+    updatedFoodData.dateArr[selectedMealDelete - 1] = [
+      selectedMealDelete,
+      0,
+      null,
+    ];
     trigger({
       method: 'delete',
       path: `/records?date=${todayDate}&mealType=${meal}`,
     });
     setFoodData(updatedFoodData);
+    setShowModal(false);
+    setSelectedMealDelete(null);
+  };
+
+  const handleConfirm = () => {
+    if (modalSelect === 'mealDelete') {
+      handleMealDelete();
+    }
   };
 
   return (
     <div>
+      {showModal && (
+        <Modal
+          modalSelect={modalSelect}
+          modalMsg={modalMsg}
+          onClose={() => setShowModal(false)}
+          onConfirm={handleConfirm}
+        />
+      )}
       <div className={style.meal_container}>
         <div className={style.meal_header}> {headerDate} </div>
         {foodData &&
@@ -117,7 +147,7 @@ const Record = () => {
                 onClick={(e) =>
                   !mealData[1] && !mealData[2]
                     ? handleMealClick(mealData[0])
-                    : handleMealDelete(e, mealData[0])
+                    : handleShowDelteModal(mealData[0])
                 }
                 alt={
                   !mealData[1] && !mealData[2]

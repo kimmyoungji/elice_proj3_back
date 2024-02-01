@@ -52,7 +52,12 @@ const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
                 navigate('/home');
               }
             } else if (!userData || !userData.username) {
-              navigate('/auth');
+              if (
+                window.location.pathname !== '/auth' &&
+                window.location.pathname !== '/login'
+              ) {
+                navigate('/auth');
+              }
             }
           },
         });
