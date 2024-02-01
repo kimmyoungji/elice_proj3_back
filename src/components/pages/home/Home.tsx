@@ -51,7 +51,6 @@ const Home = () => {
     setDate(
       `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${currentWeekArr[idx] >= 10 ? currentWeekArr[idx] : `0${currentWeekArr[idx]}`}`
     );
-    // setDate로 api 콜할 날짜 변경해주기
     if (idx === nowDay) {
       setSelectedNow(true);
     } else {
@@ -61,7 +60,6 @@ const Home = () => {
 
   const onToggle = () => setIsOpen(!isOpen);
 
-  // 드롭다운에서 주차 선택하면 주차 그리기
   const onClickWeek = (week: number) => {
     setSelectedWeek(week);
   };

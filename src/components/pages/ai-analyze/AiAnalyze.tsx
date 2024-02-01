@@ -38,16 +38,22 @@ const now = new Date();
 const nowYear = now.getFullYear();
 const nowMonth = now.getMonth();
 const nowDate = now.getDate();
+const lastLastDayIndex = new Date(nowYear, nowMonth, 0).getDate(); // 저번달 마지막 날짜
 
 const AiAnalyze = () => {
   const [recordText, setRecordText] = useState(false);
   const todayDate = `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${nowDate >= 10 ? nowDate : `0${nowDate}`}`;
-  // 최근 7일을 찾아야 함..
-  // const startDate = `${thisYear}-${thisMonth}-${thisDay}`;
+  const sixDays = nowDate - 6; // 6일 전
+  let startDate = '';
+  if (nowDate - 6 <= 0) {
+    const newSixDays = lastLastDayIndex + sixDays;
+    startDate += `${nowYear}-${nowMonth >= 10 ? nowMonth : `0${nowMonth}`}-${newSixDays >= 10 ? newSixDays : `0${newSixDays}`}`;
+  } else {
+    startDate += `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${sixDays >= 10 ? sixDays : `0${sixDays}`}`;
+  }
 
   const { trigger, result }: { trigger: any; result: any } = useCachingApi({
-    path: `/feedback?startDate=2024-01-23&date=2024-01-30`,
-    // path: `/feedback?startDate=${startDate}&date=${todayDate}`,
+    path: `/feedback?startDate=${startDate}&date=${todayDate}`,
     gcTime: 10000,
   });
 
@@ -95,38 +101,16 @@ const AiAnalyze = () => {
           num
       );
       const question = questionIdxList?.map((num, idx) => {
-        if (idx !== 3) {
-          if (
-            questionList.length === 0 ||
-            record.feedbackDate === questionList[questionList.length - 1].date
-          ) {
-            if (questionData[num].type.questionType === '질문선택') {
-              return {
-                date: record.feedbackDate,
-                questionIdx: num,
-                context: questionData[num],
-                answer: '다른 질문도 할래!',
-                feedbackId: record.feedbackId,
-              };
-            } else {
-              return {
-                date: record.feedbackDate,
-                questionIdx: num,
-                context: questionData[num],
-                answer: splitIdx
-                  ? questionData[questionIdxList[idx - 1]]?.button[
-                      Number(splitIdx[idx]) - 1
-                    ].text
-                  : '3',
-                feedbackId: record.feedbackId,
-              };
-            }
-          } else if (questionData[num].type.questionType === '질문선택') {
+        if (
+          questionList.length === 0 ||
+          record.feedbackDate === questionList[questionList.length - 1].date
+        ) {
+          if (questionData[num].type.questionType === '질문선택') {
             return {
               date: record.feedbackDate,
               questionIdx: num,
               context: questionData[num],
-              answer: '3',
+              answer: '다른 질문도 할래!',
               feedbackId: record.feedbackId,
             };
           } else {
@@ -142,8 +126,29 @@ const AiAnalyze = () => {
               feedbackId: record.feedbackId,
             };
           }
+        } else if (questionData[num].type.questionType === '질문선택') {
+          return {
+            date: record.feedbackDate,
+            questionIdx: num,
+            context: questionData[num],
+            answer: '3',
+            feedbackId: record.feedbackId,
+          };
+        } else {
+          return {
+            date: record.feedbackDate,
+            questionIdx: num,
+            context: questionData[num],
+            answer: splitIdx
+              ? questionData[questionIdxList[idx - 1]]?.button[
+                  Number(splitIdx[idx]) - 1
+                ].text
+              : '3',
+            feedbackId: record.feedbackId,
+          };
         }
       });
+      console.log(question);
       questionList.push(...(question as QuestionList));
     });
     return questionList;
