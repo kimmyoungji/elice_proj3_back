@@ -4,7 +4,6 @@ import BotBox from './BotBox';
 import UserBox from './UserBox';
 import { questionData } from './QuestionData';
 import { useNavigate } from 'react-router-dom';
-import getDates from '@utils/getDates';
 import useCachingApi from '@hooks/useCachingApi';
 import useApi from '@hooks/useApi';
 
@@ -145,7 +144,7 @@ const AiAnalyze = () => {
           }
         }
       });
-      questionList.push(...question);
+      questionList.push(...(question as QuestionList));
     });
     return questionList;
   };
@@ -184,17 +183,24 @@ const AiAnalyze = () => {
 
   const navigate = useNavigate();
 
-  const { trigger: askTrigger, result: askResult } = useApi({
+  const {
+    trigger: askTrigger,
+    result: askResult,
+  }: { trigger: any; result: any } = useApi({
     method: 'post',
     path: `/feedback?date=${todayDate}`,
+    shouldInitFetch: false,
   });
 
   const askGPT = async (askData: AskData) => {
     await askTrigger({
+      applyResult: true,
+      isShowBoundary: true,
       data: askData,
     });
   };
   const [gptAnswer, setGptAnswer] = useState('');
+  const [gptId, setGptId] = useState('');
 
   const handleOnClick = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -217,13 +223,14 @@ const AiAnalyze = () => {
         navigate('/');
       }
     } else if (questionData[questionIdx].button[idx].type === 'ai') {
-      console.log(questionData[questionIdx + '-' + String(idx + 1)].type);
-      askGPT(questionData[questionIdx + '-' + String(idx + 1)].type);
+      const askData = questionData[questionIdx + '-' + String(idx + 1)]
+        .type as AskData;
+      askGPT(askData);
       // 결과 기다리기
-      console.log(askResult);
       if (askResult) {
+        console.log(askResult);
         setGptAnswer(askResult?.data.feedback);
-        console.log(askResult?.data.feedbackId);
+        setGptId(askResult?.data.feedbackId);
       }
     }
   };
@@ -233,6 +240,7 @@ const AiAnalyze = () => {
       if (questionIdx.length === 5 || questionIdx === '1-3') {
         const newContext = questionData[questionIdx];
         newContext.text = gptAnswer + newContext.text;
+        console.log(gptId);
         setChats((prev) => [
           ...prev,
           {
@@ -240,7 +248,7 @@ const AiAnalyze = () => {
             questionIdx: questionIdx,
             context: newContext,
             answer: questionData[prevQuestionIdx].button[answerIdx].text,
-            feedbackId: 'askResult?.data.feedbackId',
+            feedbackId: gptId,
           },
         ]);
       } else {
@@ -251,7 +259,7 @@ const AiAnalyze = () => {
             questionIdx: questionIdx,
             context: questionData[questionIdx],
             answer: questionData[prevQuestionIdx].button[answerIdx].text,
-            feedbackId: 'askResult?.data.feedbackId',
+            feedbackId: gptId,
           },
         ]);
       }

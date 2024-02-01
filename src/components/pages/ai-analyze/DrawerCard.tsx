@@ -31,7 +31,7 @@ const DrawerCard = ({ id, date, type, tag, text }: Props) => {
   const [shareToast, setShareToast] = useState(false);
   const [deleteToast, setDeleteToast] = useState(false);
 
-  const { trigger, result, reqIdentifier, loading, error } = useApi({
+  const { trigger, result } = useApi({
     method: 'delete',
     path: `/feedback?feedbackId=${id}`,
     shouldInitFetch: false,

@@ -4,7 +4,7 @@ import classes from './album.module.css';
 import { useEffect, useState } from 'react';
 import useCachingApi from '@hooks/useCachingApi';
 import useIntersect from '@hooks/useIntersect';
-import AlbumBody from './AlbumBody';
+import AlbumBody from './Albumbody';
 export type MealType = '아침' | '점심' | '저녁' | '간식';
 
 export interface AlbumArrType {
