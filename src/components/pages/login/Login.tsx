@@ -50,6 +50,9 @@ const Login = () => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
+  const handleToast = () => {
+    setShowToast(true);
+  };
 
   const handleLogin: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -63,6 +66,7 @@ const Login = () => {
             '등록되지 않은 이메일 이거나, 유효하지 않은 비밀번호입니다.'
           ) {
             setToastText(`메일주소 또는 \n 비밀번호가 틀립니다`);
+            handleToast();
           } else {
             dispatch(loginUser(data.data));
           }
@@ -72,10 +76,6 @@ const Login = () => {
       }
     );
   };
-
-  useEffect(() => {
-    if (toastText !== '') setShowToast(true);
-  }, [toastText]);
 
   useEffect(() => {
     //로그인 화면 들어갔을때 쿠키 확인 절차
