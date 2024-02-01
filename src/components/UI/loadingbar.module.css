@@ -31,7 +31,7 @@ body {
   bottom: 0;
   left: 0;
   width: 200px;
-  height: 30px;
+  height: 50px;
   border-radius: 20px;
   border-bottom: 1px solid #a0bfed;
   background: #a0bfed;
@@ -43,17 +43,18 @@ body {
 .loaderInner {
   position: absolute;
   margin: auto;
-  top: 50%;
+  top: 0%;
   bottom: 0;
-  left: -150px;
+  left: -160px;
   width: auto;
-  height: 64px;
+  height: 36px;
   color: #346dff;
   text-align: center;
   text-shadow: 0 0 20px #346dff;
-  font-size: 60px;
+  letter-spacing: 0.2em;
+  font-size: 40px;
   z-index: 555555;
-  animation: load 3s infinite linear;
+  animation: load 5s infinite linear;
   transform: translateY(-30%);
 }
 
@@ -64,7 +65,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  width: 90px;
+  width: 100px;
   height: 40px;
   text-transform: uppercase;
   text-align: left;
@@ -87,6 +88,21 @@ body {
 @keyframes load {
   0% {
     left: 0px;
+  }
+  20% {
+    left: 40px;
+  }
+  40% {
+    left: 80px;
+  }
+  60% {
+    left: 120px;
+  }
+  80% {
+    left: 160px;
+  }
+  90% {
+    left: 190px;
   }
   100% {
     left: 220px;
