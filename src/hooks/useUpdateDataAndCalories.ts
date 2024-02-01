@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   adjustCaloriesByGoal,
   calBMR,
@@ -7,13 +7,17 @@ import {
 import { UserData } from '@components/pages/my-page/MypageTypes';
 
 const useUpdateDataAndCalories = <T>(updatedData: any) => {
-  const [data, setData] = useState(updatedData);
-  const [bmr, setBmr] = useState(calBMR({ data }));
-  const [bmrCalories, setBmrCalories] = useState(calBMRCalories({ bmr, data }));
   const [goalCalories, setGoalCalories] = useState(
-    Math.round(adjustCaloriesByGoal({ data, bmrCalories }))
+    Math.round(
+      adjustCaloriesByGoal({
+        data: updatedData,
+        bmrCalories: calBMRCalories({
+          bmr: calBMR({ data: updatedData }),
+          data: updatedData,
+        }),
+      })
+    )
   );
-
   const updatedBmr = calBMR({ data: updatedData });
   const updatedBmrCalories = calBMRCalories({
     bmr: updatedBmr,
@@ -26,10 +30,9 @@ const useUpdateDataAndCalories = <T>(updatedData: any) => {
     })
   );
 
-  setData(updatedData);
-  setBmr(updatedBmr);
-  setBmrCalories(updatedBmrCalories);
-  setGoalCalories(updatedGoalCalories);
+  useEffect(() => {
+    setGoalCalories(updatedGoalCalories);
+  }, []);
 
   return goalCalories;
 };

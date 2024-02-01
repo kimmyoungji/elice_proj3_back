@@ -6,14 +6,14 @@ import { loginUser } from '@components/store/userLoginRouter';
 import useCachingApi from '@hooks/useCachingApi';
 import { UserInfo } from '@components/store/userLoginRouter';
 
-// const onboardingPaths = [
-//   { field: 'gender', path: '/onboarding/1' },
-//   { field: 'age', path: '/onboarding/2' },
-//   { field: 'height', path: '/onboarding/3' },
-//   { field: 'weight', path: '/onboarding/4' },
-//   { field: 'dietGoal', path: '/onboarding/5' },
-//   { field: 'activityAmount', path: '/onboarding/6' },
-// ];
+const onboardingPaths = [
+  { field: 'gender', path: '/onboarding/1' },
+  { field: 'age', path: '/onboarding/2' },
+  { field: 'height', path: '/onboarding/3' },
+  { field: 'weight', path: '/onboarding/4' },
+  { field: 'dietGoal', path: '/onboarding/5' },
+  { field: 'activityAmount', path: '/onboarding/6' },
+];
 
 const path = '/onboarding/1';
 
@@ -56,12 +56,12 @@ const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
         });
       } else {
         if (isLoggedIn && !isUserInfoFilled) {
-          // for (const { field, path } of onboardingPaths) {
-          //   if (!(userData as any)[field]) {
-          //     setRedirectPath(path);
-          //     break;
-          //   }
-          // }
+          for (const { field, path } of onboardingPaths) {
+            if (!(userData as any)[field]) {
+              setRedirectPath(path);
+              break;
+            }
+          }
           setRedirectPath(path);
         }
       }
