@@ -84,8 +84,7 @@ const Onboarding = () => {
       { ...userData },
       {
         onSuccess: (data) => {
-          console.log(data);
-          if (data.targetCalories && data.status === 200) {
+          if (data.data.targetCalories && data.status === 200) {
             navigate('/home');
           }
         },
@@ -117,7 +116,6 @@ const Onboarding = () => {
       fats,
       dietaryFiber,
     }));
-    console.log('userData 업데이트');
   };
 
   const onNextClick = async () => {
@@ -128,7 +126,6 @@ const Onboarding = () => {
         setCurStep(checkValuesNullOrEmpty(userData) as number);
         return navigate(`/onboarding/${checkValuesNullOrEmpty(userData)}`);
       } else {
-        console.log('updateCalculatedData');
         updateCalculatedData(userData);
       }
     } else {
@@ -137,10 +134,6 @@ const Onboarding = () => {
       navigate(`/onboarding/${curStep + 1}`);
     }
   };
-
-  useEffect(() => {
-    console.log({ userData });
-  }, [userData]);
 
   const onClickOnboarding = (onboardingInfo: userPutDataType) => {
     setUserData((prev: any) => ({
@@ -158,7 +151,6 @@ const Onboarding = () => {
       userData.dietaryFiber &&
       userData.dietGoal
     ) {
-      console.log('업데이트 영양성분과 목표 칼로리 모두 있어서 PUT요청');
       onClickTrigger();
     }
   }, [
@@ -187,10 +179,6 @@ const Onboarding = () => {
         return true;
     }
   };
-
-  useEffect(() => {
-    console.log('onboarding ');
-  }, []);
 
   return (
     <div
