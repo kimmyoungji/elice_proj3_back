@@ -274,7 +274,7 @@ const RecordEdit = () => {
 
     if (!newFoods[0].recordId) {
       recordPost.trigger({
-        path: '/records',
+        path: `/records?date=${date}&mealType=${mealTime}`,
         data: {
           mealType: mealTime,
           imgUrl: pUrl,
@@ -343,7 +343,7 @@ const RecordEdit = () => {
               <div key={index} className={styles.tagitem}>
                 <div className={styles.tagimgwrap}>
                   {food.XYCoordinate.length === 0 ||
-                  food.XYCoordinate[0] === null ? (
+                  food.XYCoordinate[0] === 0? (
                     <img
                       className={`${styles.tagimg} ${
                         focus === index && styles.focusimg
