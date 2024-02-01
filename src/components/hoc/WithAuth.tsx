@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { RootState } from '../store/index';
 import { useEffect } from 'react';
 import { loginUser } from '@components/store/userLoginRouter';
@@ -41,11 +41,9 @@ const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
 
     useEffect(() => {
       if (!isLoggedIn) {
-        console.log('들어가냐?');
         trigger('', {
           onSuccess: (data) => {
-            console.log(data);
-            if (data.data.username) {
+            if (data.data?.username) {
               dispatch(loginUser(data.data));
               if (
                 window.location.pathname === '/auth' ||
@@ -54,8 +52,12 @@ const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
                 navigate('/home');
               }
             } else if (!userData || !userData.username) {
-              console.log('찍히니?');
-              navigate('/auth');
+              if (
+                window.location.pathname !== '/auth' &&
+                window.location.pathname !== '/login'
+              ) {
+                navigate('/auth');
+              }
             }
           },
         });
