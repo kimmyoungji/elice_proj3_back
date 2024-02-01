@@ -63,7 +63,7 @@ export class FoodInfoRepository {
             foodName: `%${foodName}%`,
           })
           .orderBy("entity.created_date", "DESC")
-          .getOneOrFail();
+          .getOne();
         return result;
       }
       return firstResult;

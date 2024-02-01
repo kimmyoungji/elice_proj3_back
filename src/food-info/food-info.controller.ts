@@ -35,18 +35,12 @@ export class FoodInfoController {
         if (!lastFoodId) {
           const foodListResult =
             await this.foodInfoService.getFoodList(keyword);
-          if (foodListResult.length === 0) {
-            throw new NotFoundException("데이터가 존재하지 않습니다");
-          }
           return foodListResult;
         } else {
           const foodNextListResult = await this.foodInfoService.getFoodNextList(
             keyword,
             lastFoodId
           );
-          if (!foodNextListResult) {
-            throw new NotFoundException("데이터가 존재하지 않습니다");
-          }
           return foodNextListResult;
         }
       }
@@ -54,7 +48,7 @@ export class FoodInfoController {
       if (foodName) {
         const foodInfoResult = await this.foodInfoService.getFoodInfo(foodName);
         if (!foodInfoResult) {
-          throw new NotFoundException("데이터가 존재하지 않습니다");
+          return [];
         }
         return foodInfoResult;
       }
@@ -63,7 +57,7 @@ export class FoodInfoController {
         const foodInfoResult =
           await this.foodInfoService.getFoodInfoById(foodInfoId);
         if (!foodInfoResult) {
-          throw new NotFoundException("데이터가 존재하지 않습니다");
+          return [];
         }
         return foodInfoResult;
       }
