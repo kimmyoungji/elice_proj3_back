@@ -33,7 +33,7 @@ export interface userPutDataType {
 }
 
 interface OnBoardingResult {
-  data: string;
+  data: any;
   status: number;
 }
 
@@ -56,7 +56,7 @@ const Onboarding = () => {
   const returnedUserData = useSelector(
     (state: RootState) => state.user.userInfo
   );
-  const { loading, trigger } = useCachingApi<OnBoardingResult>({
+  const { loading, trigger } = useCachingApi<any>({
     method: 'put',
     path: '/user',
   });
@@ -84,10 +84,8 @@ const Onboarding = () => {
       { ...userData },
       {
         onSuccess: (data) => {
-          if (
-            data.data === '유저정보 및 유저건강정보 업데이트 성공' &&
-            data.status === 200
-          ) {
+          console.log(data);
+          if (data.targetCalories && data.status === 200) {
             navigate('/home');
           }
         },
@@ -113,7 +111,7 @@ const Onboarding = () => {
     //userData에 세팅
     setUserData((prev: any) => ({
       ...prev,
-      ['dietGoal']: goalCalories,
+      ['targetCalories']: goalCalories,
       carbohydrates,
       proteins,
       fats,
