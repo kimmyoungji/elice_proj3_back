@@ -56,16 +56,6 @@ export class RecordRepository extends Repository<Record> {
       }
     })
 
-    let foodImage;
-
-    if (records.length > 0  && records[0].imageId) {
-      foodImage = await this.imageRecordRepository.findOne({
-        where: {
-          imageId: records[0].imageId
-        }
-      });        
-    } else { foodImage = null; }
-    
     let defaultMealInfo = {};
     // healthInfo 객체가 있는 경우
     if (healthInfo) {
@@ -98,13 +88,22 @@ export class RecordRepository extends Repository<Record> {
         foods: [], 
         totalCalories: 0, 
         totalNutrient: { carbohydrates: 0, proteins: 0, fats: 0, dietaryFiber: 0 }, 
-        imgUrl: foodImage ? foodImage.foodImageUrl : null,
+        imgUrl: null,
         ...defaultMealInfo 
       };
     }
   
     // 조회된 레코드들을 처리
     for (const record of records) {
+      let foodImage = null;
+      if (record.imageId) {
+        foodImage = await this.imageRecordRepository.findOne({
+          where: {
+            imageId: record.imageId
+          }
+        });
+      }
+
       const foodInfo = await this.foodInfoRepository.findOne({
         where: {
           foodInfoId: record.foodInfoId,
@@ -141,7 +140,7 @@ export class RecordRepository extends Repository<Record> {
       mealAccumulator[mealType].totalNutrient.proteins += Math.round(record.proteins / 100);
       mealAccumulator[mealType].totalNutrient.fats += Math.round(record.fats / 100);
       mealAccumulator[mealType].totalNutrient.dietaryFiber += Math.round(record.dietaryFiber / 100);
-    
+      mealAccumulator[mealType].imgUrl = foodImage ? foodImage.foodImageUrl : null;
       // 해당 식사 유형에 음식 데이터를 추가
       mealAccumulator[mealType].foods.push(foodData);
     } 
