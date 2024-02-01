@@ -31,16 +31,17 @@ export class FeedbackRepository {
     try {
       const { userId, question, questionType, feedbackDate } =
         checkfeedbackData;
-      return await manager
+      const result = await manager
         .createQueryBuilder(Feedback, "feedback")
-        .select(["feedback.feedback", "feedback.feedback_id"])
+        .select(["feedback", "feedback_id"])
         .where("feedback.user_id =:userId", { userId })
         .where("feedback.feedback_date =:feedbackDate", {
           feedbackDate,
         })
-        .andWhere("feedback.questionType = :questionType", { questionType })
+        .andWhere("feedback.question_type = :questionType", { questionType })
         .andWhere("feedback.question =:question", { question })
         .getOne();
+      return result;
     } catch (error) {
       throw error;
     }

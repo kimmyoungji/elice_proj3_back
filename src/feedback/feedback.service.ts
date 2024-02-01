@@ -11,7 +11,7 @@ import { ChatgptApi } from "./utils/chatgpt-api";
 @Injectable()
 export class FeedbackService {
   constructor(
-    private readonly feedBackRepository: FeedbackRepository,
+    private feedBackRepository: FeedbackRepository,
     private readonly cumulativeRepository: CumulativeRecordRepository,
     private readonly userRepository: UserRepository,
     private readonly dataSource: DataSource
@@ -35,15 +35,17 @@ export class FeedbackService {
         feedbackDate: date,
       };
       const feedbackData = new Feedback().checkfeedbackDataDto(checkdata);
-      const { feedback, feedbackId } =
-        await this.feedBackRepository.checkFeedBack(
-          feedbackData,
-          queryRunner.manager
-        );
+      const beforeData = await this.feedBackRepository.checkFeedBack(
+        feedbackData,
+        queryRunner.manager
+      );
       // 만약 동일 유저의 질문이 있다면, api 호출 x
-      if (feedbackId) {
+      if (beforeData) {
         await queryRunner.commitTransaction();
-        return { feedback: feedback, feedbackId: feedbackId };
+        return {
+          feedback: beforeData.feedback,
+          feedbackId: beforeData.feedbackId,
+        };
       } else {
         // 만약 동일 유저의 질문이 없다면, api 호출
         // const totalResult = await this.cumulativeRepository.getDateRecord(
@@ -70,6 +72,7 @@ export class FeedbackService {
           saveYn: false,
         };
         const feedbackData = new Feedback().makefeedbackDataDto(data);
+        console.log("feedbackData", feedbackData);
         await this.feedBackRepository.saveFeedBack(
           feedbackData,
           queryRunner.manager
