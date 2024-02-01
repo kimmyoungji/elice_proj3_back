@@ -27,7 +27,7 @@ const Album = () => {
   const [albumArr, setAlbumArr] = useState<AlbumArrType[]>([]);
   const [page, setPage] = useState(1);
   const { trigger, result } = useCachingApi<AlbumApiResponse>({
-    path: `/cumulative-record/month?month=${thisYear}-${returnWithZero(thisMonth)}-01&page=1`,
+    path: `/cumulative-record/month?month=${thisYear}-${returnWithZero(thisMonth)}-01&page=${page}`,
   });
   const navigate = useNavigate();
 
