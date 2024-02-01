@@ -21,20 +21,22 @@ const totalWeek = Math.ceil((lastLastDayIndex + currentFirstDayIndex) / 7); // �
 const nowWeek = Math.ceil((nowDate + currentFirstDayIndex) / 7); // 이번달 지금 주차
 
 const Home = () => {
+  console.log('lastLastDayIndex: ', lastLastDayIndex);
+  console.log('currentFirstDayIndex: ', currentFirstDayIndex);
+
   const [selectedWeek, setSelectedWeek] = useState(nowWeek);
   const [selectedDay, setSelectedDay] = useState(nowDay);
   const [selectedNow, setSelectedNow] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
 
-  const todayDate = `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${nowDate}`;
-  const [date, setDate] = useState('2024-01-29');
+  const todayDate = `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${nowDate >= 10 ? nowDate : `0${nowDate}`}`;
+  const [date, setDate] = useState(todayDate);
 
   const [currentWeekArr, setCurrentWeekArr] = useState<number[]>([]);
 
   const { trigger, result }: { trigger: any; result: any } = useCachingApi({
     path: `/cumulative-record?date=${date}`,
     gcTime: 10000,
-    // 얼만큼으로 해야하는가?
   });
 
   const triggerData = async () => {
@@ -68,6 +70,7 @@ const Home = () => {
   const weekly = () => {
     const firstDate = (selectedWeek - 1) * 7; // 해당주차 일요일 날짜
     const newWeekArr = [];
+    console.log(firstDate);
 
     for (let i = 0; i < 7; i++) {
       let date = firstDate + i;
@@ -84,6 +87,8 @@ const Home = () => {
   useEffect(() => {
     weekly();
   }, [selectedWeek]);
+
+  console.log(currentWeekArr);
 
   return (
     <div className={styles.home_wrapper}>
@@ -127,7 +132,7 @@ const Home = () => {
               ) : selectedDay === idx ? (
                 <div className={`${styles.selected} r-large`}>{date}</div>
               ) : (
-                <>{date}</>
+                <div className='r-large'>{date}</div>
               )}
             </div>
           </div>
@@ -140,30 +145,43 @@ const Home = () => {
             : `${week[selectedDay]}요일`}{' '}
           식단
         </p>
-        <Calorie
-          totalCalories={result?.data ? result?.data.totalCalories : 0}
-          recommendCalories={result?.data ? result?.data.targetCalories : 10}
-        />
-        <Nutrients
-          totalNutrient={
-            result?.data
-              ? result?.data.totalNutrient
-              : { carbohydrates: 0, proteins: 0, fats: 0, dietaryFiber: 0 }
-          }
-          recommendNutrient={
-            result?.data
-              ? result?.data.recommendNutrient
-              : { carbohydrates: 10, proteins: 10, fats: 10, dietaryFiber: 10 }
-          }
-        />
-        <MealCard
-          date={todayDate}
-          dateArr={
-            result?.data
-              ? (result?.data.dateArr as [number, number, string | undefined][])
-              : []
-          }
-        />
+        {!result || result?.data.length === 0 ? (
+          <>
+            <Calorie totalCalories={0} recommendCalories={10} />
+            <Nutrients
+              totalNutrient={{
+                carbohydrates: 0,
+                proteins: 0,
+                fats: 0,
+                dietaryFiber: 0,
+              }}
+              recommendNutrient={{
+                carbohydrates: 10,
+                proteins: 10,
+                fats: 10,
+                dietaryFiber: 10,
+              }}
+            />
+            <MealCard date={todayDate} dateArr={[]} />
+          </>
+        ) : (
+          <>
+            <Calorie
+              totalCalories={result?.data.totalCalories}
+              recommendCalories={result?.data.targetCalories}
+            />
+            <Nutrients
+              totalNutrient={result?.data.totalNutrient}
+              recommendNutrient={result?.data.recommendNutrient}
+            />
+            <MealCard
+              date={todayDate}
+              dateArr={
+                result?.data.dateArr as [number, number, string | undefined][]
+              }
+            />
+          </>
+        )}
       </div>
     </div>
   );

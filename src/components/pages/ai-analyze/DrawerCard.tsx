@@ -33,7 +33,7 @@ const DrawerCard = ({ id, date, type, tag, text }: Props) => {
 
   const { trigger, result, reqIdentifier, loading, error } = useApi({
     method: 'delete',
-    path: `/feedback?feedbackId=416cbf52-a1ab-4c4e-81fd-de1d6e1a47b4`,
+    path: `/feedback?feedbackId=${id}`,
     shouldInitFetch: false,
   });
 
@@ -58,13 +58,17 @@ const DrawerCard = ({ id, date, type, tag, text }: Props) => {
 
   const navigate = useNavigate();
 
+  const newDate = date.split('-').join('.');
+
   return (
     <>
       <div
         className={styles.card_wrapper}
-        onClick={() => navigate(`/ai-drawer/detail?date=${date}`)}
+        onClick={() =>
+          navigate(`/ai-drawer/detail?date=${date}&feedbackId=${id}`)
+        }
       >
-        <div className={`${styles.date} b-regular`}>{date}</div>
+        <div className={`${styles.date} b-regular`}>{newDate}</div>
         <div className={`${styles.type} ${typeType[type]} s-regular`}>
           {type}
         </div>

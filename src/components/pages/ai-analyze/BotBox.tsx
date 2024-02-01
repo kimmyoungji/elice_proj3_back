@@ -9,17 +9,18 @@ interface Props {
   toSave: boolean;
   text: string;
   button: { type: string; text: string }[];
+  feedbackId: string;
   handleOnClick: (e: React.MouseEvent<HTMLButtonElement>, idx: number) => void;
 }
 
-const BotBox = ({ toSave, text, button, handleOnClick }: Props) => {
+const BotBox = ({ toSave, text, button, feedbackId, handleOnClick }: Props) => {
   const [scrap, setScrap] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [toast, setToast] = useState(false);
 
   const { trigger, result, reqIdentifier, loading, error } = useApi({
     method: 'get',
-    path: `/feedback/save?feedbackId=sdnl23r`,
+    path: `/feedback/save?feedbackId=${feedbackId}`,
     shouldInitFetch: false,
   });
 
@@ -32,7 +33,7 @@ const BotBox = ({ toSave, text, button, handleOnClick }: Props) => {
   const deleteScrap = async () => {
     await trigger({
       method: 'delete',
-      path: `/feedback/save?feedbackId=sdnl23r`,
+      path: `/feedback/save?feedbackId=${feedbackId}`,
       applyResult: true,
       isShowBoundary: true,
     });
