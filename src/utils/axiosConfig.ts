@@ -87,6 +87,9 @@ api.interceptors.response.use(
       if (data.message === '이미 로컬계정으로 등록된 이메일입니다.') {
         return data.message;
       }
+      if (data.message === '이미 구글계정으로 등록된 이메일입니다.') {
+        return data.message;
+      }
     }
   }
 );
