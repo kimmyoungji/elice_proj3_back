@@ -78,6 +78,10 @@ const Login = () => {
   };
 
   useEffect(() => {
+    userInfo && navigate('/home');
+  }, [userInfo]);
+
+  useEffect(() => {
     //로그인 화면 들어갔을때 쿠키 확인 절차
     triggerUserInfo('', {
       onSuccess: (data) => {
