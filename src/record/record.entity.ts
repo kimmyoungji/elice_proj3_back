@@ -34,25 +34,25 @@ export class Record extends BaseEntity {
   @Column({ type: "varchar", nullable: false })
   recordFoodName : string;
 
-  @Column({ type: "int", nullable: false })
+  @Column({ type: "float", nullable: false })
   foodCounts: number;
 
   @Column({ type: "int", nullable: true })
   imageId: number;
 
-  @Column({ type: "int", nullable: true })
+  @Column({ type: "float", nullable: true })
   carbohydrates: number;
 
-  @Column({ type: "int", nullable: true })
+  @Column({ type: "float", nullable: true })
   proteins: number;
 
-  @Column({ type: "int", nullable: true })
+  @Column({ type: "float", nullable: true })
   fats: number;
 
-  @Column({ type: "int", nullable: true })
+  @Column({ type: "float", nullable: true })
   dietaryFiber: number;
 
-  @Column({ type: "int", nullable: true })
+  @Column({ type: "float", nullable: true })
   totalCalories: number;
 
   @Column({ type: "date", nullable: true })
