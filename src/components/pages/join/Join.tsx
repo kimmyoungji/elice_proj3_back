@@ -71,7 +71,7 @@ const Join = () => {
       },
       {
         onSuccess: (data: any) => {
-          if (data?.verified) {
+          if (data.data?.verified) {
             setIsEmailCodeValid(true);
             setEmailCodeText('이메일이 인증되었습니다');
             setToastText('이메일이 인증되었습니다');
@@ -82,7 +82,7 @@ const Join = () => {
             setToastText('이메일이 인증에 실패했습니다.');
             handleToast();
           }
-          console.log(data.verified);
+          console.log(data.data.verified);
         },
       }
     );
@@ -126,8 +126,7 @@ const Join = () => {
       { email },
       {
         onSuccess: (data: any) => {
-          console.log(data);
-          setToastText(data);
+          setToastText(data.data);
           handleToast();
         },
       }
