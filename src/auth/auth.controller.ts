@@ -121,6 +121,7 @@ export class AuthController {
     async handleSendVerificationCode(@Body() sendVerificationCodeDto:sendVerificationCodeDto, @Req() request: any, @Res() response: any): Promise<void> {
         try{
             const { email } = sendVerificationCodeDto;
+            await this.userService.checkEmail(email);
             await this.MailVerificationService.sendVerificationCode(email);
             response.status(200).send('이메일 인증 코드 발송 성공');
         }catch(err){ throw err; }
