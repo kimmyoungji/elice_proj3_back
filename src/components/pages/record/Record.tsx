@@ -25,7 +25,9 @@ const Record = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalSelect, setModalSelect] = useState('');
   const [modalMsg, setModalMsg] = useState('');
-  const [selectedMealDelete, setSelectedMealDelete] = useState(null);
+  const [selectedMealDelete, setSelectedMealDelete] = useState<null | number>(
+    null
+  );
 
   const {
     trigger,
@@ -61,7 +63,11 @@ const Record = () => {
     navigate(`/record/${selectedDate || todayDate}/${meal}`);
   };
 
-  const handleShowDelteModal = (meal: number) => {
+  const handleShowDelteModal = (
+    meal: number,
+    e: React.MouseEvent<HTMLImageElement>
+  ) => {
+    e.stopPropagation();
     setShowModal(true);
     setModalSelect('mealDelete');
     setModalMsg(mapSelectModalMsg.mealDelete);
@@ -78,7 +84,7 @@ const Record = () => {
     ];
     trigger({
       method: 'delete',
-      path: `/records?date=${todayDate}&mealType=${meal}`,
+      path: `/records?date=${todayDate}&mealType=${selectedMealDelete}`,
     });
     setFoodData(updatedFoodData);
     setShowModal(false);
@@ -86,7 +92,7 @@ const Record = () => {
   };
 
   const handleConfirm = () => {
-    if (modalSelect === 'mealDelete') {
+    if (modalSelect === 'mealDelete' && selectedMealDelete !== null) {
       handleMealDelete();
     }
   };
@@ -147,7 +153,7 @@ const Record = () => {
                 onClick={(e) =>
                   !mealData[1] && !mealData[2]
                     ? handleMealClick(mealData[0])
-                    : handleShowDelteModal(mealData[0])
+                    : handleShowDelteModal(mealData[0], e)
                 }
                 alt={
                   !mealData[1] && !mealData[2]
