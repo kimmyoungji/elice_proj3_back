@@ -16,6 +16,9 @@ import { User } from 'src/user/entities/user.entity';
 import * as dotenv from 'dotenv';
 import { isNotLoggedInGuard } from './utils/guards/isNotLoggedIn.guard';
 import { LocalLoginDtoValidationPipe } from './utils/pipes/localLoginDtoValidation.pipe';
+import { VerifyCodeDto } from './dto/verifyCode.dto';
+import { sendVerificationCodeDto } from './dto/sendVerificationCode.dto';
+import { SendVoiceMessageRequest } from 'aws-sdk/clients/pinpointsmsvoice';
 dotenv.config();
 
 
@@ -114,20 +117,23 @@ export class AuthController {
 
     /* 이메일 인증 코드 발송하기 */
     @ApiOperation({ summary: '이메일 인증 코드 발송하기' })
-    @Get('/verify-email/:email')
-    async handleSendVerificationCode(@Param('email') email:string, @Req() request: any, @Res() response: any): Promise<void> {
+    @ApiBody({type: sendVerificationCodeDto})
+    @Post('/verify-email/send-code')
+    async handleSendVerificationCode(@Body() sendVerificationCodeDto:sendVerificationCodeDto, @Req() request: any, @Res() response: any): Promise<void> {
         try{
-            const result = await this.MailVerificationService.sendVerificationCode(email);
-            console.log(result);
+            const { email } = sendVerificationCodeDto;
+            await this.MailVerificationService.sendVerificationCode(email);
             response.status(200).send('이메일 인증 코드 발송 성공');
         }catch(err){ throw err; }
     }
 
     /* 인증코드 검증하기 */
     @ApiOperation({ summary: '인증코드 검증하기' })
-    @Get('/verify-email/:email/:code')
-    async handleVerifyCode(@Param('email') email:string, @Param('code') code: number, @Res() response: any): Promise<void> {
+    @ApiBody({type: VerifyCodeDto})
+    @Post('/verify-email/check-code')
+    async handleVerifyCode(@Body() body:VerifyCodeDto, @Res() response: any): Promise<void> {
         try{
+            const { email, code } = body;
             let verified = await this.MailVerificationService.verifyCode(email, code.toString());
             response.status(200).send({verified});
         }catch(err){ throw err; }
