@@ -14,7 +14,7 @@ class Food {
     @ApiProperty({ description: "음식 이름" })
     foodName: string;
   
-    @IsInt()
+    // @IsInt()
     @IsNotEmpty()
     @ApiProperty({ description: "음식 수량" })
     counts: number;

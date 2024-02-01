@@ -27,21 +27,21 @@ export class CumulativeRecord {
   @Column({ type: "enum", name: "meal_type", enum: MealType, nullable: true })
   mealType: MealType;
 
-  @Column({ type: "int", default: 0 })
+  @Column({ type: "float", default: 0 })
   mealTotalCalories: number;
 
   @Column()
   date: Date;
 
-  @Column({ type: "int", default: 0 })
+  @Column({ type: "float", default: 0 })
   carbohydrates: number;
 
-  @Column({ type: "int", default: 0 })
+  @Column({ type: "float", default: 0 })
   proteins: number;
 
-  @Column({ type: "int", default: 0 })
+  @Column({ type: "float", default: 0 })
   fats: number;
 
-  @Column({ type: "int", default: 0 })
+  @Column({ type: "float", default: 0 })
   dietaryFiber: number;
 }

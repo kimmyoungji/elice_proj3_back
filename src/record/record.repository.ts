@@ -48,25 +48,15 @@ export class RecordRepository extends Repository<Record> {
         firstRecordDate: Equal(dateObj),
       },
     });
-
-    // 사용자 정보
-    const user = await this.userRepository.findOne({
+  
+    // 사용자의 건강 정보
+    let healthInfo = await this.healthInfoRepository.findOne({
       where: {
+        updatedDate: MoreThanOrEqual(dateObj),
         userId: userId
       }
     })
   
-    // 사용자의 건강 정보
-    const healthInfo = await this.healthInfoRepository.createQueryBuilder('healthInfo')
-      .where('healthInfo.userId = :userId', { userId: userId })
-      .andWhere('healthInfo.updatedDate <= :recordedDate', { recordedDate: dateObj })
-      .orderBy('healthInfo.updatedDate', 'DESC')
-      .getOne();
-  
-    if (!healthInfo) {
-      throw new NotFoundException(`Health info 정보가 없는 user ID ${userId}`);
-    }
-
     const record = await this.recordRepository.findOneBy({
       userId: userId
     })
@@ -76,20 +66,31 @@ export class RecordRepository extends Repository<Record> {
         imageId: record.imageId
       }
     })
-  
-    const recommendIntake = healthInfo.recommendIntake || [0, 0, 0, 0]; // 기본값
 
-    // 각 mealType에 대한 기본 정보를 설정
-    const defaultMealInfo = {
-      targetCalories: healthInfo.targetCalories,
-      recommendNutrient: {
-        carbohydrates: recommendIntake[0],
-        proteins: recommendIntake[1],
-        fats: recommendIntake[2],
-        dietaryFiber: recommendIntake[3],
-      },
-      
-    };
+    let defaultMealInfo = {};
+    // healthInfo 객체가 있는 경우
+    if (healthInfo) {
+      defaultMealInfo = {
+        targetCalories: healthInfo.targetCalories,
+        recommendNutrient: {
+          carbohydrates: healthInfo.recommendIntake[0],
+          proteins: healthInfo.recommendIntake[1],
+          fats: healthInfo.recommendIntake[2],
+          dietaryFiber: healthInfo.recommendIntake[3],
+        },
+      };
+    } else {
+      // healthInfo 객체가 없는 경우
+      defaultMealInfo = {
+        targetCalories: null,
+        recommendNutrient: {
+          carbohydrates: 0,
+          proteins: 0,
+          fats: 0,
+          dietaryFiber: 0,
+        },
+      };
+    }
   
     // mealType에 따라 정보를 누적할 객체를 준비
     const mealAccumulator = {};
@@ -98,7 +99,7 @@ export class RecordRepository extends Repository<Record> {
         foods: [], 
         totalCalories: 0, 
         totalNutrient: { carbohydrates: 0, proteins: 0, fats: 0, dietaryFiber: 0 }, 
-        imgUrl: foodImage.foodImageUrl,
+        imgUrl: foodImage ? foodImage.foodImageUrl : null,
         ...defaultMealInfo 
       };
     }
@@ -127,7 +128,11 @@ export class RecordRepository extends Repository<Record> {
         recordId: record.recordId,
         foodName: record.recordFoodName,
         counts: record.foodCounts,
-        XYCoordinate: splitImageRecord ? [splitImageRecord.xCoordinate, splitImageRecord.yCoordinate, splitImageRecord.width, splitImageRecord.height] : [],
+        XYCoordinate: splitImageRecord ? [
+          Number(splitImageRecord.xCoordinate), 
+          Number(splitImageRecord.yCoordinate), 
+          Number(splitImageRecord.width), 
+          Number(splitImageRecord.height)] : [],
       };
   
       // 각 영양소의 누적 값을 계산

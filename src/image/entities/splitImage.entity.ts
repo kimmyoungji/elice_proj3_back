@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, Timestamp } from "typeorm";
 import { UpdateSplitImageDto } from "../dtos/UpdateSplitImage.dto";
 import { CreateSplitImageDto } from "../dtos/CreateSplitImage.dto";
+import { float } from "aws-sdk/clients/cloudfront";
+import { double } from "aws-sdk/clients/lightsail";
 
 @Entity()
 export class SplitImage {
@@ -13,17 +15,17 @@ export class SplitImage {
   @Column()
   foodName: string;
 
-  @Column()
+  @Column({ type: 'float' })
   xCoordinate: number;
 
-  @Column()
+  @Column({ type: 'float' })
   yCoordinate: number;
 
-  @Column()
+  @Column({ type: 'float' })
   width: number;
 
-  @Column()
-  height:number;
+  @Column({ type: 'float' })
+  height: number;
 
   @Column({type: "timestamp with time zone", default: () => "CURRENT_TIMESTAMP"})
   createdAt: Timestamp;
