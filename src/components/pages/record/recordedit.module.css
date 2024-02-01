@@ -85,12 +85,20 @@
   font-family: var(--basic-font), sans-serif;
   font-weight: 600;
   font-size: 13px;
+  width:100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tagtxt {
+  width:100%;
   font-family: var(--basic-font), sans-serif;
   font-weight: 400;
   font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tagdeleteicon {

@@ -6,7 +6,7 @@ const getDates = () => {
     thisMonthNum >= 10 ? thisMonthNum : `0${thisMonthNum}`;
   const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
   const thisDay = date.getDate();
-  const thisDate = thisDay >= 10 ? thisDay : Number(`0${thisDay}`); // 날짜
+  const thisDate = thisDay >= 10 ? thisDay : `0${thisDay}`; // 날짜
   const thisDayText = dayOfWeek[date.getDay()];
   const thisHour = date.getHours();
 

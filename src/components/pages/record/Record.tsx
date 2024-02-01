@@ -37,8 +37,9 @@ const Record = () => {
   }, []);
 
   useEffect(() => {
-    if (data && data.data) {
+    if (data && data.data.dateArr.length > 0) {
       setFoodData(data.data);
+      console.log(data.data);
     }
   }, [data]);
 
@@ -59,7 +60,7 @@ const Record = () => {
     updatedFoodData.dateArr[meal - 1] = [meal, 0, null];
     trigger({
       method: 'delete',
-      path: `/cumulative-record/meal?date=${dateSplit[0]}-${dateSplit[1]}-${dateSplit[2]}&meal=${meal}`,
+      path: `/records?date=${todayDate}&mealType=${meal}`,
     });
     setFoodData(updatedFoodData);
   };
@@ -83,7 +84,7 @@ const Record = () => {
                       src={mealData[2] || mealLogo}
                       alt='하루 식단 이미지'
                     />
-                    s
+
                     <div className={style.meal_time}>
                       {mapSelectMealToMsg[mealData[0]]}
                     </div>

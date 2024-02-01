@@ -6,7 +6,11 @@ import { Modal } from './MyPageModal';
 import MyPageDropdown from './MyPageDropdwon';
 import { findKeyByValue, gendertoMsg } from './mapMsg';
 import { loginUser } from '@components/store/userLoginRouter';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from '@components/store/userLoginRouter';
+import { RootState } from '@components/store';
+
+const genderArr = ['남성', '여성', '기타'];
 
 const MyPageSettings = () => {
   const location = useLocation();
@@ -16,40 +20,69 @@ const MyPageSettings = () => {
   const [modalSelect, setModalSelect] = useState(false);
   const [genderSelect, setGenderSelect] = useState(gendertoMsg[gender]);
   const [isGenderDropdwonVisible, setGenderDropdownVisible] = useState(false);
-  const genderArr = ['남성', '여성', '기타'];
-  const { trigger, result } = useApi({});
+  const [newNickname, setNewNickName] = useState(nickname);
+  const { trigger, result } = useApi<Nickname>({});
   const navigate = useNavigate();
-
-  console.log(genderSelect);
   const dispatch = useDispatch();
+  const userData = useSelector((state: RootState) => state.user.userInfo);
+
+  type Nickname =
+    | {
+        data?: { isAvailable: boolean };
+      }
+    | undefined;
 
   const handleEditName = () => {
     setisEditing(!isEditing);
-    trigger({ path: '/이름 편집 요청 api', method: 'put' });
+    if (isEditing) {
+      trigger({ path: `/user/username/${newNickname}`, method: 'get' });
+    }
+  };
+
+  useEffect(() => {
+    if (result?.data?.isAvailable) {
+      const updateData = {
+        ...userData,
+        username: newNickname,
+      };
+
+      setNewNickName(newNickname);
+      trigger({
+        path: '/user',
+        method: 'put',
+        data: { username: newNickname },
+      });
+      dispatch(loginUser(updateData));
+    }
+  }, [result?.data, userData.username]);
+
+  const editNickName = () => {
+    setisEditing(!isEditing);
   };
 
   const handleSelect = (value: string) => {
     const newGenderValue = Number(findKeyByValue(gendertoMsg, value));
-    console.log(newGenderValue);
     if (newGenderValue) {
+      const updateData = {
+        ...userData,
+        gender: newGenderValue,
+      };
       setGenderSelect(gendertoMsg[newGenderValue]);
-
-      dispatch(loginUser({ gender: newGenderValue }));
+      dispatch(loginUser(updateData));
       trigger({
         path: '/user',
         method: 'put',
         data: { gender: newGenderValue },
       });
     }
-    console.log(genderSelect);
     setGenderDropdownVisible(false);
   };
 
   useEffect(() => {
-    if (gender) {
-      setGenderSelect(gendertoMsg[gender]);
+    if (userData.gender) {
+      setGenderSelect(gendertoMsg[Number(userData.gender)]);
     }
-  }, [gender]);
+  }, [genderSelect, userData.gender]);
 
   const handleLogOut = () => {
     setShowModal(true);
@@ -58,7 +91,8 @@ const MyPageSettings = () => {
 
   const handleConfirmLogout = () => {
     trigger({ path: '/auth/logout' });
-    navigate('/');
+    //에러 분기처리 할 부분?
+    dispatch(logoutUser());
   };
   const handleWithdrawal = () => {
     setShowModal(true);
@@ -67,6 +101,7 @@ const MyPageSettings = () => {
 
   const handleConfirmWithdrawal = () => {
     trigger({ path: '/auth/withdrawal' });
+    //에러 분기처리 할 부분?
     navigate('/');
   };
 
@@ -87,13 +122,27 @@ const MyPageSettings = () => {
             <div className={style.accountSettings}> 닉네임 </div>
             <div className={style.editContainer}>
               {isEditing ? (
-                <input value={nickname} />
+                <>
+                  <input
+                    className={style.inputNickName}
+                    placeholder={newNickname}
+                    onChange={(e) => setNewNickName(e.target.value)}
+                  />
+                  <button
+                    className={style.editButtonClicked}
+                    onClick={handleEditName}
+                  >
+                    완료
+                  </button>
+                </>
               ) : (
-                <div className={style.showNickName}>{nickname}</div>
+                <>
+                  <div className={style.showNickName}>{newNickname}</div>
+                  <button className={style.editButton} onClick={editNickName}>
+                    편집
+                  </button>
+                </>
               )}
-              <button className={style.editButton} onClick={handleEditName}>
-                편집
-              </button>
             </div>
           </div>
 
@@ -126,7 +175,6 @@ const MyPageSettings = () => {
               className={style.rightButton}
               src='/icons/right-arrow-icon.png'
               alt='계정 설정 화살표'
-              // onClick={handleSettingNavigate}
             />
           </div>
         </div>
@@ -142,7 +190,6 @@ const MyPageSettings = () => {
               onClick={handleLogOut}
               src='/icons/right-arrow-icon.png'
               alt='계정 설정 화살표'
-              // onClick={handleSettingNavigate}
             />
           </div>
         </div>
@@ -155,7 +202,6 @@ const MyPageSettings = () => {
               onClick={handleWithdrawal}
               src='/icons/right-arrow-icon.png'
               alt='계정 설정 화살표'
-              // onClick={handleSettingNavigate}
             />
           </div>
         </div>

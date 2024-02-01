@@ -3,12 +3,9 @@ import { NutritionBarChart } from './NutritionBarChart';
 import NutritionBar from './NutritionBar';
 import { useEffect, useState } from 'react';
 import { MealNutritionAnalysisProps } from './RecordTypes';
-// import { userData } from '../my-page/DummyUserData';
 import NutritionDonutChart from './NutritionDonutChart';
 import MealGraphToggle from './MealGraphToggle';
 import { mapSelectMealToMsg } from './recordMappingConstant';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/index';
 
 const initialNutrients = {
   carbohydrates: 0,
@@ -22,12 +19,10 @@ const MealNutritionAnalysis = ({
   data,
   selectedMealNumber,
 }: MealNutritionAnalysisProps) => {
-  const userData = useSelector((state: RootState) => state.user.userInfo);
-  const goalCalories = userData.targetCalories;
+  // const userData = useSelector((state: RootState) => state.user.userInfo);
 
   const [isShowingTotal, setIsShowingTotal] = useState(true);
   const [animationTrigger, setAnimationTrigger] = useState(false);
-  const [totalNutrient, setTotalNutrient] = useState(initialNutrients);
 
   const toggleShowingTitle = mapSelectMealToMsg[selectedMealNumber];
   const totalMealCalories = data?.[selectedMealNumber]?.totalCalories || 0;
@@ -54,35 +49,49 @@ const MealNutritionAnalysis = ({
     );
   };
 
-  useEffect(() => {
-    if (data) {
-      setTotalNutrient(calculateTotalNutrients());
-    }
-  }, [data]);
-
-  const drawGraphByNutrients = data?.[selectedMealNumber]
-    ? data?.[selectedMealNumber].totalNutrient
+  const drawGraphByNutrients = isShowingTotal
+    ? data?.[selectedMealNumber]?.totalNutrient
     : calculateTotalNutrients();
 
-  const drawGraphByCalories = data?.[selectedMealNumber]
-    ? data[selectedMealNumber].totalCalories
-    : totalCalories;
+  let goalCalories: number | undefined;
 
-  const calculatePercentage = (calories: number) =>
-    calories === 0 ? 0 : Math.min(100, (calories / goalCalories) * 100);
+  if (
+    data &&
+    data[selectedMealNumber] &&
+    data[selectedMealNumber].targetCalories
+  ) {
+    goalCalories = data[selectedMealNumber].targetCalories;
+  } else if (data && !data[selectedMealNumber]) {
+    for (const key in data) {
+      if (data[key].targetCalories) {
+        goalCalories = data[key].targetCalories;
+        break;
+      }
+    }
+  }
+
+  const calculatePercentage = (calories: number) => {
+    if (goalCalories !== undefined) {
+      return calories === 0
+        ? 0
+        : Math.min(100, (calories / goalCalories) * 100);
+    }
+  };
 
   const percentage = isShowingTotal
-    ? calculatePercentage(drawGraphByCalories)
+    ? calculatePercentage(totalMealCalories)
     : calculatePercentage(totalCalories);
 
-  const barFill = percentage >= 100 ? '#ff6a6a' : '#007bff';
+  const barFill = (percentage as number) >= 100 ? '#ff6a6a' : '#007bff';
 
   useEffect(() => {
-    setAnimationTrigger(false);
     const animationTimer = setTimeout(() => {
       setAnimationTrigger(true);
     }, 100);
-    return () => clearTimeout(animationTimer);
+    return () => {
+      clearTimeout(animationTimer);
+      setAnimationTrigger(false);
+    };
   }, [isShowingTotal]);
 
   const handleSwitchGraph = () => {

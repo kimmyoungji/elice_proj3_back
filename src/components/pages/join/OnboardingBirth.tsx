@@ -7,9 +7,10 @@ const OnboardingBirth: React.FC<OnboardingProps> = ({
   userData,
   onClickOnboarding,
 }) => {
-  const [year, setYear] = useState('');
-  const [month, setMonth] = useState('');
-  const [date, setDate] = useState('');
+  const thisYear = new Date().getFullYear();
+  const [year, setYear] = useState(thisYear.toString());
+  const [month, setMonth] = useState('1');
+  const [date, setDate] = useState('1');
 
   const onBlurSetBirth = () => {
     onClickOnboarding({ ['birthDay']: `${year}-${month}-${date}` });
