@@ -18,7 +18,7 @@ export class FoodInfoController {
   constructor(private foodInfoService: FoodInfoService) {}
 
   @Get("/foods")
-  // @UseGuards(isLoggedInGuard)
+  @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "음식 조회하기",
     description:
