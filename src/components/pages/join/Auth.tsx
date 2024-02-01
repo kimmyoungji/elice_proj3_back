@@ -8,7 +8,9 @@ import { RootState } from '@components/store';
 
 const Auth = () => {
   const navigate = useNavigate();
-  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const userInfo = useSelector(
+    (state: RootState) => state.user.userInfo.username
+  );
   const handleClickGoogleAuth = () => {
     window.location.href = 'http://localhost:5001/api/auth/google/login';
   };
