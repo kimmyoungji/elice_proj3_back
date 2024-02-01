@@ -15,7 +15,7 @@ const OnboardingBirth: React.FC<OnboardingProps> = ({
   const onBlurSetBirth = () => {
     onClickOnboarding({
       ['birthDay']: `${year}-${month}-${date}`,
-      ['age']: `${thisYear}-${year}`,
+      ['age']: `${Number(thisYear) - Number(year)}`,
     });
   };
 
