@@ -91,7 +91,6 @@ export class FoodInfoService {
     }
   }
 
-  // 구현중
   async getFoodIdList(foodList: string[]) {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -99,7 +98,6 @@ export class FoodInfoService {
 
     try {
       const foodInfoIdList = [];
-      console.log(foodList);
       for (const food of foodList) {
         const result = await this.foodInfoRepository.getFoodInfo(
           food,
@@ -107,11 +105,9 @@ export class FoodInfoService {
         );
         foodInfoIdList.push(result.foodInfoId);
       }
-
       await queryRunner.commitTransaction();
       return foodInfoIdList;
     } catch (error) {
-      console.log("error", error);
       await queryRunner.rollbackTransaction();
       return error;
     } finally {

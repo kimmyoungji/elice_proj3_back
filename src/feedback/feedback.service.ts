@@ -72,7 +72,6 @@ export class FeedbackService {
           saveYn: false,
         };
         const feedbackData = new Feedback().makefeedbackDataDto(data);
-        console.log("feedbackData", feedbackData);
         await this.feedBackRepository.saveFeedBack(
           feedbackData,
           queryRunner.manager
