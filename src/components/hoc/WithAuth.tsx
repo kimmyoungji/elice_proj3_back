@@ -1,39 +1,36 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, useActionData } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { RootState } from '../store/index';
 import { useEffect, useMemo, useState } from 'react';
 import { loginUser } from '@components/store/userLoginRouter';
 import useCachingApi from '@hooks/useCachingApi';
 import { UserInfo } from '@components/store/userLoginRouter';
 
-// const onboardingPaths = [
-//   { field: 'gender', path: '/onboarding/1' },
-//   { field: 'age', path: '/onboarding/2' },
-//   { field: 'height', path: '/onboarding/3' },
-//   { field: 'weight', path: '/onboarding/4' },
-//   { field: 'dietGoal', path: '/onboarding/5' },
-//   { field: 'activityAmount', path: '/onboarding/6' },
-// ];
-
-const path = '/onboarding/1';
+const onboardingPaths = [
+  { field: 'gender', path: '/onboarding/1' },
+  { field: 'age', path: '/onboarding/2' },
+  { field: 'height', path: '/onboarding/3' },
+  { field: 'weight', path: '/onboarding/4' },
+  { field: 'dietGoal', path: '/onboarding/5' },
+  { field: 'activityAmount', path: '/onboarding/6' },
+];
 
 const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
   const AuthComponent: React.FC = (props: any) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const userData = useSelector((state: RootState) => state.user.userInfo);
     const isLoggedIn = userData && userData.username !== '';
-    const isUserInfoFilled = useMemo(() => {
-      return (state: RootState) =>
-        userData &&
-        (state.user.userInfo.dietGoal &&
-          state.user.userInfo.gender &&
-          state.user.userInfo.height &&
-          state.user.userInfo.activityAmount &&
-          state.user.userInfo.weight &&
-          state.user.userInfo.age) !== null;
-    }, [userData]);
 
-    const [redirectPath, setRedirectPath] = useState<string | null>(null);
+    const isUserInfoFilled =
+      userData &&
+      (userData.dietGoal &&
+        userData.gender &&
+        userData.height &&
+        userData.activityAmount &&
+        userData.weight &&
+        userData.birthday) !== null;
+
     type CachingType = {
       data: UserInfo;
     };
@@ -42,6 +39,7 @@ const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
       path: '/user',
     });
 
+    console.log(isUserInfoFilled);
     useEffect(() => {
       if (!isLoggedIn) {
         trigger('', {
@@ -56,20 +54,16 @@ const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
         });
       } else {
         if (isLoggedIn && !isUserInfoFilled) {
-          // for (const { field, path } of onboardingPaths) {
-          //   if (!(userData as any)[field]) {
-          //     setRedirectPath(path);
-          //     break;
-          //   }
-          // }
-          setRedirectPath(path);
+          for (const { field, path } of onboardingPaths) {
+            if (!(userData as any)[field]) {
+              console.log(field);
+              navigate(path);
+              return;
+            }
+          }
         }
       }
     }, [isLoggedIn, userData]);
-
-    if (redirectPath) {
-      return <Navigate to={redirectPath} />;
-    }
 
     return <WrappedComponent {...props} />;
   };
