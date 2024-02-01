@@ -23,7 +23,7 @@ export class MailVerificationService {
             const verificationCode = new VerificationCode(email, code);
             //인증코드 저장
             await this.verificationCodeRepository.saveVerificationCode(verificationCode, queryRunner.manager);
-            await queryRunner.commitTransaction();
+            
             // 이메일 전송
             const result = await this.mailerService.sendMail({
                 to: email,
@@ -31,6 +31,7 @@ export class MailVerificationService {
                 html: `<h1>gugram 회원가입 이메일 인증 코드</h1><h3>${code}</h3>`
             });
             
+            await queryRunner.commitTransaction();
             return result;
         }catch(err){ 
             await queryRunner.rollbackTransaction();

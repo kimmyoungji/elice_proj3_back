@@ -71,7 +71,7 @@ export class AuthController {
     @Post('local/login')
     @UseGuards(isNotLoggedInGuard, LocalAuthGuard)
     async handleLocalLogin(
-        @Req() request: any, @Res() response: any, @Body() LocalLoginDto: LocalLoginDto){
+        @Req() request: any, @Res() response: any){
         console.log('로그인 진행중...', request.user);
         const user = await this.userService.getUserInfos(request.user.userId);
         response.status(200).send(user);
@@ -79,7 +79,6 @@ export class AuthController {
 
     /* 구글, 로컬 공용 로그아웃 API */
     @ApiOperation({ summary: '로그아웃 uri' })
-    @UseGuards(isLoggedInGuard)
     @Get('logout')
     async handleGoogleLogout(@Req() request: any, @Res() response: any): Promise<void> {
 
