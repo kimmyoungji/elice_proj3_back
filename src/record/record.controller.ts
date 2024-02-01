@@ -2,9 +2,8 @@ import { Controller, Get, Param, Query, Post, Put, Delete, Body, Req, HttpStatus
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { RecordService } from "./record.service";
 import { Record } from "./record.entity";
-import { CreateRecordDto } from "./dtos/createRecord.dto";
 import { ValidateFoodPipe } from "./pipes/record.pipe";
-import { UpdateRecordDto } from "./dtos/updateRecord.dto";
+import { RecordDto } from "./dtos/record.dto";
 import { LocalAuthGuard } from "src/auth/utils/guards/local.auth.guard";
 import { isLoggedInGuard } from "src/auth/utils/guards/isLoggedin.guard";
 @Controller("records")
@@ -37,10 +36,12 @@ export class RecordController {
   @ApiOperation({ summary: "식단 기록" })
   async createRecord(
     @Req() req,
-    @Body() createRecordDto: CreateRecordDto
+    @Query('date') date: string,
+    @Query('mealType') queryMealType: number,
+    @Body() recordDto: RecordDto
   ): Promise<string> {
     const userId = req.user.userId
-    await this.recordService.createRecord(userId, createRecordDto);
+    await this.recordService.createRecord(userId, date, queryMealType, recordDto);
     return "식단 기록 성공";
   }
 
@@ -53,10 +54,10 @@ export class RecordController {
     @Req() req,
     @Query('date') date: string,
     @Query('mealType') queryMealType: number,
-    @Body() updateRecordDto: UpdateRecordDto,
+    @Body() recordDto: RecordDto,
   ): Promise<string> {
     const userId = req.user.userId
-    await this.recordService.updateDailyRecord(userId, date, queryMealType, updateRecordDto);
+    await this.recordService.updateDailyRecord(userId, date, queryMealType, recordDto);
     return "식단 수정 성공";
   }
 
