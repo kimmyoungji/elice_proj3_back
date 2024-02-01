@@ -91,9 +91,15 @@ const MyPageSettings = () => {
 
   const handleConfirmLogout = () => {
     trigger({ path: '/auth/logout' });
-    //에러 분기처리 할 부분?
     dispatch(logoutUser());
   };
+
+  useEffect(() => {
+    if (userData.username === '') {
+      navigate('/');
+    }
+  }, [userData.username]);
+
   const handleWithdrawal = () => {
     setShowModal(true);
     setModalSelect(false);
@@ -101,8 +107,7 @@ const MyPageSettings = () => {
 
   const handleConfirmWithdrawal = () => {
     trigger({ path: '/auth/withdrawal' });
-    //에러 분기처리 할 부분?
-    navigate('/');
+    dispatch(logoutUser());
   };
 
   return (

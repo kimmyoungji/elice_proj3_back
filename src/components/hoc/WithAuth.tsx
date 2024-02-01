@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { RootState } from '../store/index';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect } from 'react';
 import { loginUser } from '@components/store/userLoginRouter';
 import useCachingApi from '@hooks/useCachingApi';
 import { UserInfo } from '@components/store/userLoginRouter';
@@ -39,27 +39,31 @@ const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
       path: '/user',
     });
 
-    console.log(isUserInfoFilled);
     useEffect(() => {
       if (!isLoggedIn) {
+        console.log('들어가냐?');
         trigger('', {
           onSuccess: (data) => {
-            if (data) {
+            console.log(data);
+            if (data.data.username) {
               dispatch(loginUser(data.data));
-            }
-            if (!userData || !userData.username) {
-              return <Navigate to='/' />;
+              if (
+                window.location.pathname === '/auth' ||
+                window.location.pathname === '/login'
+              ) {
+                navigate('/home');
+              }
+            } else if (!userData || !userData.username) {
+              console.log('찍히니?');
+              navigate('/auth');
             }
           },
         });
-      } else {
-        if (isLoggedIn && !isUserInfoFilled) {
-          for (const { field, path } of onboardingPaths) {
-            if (!(userData as any)[field]) {
-              console.log(field);
-              navigate(path);
-              return;
-            }
+      } else if (isLoggedIn && !isUserInfoFilled) {
+        for (const { field, path } of onboardingPaths) {
+          if (!(userData as any)[field]) {
+            navigate(path);
+            return;
           }
         }
       }

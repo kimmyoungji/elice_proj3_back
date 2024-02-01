@@ -20,8 +20,8 @@ import {
 import WithAuth from '@components/hoc/WithAuth';
 import { LoadingBar } from '@components/UI/LoadingBar';
 
-const Login = lazy(() => import('@components/pages/login/Login'));
-const Auth = lazy(() => import('@components/pages/join/Auth'));
+const Login = WithAuth(lazy(() => import('@components/pages/login/Login')));
+const Auth = WithAuth(lazy(() => import('@components/pages/join/Auth')));
 const Join = lazy(() => import('@components/pages/join/Join'));
 
 //hoc 적용 필요시 주석 해제 후 사용
