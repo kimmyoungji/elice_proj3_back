@@ -11,9 +11,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   async validate(email: string, password: string, done: Function): Promise<any> {
     try{
+      if(!email || !password) throw new HttpException("등록되지 않은 이메일 이거나, 유효하지 않은 비밀번호입니다.", HttpStatus.UNAUTHORIZED);
       const user = await this.authService.validateLocalUser(email, password);
       if (!user) {
-        throw new HttpException("회원가입이 되어있지 않습니다.", HttpStatus.UNAUTHORIZED);
+        throw new HttpException("등록되지 않은 이메일 이거나, 유효하지 않은 비밀번호입니다.", HttpStatus.UNAUTHORIZED);
       }
       return done(null, user);
     }catch(err){

@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { VerificationCode } from './entities/verification-code.entity';
 import { VerificationCodeRepository } from './repositories/verification-code.repository';
 import { UserService } from 'src/user/user.service';
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Req, Res, UseFilters, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus, Param, Post, Req, Res, UseFilters, UseGuards, UsePipes, Body } from '@nestjs/common';
 import { GoogleAuthGuard } from './utils/guards/google.auth.guard';
 import { AuthService } from './auth.service';
 import { LocalSignupDto } from './dto/localSignupDto';
@@ -15,10 +15,10 @@ import { HealthInfo } from 'src/user/entities/health-info.entity';
 import { User } from 'src/user/entities/user.entity';
 import * as dotenv from 'dotenv';
 import { isNotLoggedInGuard } from './utils/guards/isNotLoggedIn.guard';
+import { LocalLoginDtoValidationPipe } from './utils/pipes/localLoginDtoValidation.pipe';
 dotenv.config();
-import { MailerService } from '@nestjs-modules/mailer';
 
-// @UseFilters(new RedirectFilter())
+
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -65,11 +65,10 @@ export class AuthController {
     /* 로컬 로그인 */
     @ApiOperation({ summary: '로컬 로그인 요청 API' })
     @ApiBody({ type: LocalLoginDto, description: '로그인 정보'})
-    @UseGuards(LocalAuthGuard)
-    @UseGuards(isNotLoggedInGuard)
     @Post('local/login')
+    @UseGuards(isNotLoggedInGuard, LocalAuthGuard)
     async handleLocalLogin(
-        @Req() request: any, @Res() response: any){
+        @Req() request: any, @Res() response: any, @Body() LocalLoginDto: LocalLoginDto){
         console.log('로그인 진행중...', request.user);
         const user = await this.userService.getUserInfos(request.user.userId);
         response.status(200).send(user);

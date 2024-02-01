@@ -69,9 +69,9 @@ export class AuthService {
                     await queryRunner.commitTransaction();
                     return user; // 로그인 성공
                 }
-                else throw new HttpException('비밀번호가 일치하지 않습니다.', HttpStatus.UNAUTHORIZED);
+                else throw new HttpException('등록되지 않은 이메일 이거나, 유효하지 않은 비밀번호입니다.', HttpStatus.UNAUTHORIZED);
             }
-            else { throw new HttpException('등록되지 않은 이메일입니다.', HttpStatus.UNAUTHORIZED)} 
+            else { throw new HttpException('등록되지 않은 이메일 이거나, 유효하지 않은 비밀번호입니다.', HttpStatus.UNAUTHORIZED)} 
             
             // return null; // 로그인 실패
         }catch(err){
