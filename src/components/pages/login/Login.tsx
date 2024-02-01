@@ -26,11 +26,11 @@ const Login = () => {
     method: 'post',
     path: '/auth/local/login',
   });
-  // const { trigger: triggerUserInfo } = useCachingApi<any>({
-  //   method: 'get',
-  //   path: '/user',
-  //   //gcTime: 24 * 60 * 60 * 1000, //쿠키 만료시간
-  // });
+  const { trigger: triggerUserInfo } = useCachingApi<any>({
+    method: 'get',
+    path: '/user',
+    //gcTime: 24 * 60 * 60 * 1000, //쿠키 만료시간
+  });
 
   const userInfo = useSelector<{
     user: {
@@ -77,39 +77,39 @@ const Login = () => {
     );
   };
 
-  // useEffect(() => {
-  //   userInfo && healthInfo && navigate('/home');
-  // }, [userInfo]);
+  useEffect(() => {
+    userInfo && healthInfo && navigate('/home');
+  }, [userInfo]);
 
-  // useEffect(() => {
-  //   //로그인 화면 들어갔을때 쿠키 확인 절차
-  //   triggerUserInfo('', {
-  //     onSuccess: (data) => {
-  //       dispatch(loginUser(data.data));
-  //     },
-  //   });
-  // }, []);
+  useEffect(() => {
+    //로그인 화면 들어갔을때 쿠키 확인 절차
+    triggerUserInfo('', {
+      onSuccess: (data) => {
+        dispatch(loginUser(data.data));
+      },
+    });
+  }, []);
 
-  // useEffect(() => {
-  //   //있으면 home
-  //   console.log(postResult);
-  //   if (
-  //     postResult &&
-  //     postResult.status === 200 &&
-  //     postResult.data !== '로그인이 필요합니다.'
-  //   ) {
-  //     if (
-  //       healthInfo === '' ||
-  //       healthInfo === undefined ||
-  //       healthInfo === 0 ||
-  //       healthInfo === null
-  //     ) {
-  //       navigate('/onboarding/1');
-  //     } else {
-  //       navigate('/home');
-  //     }
-  //   }
-  // }, [postResult]);
+  useEffect(() => {
+    //있으면 home
+    console.log(postResult);
+    if (
+      postResult &&
+      postResult.status === 200 &&
+      postResult.data !== '로그인이 필요합니다.'
+    ) {
+      if (
+        healthInfo === '' ||
+        healthInfo === undefined ||
+        healthInfo === 0 ||
+        healthInfo === null
+      ) {
+        navigate('/onboarding/1');
+      } else {
+        navigate('/home');
+      }
+    }
+  }, [postResult]);
 
   return (
     <div className='login-container'>

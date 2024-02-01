@@ -63,7 +63,7 @@ api2.interceptors.request.use(
 
 api.interceptors.response.use(
   (res) => {
-    return res.data;
+    return res;
   },
   async (err) => {
     const { status, data } = err?.response;
