@@ -58,10 +58,10 @@ const useMutationggu = <T, E = ApiResponseError>(
       if (isAxiosError(error)) {
         console.log(error.message);
       }
-      // isShowBoundary && showBoundary(error);
+      isShowBoundary && showBoundary(error);
     },
     onSettled: async () => {},
-    throwOnError: true,
+    throwOnError: isShowBoundary,
     gcTime,
     //gcTime만 해도 될지? staleTime은 refetch의 기능이므로 필요 없을지?
   });

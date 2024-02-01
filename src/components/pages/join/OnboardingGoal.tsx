@@ -9,9 +9,9 @@ const OnboardingGoal: React.FC<OnboardingProps> = ({
 }) => {
   const onClickGoal = (value: number) => {
     if (userData.dietGoal === value.toString()) {
-      onClickOnboarding({ dietGoal: '' });
+      onClickOnboarding({ ['dietGoal']: '' });
     } else {
-      onClickOnboarding({ dietGoal: value });
+      onClickOnboarding({ ['dietGoal']: value });
     }
   };
   return (

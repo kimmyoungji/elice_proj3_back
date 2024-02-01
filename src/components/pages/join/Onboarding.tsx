@@ -12,6 +12,15 @@ import { checkValuesNullOrEmpty } from '@utils/checkValuesNullOrEmpty';
 import { useSelector } from 'react-redux';
 import { RootState } from '@components/store';
 import { UserInfo } from '@components/store/userLoginRouter';
+import RenderProgressBar from './RenderProgressBar';
+import useUpdateDataAndCalories from '@hooks/useUpdateDataAndCalories';
+import { UserData } from '../my-page/MypageTypes';
+import getNutritionStandard from '@utils/getNutritionStandard';
+import {
+  adjustCaloriesByGoal,
+  calBMR,
+  calBMRCalories,
+} from '../my-page/calUserData';
 
 export interface userPutDataType {
   dietGoal?: string;
@@ -19,11 +28,12 @@ export interface userPutDataType {
   height?: number;
   weight?: number;
   gender?: string;
+  age?: number;
   birthDay?: string;
 }
 
 interface OnBoardingResult {
-  data: string;
+  data: any;
   status: number;
 }
 
@@ -37,18 +47,16 @@ const initialUserInfo = {
   weight: undefined,
 };
 
-//onboarding에서 앞의 데이터가 없을 때
-
 const Onboarding = () => {
   const navigate = useNavigate();
   const { step } = useParams();
   const [curStep, setCurStep] = useState(Number(step) || 1);
-  const [userData, setUserData] = useState<userPutDataType>(initialUserInfo);
+  const [userData, setUserData] = useState<any>(initialUserInfo);
 
   const returnedUserData = useSelector(
     (state: RootState) => state.user.userInfo
   );
-  const { loading, trigger } = useCachingApi<OnBoardingResult>({
+  const { loading, trigger } = useCachingApi<any>({
     method: 'put',
     path: '/user',
   });
@@ -66,39 +74,92 @@ const Onboarding = () => {
     }
   );
 
+  //fetched된 userData중 일부만 가져옴
   useEffect(() => {
     setUserData(changeTypedUserData);
   }, [returnedUserData]);
 
+  const onClickTrigger = () => {
+    trigger(
+      { ...userData },
+      {
+        onSuccess: (data) => {
+          if (data.data.targetCalories && data.status === 200) {
+            navigate('/home');
+          }
+        },
+      }
+    );
+  };
+
+  //목표칼로리, 영양성분 userData에 업데이트
+  const updateCalculatedData = (userData: any) => {
+    //goalCalrories 계산
+    const bmr = calBMR({ data: userData });
+    const bmrCalories = calBMRCalories({
+      bmr,
+      data: userData,
+    });
+    const goalCalories = Math.round(
+      adjustCaloriesByGoal({ data: userData, bmrCalories })
+    );
+    //영양성분 계산
+    const { carbohydrates, proteins, fats, dietaryFiber } =
+      getNutritionStandard(userData);
+
+    //userData에 세팅
+    setUserData((prev: any) => ({
+      ...prev,
+      ['targetCalories']: goalCalories,
+      carbohydrates,
+      proteins,
+      fats,
+      dietaryFiber,
+    }));
+  };
+
   const onNextClick = async () => {
     if (curStep === 6) {
+      //step마지막일때 객체가 비어있는지 확인 후
+      //비어있는 곳으로 이동
       if (checkValuesNullOrEmpty(userData)) {
         setCurStep(checkValuesNullOrEmpty(userData) as number);
         return navigate(`/onboarding/${checkValuesNullOrEmpty(userData)}`);
-      } else if (!loading) {
-        trigger(
-          { ...userData },
-          {
-            onSuccess: (data) => {
-              if (
-                data.data === '유저정보 및 유저건강정보 업데이트 성공' &&
-                data.status === 200
-              ) {
-                navigate('/home');
-              }
-            },
-          }
-        );
+      } else {
+        updateCalculatedData(userData);
       }
     } else {
+      //step 1~5
       setCurStep((prev) => prev + 1);
       navigate(`/onboarding/${curStep + 1}`);
     }
   };
 
-  const onClickOnboarding = (onboardingInfo: object) => {
-    setUserData((prev) => ({ ...prev, ...onboardingInfo }));
+  const onClickOnboarding = (onboardingInfo: userPutDataType) => {
+    setUserData((prev: any) => ({
+      ...prev,
+      ...onboardingInfo,
+    }));
   };
+
+  //업데이트 영양성분과 목표 칼로리 모두 있을떄 감지해서 PUT요청
+  useEffect(() => {
+    if (
+      userData.carbohydrates &&
+      userData.proteins &&
+      userData.fats &&
+      userData.dietaryFiber &&
+      userData.dietGoal
+    ) {
+      onClickTrigger();
+    }
+  }, [
+    userData.carbohydrates &&
+      userData.proteins &&
+      userData.fats &&
+      userData.dietaryFiber &&
+      userData.dietGoal,
+  ]);
 
   const isNextButtonDisabled = () => {
     switch (curStep) {
@@ -119,20 +180,6 @@ const Onboarding = () => {
     }
   };
 
-  const renderProgressBar = () => {
-    const steps = 6;
-    const progressBarSteps = [];
-
-    for (let i = 1; i <= steps; i++) {
-      const isActive = i <= curStep;
-      progressBarSteps.push(
-        <div key={i} className={`progress-step ${isActive ? 'active' : ''}`} />
-      );
-    }
-
-    return progressBarSteps;
-  };
-
   return (
     <div
       style={{
@@ -144,7 +191,7 @@ const Onboarding = () => {
     >
       <div>
         <div className='progress-bar' style={{ marginBottom: '50px' }}>
-          {renderProgressBar()}
+          {RenderProgressBar(curStep)}
         </div>
         {curStep === 1 && (
           <OnboardingGender

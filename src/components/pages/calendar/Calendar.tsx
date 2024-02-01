@@ -36,7 +36,7 @@ const CalendarProvider = ({
 
   const [thisYear, setThisYear] = useState(yearNow);
   const [thisMonth, setThisMonth] = useState(Number(monthNow));
-  const [thisDay, setThisDay] = useState(dayNow);
+  const [thisDay, setThisDay] = useState(Number(dayNow));
   const [isAlbum, setIsAlbum] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(NaN);
   const [showSelect, setShowSelect] = useState(false);

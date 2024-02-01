@@ -6,15 +6,30 @@ import './Login.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserInfo, loginUser } from '@components/store/userLoginRouter';
 import useCachingApi from '@hooks/useCachingApi';
+import Toast from '@components/UI/Toast';
+import ToastText from '@components/UI/ToastText';
+import { checkValuesNullOrEmpty } from '@utils/checkValuesNullOrEmpty';
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { loading, trigger, result } = useCachingApi<any>({
+  const [toastText, setToastText] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const {
+    loading,
+    trigger: triggerLogin,
+    result: postResult,
+    error,
+  } = useCachingApi<any>({
     method: 'post',
-    path: 'auth/local/login',
+    path: '/auth/local/login',
+  });
+  const { trigger: triggerUserInfo, result: userResult } = useCachingApi<any>({
+    method: 'get',
+    path: '/user',
+    //gcTime: 24 * 60 * 60 * 1000, //쿠키 만료시간
   });
 
   const userInfo = useSelector<{
@@ -35,34 +50,63 @@ const Login = () => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
+  const handleToast = () => {
+    setShowToast(true);
+  };
 
   const handleLogin: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void = async () => {
-    trigger(
+    triggerLogin(
       { email, password },
       {
         onSuccess: (data) => {
-          dispatch(loginUser(data.data));
+          if (
+            data ===
+            '등록되지 않은 이메일 이거나, 유효하지 않은 비밀번호입니다.'
+          ) {
+            setToastText(`메일주소 또는 \n 비밀번호가 틀립니다`);
+            handleToast();
+          } else {
+            dispatch(loginUser(data.data));
+          }
+          if (checkValuesNullOrEmpty(data)) {
+          }
         },
       }
     );
   };
 
   useEffect(() => {
-    //유저 healthinfo가 없으면 onboarding,
+    //로그인 화면 들어갔을때 쿠키 확인 절차
+    triggerUserInfo('', {
+      onSuccess: (data) => {
+        dispatch(loginUser(data.data));
+      },
+    });
+  }, []);
+
+  useEffect(() => {
     //있으면 home
-    if (result && result.status === 200) {
-      if (healthInfo) {
-        navigate('/home');
-      } else {
+    if (postResult && postResult.status === 200) {
+      if (
+        healthInfo === '' ||
+        healthInfo === undefined ||
+        healthInfo === 0 ||
+        healthInfo === null
+      ) {
         navigate('/onboarding/1');
+      } else {
+        navigate('/home');
       }
     }
-  }, [userInfo]);
+  }, [postResult]);
 
   return (
     <div className='login-container'>
+      <Toast show={showToast} setShow={setShowToast}>
+        <ToastText>{toastText}</ToastText>
+      </Toast>
       <div className='body'>
         <p className='r-large'>이메일</p>
       </div>
@@ -92,9 +136,10 @@ const Login = () => {
           variant='default-active'
           size='big'
           onClickBtn={handleLogin}
-          disabled={loading}
+          // disabled={loading}
         >
-          {loading ? '로그인 하는중' : '로그인'}
+          {/* {loading ? '로그인 하는중' : '로그인'} */}
+          {'로그인'}
         </ButtonCommon>
       </div>
     </div>

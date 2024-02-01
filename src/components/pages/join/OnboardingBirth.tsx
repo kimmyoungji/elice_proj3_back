@@ -13,7 +13,10 @@ const OnboardingBirth: React.FC<OnboardingProps> = ({
   const [date, setDate] = useState('1');
 
   const onBlurSetBirth = () => {
-    onClickOnboarding({ ['birthDay']: `${year}-${month}-${date}` });
+    onClickOnboarding({
+      ['birthDay']: `${year}-${month}-${date}`,
+      ['age']: `${Number(thisYear) - Number(year)}`,
+    });
   };
 
   const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {

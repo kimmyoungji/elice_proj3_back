@@ -14,9 +14,6 @@ const OnboardingActivity: React.FC<OnboardingProps> = ({
       onClickOnboarding({ ['activityAmount']: value.toString() });
     }
   };
-  useEffect(() => {
-    console.log(userData.activityAmount);
-  }, [userData.activityAmount]);
   return (
     <div className='onboarding-container'>
       <h1 className='b-medium'>당신의 평소 활동량은 어떤가요?</h1>

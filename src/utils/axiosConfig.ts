@@ -120,18 +120,6 @@ api.interceptors.response.use(
       }
     }
 
-    if (err.response && status === 404) {
-      if (data === '해당하는 주문 내역이 없습니다.') {
-        window.location.href = '/';
-      }
-    }
-
-    if (err.response && status === 409) {
-      if (data === '이미 찜하기 된 상품입니다') {
-        window.location.replace('/login');
-      }
-    }
-
     if (err.response && status === 419) {
       if (data === 'Access Token 만료') {
         const originRequest: originRequestType = config;
@@ -164,15 +152,21 @@ api.interceptors.response.use(
       } else {
         window.location.replace('/');
       }
+    }
 
-      if (err.response && status === 500) {
-        if (data === '해당 상품이 장바구니에 없습니다.') {
-          window.location.replace('/cart');
-        }
+    if (err.response && status === 401) {
+      if (
+        data.message ===
+        '등록되지 않은 이메일 이거나, 유효하지 않은 비밀번호입니다.'
+      ) {
+        return data.message;
+        // window.location.replace('/login');
+        // return new Error('등록되지 않은 이메일입니다.');
       }
     }
 
-    throw new Error('잘못된 요청입니다');
+    // throw new Error('잘못된 요청입니다');
+    console.log(err.response);
   }
 );
 
