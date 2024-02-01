@@ -274,7 +274,7 @@ const RecordEdit = () => {
 
     if (!newFoods[0].recordId) {
       recordPost.trigger({
-        path: '/records',
+        path: `/records?date=${date}&mealType=${mealTime}`,
         data: {
           mealType: mealTime,
           imgUrl: pUrl,
