@@ -37,7 +37,7 @@ const Record = () => {
   }, []);
 
   useEffect(() => {
-    if (data && data.data.dateArr.length > 0) {
+    if (data && data.data.dateArr?.length > 0) {
       setFoodData(data.data);
       console.log(data.data);
     }
@@ -55,7 +55,11 @@ const Record = () => {
   const handleMealClick = (meal: number) => {
     navigate(`/record/${selectedDate || todayDate}/${meal}`);
   };
-  const handleMealDelete = (meal: number) => {
+  const handleMealDelete = (
+    event: React.MouseEvent<HTMLImageElement>,
+    meal: number
+  ) => {
+    event.stopPropagation();
     const updatedFoodData = { ...foodData };
     updatedFoodData.dateArr[meal - 1] = [meal, 0, null];
     trigger({
@@ -110,10 +114,10 @@ const Record = () => {
                     ? '/icons/meal_plus_button.png'
                     : '/icons/meal_delete.png'
                 }
-                onClick={() =>
+                onClick={(e) =>
                   !mealData[1] && !mealData[2]
                     ? handleMealClick(mealData[0])
-                    : handleMealDelete(mealData[0])
+                    : handleMealDelete(e, mealData[0])
                 }
                 alt={
                   !mealData[1] && !mealData[2]
