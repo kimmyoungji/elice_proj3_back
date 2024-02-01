@@ -88,7 +88,7 @@ const RecordEdit = () => {
       date + ' ' + mealTimetoStr[mealTime as string] + Math.random() + '.jpg'
     );
   }, []);
-  const file = foods && !foods[0].recordId && imgUrl && base64toFile(imgUrl, fileName);
+  const file = foods && !foods[0]?.recordId && imgUrl && base64toFile(imgUrl, fileName);
 
   useEffect(() => {
     if (state) {
