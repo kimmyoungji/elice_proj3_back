@@ -25,7 +25,7 @@ export class FoodInfoController {
   })
   // @UseGuards(isLoggedInGuard)
   async getFoodInfo(
-    @Query("keyword") keyword: string,
+    @Query("keyword", FoodNamePipe) keyword: string,
     @Query("lastFoodId") lastFoodId: string,
     @Query("foodName", FoodNamePipe) foodName: string,
     @Query("foodInfoId") foodInfoId: string
