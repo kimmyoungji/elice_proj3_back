@@ -26,22 +26,22 @@ const Login = () => {
     method: 'post',
     path: '/auth/local/login',
   });
-  const { trigger: triggerUserInfo, result: userResult } = useCachingApi<any>({
-    method: 'get',
-    path: '/user',
-    //gcTime: 24 * 60 * 60 * 1000, //쿠키 만료시간
-  });
+  // const { trigger: triggerUserInfo } = useCachingApi<any>({
+  //   method: 'get',
+  //   path: '/user',
+  //   //gcTime: 24 * 60 * 60 * 1000, //쿠키 만료시간
+  // });
 
   const userInfo = useSelector<{
     user: {
       userInfo: UserInfo;
     };
-  }>((state) => state.user.userInfo.username);
+  }>((state) => state.user?.userInfo?.username);
   const healthInfo = useSelector<{
     user: {
       userInfo: UserInfo;
     };
-  }>((state) => state.user.userInfo.height);
+  }>((state) => state.user?.userInfo?.height);
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -65,7 +65,7 @@ const Login = () => {
             data ===
             '등록되지 않은 이메일 이거나, 유효하지 않은 비밀번호입니다.'
           ) {
-            setToastText(`메일주소 또는 \n 비밀번호가 틀립니다`);
+            setToastText(data);
             handleToast();
           } else {
             dispatch(loginUser(data.data));
@@ -77,34 +77,39 @@ const Login = () => {
     );
   };
 
-  useEffect(() => {
-    userInfo && navigate('/home');
-  }, [userInfo]);
+  // useEffect(() => {
+  //   userInfo && healthInfo && navigate('/home');
+  // }, [userInfo]);
 
-  useEffect(() => {
-    //로그인 화면 들어갔을때 쿠키 확인 절차
-    triggerUserInfo('', {
-      onSuccess: (data) => {
-        dispatch(loginUser(data.data));
-      },
-    });
-  }, []);
+  // useEffect(() => {
+  //   //로그인 화면 들어갔을때 쿠키 확인 절차
+  //   triggerUserInfo('', {
+  //     onSuccess: (data) => {
+  //       dispatch(loginUser(data.data));
+  //     },
+  //   });
+  // }, []);
 
-  useEffect(() => {
-    //있으면 home
-    if (postResult && postResult.status === 200) {
-      if (
-        healthInfo === '' ||
-        healthInfo === undefined ||
-        healthInfo === 0 ||
-        healthInfo === null
-      ) {
-        navigate('/onboarding/1');
-      } else {
-        navigate('/home');
-      }
-    }
-  }, [postResult]);
+  // useEffect(() => {
+  //   //있으면 home
+  //   console.log(postResult);
+  //   if (
+  //     postResult &&
+  //     postResult.status === 200 &&
+  //     postResult.data !== '로그인이 필요합니다.'
+  //   ) {
+  //     if (
+  //       healthInfo === '' ||
+  //       healthInfo === undefined ||
+  //       healthInfo === 0 ||
+  //       healthInfo === null
+  //     ) {
+  //       navigate('/onboarding/1');
+  //     } else {
+  //       navigate('/home');
+  //     }
+  //   }
+  // }, [postResult]);
 
   return (
     <div className='login-container'>
