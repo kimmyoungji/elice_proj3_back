@@ -202,7 +202,7 @@ const RecordEdit = () => {
     if (foods[0].foodName === '음식명') return;
     if (foods[0].foodName === '') return;
     if (foods[0].foodInfoId) return;
-    const foodList = foods.length===1 ? foods[0].foodName : foods.map((food) => food.foodName);
+    const foodList = foods.length===1 ? [foods[0].foodName] : foods.map((food) => food.foodName);
     getFoodInfoId.trigger({
       path: '/food-info/foods',
       data: { foodList },
