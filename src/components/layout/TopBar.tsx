@@ -32,7 +32,9 @@ const TopBar = ({ home, title, back, qIcon, icon }: TopBarPropsType) => {
   };
 
   if (key === 'aidrawerdetail') {
-    title += `${new URLSearchParams(window.location.search).get('date')} 답변`;
+    const date = new URLSearchParams(window.location.search).get('date');
+    const newDate = date?.split('-').join('.');
+    title += `${newDate} 답변`;
   }
 
   return (

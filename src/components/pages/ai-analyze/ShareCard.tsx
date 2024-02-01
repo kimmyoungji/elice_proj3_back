@@ -1,6 +1,8 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import styles from '@components/pages/ai-analyze/drawer.module.css';
 import { Next } from '@assets/Next';
+import useApi from '@hooks/useApi';
+import { useEffect, useState } from 'react';
 
 const typeType: Record<string, string> = {
   식단추천: styles.recommend,
@@ -13,33 +15,73 @@ const tagType: Record<string, string> = {
   목표추천: styles.goal_tag,
 };
 
-const DUMMYdetaildata = {
-  feedbackId: '1234',
-  feedbackDate: '24.01.02',
-  questionType: '식단추천',
-  question: '내 목표에 맞게 추천 받고 싶어!',
-  text: '권장 섭취 칼로리가 1200kcal이고 근육증량을 목표로 하니, 아침에 닭가슴살 300g, 두유 200ml, 현미밥 150g, 기타 반찬 자유롭게 드시는 걸 추천드립니다. 점심과 저녁은 사과 하나, 소고기 200g 정도 먹으시고 하던 운동 지속하시면 됩니다.권장 섭취 칼로리가 1200kcal이고 근육증량을 목표로 하니, 아침에 닭가슴살 300g, 두유 200ml, 현미밥 150g, 기타 반찬 자유롭게 드시는 걸 추천드립니다. 점심과 저녁은 사과 하나, 소고기 200g 정도 먹으시고 하던 운동 지속하시면 됩니다.권장 섭취 칼로리가 1200kcal이고 근육증량을 목표로 하니, 아침에 닭가슴살 300g, 두유 200ml, 현미밥 150g, 기타 반찬 자유롭게 드시는 걸 추천드립니다. 점심과 저녁은 사과 하나, 소고기 200g 정도 먹으시고 하던 운동 지속하시면 됩니다.',
-  option: { goal: '', calorie: 0 },
-};
+interface Props {
+  feedbackId: string;
+  feedbackDate: string;
+  questionType: string;
+  question: string;
+  feedback: string;
+  option: { goal: string; calorie: number };
+}
+interface PropsReturnType {
+  data: Props;
+}
 
 const ShareCard = () => {
+  const location = useLocation();
+  const id = location.pathname.split('/')[2];
+
+  const { trigger, result, reqIdentifier, loading, error } =
+    useApi<PropsReturnType>({
+      method: 'get',
+      path: `/feedback?feedbackId=${id}`,
+      shouldInitFetch: false,
+    });
+
+  const triggerData = async () => {
+    await trigger({
+      applyResult: true,
+      isShowBoundary: true,
+    });
+  };
+
+  const [data, setData] = useState({
+    feedbackId: '',
+    feedbackDate: '',
+    questionType: '',
+    question: '',
+    feedback: '',
+    option: { goal: '', calorie: 0 },
+  });
+
+  useEffect(() => {
+    triggerData();
+  }, []);
+
+  useEffect(() => {
+    if (result?.data) {
+      setData(result?.data);
+    }
+  }, [result?.data]);
+
   const navigate = useNavigate();
+
+  const newDate = data.feedbackDate.split('-').join('.');
+
   return (
     <>
       <div className={styles.drawer_wrapper}>
         <div className={styles.detail_wrapper}>
-          <div className={`${styles.date} b-regular`}>
-            {DUMMYdetaildata.feedbackDate}
+          <div className={`${styles.date} b-regular`}>{newDate}</div>
+          <div
+            className={`${styles.type} ${typeType[data.questionType]} s-regular`}
+          >
+            {data.questionType}
           </div>
           <div
-            className={`${styles.type} ${typeType[DUMMYdetaildata.questionType]} s-regular`}
+            className={`${styles.tag} ${tagType[data.questionType]} b-small`}
           >
-            {DUMMYdetaildata.questionType}
-          </div>
-          <div
-            className={`${styles.tag} ${tagType[DUMMYdetaildata.questionType]} b-small`}
-          >
-            {DUMMYdetaildata.question}
+            {data.question}
           </div>
           <div className={styles.option_wrapper}>
             <div className={styles.option} onClick={() => navigate('/join')}>
@@ -47,9 +89,7 @@ const ShareCard = () => {
               <Next />
             </div>
           </div>
-          <div className={`${styles.share_text} r-big`}>
-            {DUMMYdetaildata.text}
-          </div>
+          <div className={`${styles.share_text} r-big`}>{data.feedback}</div>
         </div>
       </div>
     </>

@@ -1,10 +1,11 @@
-import { useLocation } from 'react-router-dom';
 import styles from '@components/pages/ai-analyze/drawer.module.css';
 import Option from './Option';
 import { Share } from '@assets/Share';
 import { DeleteBox } from '@assets/DeleteBox';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MiniToast from './MiniToast';
+import useApi from '@hooks/useApi';
+import { useSearchParams } from 'react-router-dom';
 
 const typeType: Record<string, string> = {
   식단추천: styles.recommend,
@@ -17,14 +18,17 @@ const tagType: Record<string, string> = {
   목표추천: styles.goal_tag,
 };
 
-const DUMMYdetaildata = {
-  feedbackId: '1234qwe',
-  feedbackDate: '24.01.02',
-  questionType: '식단추천',
-  question: '내 목표에 맞게 추천 받고 싶어!',
-  text: '권장 섭취 칼로리가 1200kcal이고 근육증량을 목표로 하니, 아침에 닭가슴살 300g, 두유 200ml, 현미밥 150g, 기타 반찬 자유롭게 드시는 걸 추천드립니다. 점심과 저녁은 사과 하나, 소고기 200g 정도 먹으시고 하던 운동 지속하시면 됩니다.권장 섭취 칼로리가 1200kcal이고 근육증량을 목표로 하니, 아침에 닭가슴살 300g, 두유 200ml, 현미밥 150g, 기타 반찬 자유롭게 드시는 걸 추천드립니다. 점심과 저녁은 사과 하나, 소고기 200g 정도 먹으시고 하던 운동 지속하시면 됩니다.권장 섭취 칼로리가 1200kcal이고 근육증량을 목표로 하니, 아침에 닭가슴살 300g, 두유 200ml, 현미밥 150g, 기타 반찬 자유롭게 드시는 걸 추천드립니다. 점심과 저녁은 사과 하나, 소고기 200g 정도 먹으시고 하던 운동 지속하시면 됩니다.',
-  option: { goal: '근육증량', calorie: 1200 },
-};
+interface Props {
+  feedbackId: string;
+  feedbackDate: string;
+  questionType: string;
+  question: string;
+  feedback: string;
+  option: { goal: string; calorie: number };
+}
+interface PropsReturnType {
+  data: Props;
+}
 
 const handleCopyClipBoard = async (text: string) => {
   try {
@@ -37,45 +41,86 @@ const handleCopyClipBoard = async (text: string) => {
 const AiDrawerDetail = () => {
   const [shareToast, setShareToast] = useState(false);
   const [deleteToast, setDeleteToast] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const id = searchParams.get('feedbackId');
+
+  const { trigger, result, reqIdentifier, loading, error } =
+    useApi<PropsReturnType>({
+      method: 'get',
+      path: `/feedback?feedbackId=${id}`,
+      shouldInitFetch: false,
+    });
+
+  const triggerData = async () => {
+    await trigger({
+      applyResult: true,
+      isShowBoundary: true,
+    });
+  };
+  const triggerDeleteData = async () => {
+    await trigger({
+      method: 'delete',
+      path: `/feedback?feedbackId=${id}`,
+      applyResult: true,
+      isShowBoundary: true,
+    });
+  };
+
+  const [data, setData] = useState({
+    feedbackId: '',
+    feedbackDate: '',
+    questionType: '',
+    question: '',
+    feedback: '',
+    option: { goal: '', calorie: 0 },
+  });
+
+  useEffect(() => {
+    triggerData();
+  }, []);
+
+  useEffect(() => {
+    if (result?.data) {
+      setData(result?.data);
+    }
+  }, [result?.data]);
+
   const handleShare = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    handleCopyClipBoard(
-      `http://localhost:3000/share/${DUMMYdetaildata.feedbackId}`
-    );
-    // 나중에 배포 url로 변경 필요!
+    handleCopyClipBoard(`http://localhost:3000/share/${data?.feedbackId}`); // 나중에 배포 url로 변경 필요!
     setShareToast(true);
   };
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    // 삭제 API 호출
+    triggerDeleteData();
     setDeleteToast(true);
   };
+
+  const newDate = data.feedbackDate.split('-').join('.');
 
   return (
     <>
       <div className={styles.drawer_wrapper}>
         <div className={styles.detail_wrapper}>
-          <div className={`${styles.date} b-regular`}>
-            {DUMMYdetaildata.feedbackDate}
+          <div className={`${styles.date} b-regular`}>{newDate}</div>
+          <div
+            className={`${styles.type} ${typeType[data.questionType]} s-regular`}
+          >
+            {data.questionType}
           </div>
           <div
-            className={`${styles.type} ${typeType[DUMMYdetaildata.questionType]} s-regular`}
+            className={`${styles.tag} ${tagType[data.questionType]} b-small`}
           >
-            {DUMMYdetaildata.questionType}
+            {data.question}
           </div>
-          <div
-            className={`${styles.tag} ${tagType[DUMMYdetaildata.questionType]} b-small`}
-          >
-            {DUMMYdetaildata.question}
-          </div>
-          <Option
-            type={DUMMYdetaildata.questionType}
-            tag={DUMMYdetaildata.question}
-            option={DUMMYdetaildata.option}
-          />
-          <div className={`${styles.detail_text} r-big`}>
-            {DUMMYdetaildata.text}
-          </div>
+          {data.option && (
+            <Option
+              type={data.questionType}
+              tag={data.question}
+              option={data.option}
+            />
+          )}
+          <div className={`${styles.detail_text} r-big`}>{data.feedback}</div>
           <div className={styles.button_wrapper}>
             <button className={`r-small`} onClick={handleShare}>
               <Share />

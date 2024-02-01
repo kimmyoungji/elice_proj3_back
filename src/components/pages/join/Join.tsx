@@ -4,6 +4,7 @@ import ButtonCommon from '@components/UI/ButtonCommon';
 import InputCommon from '@components/UI/InputCommon';
 import useApi from '@hooks/useApi';
 import './Onboarding.css';
+import useCachingApi from '@hooks/useCachingApi';
 
 const isPasswordValid = (value: string) => {
   const regex =
@@ -30,6 +31,9 @@ const Join = () => {
     path: 'auth/local/signup',
     data: { username, email, password },
   });
+
+  const { trigger: mailVerifyTrigger } = useCachingApi({ path: '' });
+  const { trigger: logoutTrigger } = useCachingApi({ path: '/auth/logout' });
 
   useEffect(() => {
     if (signUpResult.data === '회원가입 성공' && signUpResult.status === 200) {
@@ -83,6 +87,15 @@ const Join = () => {
     });
   };
 
+  const handleEmailAuth = () => {
+    mailVerifyTrigger({});
+  };
+
+  //회원가입 페이지 진입시 로그아웃
+  useEffect(() => {
+    logoutTrigger('');
+  }, []);
+
   return (
     <div className='join-container'>
       <div className='body'>
@@ -113,6 +126,7 @@ const Join = () => {
             top: '-40%',
             transform: 'translateY(-130%)',
           }}
+          onClickBtn={handleEmailAuth}
         >
           이메일 인증
         </ButtonCommon>
