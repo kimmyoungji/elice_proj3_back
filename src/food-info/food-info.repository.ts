@@ -30,7 +30,7 @@ export class FoodInfoRepository {
     manager: EntityManager
   ): Promise<FoodInfo[]> {
     try {
-      return await manager
+      const result = await manager
         .createQueryBuilder(FoodInfo, "entity")
         .select(["entity.foodInfoId", "entity.foodName"])
         .where("REPLACE(entity.food_name, ' ', '') like :keyword", {
@@ -40,6 +40,7 @@ export class FoodInfoRepository {
         .orderBy("entity.food_info_id", "ASC")
         .take(10)
         .getMany();
+      return result;
     } catch (error) {
       throw new HttpException(error.detail, 500);
     }

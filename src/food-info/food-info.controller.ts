@@ -18,7 +18,7 @@ export class FoodInfoController {
   constructor(private foodInfoService: FoodInfoService) {}
 
   @Get("/foods")
-  @UseGuards(isLoggedInGuard)
+  // @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "음식 조회하기",
     description:
@@ -44,7 +44,7 @@ export class FoodInfoController {
             keyword,
             lastFoodId
           );
-          if (foodNextListResult.length === 0) {
+          if (!foodNextListResult) {
             throw new NotFoundException("데이터가 존재하지 않습니다");
           }
           return foodNextListResult;
