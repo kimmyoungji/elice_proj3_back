@@ -155,12 +155,13 @@ api.interceptors.response.use(
     }
 
     if (err.response && status === 401) {
-      if (data.message === '등록되지 않은 이메일입니다.') {
+      if (
+        data.message ===
+        '등록되지 않은 이메일 이거나, 유효하지 않은 비밀번호입니다.'
+      ) {
         return data.message;
         // window.location.replace('/login');
         // return new Error('등록되지 않은 이메일입니다.');
-      }
-      if (data.message === 'df') {
       }
     }
 
