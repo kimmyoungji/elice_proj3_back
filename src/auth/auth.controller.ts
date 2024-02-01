@@ -71,7 +71,7 @@ export class AuthController {
     @Post('local/login')
     @UseGuards(isNotLoggedInGuard, LocalAuthGuard)
     async handleLocalLogin(
-        @Req() request: any, @Res() response: any, @Body() LocalLoginDto: LocalLoginDto){
+        @Req() request: any, @Res() response: any){
         console.log('로그인 진행중...', request.user);
         const user = await this.userService.getUserInfos(request.user.userId);
         response.status(200).send(user);
@@ -79,7 +79,6 @@ export class AuthController {
 
     /* 구글, 로컬 공용 로그아웃 API */
     @ApiOperation({ summary: '로그아웃 uri' })
-    @UseGuards(isLoggedInGuard)
     @Get('logout')
     async handleGoogleLogout(@Req() request: any, @Res() response: any): Promise<void> {
 
@@ -122,6 +121,7 @@ export class AuthController {
     async handleSendVerificationCode(@Body() sendVerificationCodeDto:sendVerificationCodeDto, @Req() request: any, @Res() response: any): Promise<void> {
         try{
             const { email } = sendVerificationCodeDto;
+            await this.userService.checkEmail(email);
             await this.MailVerificationService.sendVerificationCode(email);
             response.status(200).send('이메일 인증 코드 발송 성공');
         }catch(err){ throw err; }

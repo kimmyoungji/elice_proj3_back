@@ -9,7 +9,7 @@ export class CumulativeRecordController {
   constructor(private cumulativeRecordService: CumulativeRecordService) {}
 
   @Get("/")
-  // @UseGuards(isLoggedInGuard)
+  @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "월별/일별 누적 식단 데이터 조회하기",
     description:
@@ -21,8 +21,7 @@ export class CumulativeRecordController {
     @Query("month") month: Date
   ) {
     try {
-      const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
-      // const userId = request.user.userId;
+      const userId = request.user.userId;
 
       // 1) [Cumulative Table] 유저의 일별 모든 meal type의 칼로리 합산 -> totalCalories
       // 2) [Cumulative Table] 유저의 일별 모든 meal type의 탄단지 합산 -> totalNutrient
@@ -57,7 +56,7 @@ export class CumulativeRecordController {
   }
 
   @Get("/meal")
-  // @UseGuards(isLoggedInGuard)
+  @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "일별 & meal 타입별 누적 식단 데이터 조회하기",
     description: "유저의 누적 식단 데이터를 조회한다.",
@@ -67,8 +66,7 @@ export class CumulativeRecordController {
     @Query("date") date: Date
   ) {
     try {
-      const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
-      // const userId = request.user.userId;
+      const userId = request.user.userId;
       const sortedDateArr =
         await this.cumulativeRecordService.transformMealTypeRecord(
           date,
@@ -81,7 +79,7 @@ export class CumulativeRecordController {
   }
 
   @Get("/month")
-  // @UseGuards(isLoggedInGuard)
+  @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "월별 & meal 타입별 누적 식단 데이터 조회하기",
     description: "유저의 월별 아침, 점심, 저녁 누적 식단 데이터를 조회한다.",
@@ -92,8 +90,7 @@ export class CumulativeRecordController {
     @Query("page") page: number
   ) {
     try {
-      const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1"; // 임의로
-      // const userId = request.user.userId;
+      const userId = request.user.userId;
       const transformedData =
         await this.cumulativeRecordService.getMonthDetailRecord(
           month,

@@ -18,12 +18,12 @@ export class FoodInfoController {
   constructor(private foodInfoService: FoodInfoService) {}
 
   @Get("/foods")
+  @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "음식 조회하기",
     description:
       "keyword&lastFoodId: 음식 검색 리스트를 조회한다. foodName: AI로 인식된 음식의 영양성분을 조회한다. foodInfoId: 음식 리스트에서 선택한 음식의 영양성분을 조회한다.",
   })
-  // @UseGuards(isLoggedInGuard)
   async getFoodInfo(
     @Query("keyword", FoodNamePipe) keyword: string,
     @Query("lastFoodId") lastFoodId: string,
@@ -35,18 +35,12 @@ export class FoodInfoController {
         if (!lastFoodId) {
           const foodListResult =
             await this.foodInfoService.getFoodList(keyword);
-          if (foodListResult.length === 0) {
-            throw new NotFoundException("데이터가 존재하지 않습니다");
-          }
           return foodListResult;
         } else {
           const foodNextListResult = await this.foodInfoService.getFoodNextList(
             keyword,
             lastFoodId
           );
-          if (foodNextListResult.length === 0) {
-            throw new NotFoundException("데이터가 존재하지 않습니다");
-          }
           return foodNextListResult;
         }
       }
@@ -54,7 +48,7 @@ export class FoodInfoController {
       if (foodName) {
         const foodInfoResult = await this.foodInfoService.getFoodInfo(foodName);
         if (!foodInfoResult) {
-          throw new NotFoundException("데이터가 존재하지 않습니다");
+          return [];
         }
         return foodInfoResult;
       }
@@ -63,7 +57,7 @@ export class FoodInfoController {
         const foodInfoResult =
           await this.foodInfoService.getFoodInfoById(foodInfoId);
         if (!foodInfoResult) {
-          throw new NotFoundException("데이터가 존재하지 않습니다");
+          return [];
         }
         return foodInfoResult;
       }
@@ -73,11 +67,11 @@ export class FoodInfoController {
   }
 
   @Post("/foods")
+  @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "음식들 foodInfoId 리스트 조회하기",
     description: "AI로 인식된 음식들의 foodInfoId를 조회한다.",
   })
-  // @UseGuards(isLoggedInGuard)
   async getFoodList(@Body("foodList", FoodNamePipe) foodList: string[]) {
     try {
       const foodIdListResult =

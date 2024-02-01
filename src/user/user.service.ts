@@ -1,7 +1,7 @@
 import { Update } from 'aws-sdk/clients/dynamodb';
 import { HealthInfo } from 'src/user/entities/health-info.entity';
 import { HealthInfoRepository } from './repositories/health-info.repository';
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserRepository } from './repositories/user.repository';
 import { DataSource } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -9,6 +9,7 @@ import { UpdateUserDto } from './dto/UpdateUser.dto';
 import { SaveHealthInfoDto } from './dto/SaveHealthInfo.dto';
 import { calculateAge } from 'src/util/calculate-age';
 import { snakeTocamel } from 'src/util/snake-to-camel';
+import { HttpService } from '@nestjs/axios';
 
 
 @Injectable()
@@ -137,6 +138,33 @@ export class UserService {
             await queryRunner.commitTransaction();
             if(result) return true;
             else return false;
+        }catch(err){
+            await queryRunner.rollbackTransaction();
+            throw err;
+        }finally{
+            await queryRunner.release();
+        }
+    }
+
+    // 유저네임 중복 확인 메서드
+    async checkEmail(email: string): Promise<String> {
+        const queryRunner = this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
+        try{
+            const user = await this.userRepository.findUserByEmail(email, queryRunner.manager);
+
+            if(user) {
+                if(user.providerId){
+                    throw new HttpException( "이미 구글계정으로 등록된 이메일입니다.", HttpStatus.CONFLICT);
+                }else{
+                    throw new HttpException( "이미 로컬계정으로 등록된 이메일입니다.", HttpStatus.CONFLICT);
+                }
+            }
+
+            await queryRunner.commitTransaction();
+            return;
+            
         }catch(err){
             await queryRunner.rollbackTransaction();
             throw err;

@@ -10,12 +10,13 @@ import {
   Post,
   Query,
   Req,
-  Res,
+  UseGuards,
 } from "@nestjs/common";
 import { FeedbackService } from "./feedback.service";
 import { request } from "http";
 import { ResponseDataDto } from "./dto/feedback.dto";
 import { ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { isLoggedInGuard } from "src/auth/utils/guards/isLoggedin.guard";
 
 @Controller("feedback")
 @ApiTags("Feedback API")
@@ -23,6 +24,7 @@ export class FeedbackController {
   constructor(private feedbackService: FeedbackService) {}
 
   @Post("/")
+  @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "AI 피드백 요청하기",
     description: "AI가 유저의 질문에 맞는 피드백을 생성해서 응답한다.",
@@ -33,8 +35,7 @@ export class FeedbackController {
     @Query("date") date: Date,
     @Body() responseDataDto: ResponseDataDto
   ) {
-    const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
-    // const userId = request.user.userId;
+    const userId = request.user.userId;
     return await this.feedbackService.getFeedbacktoAI(
       userId,
       date,
@@ -43,6 +44,7 @@ export class FeedbackController {
   }
 
   @Get("/save")
+  @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "AI 피드백 저장하기",
     description: "유저가 희망하는 AI 피드백을 저장한다.",
@@ -64,6 +66,7 @@ export class FeedbackController {
   }
 
   @Get("/")
+  @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "피드백 및 대화내용 조회하기",
     description:
@@ -77,8 +80,7 @@ export class FeedbackController {
     @Query("feedbackId") feedbackId: string
   ) {
     try {
-      const userId = "5c97c044-ea91-4e3e-bf76-eae150c317d1";
-      // const userId = request.user.userId;
+      const userId = request.user.userId;
       if (startDate && date) {
         const data = await this.feedbackService.getFeedbackChatData(
           userId,
@@ -117,18 +119,15 @@ export class FeedbackController {
   }
 
   @Delete("/")
+  @UseGuards(isLoggedInGuard)
   @ApiOperation({
     summary: "피드백 삭제하기",
     description: "AI 피드백을 삭제한다.",
   })
-  async deleteFeedbackData(
-    @Query("feedbackId") feedbackId: string,
-    @Res() response: any
-  ) {
+  async deleteFeedbackData(@Query("feedbackId") feedbackId: string) {
     try {
       const deleteResult =
         await this.feedbackService.deleteFeedbackData(feedbackId);
-      console.log(deleteResult);
       if (deleteResult.affected === 0) {
         const exceptionObj = {
           statusCode: HttpStatus.BAD_REQUEST,

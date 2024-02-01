@@ -35,7 +35,7 @@ export class FeedbackRepository {
         .createQueryBuilder(Feedback, "feedback")
         .select(["feedback", "feedback_id"])
         .where("feedback.user_id =:userId", { userId })
-        .where("feedback.feedback_date =:feedbackDate", {
+        .andWhere("feedback.feedback_date =:feedbackDate", {
           feedbackDate,
         })
         .andWhere("feedback.question_type = :questionType", { questionType })
@@ -69,7 +69,7 @@ export class FeedbackRepository {
       return await manager
         .createQueryBuilder(Feedback, "feedback")
         .where("feedback.user_id =:userId", { userId })
-        .where("feedback.save_yn =:yn", { yn: true })
+        .andWhere("feedback.save_yn =:yn", { yn: true })
         .orderBy("feedback.feedback_date", "DESC")
         .take(5)
         .skip((page - 1) * 5)
