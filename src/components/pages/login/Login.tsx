@@ -8,6 +8,7 @@ import { UserInfo, loginUser } from '@components/store/userLoginRouter';
 import useCachingApi from '@hooks/useCachingApi';
 import Toast from '@components/UI/Toast';
 import ToastText from '@components/UI/ToastText';
+import { checkValuesNullOrEmpty } from '@utils/checkValuesNullOrEmpty';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -57,10 +58,15 @@ const Login = () => {
       { email, password },
       {
         onSuccess: (data) => {
-          if (data === '등록되지 않은 이메일입니다.') {
+          if (
+            data ===
+            '등록되지 않은 이메일 이거나, 유효하지 않은 비밀번호입니다.'
+          ) {
             setToastText(`메일주소 또는 \n 비밀번호가 틀립니다`);
           } else {
             dispatch(loginUser(data.data));
+          }
+          if (checkValuesNullOrEmpty(data)) {
           }
         },
       }
@@ -70,11 +76,6 @@ const Login = () => {
   useEffect(() => {
     if (toastText !== '') setShowToast(true);
   }, [toastText]);
-
-  useEffect(() => {
-    if (healthInfo !== '' && healthInfo !== undefined && healthInfo !== 0)
-      navigate('/home');
-  }, [healthInfo]);
 
   useEffect(() => {
     //로그인 화면 들어갔을때 쿠키 확인 절차
@@ -88,13 +89,18 @@ const Login = () => {
   useEffect(() => {
     //있으면 home
     if (postResult && postResult.status === 200) {
-      if (healthInfo !== '' && healthInfo !== undefined && healthInfo !== 0) {
-        navigate('/home');
-      } else {
+      if (
+        healthInfo === '' ||
+        healthInfo === undefined ||
+        healthInfo === 0 ||
+        healthInfo === null
+      ) {
         navigate('/onboarding/1');
+      } else {
+        navigate('/home');
       }
     }
-  }, [userInfo]);
+  }, [postResult]);
 
   return (
     <div className='login-container'>
