@@ -24,6 +24,7 @@ export const initialState: { userInfo: UserInfo } = {
     gender: '',
     targetCalories: 0,
     age: 0,
+    birthday: '',
   },
 };
 
