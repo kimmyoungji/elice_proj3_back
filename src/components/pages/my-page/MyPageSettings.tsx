@@ -76,7 +76,6 @@ const MyPageSettings = () => {
         ...userData,
         username: newNickname,
       };
-      // console.log(result.data);
       setNewNickName(newNickname);
       nickNamePut.trigger({
         path: '/user',
