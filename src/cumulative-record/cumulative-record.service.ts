@@ -55,12 +55,23 @@ export class CumulativeRecordService {
       const { targetCalories, recommendIntake } = HealthInfoResult;
       const { mealTypeResult, mealTypeImage } =
         await this.getDateMealTypeRecord(date, userId);
-      const recommendNutrient = {
-        carbohydrates: recommendIntake[0] === null ? 10 : recommendIntake[0],
-        proteins: recommendIntake[1] === null ? 10 : recommendIntake[1],
-        fats: recommendIntake[2] === null ? 10 : recommendIntake[2],
-        dietaryFiber: recommendIntake[3] === null ? 10 : recommendIntake[3],
-      };
+      let recommendNutrient = {};
+      if (recommendIntake === null) {
+        recommendNutrient = {
+          carbohydrates: 10,
+          proteins: 10,
+          fats: 10,
+          dietaryFiber: 10,
+        };
+      } else {
+        recommendNutrient = {
+          carbohydrates: recommendIntake[0] === null ? 10 : recommendIntake[0],
+          proteins: recommendIntake[1] === null ? 10 : recommendIntake[1],
+          fats: recommendIntake[2] === null ? 10 : recommendIntake[2],
+          dietaryFiber: recommendIntake[3] === null ? 10 : recommendIntake[3],
+        };
+      }
+
       const dateArr = mealTypeResult.map((result, index) => [
         result.mealType,
         result.mealTotalCalories / 100,
