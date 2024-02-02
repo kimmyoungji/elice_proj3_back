@@ -5,7 +5,7 @@ import { DeleteBox } from '@assets/DeleteBox';
 import { useEffect, useState } from 'react';
 import MiniToast from './MiniToast';
 import useApi from '@hooks/useApi';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const typeType: Record<string, string> = {
   식단추천: styles.recommend,
@@ -43,6 +43,8 @@ const AiDrawerDetail = () => {
   const [deleteToast, setDeleteToast] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const id = searchParams.get('feedbackId');
+
+  const navigate = useNavigate();
 
   const { trigger, result, reqIdentifier, loading, error } =
     useApi<PropsReturnType>({
@@ -93,10 +95,10 @@ const AiDrawerDetail = () => {
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     triggerDeleteData();
-    setDeleteToast(true);
+    navigate(-1);
   };
 
-  const newDate = data.feedbackDate.split('-').join('.');
+  const newDate = data.feedbackDate && data.feedbackDate.split('-').join('.');
 
   return (
     <>
@@ -135,9 +137,6 @@ const AiDrawerDetail = () => {
       </div>
       {shareToast && (
         <MiniToast setToast={setShareToast} text='답변 URL이 복사되었습니다.' />
-      )}
-      {deleteToast && (
-        <MiniToast setToast={setDeleteToast} text='답변이 삭제되었습니다.' />
       )}
     </>
   );
