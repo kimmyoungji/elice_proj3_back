@@ -9,18 +9,17 @@ import OnboardingGoal from './OnboardingGoal';
 import OnboardingActivity from './OnboardingActivity';
 import useCachingApi from '@hooks/useCachingApi';
 import { checkValuesNullOrEmpty } from '@utils/checkValuesNullOrEmpty';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@components/store';
 import { UserInfo } from '@components/store/userLoginRouter';
 import RenderProgressBar from './RenderProgressBar';
-import useUpdateDataAndCalories from '@hooks/useUpdateDataAndCalories';
-import { UserData } from '../my-page/MypageTypes';
 import getNutritionStandard from '@utils/getNutritionStandard';
 import {
   adjustCaloriesByGoal,
   calBMR,
   calBMRCalories,
 } from '../my-page/calUserData';
+import { loginUser } from '@components/store/userLoginRouter';
 
 export interface userPutDataType {
   dietGoal?: string;
@@ -52,6 +51,8 @@ const Onboarding = () => {
   const { step } = useParams();
   const [curStep, setCurStep] = useState(Number(step) || 1);
   const [userData, setUserData] = useState<any>(initialUserInfo);
+  const [navigateTrigger, setNavigateTrigger] = useState(false);
+  const dispatch = useDispatch();
 
   const returnedUserData = useSelector(
     (state: RootState) => state.user.userInfo
@@ -79,13 +80,18 @@ const Onboarding = () => {
     setUserData(changeTypedUserData);
   }, [returnedUserData]);
 
+  useEffect(() => {
+    navigateTrigger && navigate('/home');
+  }, [navigateTrigger]);
+
   const onClickTrigger = () => {
     trigger(
       { ...userData },
       {
         onSuccess: (data) => {
           if (data.data.targetCalories && data.status === 200) {
-            navigate('/home');
+            dispatch(loginUser(userData));
+            setNavigateTrigger(true);
           }
         },
       }
@@ -111,10 +117,12 @@ const Onboarding = () => {
     setUserData((prev: any) => ({
       ...prev,
       ['targetCalories']: goalCalories,
-      carbohydrates,
-      proteins,
-      fats,
-      dietaryFiber,
+      ['recommendIntake']: {
+        carbohydrates,
+        proteins,
+        fats,
+        dietaryFiber,
+      },
     }));
   };
 

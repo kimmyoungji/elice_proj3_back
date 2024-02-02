@@ -46,7 +46,6 @@ const Record = () => {
   useEffect(() => {
     if (data && data.data.dateArr?.length > 0) {
       setFoodData(data.data);
-      console.log(data.data);
     }
   }, [data]);
 
@@ -130,7 +129,7 @@ const Record = () => {
                     </div>
                     <div className={style.meal_calories}>
                       {' '}
-                      {mealData[1] ?? 0} kcal{' '}
+                      {Math.round(mealData[1]) ?? 0} kcal{' '}
                     </div>
                   </>
                 ) : (
