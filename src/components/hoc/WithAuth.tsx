@@ -43,7 +43,7 @@ const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
       if (!isLoggedIn) {
         trigger('', {
           onSuccess: (data) => {
-            if (data.data?.username) {
+            if (data?.data?.username) {
               dispatch(loginUser(data.data));
               if (
                 window.location.pathname === '/auth' ||

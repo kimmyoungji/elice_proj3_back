@@ -19,8 +19,6 @@ const MealNutritionAnalysis = ({
   data,
   selectedMealNumber,
 }: MealNutritionAnalysisProps) => {
-  // const userData = useSelector((state: RootState) => state.user.userInfo);
-
   const [isShowingTotal, setIsShowingTotal] = useState(true);
   const [animationTrigger, setAnimationTrigger] = useState(false);
 
@@ -92,7 +90,7 @@ const MealNutritionAnalysis = ({
       clearTimeout(animationTimer);
       setAnimationTrigger(false);
     };
-  }, [isShowingTotal]);
+  }, [isShowingTotal, selectedMealNumber]);
 
   const handleSwitchGraph = () => {
     setIsShowingTotal(!isShowingTotal);
