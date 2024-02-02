@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { useCalendarContext } from './Calendar';
 import classes from './album.module.css';
 import { useEffect, useState } from 'react';
-import useCachingApi from '@hooks/useCachingApi';
 import useIntersect from '@hooks/useIntersect';
 import AlbumBody from './AlbumBody';
+import useApi from '@hooks/useApi';
 export type MealType = '아침' | '점심' | '저녁' | '간식';
 
 export interface AlbumArrType {
@@ -26,7 +26,7 @@ const Album = () => {
   const [isFirst, setIsFirst] = useState(true);
   const [albumArr, setAlbumArr] = useState<AlbumArrType[]>([]);
   const [page, setPage] = useState(1);
-  const { trigger, result } = useCachingApi<AlbumApiResponse>({
+  const { trigger, result } = useApi<AlbumApiResponse>({
     path: `/cumulative-record/month?month=${thisYear}-${returnWithZero(thisMonth)}-01&page=${page}`,
   });
   const navigate = useNavigate();
@@ -39,30 +39,29 @@ const Album = () => {
   };
 
   useEffect(() => {
-    if (!isFirst) return; //처음이 아닐때 리턴
-    trigger('', {
-      onSuccess: (data) => {
-        setAlbumArr((prev) => [...prev, ...data.data]);
-      },
-    }); //처음만 trigger
+    if (!isFirst) return;
+    trigger({});
+    setPage((prev) => prev + 1);
     setIsFirst(false);
-  }, []);
+  },[])
+
+  useEffect(() => {
+    if (!result) return;
+    setAlbumArr((prev) => [...prev, ...result.data]);
+  },[result])
 
   const onIntersect: IntersectionObserverCallback = async (
     [entry],
     observer
   ) => {
     if (entry.isIntersecting) {
-      console.log('isIntersecting');
+      if (!result) return
+      if (result.data.length === 0) return;
       setIsLoading(true);
       observer.unobserve(entry.target);
-      trigger('', {
-        onSuccess: (data) => {
-          setAlbumArr((prev) => [...prev, ...data.data]);
-          setIsLoading(false);
-        },
-      });
+      await trigger({});
       observer.observe(entry.target);
+      setIsLoading(false);
       setPage((prev) => prev + 1);
     }
   };
@@ -87,7 +86,9 @@ const Album = () => {
             isLoading={isLoading}
           />
         ))}
+        {!isLoading && <div ref={setTarget} />}
     </div>
+    
   );
 };
 

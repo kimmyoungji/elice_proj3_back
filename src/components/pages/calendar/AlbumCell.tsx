@@ -5,24 +5,28 @@ import { getNumberMeal } from '@utils/getMealNum';
 const AlbumCell = ({
   arr,
   idx,
-  setTarget,
-  isLoading,
 }: {
   arr: [MealType, number, string];
   idx: number;
-  setTarget: React.LegacyRef<HTMLDivElement>;
-  isLoading: boolean;
 }) => {
   return (
     <>
       <div className={classes['meal-img']}>
-        <img src={arr[2]} alt='img' />
+        {arr[2]
+          ? (<img src={arr[2]} alt='img' style={{ objectFit: "cover", filter: "brightness(0.7)" }} />)
+          : (<img src='/images/9gram_logo.png' alt='img' style={{ objectFit: "cover", filter: "brightness(0.7)"}} />)}
+        
         <div className={classes['meal-card']} key={`date-${idx}`}>
-          <div className={`b-regular`}>{getNumberMeal[arr[0]]}</div>
-          <div className={`${classes['meal-cal']} b-medium`}>{arr[1]} kcal</div>
+            <>
+              <div className={`${classes['meal-imgcal']} b-regular `}>
+                {getNumberMeal[arr[0]]}
+              </div>
+              <div className={`${classes['meal-imgcal']} b-medium`}>
+                {Math.round(arr[1])} kcal
+              </div>
+            </>
         </div>
       </div>
-      {!isLoading && <div ref={setTarget} />}
     </>
   );
 };
