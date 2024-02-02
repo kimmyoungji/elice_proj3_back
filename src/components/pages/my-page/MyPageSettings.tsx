@@ -10,6 +10,8 @@ import { loginUser } from '@components/store/userLoginRouter';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '@components/store/userLoginRouter';
 import { RootState } from '@components/store';
+import Toast from '@components/UI/Toast';
+import ToastText from '@components/UI/ToastText';
 
 const genderArr = ['남성', '여성', '기타'];
 
@@ -23,6 +25,8 @@ const MyPageSettings = () => {
   const [genderSelect, setGenderSelect] = useState(gendertoMsg[gender]);
   const [isGenderDropdwonVisible, setGenderDropdownVisible] = useState(false);
   const [newNickname, setNewNickName] = useState(nickname);
+  const [toastText, setToastText] = useState('');
+  const [showToast, setShowToast] = useState(false);
   const { trigger, result } = useApi<Nickname>({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -35,10 +39,15 @@ const MyPageSettings = () => {
     | undefined;
 
   const handleEditName = () => {
-    setisEditing(!isEditing);
-    if (isEditing) {
+    if (!isEditing) {
+      setisEditing(true);
+    } else {
       trigger({ path: `/user/username/${newNickname}`, method: 'get' });
     }
+  };
+
+  const handleToast = () => {
+    setShowToast(true);
   };
 
   useEffect(() => {
@@ -47,16 +56,21 @@ const MyPageSettings = () => {
         ...userData,
         username: newNickname,
       };
-
+      // console.log(result.data);
       setNewNickName(newNickname);
       trigger({
         path: '/user',
         method: 'put',
         data: { username: newNickname },
       });
+      console.log(result.data);
       dispatch(loginUser(updateData));
+      setisEditing(false);
+    } else if (result?.data?.isAvailable === false) {
+      setToastText('이미 존재하는 닉네임 입니다');
+      handleToast();
     }
-  }, [result?.data, userData.username]);
+  }, [result?.data]);
 
   const editNickName = () => {
     setisEditing(!isEditing);
@@ -128,6 +142,9 @@ const MyPageSettings = () => {
         />
       )}
       <div className={style.container}>
+        <Toast show={showToast} setShow={setShowToast}>
+          <ToastText>{toastText}</ToastText>
+        </Toast>
         <div className={style.accountWrapper}>
           <div className={style.detailContainer}>
             <div className={style.accountSettings}> 닉네임 </div>

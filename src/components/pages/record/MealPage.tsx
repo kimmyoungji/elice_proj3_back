@@ -61,11 +61,13 @@ const MealPage = () => {
     }
   }, [result?.data]);
 
+  console.log(selectedMealNumber);
+
   useEffect(() => {
     if (selectedMealNumber) {
       navigate(`/record/${date}/${selectedMealNumber}`);
     }
-  }, [date]);
+  }, [selectedMealNumber]);
 
   const handleMealSelect = (mealType: string) => {
     setSelectedMeal(mealType);
