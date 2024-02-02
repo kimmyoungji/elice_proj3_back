@@ -38,11 +38,13 @@ interface OnBoardingResult {
 
 const initialUserInfo = {
   activityAmount: undefined,
-  dietGoal: '',
-  username: undefined,
-  height: undefined,
-  gender: undefined,
+  age: 0,
   birthDay: '',
+  dietGoal: '',
+  gender: undefined,
+  height: undefined,
+  targetCalories: 0,
+  username: undefined,
   weight: undefined,
 };
 
@@ -52,6 +54,7 @@ const Onboarding = () => {
   const [curStep, setCurStep] = useState(Number(step) || 1);
   const [userData, setUserData] = useState<any>(initialUserInfo);
   const [navigateTrigger, setNavigateTrigger] = useState(false);
+
   const dispatch = useDispatch();
 
   const returnedUserData = useSelector(
@@ -74,17 +77,17 @@ const Onboarding = () => {
       weight: returnedUserData.weight,
     }
   );
+  useEffect(() => {
+    navigateTrigger && navigate('/home');
+  }, [navigateTrigger]);
 
   //fetched된 userData중 일부만 가져옴
   useEffect(() => {
     setUserData(changeTypedUserData);
   }, [returnedUserData]);
 
-  useEffect(() => {
-    navigateTrigger && navigate('/home');
-  }, [navigateTrigger]);
-
   const onClickTrigger = () => {
+    console.log(trigger);
     trigger(
       { ...userData },
       {
@@ -149,24 +152,39 @@ const Onboarding = () => {
       ...onboardingInfo,
     }));
   };
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
 
   //업데이트 영양성분과 목표 칼로리 모두 있을떄 감지해서 PUT요청
   useEffect(() => {
+    console.log({ userData });
+    console.log(userData.recommendIntake?.carbohydrates);
     if (
-      userData.carbohydrates &&
-      userData.proteins &&
-      userData.fats &&
-      userData.dietaryFiber &&
-      userData.dietGoal
+      userData.activityAmount &&
+      userData.age &&
+      userData.birthDay &&
+      userData.dietGoal &&
+      userData.gender &&
+      userData.height &&
+      userData.recommendIntake?.carbohydrates &&
+      userData.recommendIntake?.dietaryFiber &&
+      userData.recommendIntake?.fats &&
+      userData.recommendIntake?.proteins
     ) {
       onClickTrigger();
     }
   }, [
-    userData.carbohydrates &&
-      userData.proteins &&
-      userData.fats &&
-      userData.dietaryFiber &&
-      userData.dietGoal,
+    userData.activityAmount &&
+      userData.age &&
+      userData.birthDay &&
+      userData.dietGoal &&
+      userData.gender &&
+      userData.height &&
+      userData.recommendIntake?.carbohydrates &&
+      userData.recommendIntake?.dietaryFiber &&
+      userData.recommendIntake?.fats &&
+      userData.recommendIntake?.proteins,
   ]);
 
   const isNextButtonDisabled = () => {
