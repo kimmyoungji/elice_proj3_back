@@ -61,13 +61,11 @@ const MealPage = () => {
     }
   }, [result?.data]);
 
-  console.log(selectedMealNumber);
-
   useEffect(() => {
     if (selectedMealNumber) {
       navigate(`/record/${date}/${selectedMealNumber}`);
     }
-  }, [selectedMealNumber]);
+  }, [selectedMealNumber, result?.data]);
 
   const handleMealSelect = (mealType: string) => {
     setSelectedMeal(mealType);
@@ -80,7 +78,6 @@ const MealPage = () => {
     setShowModal(true);
     setModalSelect('mealDelete');
     setModalMsg(mapSelectModalMsg.mealDelete);
-    console.log(showModal);
   };
 
   const handleMealDelete = () => {

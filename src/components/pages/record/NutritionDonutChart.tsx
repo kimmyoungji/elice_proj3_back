@@ -38,7 +38,7 @@ const NutritionDonutChart = ({
       clearTimeout(animationTimer);
       setAnimationTrigger(false);
     };
-  }, [isShowingTotal]);
+  }, [isShowingTotal, selectedMealNumber]);
 
   let standard: totalNutrientsType | undefined;
 
