@@ -162,7 +162,7 @@ export class RecordRepository extends Repository<Record> {
     return response;
   }
 
-  // 식사 기록 생성
+  // 식사 기록 생성 및 수정
   async createOrUpdateRecord(userId: string, date: string, mealType: number, recordDto: RecordDto): Promise<any> {
     const recordDate = new Date(date);
     const { imgUrl, foods } = recordDto;
@@ -312,7 +312,7 @@ export class RecordRepository extends Repository<Record> {
       proteins: 0,
       fats: 0,
       dietaryFiber: 0,
-      totalCalories: 0
+      mealTotalCalories: 0
     };
 
     let imageId = null;
@@ -328,7 +328,7 @@ export class RecordRepository extends Repository<Record> {
       cumulative.proteins += Math.round(record.proteins);
       cumulative.fats += Math.round(record.fats);
       cumulative.dietaryFiber += Math.round(record.dietaryFiber);
-      cumulative.totalCalories += Math.round(record.totalCalories);
+      cumulative.mealTotalCalories += Math.round(record.totalCalories);
 
       if (record.imageId) {
         imageId = record.imageId;
@@ -346,7 +346,7 @@ export class RecordRepository extends Repository<Record> {
       cumulativeRecord.proteins = Math.round(cumulative.proteins);
       cumulativeRecord.fats = Math.round(cumulative.fats);
       cumulativeRecord.dietaryFiber = Math.round(cumulative.dietaryFiber);
-      cumulativeRecord.mealTotalCalories = Math.round(cumulative.totalCalories);   
+      cumulativeRecord.mealTotalCalories = Math.round(cumulative.mealTotalCalories);   
       cumulativeRecord.imageId = imageId;   
       await this.cumulativeRecordRepository.save(cumulativeRecord);
     } else {
