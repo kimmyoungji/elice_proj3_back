@@ -47,13 +47,15 @@ export class RecordRepository extends Repository<Record> {
         firstRecordDate: Equal(dateObj),
       },
     });
+
+    const user = await this.userRepository.findOneBy({
+      userId: userId
+    })
   
     // 사용자의 건강 정보를 조회
-    let healthInfo = await this.healthInfoRepository.createQueryBuilder('healthInfo')
-      .where('healthInfo.userId = :userId', { userId: userId })
-      .andWhere('healthInfo.updatedDate <= :dateObj', { dateObj: dateObj })
-      .orderBy('healthInfo.updatedDate', 'DESC') // 가장 최근 정보를 위해 내림차순 정렬
-      .getOne();
+    let healthInfo = await this.healthInfoRepository.findOneBy({
+      healthInfoId: user.recentHealthInfoId
+    })
   
     // 기본 식단 정보 객체를 준비
     let defaultMealInfo = {
