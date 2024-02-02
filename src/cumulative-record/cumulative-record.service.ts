@@ -75,6 +75,11 @@ export class CumulativeRecordService {
         }
       } else if (totalResultDto && !HealthInfoResult) {
         throw new NotFoundException("데이터 조회에서 오류가 발생했습니다");
+      } else if (!totalResultDto && HealthInfoResult) {
+        const { targetCalories, recommendIntake } = HealthInfoResult;
+        const result = recommendIntakeData(targetCalories, recommendIntake);
+        await queryRunner.commitTransaction();
+        return result;
       }
       const { totalCalories, ...datas } = totalResultDto;
       const { targetCalories, recommendIntake } = HealthInfoResult;
