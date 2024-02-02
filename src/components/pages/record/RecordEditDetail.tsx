@@ -175,9 +175,10 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
   };
 
   const increment = () => {
+    console.log(focusing.counts)
     if (focus === undefined) return;
     let copyArr = [...foods];
-    copyArr[focus].counts += 0.25;
+    copyArr[focus].counts = Number(copyArr[focus].counts) + 0.25;
     setFoods(copyArr);
   };
 
@@ -187,7 +188,7 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
       alert('더 이상 양을 줄일 수 없습니다!');
     } else {
       let copyArr = [...foods];
-      copyArr[focus].counts -= 0.25;
+      copyArr[focus].counts = Number(copyArr[focus].counts) - 0.25;
       setFoods(copyArr);
     }
   };
