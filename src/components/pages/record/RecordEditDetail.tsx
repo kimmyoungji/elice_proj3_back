@@ -117,6 +117,7 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
     observer
   ) => {
     if (entry.isIntersecting) {
+      if (scrollSearch.result?.data?.length === 0) return;
       setIsLoading(true);
       observer.unobserve(entry.target);
       await scrollSearch.trigger({});
