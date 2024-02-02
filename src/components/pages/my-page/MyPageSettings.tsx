@@ -12,8 +12,18 @@ import { logoutUser } from '@components/store/userLoginRouter';
 import { RootState } from '@components/store';
 import Toast from '@components/UI/Toast';
 import ToastText from '@components/UI/ToastText';
+import { log } from 'console';
 
 const genderArr = ['남성', '여성', '기타'];
+
+interface Result {
+  config: {};
+  data: string;
+  headers: {};
+  request: {};
+  status: number;
+  statusText: string;
+}
 
 const MyPageSettings = () => {
   const location = useLocation();
@@ -27,7 +37,14 @@ const MyPageSettings = () => {
   const [newNickname, setNewNickName] = useState(nickname);
   const [toastText, setToastText] = useState('');
   const [showToast, setShowToast] = useState(false);
-  const { trigger, result } = useApi<Nickname>({});
+  const [logOutValid, setLogOutValid] = useState(false);
+  const nickNameGet = useApi<Nickname>({});
+  const nickNamePut = useApi<Nickname>({
+    method: 'put',
+  });
+  const logOutGet = useApi<Result>({});
+  const withdrawalGet = useApi<Result>({});
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state: RootState) => state.user.userInfo);
@@ -42,7 +59,10 @@ const MyPageSettings = () => {
     if (!isEditing) {
       setisEditing(true);
     } else {
-      trigger({ path: `/user/username/${newNickname}`, method: 'get' });
+      nickNameGet.trigger({
+        path: `/user/username/${newNickname}`,
+        method: 'get',
+      });
     }
   };
 
@@ -51,26 +71,24 @@ const MyPageSettings = () => {
   };
 
   useEffect(() => {
-    if (result?.data?.isAvailable) {
+    if (nickNameGet.result?.data?.isAvailable) {
       const updateData = {
         ...userData,
         username: newNickname,
       };
       // console.log(result.data);
       setNewNickName(newNickname);
-      trigger({
+      nickNamePut.trigger({
         path: '/user',
-        method: 'put',
         data: { username: newNickname },
       });
-      console.log(result.data);
       dispatch(loginUser(updateData));
       setisEditing(false);
-    } else if (result?.data?.isAvailable === false) {
+    } else if (nickNameGet.result?.data?.isAvailable === false) {
       setToastText('이미 존재하는 닉네임 입니다');
       handleToast();
     }
-  }, [result?.data]);
+  }, [nickNameGet.result?.data]);
 
   const editNickName = () => {
     setisEditing(!isEditing);
@@ -85,7 +103,7 @@ const MyPageSettings = () => {
       };
       setGenderSelect(gendertoMsg[newGenderValue]);
       dispatch(loginUser(updateData));
-      trigger({
+      nickNameGet.trigger({
         path: '/user',
         method: 'put',
         data: { gender: newGenderValue },
@@ -107,15 +125,31 @@ const MyPageSettings = () => {
   };
 
   const handleConfirmLogout = () => {
-    trigger({ path: '/auth/logout' });
-    dispatch(logoutUser());
+    logOutGet.trigger({ path: '/auth/logout' });
   };
 
   useEffect(() => {
     if (userData.username === '') {
       navigate('/');
     }
-  }, [userData.username]);
+  }, [userData.username, logOutGet.result?.status]);
+
+  useEffect(() => {
+    if (
+      withdrawalGet.result?.status === 200 ||
+      logOutGet.result?.status === 200
+    ) {
+      dispatch(logoutUser());
+      setShowModal(false);
+      navigate('/');
+    } else if (logOutGet.result) {
+      setToastText('로그아웃에 실패했습니다');
+      handleToast();
+    } else if (withdrawalGet.result) {
+      setToastText('회원 탈퇴에 실패했습니다');
+      handleToast();
+    }
+  }, [logOutGet.result, withdrawalGet.result]);
 
   const handleWithdrawal = () => {
     setShowModal(true);
@@ -124,8 +158,7 @@ const MyPageSettings = () => {
   };
 
   const handleConfirmWithdrawal = () => {
-    trigger({ path: '/auth/withdrawal' });
-    dispatch(logoutUser());
+    withdrawalGet.trigger({ path: '/auth/withdrawal' });
   };
 
   const confirmHandler =
