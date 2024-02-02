@@ -40,9 +40,9 @@ const handleCopyClipBoard = async (text: string) => {
 
 const AiDrawerDetail = () => {
   const [shareToast, setShareToast] = useState(false);
-  const [deleteToast, setDeleteToast] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const id = searchParams.get('feedbackId');
+  const location = window.location.protocol + '//' + window.location.host;
 
   const navigate = useNavigate();
 
@@ -89,7 +89,7 @@ const AiDrawerDetail = () => {
 
   const handleShare = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    handleCopyClipBoard(`http://localhost:3000/share/${data?.feedbackId}`); // 나중에 배포 url로 변경 필요!
+    handleCopyClipBoard(`${location}/share/${data?.feedbackId}`); // 나중에 배포 url로 변경 필요!
     setShareToast(true);
   };
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
