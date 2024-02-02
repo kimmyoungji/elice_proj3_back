@@ -47,12 +47,13 @@ export class AuthController {
     @Get('google/redirect')
     async handleGoogleRedirect(@Req() request:any ,@Res() response:any) {
         console.log('구글로그인 진행중...')
-        const user: User & HealthInfo = await this.userService.getUserInfos(request.user.userId);
-        if(user.recentHealthInfoId === null){
-            response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/onboarding/1`);
-        }else{
-            response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/home`);
-        }
+        response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/auth/google`);
+        // const user: User & HealthInfo = await this.userService.getUserInfos(request.user.userId);
+        // if(user.recentHealthInfoId === null){
+        //     response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/onboarding/1`);
+        // }else{
+        //     response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/home`);
+        // }
     }
 
     /* 로컬 회원가입 */
@@ -63,7 +64,7 @@ export class AuthController {
     async handleLocalSignup(@Body() localSignupDto: LocalSignupDto, @Res() response: any) {
         console.log('회원가입진행중...', localSignupDto);
         await this.authService.localSignup(localSignupDto);
-        response.status(200).send('회원가입 성공'); //분기처리 필요
+        response.status(200).send('회원가입 성공'); 
     }
     /* 로컬 로그인 */
     @ApiOperation({ summary: '로컬 로그인 요청 API' })
