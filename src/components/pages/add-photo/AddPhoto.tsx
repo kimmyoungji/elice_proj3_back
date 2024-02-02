@@ -33,10 +33,14 @@ const AddPhoto = () => {
     }
   }, []);
 
+  const userAgent = navigator.userAgent;
+  const isMobile = userAgent.match(/iPhone/i) || userAgent.match(/Android/i);
+
   const getWebcam = (callback:(stream: MediaProvider)=>void) => {
     try {
       const constraints = {
         video: {
+          facingMode: isMobile ? { exact: "environment" } : { exact: "user" },
           width: 390,
           height: 550,
         },
@@ -90,6 +94,7 @@ const AddPhoto = () => {
           className={styles.cam}
           ref={videoRef}
           autoPlay
+          playsInline
         />
       </div>
       <div className={styles.addbox}>

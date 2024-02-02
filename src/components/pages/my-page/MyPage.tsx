@@ -5,7 +5,6 @@ import { PencilIcon } from '@assets/PencilIcon';
 import { mapGoaltoMsg, mapActivitytoMsg, findKeyByValue } from './mapMsg';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@components/store';
-import { loginUser } from '@components/store/userLoginRouter';
 
 const MyPage = () => {
   const userData = useSelector((state: RootState) => state.user.userInfo);
