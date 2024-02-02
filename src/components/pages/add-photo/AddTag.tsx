@@ -50,6 +50,7 @@ const AddTag = ({
     observer
   ) => {
     if (entry.isIntersecting) {
+      if (result?.data?.length === 0) return;
       setIsLoading(true);
       observer.unobserve(entry.target);
       await trigger({});
