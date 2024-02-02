@@ -135,6 +135,7 @@ export class FeedbackController {
         };
         throw new HttpException(exceptionObj, HttpStatus.FORBIDDEN);
       }
+      return "데이터 삭제 성공";
     } catch (error) {
       throw error;
     }

@@ -116,7 +116,7 @@ export class FeedbackRepository {
     try {
       return await manager
         .createQueryBuilder(Feedback, "feedback")
-        .softDelete()
+        .delete()
         .from(Feedback)
         .where("feedback_id =:feedbackId", { feedbackId })
         .execute();
