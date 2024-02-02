@@ -175,7 +175,6 @@ const RecordEditDetail = ({ focus, foods, setFoods }: Props) => {
   };
 
   const increment = () => {
-    console.log(focusing.counts)
     if (focus === undefined) return;
     let copyArr = [...foods];
     copyArr[focus].counts = Number(copyArr[focus].counts) + 0.25;
