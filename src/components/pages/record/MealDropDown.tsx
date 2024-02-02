@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import style from './mealpage.module.css';
 import { mealTypes } from './recordMappingConstant';
-export const MealDropDown = ({ selectedMeal, handleMealSelect }) => {
+export const MealDropDown = ({ selectedMeal, handleMealSelect }: any) => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
   return (
