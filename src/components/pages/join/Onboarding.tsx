@@ -87,7 +87,6 @@ const Onboarding = () => {
   }, [returnedUserData]);
 
   const onClickTrigger = () => {
-    console.log(trigger);
     trigger(
       { ...userData },
       {
@@ -152,14 +151,9 @@ const Onboarding = () => {
       ...onboardingInfo,
     }));
   };
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
 
   //업데이트 영양성분과 목표 칼로리 모두 있을떄 감지해서 PUT요청
   useEffect(() => {
-    console.log({ userData });
-    console.log(userData.recommendIntake?.carbohydrates);
     if (
       userData.activityAmount &&
       userData.age &&

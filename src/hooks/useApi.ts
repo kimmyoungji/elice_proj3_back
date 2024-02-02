@@ -57,7 +57,6 @@ const useApi = <T>({
         );
 
         if (applyResult) {
-          console.log('result를 apply합니다');
           setResult(triggerResult);
           return;
         }
