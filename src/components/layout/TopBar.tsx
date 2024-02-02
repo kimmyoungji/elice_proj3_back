@@ -62,7 +62,8 @@ const TopBar = ({ home, title, back, qIcon, icon }: TopBarPropsType) => {
         time={50000}
       >
         <ToastText>
-          {key === 'recordymdmeal' && '식단기록 사이트에 대해 안내 문구 '}
+          {key === 'recordymdmeal' &&
+            `사진을 올리고 AI로 간편하게 \n 식단을 기록해보세요!`}
           {key === 'addphotoymdmeal' &&
             '촬영 1회 안에 모든 음식이 담길 수 있도록 촬영해주세요.'}
         </ToastText>
