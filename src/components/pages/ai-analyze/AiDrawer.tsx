@@ -60,6 +60,12 @@ const AiDrawer = () => {
     onIntersect,
   });
 
+  const handleDelete = (deletedId: string) => {
+    setDrawerList(
+      drawerList.filter((drawer) => drawer.feedbackId !== deletedId)
+    );
+  };
+
   return (
     <div className={styles.drawer_wrapper}>
       {drawerList?.map((drawer, idx) => (
@@ -70,6 +76,7 @@ const AiDrawer = () => {
             type={drawer.questionType}
             tag={drawer.question}
             text={drawer.feedback}
+            onDeleted={handleDelete}
           />
           {!isLoading && <div ref={setTarget} />}
         </div>

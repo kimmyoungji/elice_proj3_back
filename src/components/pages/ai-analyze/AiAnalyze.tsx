@@ -257,7 +257,7 @@ const AiAnalyze = () => {
       } else if (questionData[questionIdx].type.questionType === '목표추천') {
         navigate('/my-page');
       } else {
-        navigate('/');
+        navigate('/home');
       }
     } else if (questionData[questionIdx].button[idx].type === 'ai') {
       const askData = questionData[questionIdx + '-' + String(idx + 1)]
@@ -327,8 +327,6 @@ const AiAnalyze = () => {
     }, 900);
     return () => clearTimeout(timeoutId);
   }, [chats]);
-
-  console.log(chats);
 
   return (
     <div className={styles.main_wrapper}>

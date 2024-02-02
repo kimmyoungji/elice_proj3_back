@@ -115,7 +115,12 @@ const Join = () => {
           data.data && setToastText(data.data);
           handleToast();
           if (data === '회원가입 성공' || data.data === '회원가입 성공') {
-            navigate('/');
+            navigate('/login');
+          }
+          if (data === '중복된 사용자명입니다.') {
+            setToastText(data);
+            handleToast();
+            setName('');
           }
         },
       }

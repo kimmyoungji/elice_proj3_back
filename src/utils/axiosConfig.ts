@@ -90,6 +90,9 @@ api.interceptors.response.use(
       if (data.message === '이미 구글계정으로 등록된 이메일입니다.') {
         return data.message;
       }
+      if (data.message === '중복된 사용자명입니다.') {
+        return data.message;
+      }
     }
   }
 );

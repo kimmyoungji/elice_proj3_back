@@ -41,7 +41,7 @@ const BotBox = ({
   const deleteScrap = async () => {
     await trigger({
       method: 'delete',
-      path: `/feedback/save?feedbackId=${feedbackId}`,
+      path: `/feedback?feedbackId=${feedbackId}`,
       applyResult: true,
       isShowBoundary: true,
     });
