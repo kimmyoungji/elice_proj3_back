@@ -71,6 +71,8 @@ const RecordEdit = () => {
   const [imgUrl, setImgUrl] = useState('');
 
   function base64toFile(base_data: string, filename: string) {
+    if (foods && foods[0].recordId) return;
+    if (foods[1].recordId) return;
     const arr = base_data.split(',');
     const bstr = atob(arr[1]);
     let n = bstr.length;
@@ -84,12 +86,14 @@ const RecordEdit = () => {
   }
 
   const fileName = useMemo(() => {
+    if (foods && foods[0] && foods[0].recordId) return;
+    if (foods[1] && foods[1].recordId) return;
     return (
       date + ' ' + mealTimetoStr[mealTime as string] + Math.random() + '.jpg'
     );
   }, []);
   const file =
-    foods && !foods[0]?.recordId && imgUrl && base64toFile(imgUrl, fileName);
+    foods && (foods[0] && !foods[0].recordId) && (foods[1] && !foods[1].recordId) && imgUrl && fileName && base64toFile(imgUrl, fileName);
 
   useEffect(() => {
     if (state) {
