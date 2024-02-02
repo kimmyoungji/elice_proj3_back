@@ -32,7 +32,9 @@ const Calorie = ({ totalCalories, recommendCalories }: Props) => {
           />
         </svg>
         <div className={styles.calorie_wrapper}>
-          <p className={`${styles.calorie_num} b-big`}>{totalCalories}</p>
+          <p className={`${styles.calorie_num} b-big`}>
+            {Math.round(totalCalories)}
+          </p>
           <p className={`${styles.calorie_standard} r-medium`}>
             / {recommendCalories}kcal
           </p>

@@ -72,11 +72,11 @@ const Nutrients = ({ totalNutrient, recommendNutrient }: Props) => {
                   : `${styles.overpercent} b-tiny`
               }
             >
-              {Math.floor((totalNutrient[idx] / recommendNutrient[idx]) * 100)}%
+              {Math.round((totalNutrient[idx] / recommendNutrient[idx]) * 100)}%
             </p>
           </div>
           <p className={`${styles.gram} r-regular`}>
-            {Math.floor(totalNutrient[idx])}/{recommendNutrient[idx]}g
+            {Math.round(totalNutrient[idx])}/{recommendNutrient[idx]}g
           </p>
         </div>
       ))}
