@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import InputCommon from '@components/UI/InputCommon';
-import useApi from '@hooks/useApi';
 import './Onboarding.css';
 import useCachingApi from '@hooks/useCachingApi';
 import Toast from '@components/UI/Toast';
@@ -27,14 +26,9 @@ const Join = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [toastText, setToastText] = useState('');
-  const {
-    result: signUpResult,
-    loading: signUpLoading,
-    trigger: signUpTrigger,
-  } = useApi<any>({
+  const { trigger: signUpTrigger } = useCachingApi<any>({
     method: 'post',
     path: 'auth/local/signup',
-    data: { username, email, password },
   });
   const { trigger: sendMailTrigger } = useCachingApi({
     method: 'post',
@@ -45,12 +39,6 @@ const Join = () => {
     method: 'post',
     path: '/auth/verify-email/check-code',
   });
-
-  useEffect(() => {
-    if (signUpResult?.data === '회원가입 성공' && signUpResult.status === 200) {
-      navigate('/');
-    }
-  }, [signUpResult]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -115,9 +103,23 @@ const Join = () => {
   };
 
   const handleSignUp = () => {
-    signUpTrigger({
-      data: { username, email, password },
-    });
+    signUpTrigger(
+      {
+        username,
+        email,
+        password,
+      },
+      {
+        onSuccess: (data) => {
+          data && setToastText(data);
+          data.data && setToastText(data.data);
+          handleToast();
+          if (data === '회원가입 성공' || data.data === '회원가입 성공') {
+            navigate('/');
+          }
+        },
+      }
+    );
   };
 
   //이메일 인증코드 발송
@@ -126,7 +128,8 @@ const Join = () => {
       { email },
       {
         onSuccess: (data: any) => {
-          setToastText(data.data);
+          data && setToastText(data);
+          data?.data && setToastText(data?.data);
           handleToast();
         },
       }
@@ -250,7 +253,7 @@ const Join = () => {
             confirmPasswordError !== ''
           }
         >
-          {signUpLoading ? '가입 하는중' : '가입하기'}
+          {'가입하기'}
         </ButtonCommon>
       </div>
     </div>
