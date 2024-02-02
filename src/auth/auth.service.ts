@@ -1,3 +1,4 @@
+import { UserService } from 'src/user/user.service';
 import { HealthInfo } from 'src/user/entities/health-info.entity';
 import { HealthInfoRepository } from '../user/repositories/health-info.repository';
 import { LocalSignupDto } from './dto/localSignupDto';
@@ -92,7 +93,7 @@ export class AuthService {
         await queryRunner.startTransaction();
         
         try{
-             // email password username 받아오기
+            // email password username 받아오기
             const {email} = localSignupDto;
             // 가입된 이메일인지 확인하기
             const user = await this.userRepository.findUserByEmail(email, queryRunner.manager);
@@ -105,8 +106,14 @@ export class AuthService {
             }
            
             // 가입되지 않은 이메일이면 
+            // 사용자명 중복확인하기
+            
             // newUser 생성하기
             const newUser = new User().mapLocalSignupDto(localSignupDto);
+            // 이름 중복 확인
+            const isUser = await this.userRepository.findUserByUserName(newUser.username, queryRunner.manager);
+            if(isUser) throw new HttpException('중복된 사용자명입니다.', HttpStatus.CONFLICT);
+
             // saveUser 호출하기
             await this.userRepository.saveUser(newUser, queryRunner.manager);
             await queryRunner.commitTransaction();
