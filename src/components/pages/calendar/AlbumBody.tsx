@@ -29,7 +29,9 @@ const AlbumBody = ({
             <div
               key={`album-${idx}`}
               onClick={() =>
-                onClickCards(`${albumDay.date}/${getMealsNumber[arr[0]]}`)
+                onClickCards(
+                  `${returnWithZero(albumDay.date)}/${getMealsNumber[arr[0]]}`
+                )
               }
             >
               <AlbumCell
