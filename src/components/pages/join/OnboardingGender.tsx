@@ -20,28 +20,23 @@ const OnboardingGender: React.FC<OnboardingProps> = ({
     }
   };
 
-  useEffect(() => {
-    console.log(userData);
-    console.log(userData.gender);
-  }, [userData.gender]);
-
   return (
     <div className='onboarding-container'>
       <h1 className='b-medium'>당신의 성별은 무엇인가요?</h1>
       <div style={{ marginTop: '30px' }}>
         <ButtonCommon
-          variant={Number(userData.gender) === 1 ? 'active' : 'default'}
+          variant={Number(userData.gender) === 2 ? 'active' : 'default'}
           size='large'
-          onClickBtn={() => onClick(1)}
+          onClickBtn={() => onClick(2)}
         >
           여성
         </ButtonCommon>
       </div>
       <div style={{ marginTop: '15px' }}>
         <ButtonCommon
-          variant={Number(userData.gender) === 2 ? 'active' : 'default'}
+          variant={Number(userData.gender) === 1 ? 'active' : 'default'}
           size='large'
-          onClickBtn={() => onClick(2)}
+          onClickBtn={() => onClick(1)}
         >
           남성
         </ButtonCommon>
