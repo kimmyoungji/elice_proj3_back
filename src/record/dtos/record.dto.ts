@@ -25,7 +25,7 @@ class Food {
 }  
 
 @Exclude()
-export class CreateRecordDto {
+export class RecordDto {
     @Expose()
     @IsEnum(MealType)
     @ApiProperty({ description: "식단 구분", enum: MealType })

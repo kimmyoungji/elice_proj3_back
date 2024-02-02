@@ -15,28 +15,24 @@ export class CumulativeRecordDateDto {
   @Expose()
   @ApiProperty({ description: "식사별 섭취한 탄수화물" })
   @IsNotEmpty()
-  @IsInt()
   @Transform(({ value }) => value / 100)
   carbohydrates: number;
 
   @Expose()
   @ApiProperty({ description: "식사별 섭취한 단백질" })
   @IsNotEmpty()
-  @IsInt()
   @Transform(({ value }) => value / 100)
   proteins: number;
 
   @Expose()
   @ApiProperty({ description: "식사별 섭취한 지방" })
   @IsNotEmpty()
-  @IsInt()
   @Transform(({ value }) => value / 100)
   fats: number;
 
   @Expose()
   @ApiProperty({ description: "식사별 섭취한 식이섬유" })
   @IsNotEmpty()
-  @IsInt()
   @Transform(({ value }) => value / 100)
   dietaryFiber: number;
 }

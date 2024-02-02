@@ -15,7 +15,7 @@ export class SplitImage {
   @Column()
   foodName: string;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'real' })
   xCoordinate: number;
 
   @Column({ type: 'float' })
