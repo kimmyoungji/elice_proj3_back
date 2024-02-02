@@ -47,8 +47,8 @@ export class AuthController {
     @Get('google/redirect')
     async handleGoogleRedirect(@Req() request:any ,@Res() response:any) {
         console.log('구글로그인 진행중...')
-        response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/home`);
-        // response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/auth/google`);
+        // response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/home`);
+        response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/auth/google`);
         // const user: User & HealthInfo = await this.userService.getUserInfos(request.user.userId);
         // if(user.recentHealthInfoId === null){
         //     response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/onboarding/1`);
