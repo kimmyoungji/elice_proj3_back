@@ -9,6 +9,7 @@ import { DataSource } from "typeorm";
 import { HealthInfoRepository } from "../user/repositories/health-info.repository";
 import { ImageRepository } from "src/image/repositories/image.repository";
 import { CumulativeRecord } from "./cumulative-record.entity";
+import { recommendIntakeData } from "./util/recommendIntake";
 
 @Injectable()
 export class CumulativeRecordService {
@@ -36,41 +37,54 @@ export class CumulativeRecordService {
         CumulativeRecordDateDto,
         totalResult
       );
-
       // [HealthInfo Table] - 3) targetCalories, 4) recommendNutrient
       const HealthInfoResult =
         await this.healthInfoRepository.findHealthInfoByUserId(
           date,
           userId,
+          "DESC",
           queryRunner.manager
         );
-      if (!totalResultDto) {
-        return [];
+      if (!totalResultDto && !HealthInfoResult) {
+        const HealthInfoResultASC =
+          await this.healthInfoRepository.findHealthInfoByUserId(
+            date,
+            userId,
+            "ASC",
+            queryRunner.manager
+          );
+        if (HealthInfoResultASC) {
+          const { targetCalories, recommendIntake } = HealthInfoResultASC;
+          const result = recommendIntakeData(targetCalories, recommendIntake);
+          await queryRunner.commitTransaction();
+          return result;
+        } else {
+          const recommendNutrient = {
+            carbohydrates: 10,
+            proteins: 10,
+            fats: 10,
+            dietaryFiber: 10,
+          };
+
+          const result = {
+            targetCalories: 10,
+            recommendNutrient,
+          };
+          await queryRunner.commitTransaction();
+          return result;
+        }
       } else if (totalResultDto && !HealthInfoResult) {
         throw new NotFoundException("데이터 조회에서 오류가 발생했습니다");
       }
-      await queryRunner.commitTransaction();
-
       const { totalCalories, ...datas } = totalResultDto;
       const { targetCalories, recommendIntake } = HealthInfoResult;
       const { mealTypeResult, mealTypeImage } =
         await this.getDateMealTypeRecord(date, userId);
-      let recommendNutrient = {};
-      if (recommendIntake === null) {
-        recommendNutrient = {
-          carbohydrates: 10,
-          proteins: 10,
-          fats: 10,
-          dietaryFiber: 10,
-        };
-      } else {
-        recommendNutrient = {
-          carbohydrates: recommendIntake[0] === null ? 10 : recommendIntake[0],
-          proteins: recommendIntake[1] === null ? 10 : recommendIntake[1],
-          fats: recommendIntake[2] === null ? 10 : recommendIntake[2],
-          dietaryFiber: recommendIntake[3] === null ? 10 : recommendIntake[3],
-        };
-      }
+      const { recommendNutrient } = recommendIntakeData(
+        targetCalories,
+        recommendIntake
+      );
+      await queryRunner.commitTransaction();
 
       const dateArr = mealTypeResult.map((result, index) => [
         result.mealType,

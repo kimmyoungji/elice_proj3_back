@@ -53,15 +53,24 @@ export class HealthInfoRepository {
   public async findHealthInfoByUserId(
     date: Date,
     userId: string,
+    sort,
     manager: EntityManager
   ): Promise<HealthInfo> {
     try {
-      return await manager
-        .createQueryBuilder(HealthInfo, "health_info")
-        .where("user_id = :userId", { userId })
-        .andWhere("DATE_TRUNC('day', updated_date) <= :date", { date })
-        .orderBy("updated_date", "DESC")
-        .getOne();
+      if (sort === "DESC") {
+        return await manager
+          .createQueryBuilder(HealthInfo, "health_info")
+          .where("user_id = :userId", { userId })
+          .andWhere("DATE_TRUNC('day', updated_date) <= :date", { date })
+          .orderBy("updated_date", sort)
+          .getOne();
+      } else {
+        return await manager
+          .createQueryBuilder(HealthInfo, "health_info")
+          .where("user_id = :userId", { userId })
+          .orderBy("updated_date", sort)
+          .getOne();
+      }
     } catch (err) {
       console.log(err);
       throw new HttpException(err.detail, 500);
