@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import style from './mealpage.module.css';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import getDates from '@utils/getDates';
 import MealDetail from './MealDetail';
 import { MealDropDown } from './MealDropDown';
-import { MealDetailData, selecetedMealDataType } from './RecordTypes';
+import { MealDetailData } from './RecordTypes';
 import useApi from '@hooks/useApi';
-
+import { Modal, mapSelectModalMsg } from '@components/UI/Modal';
 import { mapSelectMealToMsg } from './recordMappingConstant';
-import { mealTypes, findMealNumber } from './recordMappingConstant';
+import { findMealNumber } from './recordMappingConstant';
 
 const MealPage = () => {
   const params = useParams();
@@ -17,7 +17,7 @@ const MealPage = () => {
   const { thisYear, thisMonth, thisDay } = getDates();
   const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
   const date = params.date || todayDate;
-  const selectedMealTime = params.mealTime || '1'; // 받아온 아점저간
+  const selectedMealTime = params.mealTime || '1';
   const dateSplit = date.split('-');
   const formatDate = `${dateSplit[0]}.${dateSplit[1]}.${dateSplit[2]}`;
 
@@ -30,6 +30,10 @@ const MealPage = () => {
   const [imgData, setImgData] = useState('');
   const [coordinate, setCoordinate] = useState({});
   const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalSelect, setModalSelect] = useState('');
+  const [modalMsg, setModalMsg] = useState('');
+
   type mealDataType = {
     data: MealDetailData;
   };
@@ -57,17 +61,26 @@ const MealPage = () => {
     }
   }, [result?.data]);
 
+  console.log(selectedMealNumber);
+
   useEffect(() => {
     if (selectedMealNumber) {
       navigate(`/record/${date}/${selectedMealNumber}`);
     }
-  }, [date]);
+  }, [selectedMealNumber]);
 
   const handleMealSelect = (mealType: string) => {
     setSelectedMeal(mealType);
     const newMealNumber = Number(findMealNumber(mealType));
     setSelectedMealNumber(newMealNumber);
     setDropdownVisible(false);
+  };
+
+  const handleShowDelteModal = () => {
+    setShowModal(true);
+    setModalSelect('mealDelete');
+    setModalMsg(mapSelectModalMsg.mealDelete);
+    console.log(showModal);
   };
 
   const handleMealDelete = () => {
@@ -82,8 +95,22 @@ const MealPage = () => {
     navigate(`/record/${date}`);
   };
 
+  const handleConfirm = () => {
+    if (modalSelect === 'mealDelete') {
+      handleMealDelete();
+    }
+  };
+
   return (
     <>
+      {showModal && (
+        <Modal
+          modalSelect={modalSelect}
+          modalMsg={modalMsg}
+          onClose={() => setShowModal(false)}
+          onConfirm={handleConfirm}
+        />
+      )}
       <div className={style.container}>
         <div className={style.pageTitle}>
           <div>{formatDate}</div>
@@ -109,7 +136,7 @@ const MealPage = () => {
                   <ButtonCommon
                     variant='default-active'
                     size='tiny'
-                    onClick={handleMealDelete}
+                    onClick={handleShowDelteModal}
                   >
                     <> 삭제 </>
                   </ButtonCommon>

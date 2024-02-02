@@ -11,6 +11,7 @@ export interface UserInfo {
   targetCalories?: number;
   age?: number;
   birthday?: string;
+  message?: string;
 }
 
 export const initialState: { userInfo: UserInfo } = {
@@ -25,6 +26,7 @@ export const initialState: { userInfo: UserInfo } = {
     targetCalories: 0,
     age: 0,
     birthday: '',
+    message: '',
   },
 };
 

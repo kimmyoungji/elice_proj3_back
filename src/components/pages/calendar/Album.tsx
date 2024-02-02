@@ -4,7 +4,7 @@ import classes from './album.module.css';
 import { useEffect, useState } from 'react';
 import useCachingApi from '@hooks/useCachingApi';
 import useIntersect from '@hooks/useIntersect';
-import AlbumBody from './Albumbody';
+import AlbumBody from './AlbumBody';
 export type MealType = '아침' | '점심' | '저녁' | '간식';
 
 export interface AlbumArrType {
@@ -27,7 +27,7 @@ const Album = () => {
   const [albumArr, setAlbumArr] = useState<AlbumArrType[]>([]);
   const [page, setPage] = useState(1);
   const { trigger, result } = useCachingApi<AlbumApiResponse>({
-    path: `/cumulative-record/month?month=${thisYear}-${returnWithZero(thisMonth)}-01&page=1`,
+    path: `/cumulative-record/month?month=${thisYear}-${returnWithZero(thisMonth)}-01&page=${page}`,
   });
   const navigate = useNavigate();
 

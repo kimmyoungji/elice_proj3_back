@@ -2,13 +2,16 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import style from './mypagesettings.module.css';
 import { useEffect, useState } from 'react';
 import useApi from '@hooks/useApi';
-import { Modal } from './MyPageModal';
+import { Modal } from '../../UI/Modal';
+import { mapSelectModalMsg } from '../../UI/Modal';
 import MyPageDropdown from './MyPageDropdwon';
 import { findKeyByValue, gendertoMsg } from './mapMsg';
 import { loginUser } from '@components/store/userLoginRouter';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '@components/store/userLoginRouter';
 import { RootState } from '@components/store';
+import Toast from '@components/UI/Toast';
+import ToastText from '@components/UI/ToastText';
 
 const genderArr = ['남성', '여성', '기타'];
 
@@ -17,10 +20,13 @@ const MyPageSettings = () => {
   const { nickname, gender } = location.state;
   const [isEditing, setisEditing] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [modalSelect, setModalSelect] = useState(false);
+  const [modalSelect, setModalSelect] = useState('');
+  const [modalMsg, setModalMsg] = useState('');
   const [genderSelect, setGenderSelect] = useState(gendertoMsg[gender]);
   const [isGenderDropdwonVisible, setGenderDropdownVisible] = useState(false);
   const [newNickname, setNewNickName] = useState(nickname);
+  const [toastText, setToastText] = useState('');
+  const [showToast, setShowToast] = useState(false);
   const { trigger, result } = useApi<Nickname>({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -33,10 +39,15 @@ const MyPageSettings = () => {
     | undefined;
 
   const handleEditName = () => {
-    setisEditing(!isEditing);
-    if (isEditing) {
+    if (!isEditing) {
+      setisEditing(true);
+    } else {
       trigger({ path: `/user/username/${newNickname}`, method: 'get' });
     }
+  };
+
+  const handleToast = () => {
+    setShowToast(true);
   };
 
   useEffect(() => {
@@ -45,16 +56,21 @@ const MyPageSettings = () => {
         ...userData,
         username: newNickname,
       };
-
+      // console.log(result.data);
       setNewNickName(newNickname);
       trigger({
         path: '/user',
         method: 'put',
         data: { username: newNickname },
       });
+      console.log(result.data);
       dispatch(loginUser(updateData));
+      setisEditing(false);
+    } else if (result?.data?.isAvailable === false) {
+      setToastText('이미 존재하는 닉네임 입니다');
+      handleToast();
     }
-  }, [result?.data, userData.username]);
+  }, [result?.data]);
 
   const editNickName = () => {
     setisEditing(!isEditing);
@@ -86,37 +102,49 @@ const MyPageSettings = () => {
 
   const handleLogOut = () => {
     setShowModal(true);
-    setModalSelect(true);
+    setModalSelect('login');
+    setModalMsg(mapSelectModalMsg.login);
   };
 
   const handleConfirmLogout = () => {
     trigger({ path: '/auth/logout' });
-    //에러 분기처리 할 부분?
     dispatch(logoutUser());
   };
+
+  useEffect(() => {
+    if (userData.username === '') {
+      navigate('/');
+    }
+  }, [userData.username]);
+
   const handleWithdrawal = () => {
     setShowModal(true);
-    setModalSelect(false);
+    setModalSelect('withdrawal');
+    setModalMsg(mapSelectModalMsg.withdrawal);
   };
 
   const handleConfirmWithdrawal = () => {
     trigger({ path: '/auth/withdrawal' });
-    //에러 분기처리 할 부분?
-    navigate('/');
+    dispatch(logoutUser());
   };
+
+  const confirmHandler =
+    modalSelect === 'login' ? handleConfirmLogout : handleConfirmWithdrawal;
 
   return (
     <>
       {showModal && (
         <Modal
           modalSelect={modalSelect}
+          modalMsg={modalMsg}
           onClose={() => setShowModal(false)}
-          onConfirm={
-            modalSelect ? handleConfirmLogout : handleConfirmWithdrawal
-          }
+          onConfirm={confirmHandler}
         />
       )}
       <div className={style.container}>
+        <Toast show={showToast} setShow={setShowToast}>
+          <ToastText>{toastText}</ToastText>
+        </Toast>
         <div className={style.accountWrapper}>
           <div className={style.detailContainer}>
             <div className={style.accountSettings}> 닉네임 </div>

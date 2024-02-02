@@ -1,16 +1,25 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonCommon from '@components/UI/ButtonCommon';
 import './Auth.css';
 import logo from './9g_logo.png';
+import { useSelector } from 'react-redux';
+import { RootState } from '@components/store';
 
 const Auth = () => {
   const navigate = useNavigate();
-  const [state, setState] = useState(0);
-
+  const userInfo = useSelector(
+    (state: RootState) => state.user?.userInfo?.username
+  );
   const handleClickGoogleAuth = () => {
     window.location.href = 'http://localhost:5001/api/auth/google/login';
   };
+
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     navigate('/home');
+  //   }
+  // }, [userInfo]);
 
   return (
     <div className='center-container'>

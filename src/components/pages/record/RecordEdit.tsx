@@ -88,7 +88,8 @@ const RecordEdit = () => {
       date + ' ' + mealTimetoStr[mealTime as string] + Math.random() + '.jpg'
     );
   }, []);
-  const file = foods && !foods[0]?.recordId && imgUrl && base64toFile(imgUrl, fileName);
+  const file =
+    foods && !foods[0]?.recordId && imgUrl && base64toFile(imgUrl, fileName);
 
   useEffect(() => {
     if (state) {
@@ -202,7 +203,10 @@ const RecordEdit = () => {
     if (foods[0].foodName === '음식명') return;
     if (foods[0].foodName === '') return;
     if (foods[0].foodInfoId) return;
-    const foodList = foods.length===1 ? [foods[0].foodName] : foods.map((food) => food.foodName);
+    const foodList =
+      foods.length === 1
+        ? [foods[0].foodName]
+        : foods.map((food) => food.foodName);
     getFoodInfoId.trigger({
       path: '/food-info/foods',
       data: { foodList },
@@ -212,13 +216,15 @@ const RecordEdit = () => {
   useEffect(() => {
     if (!getFoodInfoId.result) return;
     const foodInfoIdList = getFoodInfoId.result.data.foodInfoIdList;
-    const newFoods = foods.length===1 ? foods[0] :[...foods];
+    const newFoods = foods.length === 1 ? foods[0] : [...foods];
     foods.length === 1
-      ? foods[0].foodInfoId = foodInfoIdList[0]
-    : (newFoods as Food[]).map((food, index) => {
-      food.foodInfoId = foodInfoIdList[index];
-    });
-    foods.length===1 ? setFoods([newFoods] as Food[]): setFoods(newFoods as Food[]);
+      ? (foods[0].foodInfoId = foodInfoIdList[0])
+      : (newFoods as Food[]).map((food, index) => {
+          food.foodInfoId = foodInfoIdList[index];
+        });
+    foods.length === 1
+      ? setFoods([newFoods] as Food[])
+      : setFoods(newFoods as Food[]);
   }, [getFoodInfoId.result]);
 
   useEffect(() => {
@@ -268,7 +274,7 @@ const RecordEdit = () => {
 
     if (!newFoods[0].recordId) {
       recordPost.trigger({
-        path: '/records',
+        path: `/records?date=${date}&mealType=${mealTime}`,
         data: {
           mealType: mealTime,
           imgUrl: pUrl,
@@ -337,7 +343,7 @@ const RecordEdit = () => {
               <div key={index} className={styles.tagitem}>
                 <div className={styles.tagimgwrap}>
                   {food.XYCoordinate.length === 0 ||
-                  food.XYCoordinate[0] === null ? (
+                  food.XYCoordinate[0] === 0? (
                     <img
                       className={`${styles.tagimg} ${
                         focus === index && styles.focusimg

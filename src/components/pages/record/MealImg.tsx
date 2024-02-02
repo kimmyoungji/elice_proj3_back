@@ -16,7 +16,6 @@ const MealImg = ({
       : undefined;
   const foods =
     data && data[selectedMealNumber] ? data[selectedMealNumber].foods : [];
-  // const imgUrl = data[selectedMealNumber].imgUrl;
 
   return (
     <>
@@ -25,7 +24,7 @@ const MealImg = ({
           <ImgTagContent
             data={data}
             selectedMealNumber={selectedMealNumber}
-            imgUrl={imgUrl || '/images/9gram_logo.png'}
+            imgUrl={imgUrl || '/images/ggu_logo_record.png'}
             className={className}
           />
         ) : (
