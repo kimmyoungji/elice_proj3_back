@@ -101,7 +101,23 @@ const AiAnalyze = () => {
           num
       );
       const question = questionIdxList?.map((num, qIdx) => {
-        const context = questionData[num];
+        let context = {};
+        if (num.length === 5 || num === '1-3') {
+          const oldContext = questionData[num].text.split('\n');
+          oldContext.splice(oldContext.length - 1, 0, record.feedback);
+          const newContext = oldContext.join('\n');
+          context = {
+            type: {
+              questionType: questionData[num].type.questionType,
+              question: questionData[num].type.question,
+            },
+            text: newContext,
+            button: questionData[num].button,
+          };
+        } else {
+          context = questionData[num];
+        }
+
         if (
           questionList.length === 0 ||
           record.feedbackDate === questionList[questionList.length - 1].date
