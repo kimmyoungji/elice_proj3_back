@@ -93,8 +93,6 @@ const Home = () => {
     weekly();
   }, [selectedWeek]);
 
-  console.log(date);
-
   return (
     <div className={styles.home_wrapper}>
       <div className={`${styles.select_wrapper} b-small`}>
