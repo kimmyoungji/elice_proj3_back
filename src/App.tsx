@@ -19,6 +19,7 @@ import {
 } from '@tanstack/react-query';
 import WithAuth from '@components/hoc/WithAuth';
 import { LoadingBar } from '@components/UI/LoadingBar';
+import GoogleAuth from '@components/pages/join/GoogleAuth';
 
 const Join = lazy(() => import('@components/pages/join/Join'));
 
@@ -123,6 +124,7 @@ function App() {
                   <Route path='/home' element={<Home />} />
                   <Route path='/my-page' element={<MyPage />} />
                   <Route path='/my-page/edit' element={<MyPageEdit />} />
+                  <Route path='/auth/google' element={<GoogleAuth />} />
                   <Route
                     path='/my-page/settings'
                     element={<MyPageSettings />}
