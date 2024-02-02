@@ -84,34 +84,42 @@ export class AuthController {
 
         try{
             const sessionId = request.signedCookies[process.env.SESSION_COOKIE_NAME];
+            if(!sessionId || !request.user) throw new HttpException('로그아웃된 상태입니다.', HttpStatus.CONFLICT);
             // console.log('로그아웃 후의 세션저장소 :', request.sessionStore,'\n로그아웃 힐 세션아이디: ', sessionId );
-            await request.sessionStore.destroy(sessionId, (err)=>err && {msg: 'logout fail', err: err});
+            await request.sessionStore.destroy(sessionId, (err)=>err && new HttpException('로그아웃 실패',err));
             delete request.user;
             await response.clearCookie(process.env.SESSION_COOKIE_NAME, {signed: true});
-            response.status(200).send('로그아웃 성공, 백엔드에 요청시 로그인 페이지로 리다이렉팅해드립니다.');
+            response.status(200).send('로그아웃 성공');
             console.log(`${sessionId}가 로그아웃 되었습니다.`)
 
-        }catch(err){ throw err; }
+        }catch(err){ 
+            if(err.message) throw err;
+            else throw new HttpException('로그아웃 실패',HttpStatus.BAD_REQUEST); 
+        }
         // finally{ console.log('로그아웃 후의 세션저장소: ', request.sessionStore); }
     }
 
     /* 구글, 로컬 공용 회원 탈퇴 API */
     @ApiOperation({ summary: '회원 탈퇴 API' })
-    @UseGuards(isLoggedInGuard)
     @Get('withdrawal')
     async handleWithdrawal(@Req() request: any, @Res() response: any): Promise<void> {
         try{
             // 회원 탈퇴
+            if(!request.user) throw new HttpException('로그아웃된 상태입니다.', HttpStatus.CONFLICT);
             const result = await this.authService.withdrawal(request.user.userId);
             console.log(result);
 
             // 세션, req.user, cookie 삭제
             const sessionId = request.signedCookies[process.env.SESSION_COOKIE_NAME];
-            await request.sessionStore.destroy(sessionId, (err)=>err && {msg: 'logout fail', err: err});
+            if(!sessionId) throw new HttpException('로그아웃된 상태입니다.', HttpStatus.CONFLICT);
+            await request.sessionStore.destroy(sessionId, (err)=>err && {msg: '회원탈퇴 실패', err: err});
             delete request.user;
             await response.clearCookie(process.env.SESSION_COOKIE_NAME, {signed: true});
-            await response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/`);
-        }catch(err){ console.log(err); throw err; }
+            response.status(200).send(result);
+        }catch(err){
+            if(err.message) throw err;
+            else throw new HttpException('회원탈퇴 실패',HttpStatus.BAD_REQUEST); 
+        }
     }
 
     /* 이메일 인증 코드 발송하기 */
@@ -138,4 +146,4 @@ export class AuthController {
             response.status(200).send({verified});
         }catch(err){ throw err; }
     }
-}
+    }
