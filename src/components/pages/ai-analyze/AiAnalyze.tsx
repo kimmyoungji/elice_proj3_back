@@ -195,11 +195,23 @@ const AiAnalyze = () => {
             feedbackId: '',
           },
         ]);
+      } else if (chats.length !== 1) {
+        setChats((prev) => [
+          {
+            date: todayDate,
+            questionIdx: '1',
+            context: questionData['1'],
+            answer: '3',
+            feedbackId: '',
+          },
+          ...questionList,
+        ]);
+        setQuestionIdx(questionList[questionList.length - 1].questionIdx);
       } else {
         setChats((prev) => [...prev, ...questionList]);
         setQuestionIdx(questionList[questionList.length - 1].questionIdx);
       }
-    } else if (chats.length !== 1) {
+    } else {
       setChats((prev) => [
         ...prev,
         {
@@ -315,6 +327,8 @@ const AiAnalyze = () => {
     }, 900);
     return () => clearTimeout(timeoutId);
   }, [chats]);
+
+  console.log(chats);
 
   return (
     <div className={styles.main_wrapper}>
