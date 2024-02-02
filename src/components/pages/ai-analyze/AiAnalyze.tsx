@@ -102,23 +102,7 @@ const AiAnalyze = () => {
           num
       );
       const question = questionIdxList?.map((num, idx) => {
-        let context = {};
-        if (num.length === 5 || num === '1-3') {
-          const oldContext = questionData[num].text.split('\n');
-          oldContext.splice(oldContext.length - 1, 0, record.feedback);
-          const newContext = oldContext.join('\n');
-          context = {
-            type: {
-              questionType: questionData[num].type.questionType,
-              question: questionData[num].type.question,
-            },
-            text: newContext,
-            button: questionData[num].button,
-          };
-        } else {
-          context = questionData[num];
-        }
-
+        const context = questionData[num];
         if (
           questionList.length === 0 ||
           record.feedbackDate === questionList[questionList.length - 1].date
@@ -127,7 +111,7 @@ const AiAnalyze = () => {
             return {
               date: record.feedbackDate,
               questionIdx: num,
-              context: questionData[num],
+              context: context,
               answer: '다른 질문도 할래!',
               feedbackId: record.feedbackId,
             };
@@ -148,7 +132,7 @@ const AiAnalyze = () => {
           return {
             date: record.feedbackDate,
             questionIdx: num,
-            context: questionData[num],
+            context: context,
             answer: '3',
             feedbackId: record.feedbackId,
           };
@@ -187,11 +171,10 @@ const AiAnalyze = () => {
           },
         ]);
       } else {
-        console.log(chats);
         setChats((prev) => [...prev, ...questionList]);
         setQuestionIdx(questionList[questionList.length - 1].questionIdx);
       }
-    } else {
+    } else if (chats.length !== 1) {
       setChats((prev) => [
         ...prev,
         {
@@ -255,7 +238,6 @@ const AiAnalyze = () => {
 
   useEffect(() => {
     if (askResult) {
-      console.log(askResult);
       setGptAnswer(askResult?.data.feedback);
       setGptId(askResult?.data.feedbackId);
     }
@@ -263,13 +245,15 @@ const AiAnalyze = () => {
 
   useEffect(() => {
     if (answerIdx < 3) {
-      if (questionIdx.length === 5 || questionIdx === '1-3') {
+      if (
+        (questionIdx.length === 5 || questionIdx === '1-3') &&
+        gptId.length > 0
+      ) {
         const newContext = questionData[questionIdx];
         const oldText = questionData[questionIdx].text.split('\n');
         oldText.splice(oldText.length - 1, 0, gptAnswer);
-        const newText = oldText.join('\n');
+        const newText = oldText.join('\n') + questionIdx;
         newContext.text = newText;
-        console.log(gptId);
         setChats((prev) => [
           ...prev,
           {
@@ -281,7 +265,6 @@ const AiAnalyze = () => {
           },
         ]);
       } else {
-        // if (questionIdx.length !== 5 && questionIdx !== '1-3') {
         setChats((prev) => [
           ...prev,
           {
@@ -295,26 +278,6 @@ const AiAnalyze = () => {
       }
     }
   }, [questionIdx]);
-  useEffect(() => {
-    if (answerIdx < 3 && gptId.length > 0) {
-      const newContext = questionData[questionIdx];
-      const oldText = questionData[questionIdx].text.split('\n');
-      oldText.splice(oldText.length - 1, 0, gptAnswer);
-      const newText = oldText.join('\n');
-      newContext.text = newText;
-      console.log(gptId);
-      setChats((prev) => [
-        ...prev,
-        {
-          date: todayDate,
-          questionIdx: questionIdx,
-          context: newContext,
-          answer: questionData[prevQuestionIdx].button[answerIdx].text,
-          feedbackId: gptId,
-        },
-      ]);
-    }
-  }, [gptId]);
 
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
