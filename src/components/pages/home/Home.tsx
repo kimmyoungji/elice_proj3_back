@@ -44,6 +44,7 @@ const Home = () => {
   useEffect(() => {
     triggerData();
   }, [date]);
+  console.log(result);
 
   const handleClick = (idx: number) => {
     setSelectedDay(idx);
