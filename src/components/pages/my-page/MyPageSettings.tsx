@@ -142,10 +142,10 @@ const MyPageSettings = () => {
       dispatch(logoutUser());
       setShowModal(false);
       navigate('/');
-    } else if (logOutGet.result) {
+    } else if (!logOutGet.result) {
       setToastText('로그아웃에 실패했습니다');
       handleToast();
-    } else if (withdrawalGet.result) {
+    } else if (!withdrawalGet.result) {
       setToastText('회원 탈퇴에 실패했습니다');
       handleToast();
     }
