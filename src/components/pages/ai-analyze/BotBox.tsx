@@ -11,9 +11,17 @@ interface Props {
   button: { type: string; text: string }[];
   feedbackId: string;
   handleOnClick: (e: React.MouseEvent<HTMLButtonElement>, idx: number) => void;
+  disabled: boolean;
 }
 
-const BotBox = ({ toSave, text, button, feedbackId, handleOnClick }: Props) => {
+const BotBox = ({
+  toSave,
+  text,
+  button,
+  feedbackId,
+  handleOnClick,
+  disabled,
+}: Props) => {
   const [scrap, setScrap] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [toast, setToast] = useState(false);
@@ -78,8 +86,10 @@ const BotBox = ({ toSave, text, button, feedbackId, handleOnClick }: Props) => {
                             handleOnClick(e, idx);
                             setClicked(true);
                           }}
-                          disabled={clicked && true}
-                          customClassName={clicked && styles.disable_btn}
+                          disabled={disabled || clicked}
+                          customClassName={
+                            (disabled || clicked) && styles.disable_btn
+                          }
                         >
                           {btn.text}
                         </ButtonCommon>

@@ -15,7 +15,6 @@ const nowDate = now.getDate();
 const nowDay = now.getDay();
 
 const currentLastDayIndex = new Date(nowYear, nowMonth + 1, 0).getDate(); // 이번달 마지막 날짜
-const lastLastDayIndex = new Date(nowYear, nowMonth, 0).getDate(); // 저번달 마지막 날짜
 const currentFirstDayIndex = new Date(nowYear, nowMonth, 1).getDay(); // 이번달 첫번째 날
 const totalWeek = Math.ceil(
   (currentLastDayIndex + currentFirstDayIndex + 1) / 7
@@ -44,6 +43,7 @@ const Home = () => {
 
   useEffect(() => {
     triggerData();
+    console.log(date);
   }, [date]);
 
   const handleClick = (idx: number) => {
@@ -75,13 +75,15 @@ const Home = () => {
       }
       newWeekArr.push(date);
     }
-    for (let i = 0; i < 7; i++) {
-      if (newWeekArr[i] !== 0) {
-        setSelectedDay(i);
-        setDate(
-          `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${newWeekArr[i] >= 10 ? newWeekArr[i] : `0${newWeekArr[i]}`}`
-        );
-        break;
+    if (selectedWeek !== nowWeek || date !== todayDate) {
+      for (let i = 0; i < 7; i++) {
+        if (newWeekArr[i] !== 0) {
+          setSelectedDay(i);
+          setDate(
+            `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${newWeekArr[i] >= 10 ? newWeekArr[i] : `0${newWeekArr[i]}`}`
+          );
+          break;
+        }
       }
     }
     setCurrentWeekArr(newWeekArr);

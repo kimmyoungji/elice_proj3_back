@@ -54,7 +54,7 @@ const AiAnalyze = () => {
 
   const { trigger, result }: { trigger: any; result: any } = useCachingApi({
     path: `/feedback?startDate=${startDate}&date=${todayDate}`,
-    gcTime: 10000,
+    gcTime: 3000,
   });
 
   const triggerData = async () => {
@@ -66,12 +66,12 @@ const AiAnalyze = () => {
   }, []);
 
   useEffect(() => {
-    if (result?.data) {
+    if (result?.data && result?.data.data.length !== 0) {
       setRecordText(true);
     }
   }, [result?.data]);
 
-  const [chats, setChats] = useState([
+  const [chats, setChats] = useState<QuestionList>([
     {
       date: todayDate,
       questionIdx: '1',
@@ -88,6 +88,7 @@ const AiAnalyze = () => {
   const formatRecord = (recordList: RecordList) => {
     const questionList: QuestionList = [];
     recordList.forEach((record, idx) => {
+      // 피드백 내용도 적용해줘야 함
       const recordQuestionIdx = Object.keys(questionData).find(
         (key) =>
           questionData[key].type.questionType === record.questionType &&
@@ -101,11 +102,28 @@ const AiAnalyze = () => {
           num
       );
       const question = questionIdxList?.map((num, idx) => {
+        let context = {};
+        if (num.length === 5 || num === '1-3') {
+          const oldContext = questionData[num].text.split('\n');
+          oldContext.splice(oldContext.length - 1, 0, record.feedback);
+          const newContext = oldContext.join('\n');
+          context = {
+            type: {
+              questionType: questionData[num].type.questionType,
+              question: questionData[num].type.question,
+            },
+            text: newContext,
+            button: questionData[num].button,
+          };
+        } else {
+          context = questionData[num];
+        }
+
         if (
           questionList.length === 0 ||
           record.feedbackDate === questionList[questionList.length - 1].date
         ) {
-          if (questionData[num].type.questionType === '질문선택') {
+          if (num === '1') {
             return {
               date: record.feedbackDate,
               questionIdx: num,
@@ -117,7 +135,7 @@ const AiAnalyze = () => {
             return {
               date: record.feedbackDate,
               questionIdx: num,
-              context: questionData[num],
+              context: context,
               answer: splitIdx
                 ? questionData[questionIdxList[idx - 1]]?.button[
                     Number(splitIdx[idx]) - 1
@@ -126,7 +144,7 @@ const AiAnalyze = () => {
               feedbackId: record.feedbackId,
             };
           }
-        } else if (questionData[num].type.questionType === '질문선택') {
+        } else if (num === '1') {
           return {
             date: record.feedbackDate,
             questionIdx: num,
@@ -138,7 +156,7 @@ const AiAnalyze = () => {
           return {
             date: record.feedbackDate,
             questionIdx: num,
-            context: questionData[num],
+            context: context,
             answer: splitIdx
               ? questionData[questionIdxList[idx - 1]]?.button[
                   Number(splitIdx[idx]) - 1
@@ -148,7 +166,6 @@ const AiAnalyze = () => {
           };
         }
       });
-      console.log(question);
       questionList.push(...(question as QuestionList));
     });
     return questionList;
@@ -159,6 +176,7 @@ const AiAnalyze = () => {
       const questionList = formatRecord(result?.data.data);
       if (questionList[questionList.length - 1].date !== todayDate) {
         setChats((prev) => [
+          ...prev,
           ...questionList,
           {
             date: todayDate,
@@ -169,7 +187,8 @@ const AiAnalyze = () => {
           },
         ]);
       } else {
-        setChats((prev) => [...questionList]);
+        console.log(chats);
+        setChats((prev) => [...prev, ...questionList]);
         setQuestionIdx(questionList[questionList.length - 1].questionIdx);
       }
     } else {
@@ -231,7 +250,6 @@ const AiAnalyze = () => {
       const askData = questionData[questionIdx + '-' + String(idx + 1)]
         .type as AskData;
       askGPT(askData);
-      // 결과 기다리기
       if (askResult) {
         console.log(askResult);
         setGptAnswer(askResult?.data.feedback);
@@ -244,7 +262,10 @@ const AiAnalyze = () => {
     if (answerIdx < 3) {
       if (questionIdx.length === 5 || questionIdx === '1-3') {
         const newContext = questionData[questionIdx];
-        newContext.text = gptAnswer + newContext.text;
+        const oldText = questionData[questionIdx].text.split('\n');
+        oldText.splice(oldText.length - 1, 0, gptAnswer);
+        const newText = oldText.join('\n');
+        newContext.text = newText;
         console.log(gptId);
         setChats((prev) => [
           ...prev,
@@ -279,6 +300,7 @@ const AiAnalyze = () => {
     }, 900);
     return () => clearTimeout(timeoutId);
   }, [chats]);
+  console.log(chats);
 
   return (
     <div className={styles.main_wrapper}>
@@ -295,6 +317,7 @@ const AiAnalyze = () => {
               button={chat.context.button}
               feedbackId={chat.feedbackId}
               handleOnClick={handleOnClick}
+              disabled={idx === chats.length - 2 ? false : true}
             />
           </div>
         ))}

@@ -38,7 +38,7 @@ const questionData: QuestionData = {
       questionType: '식단추천',
       question: '내 목표에 맞게 추천받고 싶어!',
     },
-    text: `\n추천받은 식단, 어떤가요?`,
+    text: `추천받은 식단, 어떤가요?`,
     button: [
       { type: 'navigate', text: '추천받은 식단 기록하러 갈래!' },
       { type: 'follow-up', text: '다른 질문도 할래!' },
@@ -49,7 +49,7 @@ const questionData: QuestionData = {
       questionType: '식단추천',
       question: '오늘은 맛있는 걸로 추천받을래!',
     },
-    text: `\n추천받은 식단, 어떤가요?`,
+    text: `추천받은 식단, 어떤가요?`,
     button: [
       { type: 'navigate', text: '추천받은 식단 기록하러 갈래!' },
       { type: 'follow-up', text: '다른 질문도 할래!' },
@@ -73,7 +73,7 @@ const questionData: QuestionData = {
       question: '오늘 하루 내 식단은 어땠어?',
     },
 
-    text: `\n평가받은 내용, 어떤가요?`,
+    text: `평가받은 내용, 어떤가요?`,
     button: [
       { type: 'navigate', text: '평가받은 식단 확인하러 갈래!' },
       { type: 'follow-up', text: '다른 질문도 할래!' },
@@ -85,7 +85,7 @@ const questionData: QuestionData = {
       question: '이번주 식단 전체를 평가받을래!',
     },
 
-    text: `\n평가받은 내용, 어떤가요?`,
+    text: `평가받은 내용, 어떤가요?`,
     button: [
       { type: 'navigate', text: '평가받은 식단 확인하러 갈래!' },
       { type: 'follow-up', text: '다른 질문도 할래!' },
@@ -96,7 +96,7 @@ const questionData: QuestionData = {
       questionType: '목표추천',
       question: '목표추천',
     },
-    text: `식단관리를 위한 새로운 목표를 확인해보세요! ദ്ദി ˃ᴗ˂ )\n\n추천받은 목표, 어떤가요?`,
+    text: `식단관리를 위한 새로운 목표를 확인해보세요! ദ്ദി ˃ᴗ˂ )\n추천받은 목표, 어떤가요?`,
     button: [
       { type: 'navigate', text: '추천받은 목표 설정하러 갈래!' },
       { type: 'follow-up', text: '다른 질문도 할래!' },
