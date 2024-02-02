@@ -43,7 +43,6 @@ const Home = () => {
 
   useEffect(() => {
     triggerData();
-    console.log(date);
   }, [date]);
 
   const handleClick = (idx: number) => {

@@ -250,13 +250,16 @@ const AiAnalyze = () => {
       const askData = questionData[questionIdx + '-' + String(idx + 1)]
         .type as AskData;
       askGPT(askData);
-      if (askResult) {
-        console.log(askResult);
-        setGptAnswer(askResult?.data.feedback);
-        setGptId(askResult?.data.feedbackId);
-      }
     }
   };
+
+  useEffect(() => {
+    if (askResult) {
+      console.log(askResult);
+      setGptAnswer(askResult?.data.feedback);
+      setGptId(askResult?.data.feedbackId);
+    }
+  }, [askResult]);
 
   useEffect(() => {
     if (answerIdx < 3) {
@@ -278,6 +281,7 @@ const AiAnalyze = () => {
           },
         ]);
       } else {
+        // if (questionIdx.length !== 5 && questionIdx !== '1-3') {
         setChats((prev) => [
           ...prev,
           {
@@ -291,6 +295,26 @@ const AiAnalyze = () => {
       }
     }
   }, [questionIdx]);
+  useEffect(() => {
+    if (answerIdx < 3 && gptId.length > 0) {
+      const newContext = questionData[questionIdx];
+      const oldText = questionData[questionIdx].text.split('\n');
+      oldText.splice(oldText.length - 1, 0, gptAnswer);
+      const newText = oldText.join('\n');
+      newContext.text = newText;
+      console.log(gptId);
+      setChats((prev) => [
+        ...prev,
+        {
+          date: todayDate,
+          questionIdx: questionIdx,
+          context: newContext,
+          answer: questionData[prevQuestionIdx].button[answerIdx].text,
+          feedbackId: gptId,
+        },
+      ]);
+    }
+  }, [gptId]);
 
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
