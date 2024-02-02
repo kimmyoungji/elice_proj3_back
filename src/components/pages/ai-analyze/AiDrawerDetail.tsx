@@ -24,7 +24,7 @@ interface Props {
   questionType: string;
   question: string;
   feedback: string;
-  option: { goal: string; calorie: number };
+  option: { goal: string; targetCalories: number };
 }
 interface PropsReturnType {
   data: Props;
@@ -72,7 +72,7 @@ const AiDrawerDetail = () => {
     questionType: '',
     question: '',
     feedback: '',
-    option: { goal: '', calorie: 0 },
+    option: { goal: '', targetCalories: 0 },
   });
 
   useEffect(() => {
@@ -108,18 +108,18 @@ const AiDrawerDetail = () => {
           >
             {data.questionType}
           </div>
-          <div
-            className={`${styles.tag} ${tagType[data.questionType]} b-small`}
-          >
-            {data.question}
-          </div>
-          {data.option && (
-            <Option
-              type={data.questionType}
-              tag={data.question}
-              option={data.option}
-            />
+          {data.question !== '목표추천' && (
+            <div
+              className={`${styles.tag} ${tagType[data.questionType]} b-small`}
+            >
+              {data.question}
+            </div>
           )}
+          <Option
+            type={data.questionType}
+            tag={data.question}
+            option={data.option && data.option}
+          />
           <div className={`${styles.detail_text} r-big`}>{data.feedback}</div>
           <div className={styles.button_wrapper}>
             <button className={`r-small`} onClick={handleShare}>

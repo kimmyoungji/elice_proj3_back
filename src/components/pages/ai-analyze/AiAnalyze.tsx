@@ -213,13 +213,6 @@ const AiAnalyze = () => {
     e: React.MouseEvent<HTMLButtonElement>,
     idx: number
   ) => {
-    setAnswerIdx(idx);
-    setQuestionIdx((prev) => {
-      setPrevQuestionIdx(prev);
-      return prev.length === 5 || prev === '1-3'
-        ? '1'
-        : prev + '-' + String(idx + 1);
-    });
     if (questionData[questionIdx].button[idx].type === 'follow-up') {
     } else if (questionData[questionIdx].button[idx].type === 'navigate') {
       if (questionData[questionIdx].type.questionType === '식단추천') {
@@ -234,6 +227,13 @@ const AiAnalyze = () => {
         .type as AskData;
       askGPT(askData);
     }
+    setAnswerIdx(idx);
+    setQuestionIdx((prev) => {
+      setPrevQuestionIdx(prev);
+      return prev.length === 5 || prev === '1-3'
+        ? '1'
+        : prev + '-' + String(idx + 1);
+    });
   };
 
   useEffect(() => {
@@ -244,40 +244,43 @@ const AiAnalyze = () => {
   }, [askResult]);
 
   useEffect(() => {
-    if (answerIdx < 3) {
-      if (
-        (questionIdx.length === 5 || questionIdx === '1-3') &&
-        gptId.length > 0
-      ) {
-        const newContext = questionData[questionIdx];
-        const oldText = questionData[questionIdx].text.split('\n');
-        oldText.splice(oldText.length - 1, 0, gptAnswer);
-        const newText = oldText.join('\n') + questionIdx;
-        newContext.text = newText;
-        setChats((prev) => [
-          ...prev,
-          {
-            date: todayDate,
-            questionIdx: questionIdx,
-            context: newContext,
-            answer: questionData[prevQuestionIdx].button[answerIdx].text,
-            feedbackId: gptId,
-          },
-        ]);
-      } else {
-        setChats((prev) => [
-          ...prev,
-          {
-            date: todayDate,
-            questionIdx: questionIdx,
-            context: questionData[questionIdx],
-            answer: questionData[prevQuestionIdx].button[answerIdx].text,
-            feedbackId: gptId,
-          },
-        ]);
-      }
+    if (
+      (answerIdx < 3 || gptId.length > 0) &&
+      questionIdx.length !== 5 &&
+      questionIdx !== '1-3'
+    ) {
+      setChats((prev) => [
+        ...prev,
+        {
+          date: todayDate,
+          questionIdx: questionIdx,
+          context: questionData[questionIdx],
+          answer: questionData[prevQuestionIdx].button[answerIdx].text,
+          feedbackId: gptId,
+        },
+      ]);
     }
   }, [questionIdx]);
+
+  useEffect(() => {
+    if (questionIdx.length === 5 || questionIdx === '1-3') {
+      const newContext = questionData[questionIdx];
+      const oldText = questionData[questionIdx].text.split('\n');
+      oldText.splice(oldText.length - 1, 0, gptAnswer);
+      const newText = oldText.join('\n');
+      newContext.text = newText;
+      setChats((prev) => [
+        ...prev,
+        {
+          date: todayDate,
+          questionIdx: questionIdx,
+          context: newContext,
+          answer: questionData[prevQuestionIdx].button[answerIdx].text,
+          feedbackId: gptId,
+        },
+      ]);
+    }
+  }, [gptId]);
 
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -287,7 +290,6 @@ const AiAnalyze = () => {
     }, 900);
     return () => clearTimeout(timeoutId);
   }, [chats]);
-  console.log(chats);
 
   return (
     <div className={styles.main_wrapper}>
