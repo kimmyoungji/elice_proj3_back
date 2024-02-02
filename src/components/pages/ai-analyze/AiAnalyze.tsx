@@ -88,7 +88,6 @@ const AiAnalyze = () => {
   const formatRecord = (recordList: RecordList) => {
     const questionList: QuestionList = [];
     recordList.forEach((record, idx) => {
-      // 피드백 내용도 적용해줘야 함
       const recordQuestionIdx = Object.keys(questionData).find(
         (key) =>
           questionData[key].type.questionType === record.questionType &&

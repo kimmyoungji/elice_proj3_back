@@ -1,6 +1,7 @@
 import { Plus } from '@assets/Plus';
 import styles from '@components/pages/home/mealcard.module.css';
 import { useNavigate } from 'react-router-dom';
+const mealLogo = '/images/9gram_logo.png';
 
 interface Props {
   date: string;
@@ -46,7 +47,7 @@ const MealCard = ({ date, dateArr }: Props) => {
                 <div key={`isMealcard-${idx2}`}>
                   <img
                     className={styles.img}
-                    src={date[2] ? date[2] : '로봇 이미지 넣기'}
+                    src={date[2] ? date[2] : mealLogo}
                     alt={mealtime[date[0]]}
                   />
                   <div className={styles.black}></div>
