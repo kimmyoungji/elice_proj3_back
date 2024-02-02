@@ -47,20 +47,3 @@
   width: 110px;
   height: 110px;
 }
-
-.meal-imgcal {
-  color: white;
-  text-shadow:
-    -1.5px 0 black,
-    0 1.5px black,
-    1.5px 0 black,
-    0 -1.5px black;
-}
-.meal-noimgcal {
-  color: black;
-  text-shadow:
-    -1.5px 0 white,
-    0 1.5px white,
-    1.5px 0 white,
-    0 -1.5px white;
-}

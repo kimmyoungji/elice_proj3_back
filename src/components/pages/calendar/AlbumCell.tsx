@@ -18,10 +18,10 @@ const AlbumCell = ({
         
         <div className={classes['meal-card']} key={`date-${idx}`}>
             <>
-              <div className={`${classes['meal-imgcal']} b-regular `}>
+              <div className='b-regular' style={{color:'white'}}>
                 {getNumberMeal[arr[0]]}
               </div>
-              <div className={`${classes['meal-imgcal']} b-medium`}>
+              <div className='b-medium' style={{color:'white'}}>
                 {Math.round(arr[1])} kcal
               </div>
             </>
