@@ -263,7 +263,7 @@ const RecordEdit = () => {
       delete food.totalCapacity;
     });
 
-    if (newFoods[0].recordId) {
+    if (newFoods[newFoods.length-1].recordId) {
       recordPut.trigger({
         path: `/records?date=${date}&mealType=${mealTime}`,
         data: {
@@ -274,7 +274,7 @@ const RecordEdit = () => {
       });
     }
 
-    if (!newFoods[0].recordId) {
+    if (!newFoods[newFoods.length-1].recordId) {
       recordPost.trigger({
         path: `/records?date=${date}&mealType=${mealTime}`,
         data: {
