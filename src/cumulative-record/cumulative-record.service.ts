@@ -136,7 +136,9 @@ export class CumulativeRecordService {
               String(imageId),
               queryRunner.manager
             );
-          mealTypeImage[index] = mealTypeImageResult.foodImageUrl;
+          if(mealTypeImageResult){
+            mealTypeImage[index] = mealTypeImageResult.foodImageUrl;
+          }
         } else {
           mealTypeImage[index] = null;
         }
@@ -227,7 +229,9 @@ export class CumulativeRecordService {
               String(imageId),
               queryRunner.manager
             );
-          mealTypeImage[index] = mealTypeImageResult.foodImageUrl;
+          if(mealTypeImageResult){
+            mealTypeImage[index] = mealTypeImageResult.foodImageUrl;
+          }
         } else {
           mealTypeImage[index] = null;
         }
