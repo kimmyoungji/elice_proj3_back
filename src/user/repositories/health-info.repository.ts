@@ -63,7 +63,7 @@ export class HealthInfoRepository {
         .orderBy("updated_date", "DESC")
         .getOne();
     } catch (err) {
-      console.log(err)
+      console.log(err);
       throw new HttpException(err.detail, 500);
     }
   }
@@ -80,7 +80,7 @@ export class HealthInfoRepository {
         .where("user_id = :userId", { userId })
         .execute();
     } catch (err) {
-      console.log(err)
+      console.log(err);
       throw new HttpException(err.detail, 500);
     }
   }

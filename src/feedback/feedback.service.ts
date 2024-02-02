@@ -174,7 +174,7 @@ export class FeedbackService {
       if (
         feedbackResultDto.questionType === "목표추천" ||
         (feedbackResultDto.questionType === "식단추천" &&
-          feedbackResultDto.question === "내 목표에 맞게 추천받고 싶어")
+          feedbackResultDto.question === "내 목표에 맞게 추천받고 싶어!")
       ) {
         const healthInfoResult =
           await this.userRepository.findUserInfosByUserId(

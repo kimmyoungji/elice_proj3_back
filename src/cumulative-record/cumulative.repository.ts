@@ -14,7 +14,7 @@ export class CumulativeRecordRepository {
     manager: EntityManager
   ): Promise<CumulativeRecordDateDto> {
     try {
-      return await manager
+      const result = await manager
         .createQueryBuilder(CumulativeRecord, "cumulativeRecord")
         .select("user_id", "userId")
         .addSelect("date")
@@ -29,6 +29,7 @@ export class CumulativeRecordRepository {
         .andWhere("user_id = :userId", { userId })
         .groupBy("user_id, date")
         .getRawOne();
+      return result;
     } catch (error) {
       throw new HttpException(error.detail, 500);
     }
