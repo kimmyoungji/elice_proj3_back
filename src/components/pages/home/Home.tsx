@@ -93,6 +93,8 @@ const Home = () => {
     weekly();
   }, [selectedWeek]);
 
+  console.log(date);
+
   return (
     <div className={styles.home_wrapper}>
       <div className={`${styles.select_wrapper} b-small`}>
@@ -165,7 +167,7 @@ const Home = () => {
                 dietaryFiber: 10,
               }}
             />
-            <MealCard date={todayDate} dateArr={[]} />
+            <MealCard date={date} dateArr={[]} />
           </>
         ) : (
           <>
@@ -178,7 +180,7 @@ const Home = () => {
               recommendNutrient={result?.data.recommendNutrient}
             />
             <MealCard
-              date={todayDate}
+              date={date}
               dateArr={
                 result?.data.dateArr as [number, number, string | undefined][]
               }

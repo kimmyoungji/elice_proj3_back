@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from '@components/pages/ai-analyze/drawer.module.css';
 import { Next } from '@assets/Next';
 import useApi from '@hooks/useApi';
