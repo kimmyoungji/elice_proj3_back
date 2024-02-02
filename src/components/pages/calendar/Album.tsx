@@ -39,35 +39,23 @@ const Album = () => {
   };
 
   useEffect(() => {
-<<<<<<< Updated upstream
     if (!isFirst) return;
     trigger({});
     setPage((prev) => prev + 1);
     setIsFirst(false);
-  },[])
+  }, []);
 
   useEffect(() => {
     if (!result) return;
     setAlbumArr((prev) => [...prev, ...result.data]);
-  },[result])
-=======
-    if (!isFirst) return; //처음이 아닐때 리턴
-    trigger('', {
-      onSuccess: (data) => {
-        isFirst && setAlbumArr(data.data);
-        !isFirst && setAlbumArr((prev) => [...prev, ...data.data]);
-        setIsFirst(false);
-      },
-    }); //처음만 trigger
-  }, [thisMonth]);
->>>>>>> Stashed changes
+  }, [result]);
 
   const onIntersect: IntersectionObserverCallback = async (
     [entry],
     observer
   ) => {
     if (entry.isIntersecting) {
-      if (!result) return
+      if (!result) return;
       if (result.data.length === 0) return;
       setIsLoading(true);
       observer.unobserve(entry.target);
@@ -98,9 +86,8 @@ const Album = () => {
             isLoading={isLoading}
           />
         ))}
-        {!isLoading && <div ref={setTarget} />}
+      {!isLoading && <div ref={setTarget} />}
     </div>
-    
   );
 };
 

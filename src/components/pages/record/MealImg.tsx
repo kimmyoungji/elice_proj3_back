@@ -14,8 +14,6 @@ const MealImg = ({
   const { thisYear, thisMonth, thisDay } = getDates();
   const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
 
-  console.log(date);
-  console.log(todayDate > date);
   const imgUrl =
     data && data[selectedMealNumber]
       ? data[selectedMealNumber].imgUrl
