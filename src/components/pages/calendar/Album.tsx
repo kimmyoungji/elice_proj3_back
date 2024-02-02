@@ -39,6 +39,7 @@ const Album = () => {
   };
 
   useEffect(() => {
+<<<<<<< Updated upstream
     if (!isFirst) return;
     trigger({});
     setPage((prev) => prev + 1);
@@ -49,6 +50,17 @@ const Album = () => {
     if (!result) return;
     setAlbumArr((prev) => [...prev, ...result.data]);
   },[result])
+=======
+    if (!isFirst) return; //처음이 아닐때 리턴
+    trigger('', {
+      onSuccess: (data) => {
+        isFirst && setAlbumArr(data.data);
+        !isFirst && setAlbumArr((prev) => [...prev, ...data.data]);
+        setIsFirst(false);
+      },
+    }); //처음만 trigger
+  }, [thisMonth]);
+>>>>>>> Stashed changes
 
   const onIntersect: IntersectionObserverCallback = async (
     [entry],

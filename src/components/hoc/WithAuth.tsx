@@ -29,7 +29,7 @@ const WithAuth = (WrappedComponent: React.ComponentType<any>) => {
         userData.height &&
         userData.activityAmount &&
         userData.weight &&
-        userData.birthday) !== null;
+        userData.birthDay) !== null;
 
     type CachingType = {
       data: UserInfo;

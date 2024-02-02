@@ -2,33 +2,44 @@ import React, { useEffect, useState } from 'react';
 import InputCommon from '@components/UI/InputCommon';
 import './Onboarding.css';
 import { OnboardingProps } from './OnboardingGender';
+import getDates from '@utils/getDates';
 
 const OnboardingBirth: React.FC<OnboardingProps> = ({
   userData,
   onClickOnboarding,
 }) => {
-  const thisYear = new Date().getFullYear();
-  const [year, setYear] = useState(thisYear.toString());
-  const [month, setMonth] = useState('1');
-  const [date, setDate] = useState('1');
+  let birthYear: number;
+
+  const { thisYear } = getDates();
+  const [year, setYear] = useState<number>(
+    (userData.birthDay && new Date(userData.birthDay).getFullYear()) || 0
+  );
+  const [month, setMonth] = useState<number>(
+    (userData.birthDay && new Date(userData.birthDay).getMonth()) || 0
+  );
+  const [date, setDate] = useState<number>(
+    (userData.birthDay && new Date(userData.birthDay).getDate()) || 0
+  );
 
   const onBlurSetBirth = () => {
-    onClickOnboarding({
-      ['birthDay']: `${year}-${month}-${date}`,
-      ['age']: `${Number(thisYear) - Number(year)}`,
-    });
+    if (year && month && date) {
+      onClickOnboarding({
+        ['birthDay']: new Date(year, month, date).toISOString(),
+        ['age']: Number(thisYear) - year,
+      });
+    }
   };
 
   const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setYear(e.target.value);
+    setYear(Number(e.target.value));
   };
 
   const handleMonthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMonth(e.target.value);
+    setMonth(Number(e.target.value));
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(e.target.value);
+    setDate(Number(e.target.value));
   };
 
   return (

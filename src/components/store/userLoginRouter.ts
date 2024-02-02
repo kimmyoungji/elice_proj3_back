@@ -10,7 +10,7 @@ export interface UserInfo {
   profileImage?: string;
   targetCalories?: number;
   age?: number;
-  birthday?: string;
+  birthDay?: string;
   message?: string;
 }
 
@@ -25,7 +25,7 @@ export const initialState: { userInfo: UserInfo } = {
     gender: '',
     targetCalories: 0,
     age: 0,
-    birthday: '',
+    birthDay: '',
     message: '',
   },
 };

@@ -73,7 +73,7 @@ const Onboarding = () => {
       dietGoal: returnedUserData.dietGoal,
       height: returnedUserData.height,
       gender: returnedUserData.gender,
-      birthDay: '',
+      birthDay: returnedUserData.birthDay,
       weight: returnedUserData.weight,
     }
   );
@@ -172,7 +172,6 @@ const Onboarding = () => {
     userData.activityAmount &&
       userData.age &&
       userData.birthDay &&
-      userData.dietGoal &&
       userData.gender &&
       userData.height &&
       userData.recommendIntake?.carbohydrates &&

@@ -11,9 +11,9 @@ export const checkValuesNullOrEmpty = <T>(obj: {
   [key in keyof T]: string | number | null | '';
 }): number | boolean => {
   let returnVal: boolean | string = false;
-  let returnNum = 0;
   for (let key in obj) {
-    ++returnNum;
+    console.log({ key, obj: obj[key] });
+    if (obj[key] === 2) continue;
     if (obj[key] === null || obj[key] === '' || obj[key] === undefined) {
       return changeKeyToNumber[key];
     }

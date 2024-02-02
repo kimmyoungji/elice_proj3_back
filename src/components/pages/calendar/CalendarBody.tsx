@@ -32,7 +32,6 @@ const CalendarBody = () => {
 
   const { trigger, result } = useCachingApi<CumulativeCalDateArr>({
     path: `/cumulative-record?month=${thisYear}-${returnWithZero(thisMonth)}-01`,
-    gcTime: 20000,
   });
 
   const triggerData = async () => {
