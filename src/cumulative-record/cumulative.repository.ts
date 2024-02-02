@@ -41,7 +41,7 @@ export class CumulativeRecordRepository {
     manager: EntityManager
   ): Promise<CumulativeDateMealTypeDto[]> {
     try {
-      return await manager
+      const result = await manager
         .createQueryBuilder(CumulativeRecord, "cumulativeRecord")
         .select([
           "cumulativeRecord.mealType",
@@ -55,6 +55,7 @@ export class CumulativeRecordRepository {
         .andWhere("user_id = :userId", { userId })
         .orderBy("meal_type", "ASC")
         .getMany();
+      return result;
     } catch (error) {
       throw new HttpException(error.detail, 500);
     }

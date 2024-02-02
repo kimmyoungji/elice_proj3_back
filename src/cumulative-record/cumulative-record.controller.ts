@@ -33,7 +33,6 @@ export class CumulativeRecordController {
           date,
           userId
         );
-        console.log(result);
         return result;
       }
 
