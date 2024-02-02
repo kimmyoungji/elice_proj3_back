@@ -51,9 +51,7 @@ const AiDrawer = WithAuth(
 const AiDrawerDetail = WithAuth(
   lazy(() => import('@components/pages/ai-analyze/AiDrawerDetail'))
 );
-const ShareCard = WithAuth(
-  lazy(() => import('@components/pages/ai-analyze/ShareCard'))
-);
+const ShareCard = lazy(() => import('@components/pages/ai-analyze/ShareCard'));
 
 const Record = WithAuth(lazy(() => import('@components/pages/record/Record')));
 const RecordEdit = WithAuth(
