@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import style from './mealImg.module.css';
 import ImgTagContent from './ImgTagContent';
 import { MealImgProps } from './RecordTypes';
+import getDates from '@utils/getDates';
 
 const MealImg = ({
   className,
@@ -10,6 +11,11 @@ const MealImg = ({
   selectedMealNumber,
 }: MealImgProps) => {
   const navigate = useNavigate();
+  const { thisYear, thisMonth, thisDay } = getDates();
+  const todayDate = `${thisYear}-${thisMonth}-${thisDay}`;
+
+  console.log(date);
+  console.log(todayDate > date);
   const imgUrl =
     data && data[selectedMealNumber]
       ? data[selectedMealNumber].imgUrl
@@ -33,11 +39,15 @@ const MealImg = ({
               navigate(`/add-photo/${date}/${selectedMealNumber}`);
             }}
           >
-            <div className={style.uploadButton}> + </div>
-            <div className={style.uploadText}>
-              {' '}
-              오늘의 식단을 <br /> 추가해주세요{' '}
-            </div>
+            {todayDate >= date && (
+              <>
+                <div className={style.uploadButton}> + </div>
+                <div className={style.uploadText}>
+                  {' '}
+                  오늘의 식단을 <br /> 추가해주세요{' '}
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
