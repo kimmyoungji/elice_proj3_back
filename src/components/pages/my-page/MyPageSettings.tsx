@@ -76,7 +76,6 @@ const MyPageSettings = () => {
         ...userData,
         username: newNickname,
       };
-      // console.log(result.data);
       setNewNickName(newNickname);
       nickNamePut.trigger({
         path: '/user',
@@ -142,10 +141,10 @@ const MyPageSettings = () => {
       dispatch(logoutUser());
       setShowModal(false);
       navigate('/');
-    } else if (!logOutGet.result) {
+    } else if (!logOutGet.error) {
       setToastText('로그아웃에 실패했습니다');
       handleToast();
-    } else if (!withdrawalGet.result) {
+    } else if (!withdrawalGet.error) {
       setToastText('회원 탈퇴에 실패했습니다');
       handleToast();
     }
@@ -224,19 +223,6 @@ const MyPageSettings = () => {
           <div className={style.detailContainer}>
             <div className={style.accountSettings}> 등급 </div>
             <div className={style.accountFontStyle}> [유료] 새싹밀 </div>
-          </div>
-        </div>
-        <div className={style.detailContainer}>
-          <div className={style.accountSettings}>
-            {' '}
-            약관 및 개인정보 처리 동의{' '}
-          </div>
-          <div>
-            <img
-              className={style.rightButton}
-              src='/icons/right-arrow-icon.png'
-              alt='계정 설정 화살표'
-            />
           </div>
         </div>
         <div className={style.detailContainer}>

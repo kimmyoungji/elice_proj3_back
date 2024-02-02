@@ -123,12 +123,20 @@ const AiAnalyze = () => {
           record.feedbackDate === questionList[questionList.length - 1].date
         ) {
           if (num === '1') {
-            if (idx === 0) {
+            if (questionList.length !== 0 && idx !== 0) {
               return {
                 date: record.feedbackDate,
                 questionIdx: num,
                 context: context,
-                answer: '3',
+                answer: '다른 질문도 할래!',
+                feedbackId: record.feedbackId,
+              };
+            } else if (idx !== 0) {
+              return {
+                date: record.feedbackDate,
+                questionIdx: num,
+                context: context,
+                answer: '다른 질문도 할래!',
                 feedbackId: record.feedbackId,
               };
             } else {
@@ -136,7 +144,7 @@ const AiAnalyze = () => {
                 date: record.feedbackDate,
                 questionIdx: num,
                 context: context,
-                answer: '다른 질문도 할래!',
+                answer: '3',
                 feedbackId: record.feedbackId,
               };
             }
@@ -175,7 +183,10 @@ const AiAnalyze = () => {
           };
         }
       });
-      questionList.push(...(question as QuestionList));
+      console.log(question);
+      if (question) {
+        questionList.push(...(question as QuestionList));
+      }
     });
     return questionList;
   };
@@ -183,9 +194,9 @@ const AiAnalyze = () => {
   useEffect(() => {
     if (recordText) {
       const questionList = formatRecord(result?.data.data);
+      console.log(questionList);
       if (questionList[questionList.length - 1].date !== todayDate) {
         setChats((prev) => [
-          ...prev,
           ...questionList,
           {
             date: todayDate,
@@ -208,12 +219,11 @@ const AiAnalyze = () => {
         ]);
         setQuestionIdx(questionList[questionList.length - 1].questionIdx);
       } else {
-        setChats((prev) => [...prev, ...questionList]);
+        setChats((prev) => [...questionList]);
         setQuestionIdx(questionList[questionList.length - 1].questionIdx);
       }
-    } else {
+    } else if (chats.length === 1) {
       setChats((prev) => [
-        ...prev,
         {
           date: todayDate,
           questionIdx: '1',
@@ -222,6 +232,8 @@ const AiAnalyze = () => {
           feedbackId: '',
         },
       ]);
+    } else {
+      setChats((prev) => [...prev]);
     }
   }, [recordText]);
 
@@ -257,7 +269,7 @@ const AiAnalyze = () => {
       } else if (questionData[questionIdx].type.questionType === '목표추천') {
         navigate('/my-page');
       } else {
-        navigate('/');
+        navigate('/home');
       }
     } else if (questionData[questionIdx].button[idx].type === 'ai') {
       const askData = questionData[questionIdx + '-' + String(idx + 1)]
@@ -335,24 +347,24 @@ const AiAnalyze = () => {
       <>
         {chats.map((chat, idx) => (
           <div key={`chat-${idx}`} className={styles.chats_wrapper}>
-            {(idx === 0 || chat.date !== chats[idx].date) && (
+            {(idx === 0 || (idx > 1 && chat.date !== chats[idx - 1].date)) && (
               <div className={`${styles.date} s-regular`}>{chat.date}</div>
             )}
-            {idx !== 0 && chat.answer !== '3' && <UserBox text={chat.answer} />}
-            {idx !== 0 ? (
-              <BotBox
-                toSave={chat.context.type.question ? true : false}
-                text={chat.context.text}
-                button={chat.context.button}
-                feedbackId={chat.feedbackId}
-                handleOnClick={handleOnClick}
-                disabled={
-                  chats.length < 2 || idx === chats.length - 1 ? false : true
-                }
-              />
-            ) : (
+            {chat.answer !== '3' && <UserBox text={chat.answer} />}
+            {/* {idx !== 0 ? ( */}
+            <BotBox
+              toSave={chat.context.type.question ? true : false}
+              text={chat.context.text}
+              button={chat.context.button}
+              feedbackId={chat.feedbackId}
+              handleOnClick={handleOnClick}
+              disabled={
+                chats.length < 2 || idx === chats.length - 1 ? false : true
+              }
+            />
+            {/* ) : (
               <></>
-            )}
+            )} */}
           </div>
         ))}
         <div ref={chatEndRef}></div>

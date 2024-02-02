@@ -6,6 +6,7 @@ import { mapSelectMealToMsg, mealTypes } from './recordMappingConstant';
 import useApi, { TriggerType } from '@hooks/useApi';
 import { Modal, mapSelectModalMsg } from '@components/UI/Modal';
 import { RecordProps } from './RecordTypes';
+import { Plus } from '@assets/Plus';
 const mealLogo = '/images/9gram_logo_box.png';
 
 const Record = () => {
@@ -142,24 +143,19 @@ const Record = () => {
                   </>
                 )}
               </div>
-              <img
-                className={style.meal_button}
-                src={
-                  !mealData[1] && !mealData[2]
-                    ? '/icons/meal_plus_button.png'
-                    : '/icons/meal_delete.png'
-                }
-                onClick={(e) =>
-                  !mealData[1] && !mealData[2]
-                    ? handleMealClick(mealData[0])
-                    : handleShowDelteModal(mealData[0], e)
-                }
-                alt={
-                  !mealData[1] && !mealData[2]
-                    ? '하루 식단 추가 버튼'
-                    : '하루 식단 삭제 버튼'
-                }
-              />
+              {!mealData[1] && !mealData[2] ? (
+                <Plus
+                  className={style.meal_plusButton}
+                  onClick={(e) => handleMealClick(mealData[0])}
+                />
+              ) : (
+                <img
+                  className={style.meal_button}
+                  src={'/icons/meal_delete.png'}
+                  onClick={(e) => handleShowDelteModal(mealData[0], e)}
+                  alt={'하루 식단 삭제 버튼'}
+                />
+              )}
             </div>
           ))}
       </div>

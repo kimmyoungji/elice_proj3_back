@@ -44,6 +44,7 @@ const Home = () => {
   useEffect(() => {
     triggerData();
   }, [date]);
+  console.log(result);
 
   const handleClick = (idx: number) => {
     setSelectedDay(idx);
@@ -170,17 +171,30 @@ const Home = () => {
         ) : (
           <>
             <Calorie
-              totalCalories={result?.data.totalCalories}
+              totalCalories={
+                result?.data.totalCalories ? result?.data.totalCalories : 0
+              }
               recommendCalories={result?.data.targetCalories}
             />
             <Nutrients
-              totalNutrient={result?.data.totalNutrient}
+              totalNutrient={
+                result?.data.totalNutrient
+                  ? result?.data.totalNutrient
+                  : {
+                      carbohydrates: 0,
+                      proteins: 0,
+                      fats: 0,
+                      dietaryFiber: 0,
+                    }
+              }
               recommendNutrient={result?.data.recommendNutrient}
             />
             <MealCard
               date={date}
               dateArr={
-                result?.data.dateArr as [number, number, string | undefined][]
+                (result?.data.dateArr as [number, number, string | undefined][])
+                  ? result?.data.dateArr
+                  : []
               }
             />
           </>

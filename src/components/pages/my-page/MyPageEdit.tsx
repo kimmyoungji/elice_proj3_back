@@ -184,20 +184,15 @@ const MyPageEdit = () => {
         });
         if (uploadUrl) {
           const uploadedImageUrl = presignedUrl.data.split('?')[0];
-          console.log(uploadedImageUrl);
-
           return uploadedImageUrl;
         }
       }
-    } catch (error) {
-      console.error('이미지 업로드 실패', error);
-    }
+    } catch (error) {}
   };
 
   const saveAndNavigate = async () => {
     let uploadedImageUrl;
     let updatedNutrients = getNutritionStandard(data);
-    console.log(updatedNutrients);
 
     if (!(data.dietGoal && data.targetCalories && data.gender)) {
       const updatedNutrients = {
@@ -206,15 +201,12 @@ const MyPageEdit = () => {
         proteins: 0,
         fats: 0,
       };
-      console.log(updatedNutrients);
     }
 
     if (fileChanged) {
       uploadedImageUrl = await uploadProfileImage();
-      console.log(uploadedImageUrl);
     }
 
-    console.log(file);
     const updatedData = {
       ...data,
       dietGoal: Number(findKeyByValue(mapGoaltoMsg, selectedGoal)),
@@ -226,7 +218,6 @@ const MyPageEdit = () => {
       profileImage: uploadedImageUrl || file,
     };
     const { username, ...dataToSend } = updatedData;
-    console.log(updatedData);
 
     updateDataAndCalories(updatedData);
     dispatch(loginUser(updatedData));
