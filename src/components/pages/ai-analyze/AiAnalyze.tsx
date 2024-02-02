@@ -100,28 +100,38 @@ const AiAnalyze = () => {
           (splitIdx[idx - 1] ? splitIdx[idx - 1] + '-' : '') +
           num
       );
-      const question = questionIdxList?.map((num, idx) => {
+      const question = questionIdxList?.map((num, qIdx) => {
         const context = questionData[num];
         if (
           questionList.length === 0 ||
           record.feedbackDate === questionList[questionList.length - 1].date
         ) {
           if (num === '1') {
-            return {
-              date: record.feedbackDate,
-              questionIdx: num,
-              context: context,
-              answer: '다른 질문도 할래!',
-              feedbackId: record.feedbackId,
-            };
+            if (idx === 0) {
+              return {
+                date: record.feedbackDate,
+                questionIdx: num,
+                context: context,
+                answer: '3',
+                feedbackId: record.feedbackId,
+              };
+            } else {
+              return {
+                date: record.feedbackDate,
+                questionIdx: num,
+                context: context,
+                answer: '다른 질문도 할래!',
+                feedbackId: record.feedbackId,
+              };
+            }
           } else {
             return {
               date: record.feedbackDate,
               questionIdx: num,
               context: context,
               answer: splitIdx
-                ? questionData[questionIdxList[idx - 1]]?.button[
-                    Number(splitIdx[idx]) - 1
+                ? questionData[questionIdxList[qIdx - 1]]?.button[
+                    Number(splitIdx[qIdx]) - 1
                   ].text
                 : '3',
               feedbackId: record.feedbackId,
@@ -141,8 +151,8 @@ const AiAnalyze = () => {
             questionIdx: num,
             context: context,
             answer: splitIdx
-              ? questionData[questionIdxList[idx - 1]]?.button[
-                  Number(splitIdx[idx]) - 1
+              ? questionData[questionIdxList[qIdx - 1]]?.button[
+                  Number(splitIdx[qIdx]) - 1
                 ].text
               : '3',
             feedbackId: record.feedbackId,
@@ -293,20 +303,26 @@ const AiAnalyze = () => {
   return (
     <div className={styles.main_wrapper}>
       <>
-        {chats.slice(1).map((chat, idx) => (
+        {chats.map((chat, idx) => (
           <div key={`chat-${idx}`} className={styles.chats_wrapper}>
             {(idx === 0 || chat.date !== chats[idx].date) && (
               <div className={`${styles.date} s-regular`}>{chat.date}</div>
             )}
             {idx !== 0 && chat.answer !== '3' && <UserBox text={chat.answer} />}
-            <BotBox
-              toSave={chat.context.type.question ? true : false}
-              text={chat.context.text}
-              button={chat.context.button}
-              feedbackId={chat.feedbackId}
-              handleOnClick={handleOnClick}
-              disabled={idx === chats.length - 2 ? false : true}
-            />
+            {idx !== 0 ? (
+              <BotBox
+                toSave={chat.context.type.question ? true : false}
+                text={chat.context.text}
+                button={chat.context.button}
+                feedbackId={chat.feedbackId}
+                handleOnClick={handleOnClick}
+                disabled={
+                  chats.length < 2 || idx === chats.length - 1 ? false : true
+                }
+              />
+            ) : (
+              <></>
+            )}
           </div>
         ))}
         <div ref={chatEndRef}></div>

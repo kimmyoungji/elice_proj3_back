@@ -10,7 +10,7 @@ const UserBox = ({ text }: Props) => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setDelayed(true);
-    }, 800);
+    }, 700);
     return () => clearTimeout(timeoutId);
   }, []);
 

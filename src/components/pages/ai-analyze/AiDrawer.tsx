@@ -1,5 +1,6 @@
 import styles from '@components/pages/ai-analyze/drawer.module.css';
 import useCachingApi from '@hooks/useCachingApi';
+import useIntersect from '@hooks/useIntersect';
 import { useEffect, useState } from 'react';
 import DrawerCard from './DrawerCard';
 
@@ -10,40 +11,68 @@ interface DrawerList {
   question: string;
   feedback: string;
 }
+type DrawerApi = {
+  data: { data: DrawerList[] };
+};
 
 const AiDrawer = () => {
   const [drawerList, setDrawerList] = useState<DrawerList[]>([]);
+  const [page, setPage] = useState(1);
+  const [isFirst, setIsFirst] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { trigger, result }: { trigger: any; result: any } = useCachingApi({
-    path: `/feedback?page=1`,
-    gcTime: 10000,
+  const { trigger, result } = useCachingApi<DrawerApi>({
+    path: `/feedback?page=${page}`,
   });
 
-  const triggerData = async () => {
-    await trigger({});
-  };
-
   useEffect(() => {
-    triggerData();
+    if (!isFirst) return;
+    trigger('', {
+      onSuccess: (data) => {
+        setDrawerList((prev) => [...prev, ...data.data.data]);
+      },
+    });
+    setIsFirst(false);
   }, []);
 
-  useEffect(() => {
-    if (result?.data.data) {
-      setDrawerList(result?.data.data);
+  const onIntersect: IntersectionObserverCallback = async (
+    [entry],
+    observer
+  ) => {
+    if (entry.isIntersecting) {
+      setIsLoading(true);
+      observer.unobserve(entry.target);
+      trigger('', {
+        onSuccess: (data) => {
+          setDrawerList((prev) => [...prev, ...data.data.data]);
+          setIsLoading(false);
+        },
+      });
+      observer.observe(entry.target);
+      setPage((prev) => prev + 1);
     }
-  }, [result?.data]);
+  };
+
+  const { setTarget } = useIntersect({
+    root: null,
+    rootMargin: '100px',
+    threshold: 1,
+    onIntersect,
+  });
 
   return (
     <div className={styles.drawer_wrapper}>
       {drawerList?.map((drawer, idx) => (
-        <DrawerCard
-          key={`drawercard-${idx}`}
-          id={drawer.feedbackId}
-          date={drawer.feedbackDate}
-          type={drawer.questionType}
-          tag={drawer.question}
-          text={drawer.feedback}
-        />
+        <div key={`drawercard-${idx}`}>
+          <DrawerCard
+            id={drawer.feedbackId}
+            date={drawer.feedbackDate}
+            type={drawer.questionType}
+            tag={drawer.question}
+            text={drawer.feedback}
+          />
+          {!isLoading && <div ref={setTarget} />}
+        </div>
       ))}
     </div>
   );
