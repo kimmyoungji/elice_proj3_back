@@ -7,7 +7,7 @@ dotenv.config();
 
 const openai = new OpenAI();
 
-export function ChatgptApi(
+export async function ChatgptApi(
   totalResult: CumulativeRecordDateDto,
   userInfo,
   questionType: string
@@ -28,7 +28,7 @@ export function ChatgptApi(
       questionDetail = `나의 현재 몸무게는 ${userInfo[0].weight}kg이고 나는 ${userInfo[0].targetWeight}kg까지 몸무게를 빼고싶어. 나의 식단 기록 목표를 추천해줘`;
   }
 
-  const chatCompletion = openai.chat.completions.create({
+  const chatCompletion = await openai.chat.completions.create({
     messages: [
       {
         role: "system",
