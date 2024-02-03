@@ -48,21 +48,21 @@ export class FeedbackService {
         };
       } else {
         // 만약 동일 유저의 질문이 없다면, api 호출
-        // const totalResult = await this.cumulativeRepository.getDateRecord(
-        //   date,
-        //   userId,
-        //   queryRunner.manager
-        // );
-        // const userInfo = await this.userRepository.findUserInfosByUserId(
-        //   userId,
-        //   queryRunner.manager
-        // );
-        // 추후 다른 파일로 빼기
+        const totalResult = await this.cumulativeRepository.getDateRecord(
+          date,
+          userId,
+          queryRunner.manager
+        );
+        const userInfo = await this.userRepository.findUserInfosByUserId(
+          userId,
+          queryRunner.manager
+        );
+        추후 다른 파일로 빼기
 
-        // ChatGPT API 호출
-        // const outputText = await ChatgptApi(totalResult, userInfo, questionType);
+        ChatGPT API 호출
+        const outputText = await ChatgptApi(totalResult, userInfo, questionType);
 
-        const outputText = "어쩌구저쩌구 맛있는 추천";
+        // const outputText = "어쩌구저쩌구 맛있는 추천";
         const data = {
           userId,
           question,
