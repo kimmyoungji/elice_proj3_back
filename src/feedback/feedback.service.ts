@@ -57,10 +57,14 @@ export class FeedbackService {
           userId,
           queryRunner.manager
         );
-        추후 다른 파일로 빼기
+        // 추후 다른 파일로 빼기
 
-        ChatGPT API 호출
-        const outputText = await ChatgptApi(totalResult, userInfo, questionType);
+        // ChatGPT API 호출
+        const outputText = await ChatgptApi(
+          totalResult,
+          userInfo,
+          questionType
+        );
 
         // const outputText = "어쩌구저쩌구 맛있는 추천";
         const data = {
