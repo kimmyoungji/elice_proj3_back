@@ -1,8 +1,9 @@
 import ButtonCommon from '@components/UI/ButtonCommon';
 import styles from './checkphotomodal.module.css';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { api2 } from '@utils/axiosConfig';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { LoadingBar } from '@components/UI/LoadingBar';
 
 interface Props {
   pre: string;
@@ -10,16 +11,18 @@ interface Props {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const fileName = new Date().getTime() + Math.random().toString().split(".")[0];
+const fileName = new Date().getTime() + Math.random().toString().split('.')[0];
 
 const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
+  const [loading, setLoading] = useState(false);
   const formData = new FormData();
   const cropRef = useRef<HTMLCanvasElement | null>(null);
   const params = useParams();
   const date = params.date;
   const mealTime = params.mealTime;
   const navigate = useNavigate();
-  
+  const location = useLocation();
+
   function base64toFile(base_data: string, filename: string) {
     const arr = base_data.split(',');
     const bstr = atob(arr[1]);
@@ -33,7 +36,7 @@ const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
     return new File([u8arr], filename, { type: 'image/jpg' });
   }
 
-  let canvasUrl:string|undefined;
+  let canvasUrl: string | undefined;
   const uploadImg = () => {
     const canvas = cropRef.current;
     const context = canvas?.getContext('2d');
@@ -62,24 +65,26 @@ const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
   };
 
   const postFile = async () => {
+    setLoading(true);
     const res = await api2.post('/classification', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
-
-    const foodsArr = res.data.map((food: any) => ({ ...food, counts: 1}))
+    setLoading(false);
+    const foodsArr = res.data.map((food: any) => ({ ...food, counts: 1 }));
 
     const data = {
       imgUrl: canvasUrl,
       foods: foodsArr,
     };
-    
-    navigate(`/record/${date}/${mealTime}/edit`, { state: data })
-  };
-  
 
-  
+    navigate(`/record/${date}/${mealTime}/edit`, { state: data });
+  };
+
+  if (loading) {
+    return <LoadingBar path={location.pathname} />;
+  }
 
   return (
     <div className={styles.container}>
@@ -94,7 +99,7 @@ const CheckPhotoModal = ({ pre, imgUrl, setShowModal }: Props) => {
             <canvas
               width='350'
               height='200'
-              style={{ position: 'absolute', bottom: '0', display:'none'}}
+              style={{ position: 'absolute', bottom: '0', display: 'none' }}
               ref={cropRef}
             />
           </div>

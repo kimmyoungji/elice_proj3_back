@@ -3,9 +3,10 @@ import { useEffect, useRef, useState } from 'react';
 import BotBox from './BotBox';
 import UserBox from './UserBox';
 import { questionData } from './QuestionData';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useCachingApi from '@hooks/useCachingApi';
 import useApi from '@hooks/useApi';
+import { LoadingBar } from '@components/UI/LoadingBar';
 
 type RecordList = {
   feedbackId: string;
@@ -14,6 +15,7 @@ type RecordList = {
   question: string | undefined;
   feedback: string;
 }[];
+
 interface AskData {
   questionType: string;
   question: string;
@@ -39,6 +41,7 @@ const nowYear = now.getFullYear();
 const nowMonth = now.getMonth();
 const nowDate = now.getDate();
 const lastLastDayIndex = new Date(nowYear, nowMonth, 0).getDate(); // 저번달 마지막 날짜
+const questionList: QuestionList = [];
 
 const AiAnalyze = () => {
   const [recordText, setRecordText] = useState(false);
@@ -51,26 +54,8 @@ const AiAnalyze = () => {
   } else {
     startDate += `${nowYear}-${nowMonth + 1 >= 10 ? nowMonth + 1 : `0${nowMonth + 1}`}-${sixDays >= 10 ? sixDays : `0${sixDays}`}`;
   }
-
-  const { trigger, result }: { trigger: any; result: any } = useCachingApi({
-    path: `/feedback?startDate=${startDate}&date=${todayDate}`,
-    gcTime: 3000,
-  });
-
-  const triggerData = async () => {
-    await trigger({});
-  };
-
-  useEffect(() => {
-    triggerData();
-  }, []);
-
-  useEffect(() => {
-    if (result?.data && result?.data.data.length !== 0) {
-      setRecordText(true);
-    }
-  }, [result?.data]);
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const [chats, setChats] = useState<QuestionList>([
     {
       date: todayDate,
@@ -84,9 +69,40 @@ const AiAnalyze = () => {
   const [answerIdx, setAnswerIdx] = useState(3);
   const [questionIdx, setQuestionIdx] = useState('1');
   const [prevQuestionIdx, setPrevQuestionIdx] = useState('1');
+  const [gptAnswer, setGptAnswer] = useState('');
+  const [gptId, setGptId] = useState('');
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
+
+  const { trigger, result }: { trigger: any; result: any } = useCachingApi({
+    path: `/feedback?startDate=${startDate}&date=${todayDate}`,
+    gcTime: 3000,
+  });
+
+  const {
+    trigger: askTrigger,
+    result: askResult,
+    loading,
+  }: { trigger: any; result: any; loading: boolean } = useApi({
+    method: 'post',
+    path: `/feedback?date=${todayDate}`,
+    shouldInitFetch: false,
+  });
+
+  const triggerData = async () => {
+    await trigger({});
+  };
+
+  useEffect(() => {
+    triggerData();
+  }, [loading]);
+
+  useEffect(() => {
+    if (result?.data && result?.data.data.length !== 0) {
+      setRecordText(true);
+    }
+  }, [result?.data]);
 
   const formatRecord = (recordList: RecordList) => {
-    const questionList: QuestionList = [];
     recordList.forEach((record, idx) => {
       const recordQuestionIdx = Object.keys(questionData).find(
         (key) =>
@@ -237,17 +253,6 @@ const AiAnalyze = () => {
     }
   }, [recordText]);
 
-  const navigate = useNavigate();
-
-  const {
-    trigger: askTrigger,
-    result: askResult,
-  }: { trigger: any; result: any } = useApi({
-    method: 'post',
-    path: `/feedback?date=${todayDate}`,
-    shouldInitFetch: false,
-  });
-
   const askGPT = async (askData: AskData) => {
     await askTrigger({
       applyResult: true,
@@ -255,8 +260,6 @@ const AiAnalyze = () => {
       data: askData,
     });
   };
-  const [gptAnswer, setGptAnswer] = useState('');
-  const [gptId, setGptId] = useState('');
 
   const handleOnClick = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -331,7 +334,6 @@ const AiAnalyze = () => {
     }
   }, [gptId]);
 
-  const chatEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     const timeoutId = setTimeout(() => {
@@ -339,6 +341,10 @@ const AiAnalyze = () => {
     }, 900);
     return () => clearTimeout(timeoutId);
   }, [chats]);
+
+  if (loading) {
+    return <LoadingBar path={location.pathname} />;
+  }
 
   console.log(chats);
 

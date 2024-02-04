@@ -20,7 +20,8 @@ body {
   bottom: 0;
   left: 0;
   max-width: 400px;
-  height: 400px;
+  height: 100%;
+  background-color: white;
 }
 
 .loaderOuter {
@@ -62,17 +63,17 @@ body {
   position: absolute;
   margin: auto;
   top: 100px;
-  left: 0;
+  left: 30px;
   right: 0;
   bottom: 0;
-  width: 100px;
+  width: 150px;
   height: 40px;
   text-transform: uppercase;
   text-align: left;
   text-shadow: 0 0 20px #346dff;
   letter-spacing: 0.1em;
   font-size: 14px;
-  font-weight: lighter;
+  font-weight: 600;
   color: #346dff;
 }
 
@@ -81,7 +82,7 @@ body {
 }
 
 .title::after {
-  animation: txt 1s infinite;
+  animation: inline-block infinite;
   content: '';
 }
 
@@ -109,17 +110,86 @@ body {
   }
 }
 
-@keyframes txt {
+@keyframes aiAnalyzeLoading {
+  0% {
+    content: '뀨봇 답변 중';
+  }
+  25% {
+    content: '뀨봇 답변 중.';
+  }
+  50% {
+    content: '뀨봇 답변 중..';
+  }
+  75% {
+    content: '뀨봇 답변 중...';
+  }
+  100% {
+    content: '뀨봇 답변 중';
+  }
+}
+
+@keyframes addPhotoLoading {
+  0% {
+    content: '뀨봇 사진 분석 중';
+  }
+  25% {
+    content: '뀨봇 사진 분석 중.';
+  }
+  50% {
+    content: '뀨봇 사진 분석 중..';
+  }
+  75% {
+    content: '뀨봇 사진 분석 중...';
+  }
+  100% {
+    content: '뀨봇 사진 분석 중';
+  }
+}
+
+@keyframes defaultLoading {
   0% {
     content: 'LOADING';
   }
-  35% {
+  25% {
     content: 'LOADING.';
   }
-  65% {
+  50% {
     content: 'LOADING..';
   }
-  100% {
+  75% {
     content: 'LOADING...';
   }
+  100% {
+    content: 'LOADING';
+  }
+}
+
+@keyframes aiAnalyzeTxt {
+  0% {
+    content: '뀨봇 답변 중';
+  }
+  25% {
+    content: '뀨봇 답변 중.';
+  }
+  50% {
+    content: '뀨봇 답변 중..';
+  }
+  75% {
+    content: '뀨봇 답변 중...';
+  }
+  100% {
+    content: '뀨봇 답변 완료';
+  }
+}
+
+.aiAnalyzeLoading .title::after {
+  animation: aiAnalyzeLoading 2s infinite;
+}
+
+.addPhotoLoading .title::after {
+  animation: addPhotoLoading 3s infinite;
+}
+
+.defaultLoading .title::after {
+  animation: defaultLoading 1.5s infinite;
 }

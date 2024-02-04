@@ -65,30 +65,6 @@ const Calender = WithAuth(
   lazy(() => import('@components/pages/calendar/Calendar'))
 );
 
-// const Onboarding = lazy(() => import('@components/pages/join/Onboarding'));
-// const Home = lazy(() => import('@components/pages/home/Home'));
-
-// const MyPage = lazy(() => import('@components/pages/my-page/MyPage'));
-// const MyPageEdit = lazy(() => import('@components/pages/my-page/MyPageEdit'));
-// const MyPageSettings = lazy(
-//   () => import('@components/pages/my-page/MyPageSettings')
-// );
-
-// const AddPhoto = lazy(() => import('@components/pages/add-photo/AddPhoto'));
-// const AddPhotoSearch = lazy(
-//   () => import('@components/pages/add-photo/AddPhotoSearch')
-// );
-// const AiAnalyze = lazy(() => import('@components/pages/ai-analyze/AiAnalyze'));
-// const AiDrawer = lazy(() => import('@components/pages/ai-analyze/AiDrawer'));
-// const AiDrawerDetail = lazy(
-//   () => import('@components/pages/ai-analyze/AiDrawerDetail')
-// );
-// const ShareCard = lazy(() => import('@components/pages/ai-analyze/ShareCard'));
-// const Record = lazy(() => import('@components/pages/record/Record'));
-// const RecordEdit = lazy(() => import('@components/pages/record/RecordEdit'));
-// const MealPage = lazy(() => import('@components/pages/record/MealPage'));
-// const Calender = lazy(() => import('@components/pages/calendar/Calendar'));
-
 const preventNavArr = ['login', 'join', 'auth', 'onboardingstep'];
 const preventTopNavArr = ['auth', 'sharestep'];
 
