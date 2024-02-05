@@ -9,16 +9,11 @@ import { AuthService } from './auth.service';
 import { LocalSignupDto } from './dto/localSignupDto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from './utils/guards/local.auth.guard';
-import { isLoggedInGuard } from './utils/guards/isLoggedin.guard';
 import { LocalLoginDto } from './dto/localLoginDto';
-import { HealthInfo } from 'src/user/entities/health-info.entity';
-import { User } from 'src/user/entities/user.entity';
 import * as dotenv from 'dotenv';
 import { isNotLoggedInGuard } from './utils/guards/isNotLoggedIn.guard';
-import { LocalLoginDtoValidationPipe } from './utils/pipes/localLoginDtoValidation.pipe';
 import { VerifyCodeDto } from './dto/verifyCode.dto';
 import { sendVerificationCodeDto } from './dto/sendVerificationCode.dto';
-import { SendVoiceMessageRequest } from 'aws-sdk/clients/pinpointsmsvoice';
 dotenv.config();
 
 
@@ -47,7 +42,7 @@ export class AuthController {
     @Get('google/redirect')
     async handleGoogleRedirect(@Req() request:any ,@Res() response:any) {
         console.log('구글로그인 진행중...')
-        // response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/home`);
+        response.cookie = request.session.cookie;
         response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/auth/google`);
         // const user: User & HealthInfo = await this.userService.getUserInfos(request.user.userId);
         // if(user.recentHealthInfoId === null){

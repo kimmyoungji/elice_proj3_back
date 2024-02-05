@@ -5,7 +5,7 @@ const { OpenAI } = require("openai");
 
 dotenv.config();
 
-const openai = new OpenAI();
+const openai = new OpenAI({ apiKey: ''});
 
 export async function ChatgptApi(
   totalResult: CumulativeRecordDateDto,
