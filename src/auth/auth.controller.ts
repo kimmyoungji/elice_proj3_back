@@ -40,16 +40,17 @@ export class AuthController {
     @UseGuards(GoogleAuthGuard) // 여기서 req.user에 user 정보가 담김
     @UseGuards(isNotLoggedInGuard)
     @Get('google/redirect')
-    async handleGoogleRedirect(@Req() request:any ,@Res() response:any) {
+    async handleGoogleRedirect(@Req() request:any, @Res() response:any) {
         console.log('구글로그인 진행중...')
-        response.cookie = request.session.cookie;
+        response.cookie('session-cookie',request.sessionID, {
+            secure: true,
+            httpOnly: true,
+            domain: 'gugram.xyz', 
+            maxAge: 60 * 60 * 24 * 1000, 
+            path: '*',
+            sameSite: 'lax'
+        })
         response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/auth/google`);
-        // const user: User & HealthInfo = await this.userService.getUserInfos(request.user.userId);
-        // if(user.recentHealthInfoId === null){
-        //     response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/onboarding/1`);
-        // }else{
-        //     response.status(200).redirect(`${process.env.CLIENT_BASE_URL}/home`);
-        // }
     }
 
     /* 로컬 회원가입 */
