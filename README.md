@@ -23,7 +23,7 @@
  - Back-end <br/>
  <img alt="Static Badge" src="https://img.shields.io/badge/Node.js-black?style=for-the-badge&logo=nodedotjs"> <img alt="Static Badge" src="https://img.shields.io/badge/npm-black?style=for-the-badge&logo=npm"> <img alt="Static Badge" src="https://img.shields.io/badge/nest.js-black?style=for-the-badge&logo=nestjs"> <img alt="Static Badge" src="https://img.shields.io/badge/express.js-black?style=for-the-badge&logo=express"> <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white"> <img alt="Static Badge" src="https://img.shields.io/badge/PostgreSQL-skyblue?style=for-the-badge&logo=postgresql"> <img alt="Static Badge" src="https://img.shields.io/badge/TypeORM-skyblue?style=for-the-badge&logo=typeorm">
 
-- Deploy
+- Deploy <br/>
 <img alt="Static Badge" src="https://img.shields.io/badge/AWS-grey?style=for-the-badge&logo=amazonaws"> <img alt="Static Badge" src="https://img.shields.io/badge/EC2-grey?style=for-the-badge&logo=amazonec2">
 <img alt="Static Badge" src="https://img.shields.io/badge/RDS-grey?style=for-the-badge&logo=amazonrds"> <img alt="Static Badge" src="https://img.shields.io/badge/S3-grey?style=for-the-badge&logo=amazons3">
 
