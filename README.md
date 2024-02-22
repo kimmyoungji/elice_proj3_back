@@ -1,10 +1,5 @@
 # Gugram
 
-  **Gugram**<br/>
-  구그램은 AI를 활용하여 음식 사진을 인식하여 식단을 기록 및 분석해주는 서비스입니다.
-
-
-## 프로젝트 구성 안내
 ### **목차**<br/>
 [1. 프로젝트 소개](#1-프로젝트-소개)<br/>
 [2. 프로젝트 목표](#2-프로젝트-목표)<br/>
@@ -14,38 +9,22 @@
 [6. 버전](#6-버전)<br/>
 
 ## 1. 프로젝트 소개
+**Gugram**<br/>
+구그램은 AI를 활용하여 음식 사진을 인식하여 식단을 기록 및 분석해주는 서비스입니다.
 
 ### 기술 스택 <br/>
- - AI 
-  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=Python&logoColor=white"/> <br/>
-  
- - Front-end <br/>
-  typescript
-   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/>
-   <img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=black"/> <br/>
-
- - Back-end <br/>
-   - Node.js
-   - Nest.js
-   - typescript
-   - postgresql
-   <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/>
-
-### 라이브러리 <br/>
- - 데이터분석 <br/>
-   <img src="https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas&logoColor=white"/>
-   <img src="https://img.shields.io/badge/matplotlib-0ABF53?style=flat-square&logo=multer&logoColor=white"/> <br/>
+ - AI <br/>
+ ![flask](https://img.shields.io/badge/flask-black?style=for-the-badge&logo=flask&logoColor=white)
+ ![ultralytics](https://img.shields.io/badge/ultralytics-purple?style=for-the-badge)
 
  - Front-end <br/>
-   - redux
-   - module css
-   - 
-
+ <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white">   <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white">   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white">   <img src="https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white">   <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB">   <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white">
+ 
  - Back-end <br/>
-   - typeorm
-   <img src="https://img.shields.io/badge/multer-FF9E0F?style=flat-square&logo=multer&logoColor=white"/>
-   <img src="https://img.shields.io/badge/amazons3-569A31?style=flat-square&logo=amazons3&logoColor=white"/> <br/>
-  
+ <img alt="Static Badge" src="https://img.shields.io/badge/Node.js-black?style=for-the-badge&logo=nodedotjs"> <img alt="Static Badge" src="https://img.shields.io/badge/npm-black?style=for-the-badge&logo=npm"> <img alt="Static Badge" src="https://img.shields.io/badge/nest.js-black?style=for-the-badge&logo=nestjs"> <img alt="Static Badge" src="https://img.shields.io/badge/express.js-black?style=for-the-badge&logo=express"> <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white"> <img alt="Static Badge" src="https://img.shields.io/badge/PostgreSQL-skyblue?style=for-the-badge&logo=postgresql"> <img alt="Static Badge" src="https://img.shields.io/badge/TypeORM-skyblue?style=for-the-badge&logo=typeorm">
+
+
+
 ### AI 모델 학습 데이터셋
  AI 허브의 음식 이미지 데이터셋을 가져와 이미지 인식 모델 학습에 활용하였습니다.
  https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=&topMenu=&aihubDataSe=data&dataSetSn=74<br/>
