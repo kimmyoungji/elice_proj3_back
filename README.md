@@ -63,8 +63,7 @@
     <tr>
       <td><img src='./demo_images/gugram_로그인창.png' width="200px"></td>
       <td><img src='./demo_images/gugram_홈.png' width="200px"></td>
-      <td><img src='./demo_images/gugram_달력.png' width="200px">
-      <img src='./demo_images/gugram_식단앨범.png' width="200px"></td>
+      <td><img src='./demo_images/gugram_앨범_달력페이지.png' width="400px"></td>
     </tr>
   </tbody>
 </table>
@@ -92,7 +91,7 @@
       <td >- 수정을 마치면, 식단 기록이 완료됩니다.</td>
     </tr>
     <tr>
-      <td> <img src='./demo_images/gugram_식단기록시작페이지.png' width="200px"> <img src='./demo_images/gugram_식단기록페이지.png' width="200px"> </td>
+      <td> <img src='./demo_images/gugram_기록시작페이지_기록페이지.png' width="400px"> 
       <td><img src='./demo_images/gugram_식단촬영페이지.png' width="200px"></td>
       <td><img src='./demo_images/gugram_AI분석요청.png' width="200px"></td>
       <td><img src='./demo_images/gugram_식단기록완료페이지.png' width="200px"></td>
