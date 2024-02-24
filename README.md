@@ -32,8 +32,7 @@
  <img alt="Static Badge" src="https://img.shields.io/badge/Node.js-black?style=for-the-badge&logo=nodedotjs"> <img alt="Static Badge" src="https://img.shields.io/badge/npm-black?style=for-the-badge&logo=npm"> <img alt="Static Badge" src="https://img.shields.io/badge/nest.js-black?style=for-the-badge&logo=nestjs"> <img alt="Static Badge" src="https://img.shields.io/badge/express.js-black?style=for-the-badge&logo=express"> <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white"> <img alt="Static Badge" src="https://img.shields.io/badge/PostgreSQL-skyblue?style=for-the-badge&logo=postgresql"> <img alt="Static Badge" src="https://img.shields.io/badge/TypeORM-skyblue?style=for-the-badge&logo=typeorm">
 
 - Deploy <br/>
-<img alt="Static Badge" src="https://img.shields.io/badge/AWS-grey?style=for-the-badge&logo=amazonaws"> <img alt="Static Badge" src="https://img.shields.io/badge/EC2-grey?style=for-the-badge&logo=amazonec2">
-<img alt="Static Badge" src="https://img.shields.io/badge/RDS-grey?style=for-the-badge&logo=amazonrds"> <img alt="Static Badge" src="https://img.shields.io/badge/S3-grey?style=for-the-badge&logo=amazons3">
+<img alt="Static Badge" src="https://img.shields.io/badge/AWS-grey?style=for-the-badge&logo=amazonaws"> <img alt="Static Badge" src="https://img.shields.io/badge/EC2-grey?style=for-the-badge&logo=amazonec2"><img alt="Static Badge" src="https://img.shields.io/badge/RDS-grey?style=for-the-badge&logo=amazonrds"> <img alt="Static Badge" src="https://img.shields.io/badge/S3-grey?style=for-the-badge&logo=amazons3">
 
 - Datas <br /> 음식 이미지 및 영양정보 텍스트 : https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=&topMenu=&aihubDataSe=data&dataSetSn=74 <br />--> 이미지 처리 모델 학습에 사용 <br/><br/>식품의약품안전처 식품영양성분 API : https://various.foodsafetykorea.go.kr/nutrient/ <br /> --> 음식 영양성분 데이터로 사용 </br></br>
 
@@ -42,39 +41,44 @@
 ## 2. 프로젝트 기능 설명
 
 <table>
-<colgroup>
-    <col style="width: 20%;">
-    <col style="width: 20%;">
-    <col style="width: 40%;">
-  </colgroup>
   <thead>
     <tr>
       <th>1. 회원가입 & 로그인 페이지</th>
       <th>2. 메인페이지</th>
-      <th>3. 식단 조회 페이지: 달력형 & 앨범형</th>
     </tr>
   </thead>
   <tbody>
     <tr  style="font-size:12px">
-      <td>- 로컬로그인과 구글로그인으로 서비스를 이용할 수 있습니다.</td>
-      <td>- 홈 화면에서는 하루섭취 정보를 볼 수 있습니다.</td>
-      <td>- 달력에서는 일일목표섭취 칼로리 달성여부를 한눈에 볼 수 있습니다. <br /> - 앨범페이지에서는 섭취한 식단들의 사진을 모아 볼 수 있습니다.</td>
+      <td>로컬로그인과 구글로그인으로 서비스를 이용할 수 있습니다.</td>
+      <td>홈 화면에서는 하루섭취 정보를 볼 수 있습니다.</td>
     </tr>
     <tr>
-      <td><img src='./demo_images/gugram_로그인창.png' width="200px"></td>
-      <td><img src='./demo_images/gugram_홈.png' width="200px"></td>
-      <td><img src='./demo_images/gugram_앨범_달력페이지.png' width="400px"></td>
+      <td><img src='./demo_images/로그인페이지.png' width="200px"></td>
+      <td><img src='./demo_images/메인페이지.png' width="200px"></td>
     </tr>
   </tbody>
 </table>
 
 <table>
-  <colgroup>
-    <col style="width: 40%;">
-    <col style="width: 20%;">
-    <col style="width: 20%;">
-    <col style="width: 20%;">
-  </colgroup>
+  <thead>
+    <tr>
+      <th>3. 식단 조회 페이지: 달력형</th>
+      <th>3. 식단 조회 페이지: 앨범형</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr  style="font-size:12px">
+      <td> 달력에서는 일일목표섭취 칼로리 달성여부를 한눈에 볼 수 있습니다. </td>
+      <td> 앨범페이지에서는 섭취한 식단들의 사진을 모아 볼 수 있습니다.</td>
+    </tr>
+    <tr>
+      <td><img src='./demo_images/식단조회페이지_달력.png' width="200px"></td>
+      <td><img src='./demo_images/식단조회페이지_앨범.png' width="200px"></td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
   <thead>
     <tr>
       <th>4. 식단 기록 페이지</th>
@@ -85,37 +89,50 @@
   </thead>
   <tbody>
     <tr style="font-size:12px">
-      <td>- 아침,점심,저녁,간식을 선택하여 기록할 수 있습니다.</td>
-      <td>- "촬영 기능"과 "사진업로드 기능" 또는 "집접입력 기능"으로 음식 사진을 업로드 할 수 있습니다.</td>
-      <td>- 사진 업로드 후 AI서버에 사진 분석이 요청됩니다.<br/> - 분석이 끝난 뒤에 분석결과를 선택하여 수정할 수 있습니다.</td>
-      <td >- 수정을 마치면, 식단 기록이 완료됩니다.</td>
+      <td>아침,점심,저녁,간식을 선택하여 기록할 수 있습니다.</td>
+      <td>아침,점심,저녁,간식 중 택1하면 기록페이지로 넘어갑니다.</td>
+      <td>"촬영 기능" 으로 음식 사진을 업로드 할 수 있습니다.</td>
+      <td>"이미지 업로드 기능" 으로 음식 사진을 업로드 할 수 있습니다.</td>
     </tr>
     <tr>
-      <td> <img src='./demo_images/gugram_기록시작페이지_기록페이지.png' width="400px"> 
-      <td><img src='./demo_images/gugram_식단촬영페이지.png' width="200px"></td>
-      <td><img src='./demo_images/gugram_AI분석요청.png' width="200px"></td>
-      <td><img src='./demo_images/gugram_식단기록완료페이지.png' width="200px"></td>
+      <td> <img src='./demo_images/기록페이지_시작.png' width="200px"> </td>
+      <td> <img src='./demo_images/기록페이지_시작2.png' width="200px"> </td>
+      <td><img src='./demo_images/기록페이지_촬영.png' width="200px"></td>
+      <td><img src='./demo_images/기록페이지_앨범.png' width="200px"></td>
+    </tr>
+    <tr style="font-size:12px">
+      <td>사진 업로드 후 분석요청시 AI서버에 사진 분석이 요청됩니다.</td>
+      <td>분석이 끝난 뒤에 분석결과가 나타납니다.</td>
+      <td>분석이 끝난 뒤에 분석결과를 선택하여 수정할 수 있습니다.</td>
+      <td>수정을 마치면, 식단 기록이 완료됩니다.</td>
+    </tr>
+    <tr>
+      <td><img src='./demo_images/기록페이지_분석.png' width="200px"></td>
+      <td><img src='./demo_images/기록페이지_분석완료.png' width="200px"></td>
+      <td><img src='./demo_images/기록페이지_수정.png' width="200px"></td>
+      <td><img src='./demo_images/기록페이지_기록완료.png' width="200px"></td>
     </tr>
   </tbody>
 </table>
 
-
-**5. 한끼 식단 페이지**<br/>
-- 음식 이미지 등록 기능 ( 촬영 또는 앨범 )
-    - 등록된 음식 이미지를 분석하여 얻은 음식 종류 데이터 제공
-    - 여러 음식이 보이는 사진을 등록하면, 이를 분석하여 개별 음식 사진으로 등록
-    - 분석된 음식명을 원본 이미지 위에 태그로 표시 </br></br>
-- 음식명 검색 및 등록 기능 (사진 없음)
-    - 식품의약품안전처 식품영양성분 데이터베이스 활용
-- 음식 종류 별 칼로리와 영양성분 데이터 제공
-  - 식품의약품안전처 식품영양성분 데이터베이스 활용
-
-**6. AI영양사 페이지**<br/>
-- 채팅형 레이아웃
-- open ai api를 활용한 사용자 맞춤 식단 분석 데이터 제공 및 저장
-  - 식단 추천
-  - 선택한 식단 평가
-  - 목표 추천 <br/><br/>
+<table>
+  <thead>
+    <tr>
+      <th>5. AI영양사 페이지</th>
+      <th>6. 개인정보 페이지</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="font-size:12px">
+      <td>OPEN AI API를 사용하여 chat gpt에게 식단분석을 요청할 수 있습니다.</td>
+      <td>개인 건강정보를 수정할 수 있습니다.</td>
+    </tr>
+    <tr>
+      <td> <img src='./demo_images/AI영양사페이지.png' width="200px"> </td>
+      <td> <img src='./demo_images/개인정보페이지.png' width="200px"> </td>
+    </tr>
+  </tbody>
+</table>
 
 
 ### 프로젝트만의 차별점, 기대 효과
