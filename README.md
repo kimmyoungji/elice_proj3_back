@@ -1,18 +1,26 @@
-# Gugram
+# Gugram: 이미지 처리 인공지능을 활용한 식단기록 서비스
 
 ### **목차**<br/>
 [1. 프로젝트 소개](#1-프로젝트-소개)<br/>
-[2. 프로젝트 목표](#2-프로젝트-목표)<br/>
-[3. 프로젝트 기능 설명](#3-프로젝트-기능-설명)<br/>
-[4. 프로젝트 구성도](#4-프로젝트-구성도)<br/>
-[5. 프로젝트 팀원 역할 분담](#5-프로젝트-팀원-역할-분담)<br/>
-[6. 버전](#6-버전)<br/>
+[2. 프로젝트 사용 도구와 데이터](#2-프로젝트-사용-도구와-데이터)<br/>
+[3. 프로젝트 기능 소개 ](#3-프로젝트-기능-설명)<br/>
+[4. 프로젝트 팀원 역할 분담](#4-프로젝트-팀원-역할-분담)<br/>
+[5. 버전](#5-버전)<br/>
+
+<br />
 
 ## 1. 프로젝트 소개
-**Gugram**<br/>
-구그램은 AI를 활용하여 음식 사진을 인식하여 식단을 기록 및 분석해주는 서비스입니다.
+### **Gugram**<br/>
+### 구그램은 이미지 처리 인공지능을 활용한 식단기록 서비스
 
-### 기술 스택 <br/>
+| 차별화 기능 1 | 이미지 처리 모델로 사진속 음식의 이름을 추론하여 그 결과를 기록 |
+| ------ | ------ |
+| 차별화 기능 2 | OPEN AI API를 활용하여 사용자의 식단 데이터를 바탕으로 식단 분석을 Chat GPT4.0에 요청 |
+
+<br />
+
+## 2. 프로젝트 사용 도구와 데이터
+### 사용 도구 및 데이터 <br/>
  - AI <br/>
  ![flask](https://img.shields.io/badge/flask-black?style=for-the-badge&logo=flask&logoColor=white)
  ![ultralytics](https://img.shields.io/badge/ultralytics-purple?style=for-the-badge)
@@ -27,27 +35,15 @@
 <img alt="Static Badge" src="https://img.shields.io/badge/AWS-grey?style=for-the-badge&logo=amazonaws"> <img alt="Static Badge" src="https://img.shields.io/badge/EC2-grey?style=for-the-badge&logo=amazonec2">
 <img alt="Static Badge" src="https://img.shields.io/badge/RDS-grey?style=for-the-badge&logo=amazonrds"> <img alt="Static Badge" src="https://img.shields.io/badge/S3-grey?style=for-the-badge&logo=amazons3">
 
+- Datas <br /> 음식 이미지 및 영양정보 텍스트 : https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=&topMenu=&aihubDataSe=data&dataSetSn=74 <br />--> 이미지 처리 모델 학습에 사용 <br/><br/>식품의약품안전처 식품영양성분 API : https://various.foodsafetykorea.go.kr/nutrient/ <br /> --> 음식 영양성분 데이터로 사용 </br></br>
 
+<br />
 
-### AI 모델 학습 데이터셋
- AI 허브의 음식 이미지 데이터셋을 가져와 이미지 인식 모델 학습에 활용하였습니다.
- https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=&topMenu=&aihubDataSe=data&dataSetSn=74<br/>
-
-
-## 2. 프로젝트 목표
-
-  ##### 1) AI를 활용한 200가지 음식 이미지 인식 및 기록 기능
-
-  ##### 2) Open AI API를 활용한 식단 분석 서비스 구현
-
-
-## 3. 프로젝트 기능 설명
-
-### 주요 기능 (주된 활용성) 및 서브 기능
+## 2. 프로젝트 기능 설명
 
 **1. 회원가입 & 로그인**<br/>
 - 이메일, 닉네임 중복 확인<br/>
-- 로그인 시, token 및 cookie로 유저 인증
+- 구글 로그인 & 로컬 로그인
 
 **2. 메인페이지**<br/>
 - 목표 칼로리 대비 하루 총 섭취 칼로리 및 영양 성분별 섭취량 - 그래프 시각화
@@ -67,10 +63,8 @@
     - 분석된 음식명을 원본 이미지 위에 태그로 표시 </br></br>
 - 음식명 검색 및 등록 기능 (사진 없음)
     - 식품의약품안전처 식품영양성분 데이터베이스 활용
-    - https://various.foodsafetykorea.go.kr/nutrient/  </br></br>
 - 음식 종류 별 칼로리와 영양성분 데이터 제공
   - 식품의약품안전처 식품영양성분 데이터베이스 활용
-  - https://various.foodsafetykorea.go.kr/nutrient/ </br></br>
 
 **6. AI영양사 페이지**<br/>
 - 채팅형 레이아웃
