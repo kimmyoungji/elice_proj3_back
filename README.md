@@ -41,15 +41,64 @@
 
 ## 2. 프로젝트 기능 설명
 
-| 1. 회원가입 & 로그인 페이지 | 2. 메인페이지 | 3. 식단 조회 페이지: 달력형 & 앨범형 |
-|:--|:--|:--|
-|- 로컬로그인과 구글로그인으로 서비스를 이용할 수 있습니다. | - 홈 화면에서는 하루섭취 정보를 볼 수 있습니다.| - 달력에서는 일일목표섭취 칼로리 달성여부를 한눈에 볼 수 있습니다. <br /> - 앨범페이지에서는 섭취한 식단들의 사진을 모아 볼 수 있습니다. | 
-|<img src='./demo_images/gugram_로그인창.png' width="200px">| <img src='./demo_images/gugram_홈.png' width="200px"> | <img src='./demo_images/gugram_달력.png' width="200px"> <img src='./demo_images/gugram_식단앨범.png' width="200px"> |
+<table>
+<colgroup>
+    <col style="width: 20%;">
+    <col style="width: 20%;">
+    <col style="width: 40%;">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>1. 회원가입 & 로그인 페이지</th>
+      <th>2. 메인페이지</th>
+      <th>3. 식단 조회 페이지: 달력형 & 앨범형</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr  style="font-size:12px">
+      <td>- 로컬로그인과 구글로그인으로 서비스를 이용할 수 있습니다.</td>
+      <td>- 홈 화면에서는 하루섭취 정보를 볼 수 있습니다.</td>
+      <td>- 달력에서는 일일목표섭취 칼로리 달성여부를 한눈에 볼 수 있습니다. <br /> - 앨범페이지에서는 섭취한 식단들의 사진을 모아 볼 수 있습니다.</td>
+    </tr>
+    <tr>
+      <td><img src='./demo_images/gugram_로그인창.png' width="200px"></td>
+      <td><img src='./demo_images/gugram_홈.png' width="200px"></td>
+      <td><img src='./demo_images/gugram_달력.png' width="200px">
+      <img src='./demo_images/gugram_식단앨범.png' width="200px"></td>
+    </tr>
+  </tbody>
+</table>
 
-| 4. 식단 기록 페이지 ||||
-|:--|:--|:--|:--|
-| - 아침,점심,저녁,간식을 선택하여 기록할 수 있습니다.| - "촬영 기능"과 "사진업로드 기능" 또는 "집접입력 기능"으로 음식 사진을 업로드 할 수 있습니다. | - 사진 업로드 후 AI서버에 사진 분석이 요청됩니다.<br/> - 분석이 끝난 뒤에 분석결과를 선택하여 수정할 수 있습니다. | - 수정을 마치면, 식단 기록이 완료됩니다. |
-| <img src='./demo_images/gugram_식단기록시작페이지.png' width="200px"> <img src='./demo_images/gugram_식단기록페이지.png' width="200px"> | <img src='./demo_images/gugram_식단촬영페이지.png' width="200px"> | <img src='./demo_images/gugram_AI분석요청.png' width="200px"> | <img src='./demo_images/gugram_식단기록완료페이지.png' width="200px">|
+<table>
+  <colgroup>
+    <col style="width: 40%;">
+    <col style="width: 20%;">
+    <col style="width: 20%;">
+    <col style="width: 20%;">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>4. 식단 기록 페이지</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="font-size:12px">
+      <td>- 아침,점심,저녁,간식을 선택하여 기록할 수 있습니다.</td>
+      <td>- "촬영 기능"과 "사진업로드 기능" 또는 "집접입력 기능"으로 음식 사진을 업로드 할 수 있습니다.</td>
+      <td>- 사진 업로드 후 AI서버에 사진 분석이 요청됩니다.<br/> - 분석이 끝난 뒤에 분석결과를 선택하여 수정할 수 있습니다.</td>
+      <td >- 수정을 마치면, 식단 기록이 완료됩니다.</td>
+    </tr>
+    <tr>
+      <td> <img src='./demo_images/gugram_식단기록시작페이지.png' width="200px"> <img src='./demo_images/gugram_식단기록페이지.png' width="200px"> </td>
+      <td><img src='./demo_images/gugram_식단촬영페이지.png' width="200px"></td>
+      <td><img src='./demo_images/gugram_AI분석요청.png' width="200px"></td>
+      <td><img src='./demo_images/gugram_식단기록완료페이지.png' width="200px"></td>
+    </tr>
+  </tbody>
+</table>
 
 
 **5. 한끼 식단 페이지**<br/>
